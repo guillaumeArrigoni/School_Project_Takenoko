@@ -1,4 +1,4 @@
-package ads;
+package Takenoko.Interface;
 
 public enum Color {
     Lac(0, "Lac"),

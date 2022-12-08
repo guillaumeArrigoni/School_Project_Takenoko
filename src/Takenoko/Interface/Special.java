@@ -1,4 +1,4 @@
-package ads;
+package Takenoko.Interface;
 
 public enum Special {
     Classic(0, "classic");

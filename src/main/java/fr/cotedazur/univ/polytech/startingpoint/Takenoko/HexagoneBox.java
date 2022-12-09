@@ -1,7 +1,7 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -3,7 +3,6 @@ package main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface;
 import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import java.util.concurrent.ThreadLocalRandom;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
 public class Action {
 

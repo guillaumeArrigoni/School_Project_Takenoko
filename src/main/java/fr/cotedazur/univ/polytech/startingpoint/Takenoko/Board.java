@@ -1,10 +1,13 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception.AdjacenteException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.*;
+
+import static main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.*;
 
 public class Board {
 

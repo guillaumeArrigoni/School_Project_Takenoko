@@ -5,10 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a766fb6-01d9-449b-b2a1-601b6a1c4225" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/fr/cotedazur/univ/polytech/startingpoint/MainTest.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/MeteoDice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/Interface/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Takenoko/Board.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/CoordinateMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/CoordinateMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/HexagoneBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/HexagoneBox.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/Interface/Color.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/Interface/Color.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/Interface/Special.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/Interface/Special.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/bot/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/cotedazur/univ/polytech/startingpoint/Takenoko/bot/Bot.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +67,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1670595632396</updated>
-      <workItem from="1670595634805" duration="4261000" />
+      <workItem from="1670595634805" duration="5406000" />
     </task>
     <servers />
   </component>

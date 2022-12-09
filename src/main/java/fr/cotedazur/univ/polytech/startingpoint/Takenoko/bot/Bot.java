@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,17 +16,15 @@ public class Bot {
         this.board = board;
     }
 
-
-
     public void placeRandomTile(HashMap<Integer, Integer> availableTiles){
      List<HexagoneBox> list = new ArrayList<>();
      List<Integer> availablreTilesList = availableTiles.keySet().stream().toList();
      for(int i = 0; i < 3; i++)
          list.add(Action.drawTile());
      HexagoneBox placedTile = list.get(ThreadLocalRandom.current().nextInt(0, 3));
-     int placedTilecCoords = availablreTilesList.get(ThreadLocalRandom.current().nextInt(0, availablreTilesList.size()));
-     board.p
-
+     int placedTileCoords = availablreTilesList.get(ThreadLocalRandom.current().nextInt(0, availablreTilesList.size()));
+     placedTile.setId(placedTileCoords);
+     board.addBox(placedTile);
     }
 }
 

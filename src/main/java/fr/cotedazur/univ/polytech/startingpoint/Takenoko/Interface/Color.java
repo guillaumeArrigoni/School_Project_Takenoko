@@ -1,4 +1,4 @@
-package Takenoko.Interface;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface;
 
 public enum Color {
     Lac(0, "Lac"),

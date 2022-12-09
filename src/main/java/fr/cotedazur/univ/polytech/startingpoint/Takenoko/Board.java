@@ -11,9 +11,10 @@ import static main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Coordi
 
 public class Board {
 
-    HashMap<Integer,Integer> AvailableBox;
+    private HashMap<Integer,Integer> AvailableBox;
     int numberBoxPlaced ;
-    HashMap<Integer,Integer> PlacedBox;
+    private HashMap<Integer,Integer> PlacedBox;
+    private HashMap<String,Integer> StackOfAvailableBox;
 
     public Board(){
         HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classic);
@@ -43,25 +44,34 @@ public class Board {
     }
 
     public void addBox(HexagoneBox box){
-        numberBoxPlaced = numberBoxPlaced +1;
         int id = box.getId();
-        if (numberBoxPlaced == 2){
-            AvailableBox.clear();
-        }
-        AvailableBox.remove(id);
-        PlacedBox.put(id,get_range_from_center(id));
+        UpdateAvaiableBoxAndPlacedBox(id);
 
         ArrayList<Integer> adjacenteBox = get_all_adjacente_box(id);
-        for (int i=0;i<adjacenteBox.size();i++){
+        for (int i=0;i<6;i++){
             if (PlacedBox.containsKey(adjacenteBox.get(i))){
                 //cherche toutes les tuiles adjacente à celle que l'on pose
-                int[] communAdjacenteBox = get_adjBox_shared_by2AdjBox(id,adjacenteBox.get(i));
+                AddNewAvailableBoxToDico(id,adjacenteBox,i);
+            }
+        }
+    }
 
-                for (int j=0;j<communAdjacenteBox.length;j++){
-                    if (!PlacedBox.containsKey(communAdjacenteBox[j])){
-                        AvailableBox.put(communAdjacenteBox[j],get_range_from_center(communAdjacenteBox[j]));
-                    }
-                }
+    private void UpdateAvaiableBoxAndPlacedBox(int id){
+        this.numberBoxPlaced = this.numberBoxPlaced +1;
+        if (this.numberBoxPlaced == 2){
+            AvailableBox.clear();
+        } else {
+            AvailableBox.remove(id);
+        }
+        PlacedBox.put(id,get_range_from_center(id));
+    }
+
+    private void AddNewAvailableBoxToDico(int idNewBox, ArrayList<Integer> adjacenteBox, int index){
+        int[] communAdjacenteBox = get_adjBox_shared_by2AdjBox(idNewBox,adjacenteBox.get(index));
+
+        for (int j=0;j<communAdjacenteBox.length;j++){
+            if (!PlacedBox.containsKey(communAdjacenteBox[j])){
+                AvailableBox.put(communAdjacenteBox[j],get_range_from_center(communAdjacenteBox[j]));
             }
         }
     }
@@ -94,4 +104,9 @@ public class Board {
         }
         return adjacenteBox;
     }
+
+    public HashMap<Integer,Integer> getAvailableBox(){
+        return this.AvailableBox;
+    }
+
 }

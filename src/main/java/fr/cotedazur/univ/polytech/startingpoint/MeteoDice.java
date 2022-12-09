@@ -28,6 +28,5 @@ public class MeteoDice {
             case 6 -> Meteo.HASARD;
             default -> null;
         };
-
     }
 }

@@ -1,5 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception.AdjacenteException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

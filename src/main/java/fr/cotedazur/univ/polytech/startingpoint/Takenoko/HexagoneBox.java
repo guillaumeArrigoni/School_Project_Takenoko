@@ -5,7 +5,6 @@ import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Spe
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
 
 import static main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
 

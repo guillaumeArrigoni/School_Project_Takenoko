@@ -1,10 +1,12 @@
-package main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
 
 public class HexagoneBox {
 
@@ -69,5 +71,13 @@ public class HexagoneBox {
 
     public int getHeightBamboo() {
         return heightBamboo;
+    }
+
+    public void setId(int id){
+        this.id = id;
+        int[] tempoCoordinates = separateID(id);
+        for (int i=0;i<3;i++){
+            this.coordinates.set(i,tempoCoordinates[i]);
+        }
     }
 }

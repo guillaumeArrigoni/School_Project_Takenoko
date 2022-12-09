@@ -1,7 +1,7 @@
-package main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception.AdjacenteException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 
 import java.util.ArrayList;

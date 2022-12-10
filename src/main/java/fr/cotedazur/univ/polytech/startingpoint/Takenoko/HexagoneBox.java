@@ -6,6 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.generateID;
 import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
 
 public class HexagoneBox {
@@ -50,12 +51,6 @@ public class HexagoneBox {
         this.special = special;
         this.irrigate = true;
         this.heightBamboo = 0;
-    }
-
-    private int generateID(int x, int y, int z){
-        int id = 1000000;
-        id = id + x*10000 + y*100 + z;
-        return id;
     }
 
     public ArrayList<Integer> getCoordinates(){

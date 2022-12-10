@@ -1,7 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Action {
@@ -13,7 +12,7 @@ public class Action {
             case 2 -> Color.Rouge;
             default -> Color.Jaune;
         };
-        return new HexagoneBox(color,Special.Classic);
+        return new HexagoneBox(color,Special.Classique);
     }
 
 }

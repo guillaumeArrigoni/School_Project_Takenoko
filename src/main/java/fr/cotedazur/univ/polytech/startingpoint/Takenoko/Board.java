@@ -1,13 +1,15 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception.AdjacenteException;
-import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
-import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception.*;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.*;
+
 
 public class Board {
 
@@ -28,25 +30,33 @@ public class Board {
         PlacedBox.put(lac.getId(),0);
     }
 
+    /**
+     * A method to get the 6 possible adjacente box of a box
+     * @param id of the box witch we want to get all the adjacente box
+     * @return an ArrayList<Integer> with the id of the adjacente box following the order :
+     *      6       1
+     *  5       x       2
+     *      4       3
+     * with x the box in question and 1,2,3,4,5,6 the adjacente box
+     */
     private ArrayList<Integer> get_all_adjacente_box(int id){
         ArrayList<Integer> adjacenteBox = new ArrayList<Integer>();
         int[] coordinates = separateID(id);
         int x = coordinates[0];
         int y = coordinates[1];
         int z = coordinates[2];
-        adjacenteBox.add(generateID(x-1,y+1,z));
-        adjacenteBox.add(generateID(x-1,y,z+1));
-        adjacenteBox.add(generateID(x,y+1,z-1));
-        adjacenteBox.add(generateID(x,y-1,z+1));
         adjacenteBox.add(generateID(x+1,y-1,z));
         adjacenteBox.add(generateID(x+1,y,z-1));
+        adjacenteBox.add(generateID(x,y+1,z-1));
+        adjacenteBox.add(generateID(x-1,y+1,z));
+        adjacenteBox.add(generateID(x-1,y,z+1));
+        adjacenteBox.add(generateID(x,y-1,z+1));
         return adjacenteBox;
     }
 
     public void addBox(HexagoneBox box){
         int id = box.getId();
         UpdateAvaiableBoxAndPlacedBox(id);
-
         ArrayList<Integer> adjacenteBox = get_all_adjacente_box(id);
         for (int i=0;i<6;i++){
             if (PlacedBox.containsKey(adjacenteBox.get(i))){
@@ -83,7 +93,7 @@ public class Board {
         int[] generateCoordinate = new int[3];
 
         try {
-            int[] communCoordinates = getIntegerSharedBy2TabofCoordinate(coordinatesBox1,coordinatesBox2);
+            int[] communCoordinates = getCoordinateInCommonBetween2TabOfCoordinates(coordinatesBox1,coordinatesBox2);
             int sameCoordinate = communCoordinates[0];
             int sameIndice = communCoordinates[1];
             int indicePlus1 = (communCoordinates[1]+1)%3;

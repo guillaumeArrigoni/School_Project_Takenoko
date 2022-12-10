@@ -1,4 +1,4 @@
-package main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception.AdjacenteException;
 
@@ -45,7 +45,17 @@ public class CoordinateMethod {
         return range;
     }
 
-    public static int[] getIntegerSharedBy2TabofCoordinate (int[] tab1, int[] tab2) throws AdjacenteException {
+    /**
+     * Return the coordinates in common between 2 tab of coordinates
+     * @param tab1 the first tab of coordinate
+     * @param tab2 the second tab of coordinate
+     * @return a tab of 3 int with :
+     *      - the coordinates in common
+     *      - the index of the coordinate in common in the first tab
+     *      - the index of the coordinate in common in the second tab
+     * @throws AdjacenteException if the program detect no coordinate adjacente
+     */
+    public static int[] getCoordinateInCommonBetween2TabOfCoordinates(int[] tab1, int[] tab2) throws AdjacenteException {
         int[] valueAndIndex = new int[3];
         for (int i=0; i<tab1.length;i++){
             for (int j=0; j<tab2.length;j++){
@@ -53,9 +63,10 @@ public class CoordinateMethod {
                     valueAndIndex[0] = tab1[i];
                     valueAndIndex[1] = i;
                     valueAndIndex[2] = j;
+                    return valueAndIndex;
                 }
             }
         }
-        throw new AdjacenteException();
+        throw new AdjacenteException(tab1,tab2);
     }
 }

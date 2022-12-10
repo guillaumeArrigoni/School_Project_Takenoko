@@ -1,12 +1,12 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
-import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
-import main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static main.java.fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
+import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
 
 public class HexagoneBox {
 
@@ -28,15 +28,24 @@ public class HexagoneBox {
      *  6       2
      *  5       3
      *      4
-     * @param x : 5-4 (or 1-2) edge
+     * @param z : 5-4 (or 1-2) edge
      * @param y : 6-5 (or 2-3) edge
-     * @param z : 1-6 (or 3-4) edge
+     * @param x : 1-6 (or 3-4) edge
      * @param color : the color of the box
      * @param special : the particularity of the box
      */
     public HexagoneBox (int x, int y, int z, Color color, Special special){
         this.coordinates = new ArrayList<Integer>(Arrays.asList(x, y, z));
         this.id = generateID(x,y,z);
+        this.color = color;
+        this.special = special;
+        this.irrigate = true;
+        this.heightBamboo = 0;
+    }
+
+    public HexagoneBox (Color color, Special special){
+        this.coordinates = new ArrayList<Integer>(Arrays.asList(null, null, null));
+        this.id = -1;
         this.color = color;
         this.special = special;
         this.irrigate = true;
@@ -76,8 +85,6 @@ public class HexagoneBox {
     public void setId(int id){
         this.id = id;
         int[] tempoCoordinates = separateID(id);
-        for (int i=0;i<3;i++){
-            this.coordinates.set(i,tempoCoordinates[i]);
-        }
+        this.coordinates = new ArrayList(Arrays.asList(tempoCoordinates));
     }
 }

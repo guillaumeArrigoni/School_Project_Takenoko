@@ -1,6 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface;
 
 public enum Color {
+    /**
+     * The different Color of the box
+     */
     Lac(0, "Lac"),
     Jaune(1, "Jaune"),
     Vert(2, "Vert"),

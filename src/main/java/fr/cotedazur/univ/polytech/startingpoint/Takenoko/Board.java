@@ -36,15 +36,6 @@ public class Board {
      */
     private HashMap<Integer,Integer> AvailableBox;
 
-    /**
-     * StackOfAvailableBox is a Hashmap that contain in key all the box that can be picked and placed.
-     * Associate to each key the number of same box available
-     * Type :
-     *      - TypeOfStackBox : the type of the box category
-     *      - Integer : the number of box from this type in the stack that can be picked
-     */
-    private HashMap<TypeOfStackBox,Integer> StackOfAvailableBox;
-
     public Board(){
         HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique);
         numberBoxPlaced = 1;
@@ -148,7 +139,7 @@ public class Board {
             adjacenteBox[0] = adjBox_of2OtherBox(sameIndice,indicePlus1,indicePlus2,coordinatesBox1,coordinatesBox2,true);
             adjacenteBox[1] = adjBox_of2OtherBox(sameIndice,indicePlus1,indicePlus2,coordinatesBox1,coordinatesBox2,false);
         } catch (AdjacenteException exception) {
-            System.err.println(exception.getClass().getName() + ": " + exception.getMessage());
+            System.err.println("\n  -> An error has occurred :\n" + exception.getClass().getName() + " : " + exception.getErrorTitle() + "\n");
         }
         return adjacenteBox;
     }

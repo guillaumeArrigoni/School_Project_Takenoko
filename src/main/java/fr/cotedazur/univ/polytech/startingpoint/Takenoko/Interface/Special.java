@@ -1,7 +1,14 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface;
 
 public enum Special {
-    Classic(0, "classic");
+    /**
+     * The different special particularity of the box
+     */
+    Classique(0, "classic"),
+    SourceEau(1,"water's source"),
+    Engrais(2,"fertilizer"),
+    Protéger(3,"protected");
+
     private final int indice;
 
     private final String description;

@@ -41,35 +41,12 @@ public class Board {
         numberBoxPlaced = 1;
 
         AvailableBox = new HashMap<Integer,Integer>();
-        ArrayList<Integer> listAdjacenteBox = get_all_adjacente_box(lac.getId());
-        AvailableBox = Add_Integer_Into_Dico_With_Same_Value(AvailableBox,listAdjacenteBox,1);
+        for (int i=0;i<6;i++){
+            AvailableBox.put(lac.getAdjacentBoxOfIndex(i),1);
+        }
 
         PlacedBox = new HashMap<Integer,Integer>();
         PlacedBox.put(lac.getId(),0);
-    }
-
-    /**
-     * A method to get the 6 possible adjacente box of a box
-     * @param id of the box witch we want to get all the adjacente box
-     * @return an ArrayList<Integer> with the id of the adjacente box following the order :
-     *      6       1
-     *  5       x       2
-     *      4       3
-     * with x the box in question and 1,2,3,4,5,6 the adjacente box
-     */
-    private ArrayList<Integer> get_all_adjacente_box(int id){
-        ArrayList<Integer> adjacenteBox = new ArrayList<Integer>();
-        int[] coordinates = separateID(id);
-        int x = coordinates[0];
-        int y = coordinates[1];
-        int z = coordinates[2];
-        adjacenteBox.add(generateID(x+1,y-1,z));
-        adjacenteBox.add(generateID(x+1,y,z-1));
-        adjacenteBox.add(generateID(x,y+1,z-1));
-        adjacenteBox.add(generateID(x-1,y+1,z));
-        adjacenteBox.add(generateID(x-1,y,z+1));
-        adjacenteBox.add(generateID(x,y-1,z+1));
-        return adjacenteBox;
     }
 
     /**
@@ -79,11 +56,11 @@ public class Board {
     public void addBox(HexagoneBox box){
         int id = box.getId();
         UpdateAvaiableBoxAndPlacedBox(id);
-        ArrayList<Integer> adjacenteBox = get_all_adjacente_box(id);
         for (int i=0;i<6;i++){
-            if (PlacedBox.containsKey(adjacenteBox.get(i))){
+            int AdjacentId = box.getAdjacentBoxOfIndex(i);
+            if (PlacedBox.containsKey(AdjacentId)){
                 //cherche toutes les tuiles adjacente à celle que l'on pose
-                AddNewAvailableBoxToDico(id,adjacenteBox.get(i));
+                AddNewAvailableBoxToDico(id,AdjacentId);
             }
         }
     }

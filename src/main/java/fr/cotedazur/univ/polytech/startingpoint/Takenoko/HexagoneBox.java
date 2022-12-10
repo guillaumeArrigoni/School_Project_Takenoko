@@ -1,10 +1,12 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception.AdjacenteException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.generateID;
 import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
@@ -21,6 +23,7 @@ public class HexagoneBox {
     private Special special;
     private boolean irrigate;
     private int heightBamboo;
+    private HashMap<Integer,Integer> AdjacentBox;
 
 
 
@@ -42,6 +45,7 @@ public class HexagoneBox {
         this.special = special;
         this.irrigate = true;
         this.heightBamboo = 0;
+        get_all_adjacente_box();
     }
 
     public HexagoneBox (Color color, Special special){
@@ -51,6 +55,7 @@ public class HexagoneBox {
         this.special = special;
         this.irrigate = true;
         this.heightBamboo = 0;
+        get_all_adjacente_box();
     }
 
     public ArrayList<Integer> getCoordinates(){
@@ -77,9 +82,39 @@ public class HexagoneBox {
         return heightBamboo;
     }
 
+    public int getAdjacentBoxOfIndex(int index){
+        return this.AdjacentBox.get(index);
+    }
+
     public void setId(int id){
         this.id = id;
         int[] tempoCoordinates = separateID(id);
         this.coordinates = new ArrayList(Arrays.asList(tempoCoordinates));
+    }
+
+    public void setAdjacentBox(ArrayList<Integer> ListOfAdjacentBox){
+        for (int i=0;i<ListOfAdjacentBox.size();i++){
+
+        }
+    }
+
+    /**
+     * A method to get the 6 possible adjacente box of a box
+     *      6       1
+     *  5       x       2
+     *      4       3
+     * with x the box in question and 1,2,3,4,5,6 the adjacente box
+     */
+    private void get_all_adjacente_box(){
+        this.AdjacentBox = new HashMap<Integer,Integer>();
+        int x = this.coordinates.get(0);
+        int y = this.coordinates.get(1);
+        int z = this.coordinates.get(2);
+        this.AdjacentBox.put(1,generateID(x+1,y-1,z));
+        this.AdjacentBox.put(2,generateID(x+1,y,z-1));
+        this.AdjacentBox.put(3,generateID(x,y+1,z-1));
+        this.AdjacentBox.put(4,generateID(x-1,y+1,z));
+        this.AdjacentBox.put(5,generateID(x-1,y,z+1));
+        this.AdjacentBox.put(6,generateID(x,y-1,z+1));
     }
 }

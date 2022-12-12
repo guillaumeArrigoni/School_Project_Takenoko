@@ -55,7 +55,6 @@ public class HexagoneBox {
         this.special = special;
         this.irrigate = true;
         this.heightBamboo = 0;
-        get_all_adjacente_box();
     }
 
     public ArrayList<Integer> getCoordinates(){
@@ -82,6 +81,9 @@ public class HexagoneBox {
         return heightBamboo;
     }
 
+    public HashMap<Integer, Integer> getAdjacentBox() {
+        return this.AdjacentBox;
+    }
     public int getAdjacentBoxOfIndex(int index){
         return this.AdjacentBox.get(index);
     }
@@ -116,5 +118,6 @@ public class HexagoneBox {
         this.AdjacentBox.put(4,generateID(x-1,y+1,z));
         this.AdjacentBox.put(5,generateID(x-1,y,z+1));
         this.AdjacentBox.put(6,generateID(x,y-1,z+1));
+        System.out.println(this.AdjacentBox.toString());
     }
 }

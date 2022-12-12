@@ -28,14 +28,20 @@ public class CoordinateMethod {
      * @return a tab of 3 int with the coordinates
      */
     public static int[] separateID(int id) {
+        int[] tab = new int[3];
+        tab[0] = (id % 1000000) / 10000;
+        tab[1] = (id % 10000) / 100;
+        tab[2] = id % 100;
+        return tab;
+    }
+    /*public static int[] separateID(int id) {
         int[] coordinates = new int[3];
         String idString = Integer.toString(id);
         for (int i = 3; i > 0; i--) {
             coordinates[i] = Integer.parseInt(idString.substring(i * 2 + 1, i * 2 + 3));
         }
         return coordinates;
-    }
-
+    }*/
     /**
      * Method use to add to a Hashmap all the Integer of the first ArrayList as key and all the Integer of the second one as value for those key
      * (N Integer of the first ArrayList will be the key associated to the N Integer of the second ArrayList)

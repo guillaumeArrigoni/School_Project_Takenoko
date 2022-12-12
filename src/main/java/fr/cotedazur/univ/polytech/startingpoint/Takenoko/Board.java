@@ -9,6 +9,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.TypeOfStackBo
 import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -41,12 +42,20 @@ public class Board {
         numberBoxPlaced = 1;
 
         AvailableBox = new HashMap<Integer,Integer>();
-        for (int i=0;i<6;i++){
+        for (int i=1;i<7;i++){
             AvailableBox.put(lac.getAdjacentBoxOfIndex(i),1);
         }
 
         PlacedBox = new HashMap<Integer,Integer>();
         PlacedBox.put(lac.getId(),0);
+    }
+
+    public int getNumberBoxPlaced() {
+        return numberBoxPlaced;
+    }
+
+    public HashMap<Integer, Integer> getPlacedBox() {
+        return PlacedBox;
     }
 
     /**
@@ -55,12 +64,35 @@ public class Board {
      */
     public void addBox(HexagoneBox box){
         int id = box.getId();
+        int newID1, newID2;
         UpdateAvaiableBoxAndPlacedBox(id);
-        for (int i=0;i<6;i++){
+        System.out.println(id);
+        System.out.println(Arrays.toString(separateID(id)));
+        System.out.println(box.getAdjacentBox().toString());
+        for (int i=1;i<7;i++){
             int AdjacentId = box.getAdjacentBoxOfIndex(i);
             if (PlacedBox.containsKey(AdjacentId)){
                 //cherche toutes les tuiles adjacente à celle que l'on pose
-                AddNewAvailableBoxToDico(id,AdjacentId);
+                int x = separateID(id)[0], y = separateID(id)[1], z = separateID(id)[2];
+                int x1 = separateID(AdjacentId)[0], y1 = separateID(AdjacentId)[1], z1 = separateID(AdjacentId)[2];
+                if (x==x1) {
+                    newID1 = 1000000 + (x+1)*10000 + Math.min(y,y1)*100 + Math.min(z,z1);
+                    newID2 = 1000000 + (x-1)*10000 + Math.max(y,y1)*100 + Math.max(z,z1);
+                }
+                else if (y==y1) {
+                    newID1 = 1000000 + Math.min(x,x1)*10000 + (y+1)*100 + Math.min(z,z1);
+                    newID2 = 1000000 + Math.max(x,x1)*10000 + (y-1)*100 + Math.max(z,z1);
+                }
+                else {
+                    newID1 = 1000000 + Math.min(x,x1)*10000 + Math.min(y,y1)*100 + (z+1);
+                    newID2 = 1000000 + Math.max(x,x1)*10000 + Math.min(y,y1)*100 + (z-1);
+                }
+                if (!PlacedBox.containsKey(newID1) && !AvailableBox.containsKey(newID1)) {
+                    AvailableBox.put(newID1, Math.max(Math.abs(x-x1), Math.max(Math.abs(y-y1), Math.abs(z-z1))));
+                }
+                if (!PlacedBox.containsKey(newID2) && !AvailableBox.containsKey(newID2)) {
+                    AvailableBox.put(newID2, Math.max(Math.abs(x-x1), Math.max(Math.abs(y-y1), Math.abs(z-z1))));
+                }
             }
         }
     }

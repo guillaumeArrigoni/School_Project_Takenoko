@@ -16,7 +16,7 @@ class BotTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        bot = new Bot();
+        bot = new Bot("testBot");
     }
 
     @Test
@@ -25,8 +25,7 @@ class BotTest {
         assertEquals(6, board.getAvailableBox().size());
         HexagoneBox test = bot.placeRandomTile(board);
         assertEquals(2, board.getAvailableBox().size());
+        HexagoneBox test1 = bot.placeRandomTile(board);
+        assertEquals(3, board.getPlacedBox().size());
     }
-
-
-
 }

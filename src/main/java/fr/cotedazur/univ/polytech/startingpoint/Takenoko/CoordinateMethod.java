@@ -16,24 +16,27 @@ public class CoordinateMethod {
      * @param z : third coordinate
      * @return the id associated to the coordinates:
      */
-    public static int generateID(int x, int y, int z) {
+    /*public static int generateID(int x, int y, int z) {
         int id = 1000000;
         id = id + x * 10000 + y * 100 + z;
         return id;
-    }
+    }*/
 
     /**
      * Method use to separate a id into a tab of 3 int with the coordinates associated to the id
      * @param id : the id we want to get the coordinates
      * @return a tab of 3 int with the coordinates
      */
-    public static int[] separateID(int id) {
+    /*public static int[] separateID(int id) {
         int[] tab = new int[3];
         tab[0] = (id % 1000000) / 10000;
         tab[1] = (id % 10000) / 100;
         tab[2] = id % 100;
+        for (int i=0; i<3; i++) {
+            if (tab[i] > 50) tab[i]=tab[i]-100;
+        }
         return tab;
-    }
+    }*/
     /*public static int[] separateID(int id) {
         int[] coordinates = new int[3];
         String idString = Integer.toString(id);
@@ -73,14 +76,11 @@ public class CoordinateMethod {
 
     /**
      * Return the range of a Box to the center of the board (lake)
-     * @param id : of the box that we want to know the range to the lake
-     * @return a int that correspond to the range
+     * @param coordinates : of the box that we want to know the range to the lake
+     * @return int that correspond to the range
      */
-    public static int get_range_from_center(int id){
-        int[] coordinates = separateID(id);
-        int range = abs(coordinates[0]) + abs(coordinates[1]) + abs(coordinates[2]);
-        range = range/2;
-        return range;
+    public static int get_range_from_center(int[] coordinates){
+        return Math.max(coordinates[0], Math.max(coordinates[1], coordinates[2]));
     }
 
     /**

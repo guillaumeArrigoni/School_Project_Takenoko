@@ -1,7 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Action;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
 import org.junit.jupiter.api.Test;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;

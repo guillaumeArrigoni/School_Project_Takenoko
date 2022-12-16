@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.Arrays;
@@ -18,7 +19,7 @@ public class Main {
         int nbLigne = 5;
         HashMap<int[], Integer> placedBox = board.getPlacedBox();
         for (Map.Entry tile : placedBox.entrySet()) {
-            System.out.print(Arrays.toString((int[])tile.getKey()) + " ");
+            System.out.print(Arrays.toString((int[])tile.getKey()));
         }
         System.out.println(" ");
     }
@@ -50,5 +51,6 @@ public class Main {
         }
 
         printBoardState(board);
+        System.out.println(Action.possibleMoveForGardener(board, board.getGardenerCoords()));
     }
 }

@@ -1,11 +1,10 @@
-package fr.cotedazur.univ.polytech.startingpoint;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,16 +15,15 @@ class BotTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        bot = new Bot("testBot");
+        bot = new Bot("testBot", board);
     }
 
     @Test
     void placeRandomTile() {
-        int size = board.getAvailableBox().size();
         assertEquals(6, board.getAvailableBox().size());
-        HexagoneBox test = bot.placeRandomTile(board);
+        bot.placeRandomTile();
         assertEquals(2, board.getAvailableBox().size());
-        HexagoneBox test1 = bot.placeRandomTile(board);
+        bot.placeRandomTile();
         assertEquals(3, board.getAvailableBox().size());
     }
 }

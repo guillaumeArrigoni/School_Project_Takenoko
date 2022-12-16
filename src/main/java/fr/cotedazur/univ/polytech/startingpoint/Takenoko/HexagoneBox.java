@@ -1,11 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception.AdjacenteException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /*import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.generateID;
@@ -45,7 +43,7 @@ public class HexagoneBox {
         this.special = special;
         this.irrigate = true;
         this.heightBamboo = 0;
-        get_all_adjacente_box();
+        getAllAdjacenteBox();
     }
 
     public HexagoneBox (Color color, Special special){
@@ -90,6 +88,7 @@ public class HexagoneBox {
 
     public void setCoordinates(int[] coordinates) {
         this.coordinates = coordinates;
+        getAllAdjacenteBox();
     }
 
     /*public void setId(int id){
@@ -111,7 +110,7 @@ public class HexagoneBox {
      *      4       3
      * with x the box in question and 1,2,3,4,5,6 the adjacente box
      */
-    private void get_all_adjacente_box(){
+    private void getAllAdjacenteBox(){
         this.AdjacentBox = new HashMap<Integer,int[]>();
         int x = this.coordinates[0];
         int y = this.coordinates[1];

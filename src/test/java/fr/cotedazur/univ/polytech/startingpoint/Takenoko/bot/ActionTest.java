@@ -1,11 +1,9 @@
-package fr.cotedazur.univ.polytech.startingpoint;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Action;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
 import org.junit.jupiter.api.Test;
-
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

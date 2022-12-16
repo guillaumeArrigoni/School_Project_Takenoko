@@ -2,41 +2,50 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-
+/**
+ * This class is the bot that will play the game
+ */
 public class Bot {
-    public String name;
-    public Bot(String name){
+    /**
+     * Name of the bot
+     */
+    private final String name;
+    private final Board board;
+
+    /**
+     * Constructor of the bot
+     * @param name : name of the bot
+     */
+    public Bot(String name, Board board){
         this.name = name;
+        this.board = board;
     }
 
-    public HexagoneBox placeRandomTile(Board board){
+    /**
+     * This method is used to place a random tile on the board
+     */
+    public void placeRandomTile(){
+        //Init
         List<HexagoneBox> list = new ArrayList<>();
+        //Get all the available coords
         List<int[]> availableTilesList = board.getAvailableBox().keySet().stream().toList();
+        //Draw three tiles
         for(int i = 0; i < 3; i++)
             list.add(Action.drawTile());
+        //Choose a random tile from the tiles drawn
         HexagoneBox placedTile = list.get(ThreadLocalRandom.current().nextInt(0, 3));
+        //Choose a random available space
         int[] placedTileCoords = availableTilesList.get(ThreadLocalRandom.current().nextInt(0, availableTilesList.size()));
+        //Set the coords of the tile
         placedTile.setCoordinates(placedTileCoords);
-        
-        placedTile = new HexagoneBox(placedTileCoords[0],
-                                     placedTileCoords[1],
-                                     placedTileCoords[2],
-                                     placedTile.getColor(),
-                                     placedTile.getSpecial());
+        //Add the tile to the board
         board.addBox(placedTile);
-        return placedTile;
-    }
-
-    public void playAndPrintMove(Board board) {
-        HexagoneBox placedTile = placeRandomTile(board);
         System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 }

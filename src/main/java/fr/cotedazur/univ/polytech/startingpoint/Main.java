@@ -24,8 +24,8 @@ public class Main {
 
     public static void main(String... args) {
         Board board = new Board();
-        Bot bot1 = new Bot("Bot1");
-        Bot bot2 = new Bot("Bot2");
+        Bot bot1 = new Bot("Bot1",board);
+        Bot bot2 = new Bot("Bot2",board);
         MeteoDice meteoDice = new MeteoDice();
         System.out.println("Que la partie commence !");
         boolean playing = true;
@@ -35,12 +35,12 @@ public class Main {
             MeteoDice.Meteo meteo = meteoDice.roll();
             System.out.println("Le dé a choisi : " + meteo);
             if (turn == 0) {
-                bot1.playAndPrintMove(board);
-                bot1.playAndPrintMove(board);
+                bot1.placeRandomTile();
+                bot1.placeRandomTile();
             }
             else {
-                bot2.playAndPrintMove(board);
-                bot2.playAndPrintMove(board);
+                bot2.placeRandomTile();
+                bot2.placeRandomTile();
             }
             turn = 1 - turn;
             if (board.getNumberBoxPlaced() == 11) {playing = false;}

@@ -6,6 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Main {
 
@@ -24,8 +25,9 @@ public class Main {
 
     public static void main(String... args) {
         Board board = new Board();
-        Bot bot1 = new Bot("Bot1",board);
-        Bot bot2 = new Bot("Bot2",board);
+        Random random = new Random();
+        Bot bot1 = new Bot("Bot1",board,random);
+        Bot bot2 = new Bot("Bot2",board,random);
         MeteoDice meteoDice = new MeteoDice();
         System.out.println("Que la partie commence !");
         boolean playing = true;

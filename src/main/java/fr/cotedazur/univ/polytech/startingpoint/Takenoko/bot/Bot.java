@@ -6,8 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
+import java.util.Random;
 /**
  * This class is the bot that will play the game
  */
@@ -18,13 +17,16 @@ public class Bot {
     private final String name;
     private final Board board;
 
+    private final Random random;
+
     /**
      * Constructor of the bot
      * @param name : name of the bot
      */
-    public Bot(String name, Board board){
+    public Bot(String name, Board board, Random random) {
         this.name = name;
         this.board = board;
+        this.random = random;
     }
 
     /**
@@ -37,11 +39,11 @@ public class Bot {
         List<int[]> availableTilesList = board.getAvailableBox().keySet().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(Action.drawTile());
+            list.add(Action.drawTile(random));
         //Choose a random tile from the tiles drawn
-        HexagoneBox placedTile = list.get(ThreadLocalRandom.current().nextInt(0, 3));
+        HexagoneBox placedTile = list.get(random.nextInt(0, 3));
         //Choose a random available space
-        int[] placedTileCoords = availableTilesList.get(ThreadLocalRandom.current().nextInt(0, availableTilesList.size()));
+        int[] placedTileCoords = availableTilesList.get(random.nextInt(0, availableTilesList.size()));
         //Set the coords of the tile
         placedTile.setCoordinates(placedTileCoords);
         //Add the tile to the board

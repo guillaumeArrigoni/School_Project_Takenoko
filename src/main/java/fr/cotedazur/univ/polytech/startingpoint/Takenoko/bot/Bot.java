@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.Objectives;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ public class Bot {
      */
     private final String name;
     private final Board board;
+    private ArrayList<Objectives> objectives;
 
     private final Random random;
 
@@ -27,6 +29,7 @@ public class Bot {
         this.name = name;
         this.board = board;
         this.random = random;
+        this.objectives = new ArrayList<>();
     }
 
     /**
@@ -49,6 +52,10 @@ public class Bot {
         //Add the tile to the board
         board.addBox(placedTile);
         System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+    }
+
+    public ArrayList<Objectives> getObjectives() {
+        return objectives;
     }
 }
 

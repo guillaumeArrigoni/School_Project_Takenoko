@@ -1,5 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,11 +28,11 @@ public class GestionObjectifs {
        int idPanda = 1;
        for(Objectives objectives : Objectives.values()) {
            if(objectives.getType().equals("PARCELLE")) {
-               ParcelleObjectifs.put(idParcelle, objectives);
+               ParcelleObjectifs.put(idParcelle++, objectives);
            } if(objectives.getType().equals("JARDINIER")){
-               JardinierObjectifs.put(idJardinier, objectives);
+               JardinierObjectifs.put(idJardinier++, objectives);
            } if(objectives.getType().equals("PANDA")){
-               PandaObjectifs.put(idPanda, objectives);
+               PandaObjectifs.put(idPanda++, objectives);
            }
        }
     }
@@ -68,5 +70,49 @@ public class GestionObjectifs {
         Objectives objective = getPandaObjectifs().get(i);
         getPandaObjectifs().remove(i);
         return  objective;
+    }
+
+    public boolean checkObjectives(Objectives objectives){
+        return switch(objectives.getType()) {
+            case "PARCELLE" -> checkParcelleObjectives(objectives);
+            case "JARDINIER" -> checkJardinierObjectives(objectives);
+            case "PANDA" -> checkPandaObjectives(objectives);
+            default -> false;
+        };
+
+    }
+
+    public boolean checkPandaObjectives(Objectives objectives) {
+        return false;
+    }
+
+    public boolean checkJardinierObjectives(Objectives objectives) {
+        return false;
+    }
+
+    public boolean checkParcelleObjectives(Objectives objectives) {
+        return switch (objectives.getPattern().getForme()){
+            case "TRIANGLE" -> checkParcelleTriangleObjectives(objectives);
+            case "LIGNE" -> checkParcelleLigneObjectives(objectives);
+            case "COURBE" -> checkParcelleCourbeObjectives(objectives);
+            case "LOSANGE" -> checkParcelleLosangeObjectives(objectives);
+            default -> false;
+        };
+    }
+
+    private boolean checkParcelleLosangeObjectives(Objectives objectives) {
+        return false;
+    }
+
+    private boolean checkParcelleCourbeObjectives(Objectives objectives) {
+        return false;
+    }
+
+    private boolean checkParcelleLigneObjectives(Objectives objectives) {
+        return false;
+    }
+
+    private boolean checkParcelleTriangleObjectives(Objectives objectives) {
+        return false;
     }
 }

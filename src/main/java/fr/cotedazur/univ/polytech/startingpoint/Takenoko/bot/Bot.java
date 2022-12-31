@@ -3,6 +3,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.Objectives;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.TypeObjective;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +18,8 @@ public class Bot {
      */
     private final String name;
     private final Board board;
+    private int score;
+    private final int NB_MAX_OBJECTIFS = 5;
     private ArrayList<Objectives> objectives;
 
     private final Random random;
@@ -27,6 +30,7 @@ public class Bot {
      */
     public Bot(String name, Board board, Random random) {
         this.name = name;
+        this.score = 0;
         this.board = board;
         this.random = random;
         this.objectives = new ArrayList<>();
@@ -56,6 +60,26 @@ public class Bot {
 
     public ArrayList<Objectives> getObjectives() {
         return objectives;
+    }
+
+    public int getScore() {
+        return score;
+    }
+    public void addScore(Objectives objectives){
+        this.score += objectives.getValue();
+    }
+
+    /** Le bot doit choisir quel type d'objectif piocher.
+     * A MODIFIER POUR QUE LE BOT CHOISISSE DE MANIERE INTELLIGENTE.
+     */
+    public TypeObjective chooseTypeObjectiveToRoll(){
+        int i = (int) (Math.random() * 3) + 1 ;
+        return switch (i){
+            case 1 -> TypeObjective.PARCELLE;
+            case 2 -> TypeObjective.JARDINIER;
+            case 3 -> TypeObjective.PANDA;
+            default -> TypeObjective.PARCELLE;
+        };
     }
 }
 

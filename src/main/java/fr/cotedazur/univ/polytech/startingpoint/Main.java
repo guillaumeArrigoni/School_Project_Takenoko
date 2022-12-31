@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectifs;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
@@ -30,6 +31,8 @@ public class Main {
         Bot bot1 = new Bot("Bot1",board,random);
         Bot bot2 = new Bot("Bot2",board,random);
         MeteoDice meteoDice = new MeteoDice();
+        GestionObjectifs gestionnaire = new GestionObjectifs();
+        gestionnaire.initialize();
         System.out.println("Que la partie commence !");
         boolean playing = true;
         int turn = 0;
@@ -38,15 +41,26 @@ public class Main {
             MeteoDice.Meteo meteo = meteoDice.roll();
             System.out.println("Le dé a choisi : " + meteo);
             if (turn == 0) {
+                if(gestionnaire.checkIfBotCanDrawAnObjective(bot1)){
+                    gestionnaire.rollObjective(bot1);
+                }
+                gestionnaire.checkObjectives(bot1);
                 bot1.placeRandomTile();
                 bot1.placeRandomTile();
             }
             else {
+                if(gestionnaire.checkIfBotCanDrawAnObjective(bot2)){
+                    gestionnaire.rollObjective(bot2);
+                }
+                gestionnaire.checkObjectives(bot2);
                 bot2.placeRandomTile();
                 bot2.placeRandomTile();
             }
             turn = 1 - turn;
-            if (board.getNumberBoxPlaced() == 11) {playing = false;}
+            if (board.getNumberBoxPlaced() == 11) {
+                playing = false;
+                gestionnaire.printWinner(bot1, bot2);
+            }
             System.out.println("------------------------------------------");
         }
 

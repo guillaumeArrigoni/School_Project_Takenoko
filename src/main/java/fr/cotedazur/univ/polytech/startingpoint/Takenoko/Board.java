@@ -25,6 +25,7 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
+
     private ArrayList<HexagoneBox> PlacedBox;
 
     /**
@@ -60,11 +61,33 @@ public class Board {
 
     public int[] getPandaCoords() {return this.pandaCoords;}
 
-    public void setGardenerCoords(int[] newCoords) {
-        this.gardenerCoords = newCoords;
+    public void setGardenerCoords(int[] coords) {
+        this.gardenerCoords = coords;
+        HexagoneBox box;
+        box = getBoxWithCoordinates(coords);
+        if (box.isIrrigate()) box.growBamboo();
+        HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
+        ArrayList<HexagoneBox> placedBox = this.getPlacedBox();
+        for (HexagoneBox newBox : placedBox) {
+            if (this.containsValue(adjacentBox, box.getCoordinates())) {
+                if (newBox.isIrrigate()) newBox.growBamboo();
+            }
+        }
     }
 
-    public void setPandaCoords(int[] newCoords) {this.pandaCoords = newCoords;}
+    public HexagoneBox getBoxWithCoordinates(int[] coords) {
+        for (HexagoneBox newBox : this.PlacedBox) {
+            if (Arrays.equals(newBox.getCoordinates(), coords)) return newBox;
+        }
+        return null;
+    }
+
+    public void setPandaCoords(int[] newCoords) {
+        this.pandaCoords = newCoords;
+        HexagoneBox box;
+        box = getBoxWithCoordinates(newCoords);
+        box.eatBamboo();
+    }
     public int getNumberBoxPlaced() {
         return numberBoxPlaced;
     }

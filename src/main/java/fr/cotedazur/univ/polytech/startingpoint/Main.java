@@ -20,8 +20,8 @@ public class Main {
             System.out.print(Arrays.toString((int[])tile.getKey()));
         }
         System.out.println(" ");
-    }*/
-/*
+    }
+
     public static void main(String... args) {
         Board board = new Board();
         Random random = new Random();
@@ -51,6 +51,6 @@ public class Main {
         printBoardState(board);
         System.out.println(Action.possibleMoveForGardener(board, board.getGardenerCoords()));
     }
-    */
+*/
 
 }

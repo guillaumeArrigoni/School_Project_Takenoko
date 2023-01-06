@@ -54,21 +54,12 @@ public class Action {
         return possibleMove;
     }
 
-    public static void moveGardener(Board board, HexagoneBox box) {
-        board.setGardenerCoords(box.getCoordinates());
-        box.growBamboo();
-        HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
-        ArrayList<HexagoneBox> placedBox = board.getPlacedBox();
-        for (HexagoneBox newBox : placedBox) {
-            if (board.containsValue(adjacentBox, box.getCoordinates())) {
-                newBox.growBamboo();
-            }
-        }
+    public static void moveGardener(Board board, int[] coords) {
+        board.setGardenerCoords(coords);
     }
 
-    public static void movePanda(Board board, HexagoneBox box) {
-        board.setPandaCoords(box.getCoordinates());
-        box.eatBamboo();
+    public static void movePanda(Board board, int[] coords) {
+        board.setPandaCoords(coords);
     }
 
 

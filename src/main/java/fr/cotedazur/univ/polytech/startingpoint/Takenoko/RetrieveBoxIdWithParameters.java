@@ -5,18 +5,18 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
 import java.util.*;
 
-public class CheckObjectives {
+public class RetrieveBoxIdWithParameters {
 
 
-    HashMap<Color, ArrayList<Integer>> BoxColor = new HashMap<>();
-    HashMap<Boolean, ArrayList<Integer>> BoxIsIrrigated = new HashMap<>();
-    HashMap<Integer, ArrayList<Integer>> BoxHeight = new HashMap<>();
-    HashMap<Special, ArrayList<Integer>> BoxSpeciality = new HashMap<>();
+    private HashMap<Color, ArrayList<Integer>> BoxColor = new HashMap<>();
+    private HashMap<Boolean, ArrayList<Integer>> BoxIsIrrigated = new HashMap<>();
+    private HashMap<Integer, ArrayList<Integer>> BoxHeight = new HashMap<>();
+    private HashMap<Special, ArrayList<Integer>> BoxSpeciality = new HashMap<>();
 
     /**
      * Initiate all the value for the Hashmap in order to avoid checking if a key exist
      */
-    public CheckObjectives(){
+    public RetrieveBoxIdWithParameters(){
         ArrayList<Integer> empty = new ArrayList<>();
         this.BoxIsIrrigated.put(true,empty);
         this.BoxIsIrrigated.put(false,empty);
@@ -55,33 +55,17 @@ public class CheckObjectives {
         BoxSpeciality.put(speciality,listId);
     }
 
-    private ArrayList<Integer> getAllIdThatCompleteCondition(Optional<Color> color, Optional<Boolean> isIrrigated, Optional<Integer> height, Optional<Special> Speciality){
-        ArrayList<ArrayList<Integer>> allList = new ArrayList<>();
-        if (color.isPresent()){
-            allList.add(BoxColor.get(color));
-        }
-        if (isIrrigated.isPresent()){
-            allList.add(BoxIsIrrigated.get(isIrrigated));
-        }
-        if (height.isPresent()){
-            allList.add(BoxHeight.get(height));
-        }
-        if (Speciality.isPresent()){
-            allList.add(BoxSpeciality.get(Speciality));
-        }
-        ArrayList<Integer> listToReturn;
-        if (allList.isEmpty()){
-            listToReturn = new ArrayList<>();
-        } else {
-            listToReturn = allList.get(0);
-        }
-        for (int i=1;i<allList.size();i++){
-            listToReturn.retainAll(allList.get(i));
-        }
-        return listToReturn;
-    }
 
-    private ArrayList<Integer> getAllIdThatCompleteCondition2(Optional<ArrayList<Color>> color, Optional<ArrayList<Boolean>> isIrrigated, Optional<ArrayList<Integer>> height, Optional<ArrayList<Special>> speciality){
+    /**
+     * Method use to get all the id of the box that complete the requirement below
+     * All the parameters below are Optionals, they can be passed with an Optional.empty()
+     * @param color : is an ArrayList of Color that are requested
+     * @param isIrrigated : is an ArrayList of Boolean that are requested
+     * @param height : is an ArrayList of Integer that are requested
+     * @param speciality : is an ArrayList of Special that are requested
+     * @return the ArrayList of all the id that complete the requirement
+     */
+    public ArrayList<Integer> getAllIdThatCompleteCondition2(Optional<ArrayList<Color>> color, Optional<ArrayList<Boolean>> isIrrigated, Optional<ArrayList<Integer>> height, Optional<ArrayList<Special>> speciality){
         ArrayList<ArrayList<Integer>> allList = new ArrayList<>();
         HashMap<Integer,ArrayList<Integer>> allListInDico = new HashMap<>();
         if (color.isPresent()){
@@ -108,6 +92,12 @@ public class CheckObjectives {
         return listToReturn;
     }
 
+    /**
+     * Method use to merge all the list that are described.
+     * @param listToMerge : an ArrayList of Objects that are the key of the HashMap below
+     * @param dicoRelated : a Hashmap that use the previous element are give an ArrayList of id
+     * @return an ArrayList with all the id that are merge from all the list
+     */
     private ArrayList<Integer> mergeAllList(ArrayList listToMerge, HashMap dicoRelated){
         ArrayList<Integer> tempoList = new ArrayList<>();
         for (int i=0;i<listToMerge.size();i++){

@@ -115,7 +115,8 @@ public class GestionObjectifs {
     }
 
     public boolean checkJardinierObjectives(Objectives objectives) {
-        return false;
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
+
     }
 
     public boolean checkParcelleObjectives(Objectives objectives) {
@@ -230,7 +231,7 @@ public class GestionObjectifs {
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
         return bot.getObjectives().size() < 5;
     }
-    public void printWinner(Bot ... bots){
+    /*public void printWinner(Bot ... bots){
         int max=0;
         int i=1;
         int idWinner=0;
@@ -243,5 +244,5 @@ public class GestionObjectifs {
             i++;
         }
         System.out.println("Winner :  Bot" + idWinner + " wins with " + max + " points" );
-    }
+    }*/
 }

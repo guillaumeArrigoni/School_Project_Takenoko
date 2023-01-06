@@ -4,6 +4,7 @@ import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.Objectives;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.TypeObjective;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -159,6 +160,18 @@ public class Bot {
 
     public ArrayList<Objectives> getObjectives() {
         return objectives;
+    }
+    public void addScore(Objectives objectives){
+        this.score += objectives.getValue();
+    }
+    public TypeObjective chooseTypeObjectiveToRoll(){
+        int i = (int) (Math.random() * 3) + 1 ;
+        return switch (i){
+            case 1 -> TypeObjective.PARCELLE;
+            case 2 -> TypeObjective.JARDINIER;
+            case 3 -> TypeObjective.PANDA;
+            default -> TypeObjective.PARCELLE;
+        };
     }
 }
 

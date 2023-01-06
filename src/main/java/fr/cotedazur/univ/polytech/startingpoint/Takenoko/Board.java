@@ -66,12 +66,12 @@ public class Board {
         this.gardenerCoords = coords;
         HexagoneBox box;
         box = getBoxWithCoordinates(coords);
-        if (box.isIrrigate()) box.growBamboo();
+        if (box.isIrrigate() && !Arrays.equals(box.getCoordinates(), new int[]{0,0,0})) box.growBamboo();
         HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
         ArrayList<HexagoneBox> placedBox = this.getPlacedBox();
         for (HexagoneBox newBox : placedBox) {
             if (this.containsValue(adjacentBox, box.getCoordinates())) {
-                if (newBox.isIrrigate()) newBox.growBamboo();
+                if (newBox.isIrrigate() && !Arrays.equals(newBox.getCoordinates(), new int[]{0,0,0})) newBox.growBamboo();
             }
         }
     }

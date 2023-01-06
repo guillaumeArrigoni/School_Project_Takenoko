@@ -1,5 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.*;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
@@ -37,9 +41,9 @@ public class Main {
         boolean playing = true;
         int turn = 0;
 
+
         while (playing) {
-            MeteoDice.Meteo meteo = meteoDice.roll();
-            System.out.println("Le dé a choisi : " + meteo);
+            meteoDice.roll();
             if (turn == 0) {
                 bot1.playTurn();
             }
@@ -47,17 +51,10 @@ public class Main {
                 bot2.playTurn();
             }
             turn = 1 - turn;
-            if (board.getNumberBoxPlaced() == 11) {
-                playing = false;
-                System.out.println(bot1.getScore());
-                System.out.println(bot2.getScore());
-            }
+            printBoardState(board);
+            if (board.getNumberBoxPlaced() > 10) {playing = false;}
             System.out.println("------------------------------------------");
-
         }
-
-
-        printBoardState(board);
     }
 
 

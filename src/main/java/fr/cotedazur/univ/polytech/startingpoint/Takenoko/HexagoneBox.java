@@ -115,11 +115,6 @@ public class HexagoneBox {
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
 
-    public void setAdjacentBox(ArrayList<Integer> ListOfAdjacentBox){
-        for (int i=0;i<ListOfAdjacentBox.size();i++){
-
-        }
-    }
 
     /**
      * A method to get the 6 possible adjacente box of a box

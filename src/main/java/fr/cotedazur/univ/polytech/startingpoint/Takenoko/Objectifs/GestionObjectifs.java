@@ -1,12 +1,18 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.UniqueObjectCreated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class GestionObjectifs {
+
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private final Board board;
     private HashMap<Integer, Objectives> ParcelleObjectifs;
     private HashMap<Integer, Objectives> JardinierObjectifs;
     private HashMap<Integer, Objectives> PandaObjectifs;
@@ -15,6 +21,8 @@ public class GestionObjectifs {
      * Contient 3 hashmap qui stockent les differents types d'objectifs disponibles (les pioches).
      */
     public GestionObjectifs(){
+        this.retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
+        this.board = UniqueObjectCreated.getBoard();
         this.ParcelleObjectifs = new HashMap<>();
         this.JardinierObjectifs = new HashMap<>();
         this.PandaObjectifs = new HashMap<>();
@@ -133,6 +141,20 @@ public class GestionObjectifs {
     }
 
     private boolean checkParcelleTriangleObjectives(Objectives objectives) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
+        for (int i=0;i<listOfIdAvailable.size();i++){
+            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
+            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
+                if (listOfIdAvailable.contains(box.getAdjacentBox().get(j))){
+                    idOfAdjacentBoxCorrect.add(j);
+                }
+                int size = idOfAdjacentBoxCorrect.size();
+                if (size > 1 && ((idOfAdjacentBoxCorrect.get(size-1)-idOfAdjacentBoxCorrect.get(size-2) == 1) || (idOfAdjacentBoxCorrect.get(0)==1 && idOfAdjacentBoxCorrect.get(size-1)==6))){
+                    return true;
+                }
+            }
+        }
         return false;
     }
     public void printWinner(Bot bot1, Bot bot2){

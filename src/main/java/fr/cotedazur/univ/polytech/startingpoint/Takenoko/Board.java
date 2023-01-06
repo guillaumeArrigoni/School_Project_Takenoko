@@ -25,6 +25,7 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
+
     private ArrayList<HexagoneBox> PlacedBox;
 
     /**

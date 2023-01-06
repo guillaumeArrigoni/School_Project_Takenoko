@@ -27,6 +27,7 @@ public class Board {
      */
 
     private ArrayList<HexagoneBox> PlacedBox;
+    private HashMap<Integer,HexagoneBox> getBox;
 
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
@@ -157,6 +158,10 @@ public class Board {
         return false;
     }
 
+    public HashMap<Integer, HexagoneBox> getGetBox() {
+        return getBox;
+    }
+
     /**
      * Check if the number of box placed is equals to 2
      * (correspond to the case when the players add the first HexagoneBox to the booard (the first is the lake)
@@ -171,6 +176,7 @@ public class Board {
             AvailableBox.remove(box.getCoordinates());
         }
         PlacedBox.add(box);
+        getBox.put(box.getId(),box);
     }
 
     /*

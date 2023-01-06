@@ -62,13 +62,13 @@ public class GestionObjectifs {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    /*public Objectives rollObjective(Bot bot){
+    public Objectives rollObjective(Bot bot){
         TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll();
         return switch (typeObjective){
             case PARCELLE -> rollParcelleObjective();
             case JARDINIER -> rollJardinierObjective();
             /** Il n'y a pas encore d'Objectifs Panda.**/
-            /*case PANDA -> rollParcelleObjective();
+            case PANDA -> rollParcelleObjective();
         };
 
     }
@@ -141,11 +141,11 @@ public class GestionObjectifs {
             }
             for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
                 if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+1)%6)
-                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)).getColor()==box.getColor()
+                        && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)).getColor()==box.getColor()
                         && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+2)%6)
-                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6)).getColor()!=box.getColor()
+                        && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6)).getColor()!=box.getColor()
                         && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+3)%6)
-                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+3)%6)).getColor()!=box.getColor()){
+                        && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+3)%6)).getColor()!=box.getColor()){
                     return true;
                 }
             }
@@ -230,7 +230,7 @@ public class GestionObjectifs {
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
         return bot.getObjectives().size() < 5;
     }
-    /*public void printWinner(Bot ... bots){
+    public void printWinner(Bot ... bots){
         int max=0;
         int i=1;
         int idWinner=0;
@@ -243,5 +243,5 @@ public class GestionObjectifs {
             i++;
         }
         System.out.println("Winner :  Bot" + idWinner + " wins with " + max + " points" );
-    }*/
+    }
 }

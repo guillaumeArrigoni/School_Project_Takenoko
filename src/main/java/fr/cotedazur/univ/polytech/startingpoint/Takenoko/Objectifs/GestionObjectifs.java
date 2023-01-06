@@ -184,5 +184,5 @@ public class GestionObjectifs {
             i++;
         }
         System.out.println("Winner :  Bot" + idWinner + " wins with " + max + " points" );
-    }*/
-}
+    }
+*/}

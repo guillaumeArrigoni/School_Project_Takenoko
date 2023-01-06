@@ -32,9 +32,9 @@ public class Main {
         boolean playing = true;
         int turn = 0;
 
+
         while (playing) {
             MeteoDice.Meteo meteo = meteoDice.roll();
-            System.out.println("Le dé a choisi : " + meteo);
             if (turn == 0) {
                 bot1.playTurn();
             }
@@ -42,11 +42,11 @@ public class Main {
                 bot2.playTurn();
             }
             turn = 1 - turn;
-            if (board.getNumberBoxPlaced() == 11) {playing = false;}
+            printBoardState(board);
+            if (board.getNumberBoxPlaced() > 10) {playing = false;}
             System.out.println("------------------------------------------");
         }
 
-        printBoardState(board);
     }
 
 

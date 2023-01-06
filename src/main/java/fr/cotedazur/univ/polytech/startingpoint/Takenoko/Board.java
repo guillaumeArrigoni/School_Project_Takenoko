@@ -37,6 +37,8 @@ public class Board {
      */
     private HashMap<int[],Integer> AvailableBox;
 
+    private int[] gardenerCoords;
+
     public Board(){
         HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique);
         numberBoxPlaced = 1;
@@ -48,6 +50,15 @@ public class Board {
 
         PlacedBox = new HashMap<int[],HexagoneBox>();
         PlacedBox.put(lac.getCoordinates(),lac);
+        gardenerCoords = new int[]{0,0,0};
+    }
+
+    public int[] getGardenerCoords() {
+        return this.gardenerCoords;
+    }
+
+    public void setGardenerCoords(int[] newCoords) {
+        this.gardenerCoords = newCoords;
     }
 
     public int getNumberBoxPlaced() {

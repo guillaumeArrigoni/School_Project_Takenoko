@@ -4,29 +4,52 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class BotTest {
     Bot bot;
     Board board;
     RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+
+    Random r;
     @BeforeEach
     void setUp() {
+        r = mock(Random.class);
         board = new Board();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        bot = new Bot("testBot", board);
+        bot = new Bot("testBot", board, r);
     }
 
     @Test
-    void placeRandomTile() {
-        assertEquals(6, board.getAvailableBox().size());
+    void placeFirstTileDrawn() {
+        when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0);
+        assertEquals(1, board.getPlacedBox().size());
         bot.placeRandomTile();
-        assertEquals(2, board.getAvailableBox().size());
+        verify(r, times(5)).nextInt(anyInt(),anyInt());
+        assertEquals(2, board.getPlacedBox().size());
+    }
+
+    @Test
+    void placeSecondTileDrawn(){
+        when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,1,1);
+        assertEquals(1, board.getPlacedBox().size());
         bot.placeRandomTile();
-        assertEquals(3, board.getAvailableBox().size());
+        assertEquals(2, board.getPlacedBox().size());
+    }
+
+    @Test
+    void placeThirdTileDrawn(){
+        when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,2,2);
+        assertEquals(1, board.getPlacedBox().size());
+        bot.placeRandomTile();
+        assertEquals(2, board.getPlacedBox().size());
+
     }
 }

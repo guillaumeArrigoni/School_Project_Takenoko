@@ -173,5 +173,9 @@ public class Bot {
             default -> TypeObjective.PARCELLE;
         };
     }
+
+    public String getName() {
+        return name;
+    }
 }
 

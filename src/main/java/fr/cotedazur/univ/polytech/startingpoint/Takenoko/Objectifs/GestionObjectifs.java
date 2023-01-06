@@ -62,33 +62,35 @@ public class GestionObjectifs {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    public Objectives rollObjective(Bot bot){
+    public void rollObjective(Bot bot){
         TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll();
-        return switch (typeObjective){
-            case PARCELLE -> rollParcelleObjective();
-            case JARDINIER -> rollJardinierObjective();
-            /** Il n'y a pas encore d'Objectifs Panda.**/
-            case PANDA -> rollParcelleObjective();
+        switch (typeObjective){
+        case PARCELLE -> rollParcelleObjective(bot);
+        case JARDINIER -> rollJardinierObjective(bot);
+        /** Il n'y a pas encore d'Objectifs Panda.**/
+        case PANDA -> rollParcelleObjective(bot);
         };
-
     }
-    public Objectives rollParcelleObjective(){
+    public void rollParcelleObjective(Bot bot){
         int i = new Random().nextInt(1, getParcelleObjectifs().size() +1);
         Objectives objective = getParcelleObjectifs().get(i);
         getParcelleObjectifs().remove(i);
-        return  objective;
+        bot.getObjectives().add(objective);
+        System.out.println(bot.getName() + " a pioché un nouvel objectif.");
     }
-    public Objectives rollJardinierObjective(){
+    public void rollJardinierObjective(Bot bot){
         int i = new Random().nextInt(1, getJardinierObjectifs().size() +1);
         Objectives objective = getJardinierObjectifs().get(i);
         getJardinierObjectifs().remove(i);
-        return  objective;
+        bot.getObjectives().add(objective);
+        System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
     }
-    public Objectives rollPandaObjective(){
+    public void rollPandaObjective(Bot bot){
         int i = new Random().nextInt(1, getPandaObjectifs().size() +1);
         Objectives objective = getPandaObjectifs().get(i);
         getPandaObjectifs().remove(i);
-        return  objective;
+        bot.getObjectives().add(objective);
+        System.out.println(bot.getName() + " a pioché un nouvel objectif. " + objective.toString());
     }
     public void checkObjectives(Bot bot){
         for(Objectives objective : bot.getObjectives()){

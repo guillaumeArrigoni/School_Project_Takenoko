@@ -64,7 +64,7 @@ public class RetrieveBoxIdWithParameters {
      * @param speciality : is an ArrayList of Special that are requested
      * @return the ArrayList of all the id that complete the requirement
      */
-    public ArrayList<Integer> getAllIdThatCompleteCondition2(Optional<ArrayList<Color>> color, Optional<ArrayList<Boolean>> isIrrigated, Optional<ArrayList<Integer>> height, Optional<ArrayList<Special>> speciality){
+    public ArrayList<Integer> getAllIdThatCompleteCondition(Optional<ArrayList<Color>> color, Optional<ArrayList<Boolean>> isIrrigated, Optional<ArrayList<Integer>> height, Optional<ArrayList<Special>> speciality){
         ArrayList<ArrayList<Integer>> allList = new ArrayList<>();
         HashMap<Integer,ArrayList<Integer>> allListInDico = new HashMap<>();
         if (color.isPresent()){

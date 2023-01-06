@@ -93,6 +93,7 @@ public class GestionObjectifs {
         System.out.println(bot.getName() + " a pioché un nouvel objectif. " + objective.toString());
     }
     public void checkObjectives(Bot bot){
+        System.out.println(bot.getObjectives());
         for(Objectives objective : bot.getObjectives()){
             if(checkOneObjective(objective)){
                 bot.addScore(objective);

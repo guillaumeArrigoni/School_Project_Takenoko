@@ -79,14 +79,14 @@ public class RetrieveBoxIdWithParameters {
         if (speciality.isPresent()){
             allList.add(mergeAllList(speciality.get(),BoxSpeciality));
         }
-        ArrayList<Integer> listToReturn;
-        if (allList.isEmpty()){
-            listToReturn = new ArrayList<>();
-        } else {
-            listToReturn = allList.get(0);
-        }
+        ArrayList<Integer> listToReturn = new ArrayList<>();
         for (int i=1;i<allList.size();i++){
-            listToReturn.retainAll(allList.get(i));
+            if (listToReturn.isEmpty() && !allList.get(i).isEmpty()){
+                listToReturn.addAll(allList.get(i));
+            } else {
+                listToReturn.retainAll(allList.get(i));
+            }
+
         }
         return listToReturn;
     }

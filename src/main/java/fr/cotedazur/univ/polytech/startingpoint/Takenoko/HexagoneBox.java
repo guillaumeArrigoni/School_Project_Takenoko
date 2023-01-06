@@ -4,6 +4,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /*import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.generateID;
@@ -16,7 +17,7 @@ public class HexagoneBox {
      * Form : 1*1 000 000 + x*10 000 + y*100 + z
      * Example : 1020301 -> x = 02, y = 03, z = 01
      */
-    //private int id ;
+    private int id ;
     private Color color;
     private Special special;
     private boolean irrigate;
@@ -38,7 +39,7 @@ public class HexagoneBox {
      */
     public HexagoneBox (int x, int y, int z, Color color, Special special){
         this.coordinates = new int[]{x,y,z};
-        //this.id = generateID(x,y,z);
+        this.id = generateID(this.coordinates);
         this.color = color;
         this.special = special;
         this.irrigate = true;
@@ -59,9 +60,9 @@ public class HexagoneBox {
         return this.coordinates;
     }
     
-    /*public int getId(){
+    public int getId(){
         return this.id;
-    }*/
+    }
     
     public Color getColor(){
         return this.color;
@@ -91,11 +92,10 @@ public class HexagoneBox {
         getAllAdjacenteBox();
     }
 
-    /*public void setId(int id){
+    public void setId(int id){
         this.id = id;
-        int[] tempoCoordinates = separateID(id);
-        this.coordinates = new ArrayList(Arrays.asList(tempoCoordinates));
-    }*/
+        this.coordinates = separateID(id);
+    }
 
     public void setAdjacentBox(ArrayList<Integer> ListOfAdjacentBox){
         for (int i=0;i<ListOfAdjacentBox.size();i++){
@@ -121,5 +121,37 @@ public class HexagoneBox {
         this.AdjacentBox.put(4,new int[] {x-1,y+1,z});
         this.AdjacentBox.put(5,new int[] {x-1,y,z+1});
         this.AdjacentBox.put(6,new int[] {x,y-1,z+1});
+    }
+
+    /**
+     * Method use to generate the id with the coordinates
+     * @param coordinates : the list of coordinates with in index 0 : x, index 1 : y, index 2 : z
+     * @return the id associated to the coordinates:
+     */
+    public static int generateID(int[] coordinates) {
+        int id = 1000000;
+        for (int i=0;i<3;i++){
+            if (coordinates[i]<0){
+                coordinates[i] = 100 + coordinates[i];
+            }
+        }
+        id = id + coordinates[0] * 10000 + coordinates[1] * 100 + coordinates[2];
+        return id;
+    }
+
+    /**
+     * Method use to separate an id into a tab of 3 int with the coordinates associated to the id
+     * @param id : the id we want to get the coordinates
+     * @return a tab of 3 int with the coordinates
+     */
+    public static int[] separateID(int id) {
+        int[] tab = new int[3];
+        tab[0] = (id % 1000000) / 10000;
+        tab[1] = (id % 10000) / 100;
+        tab[2] = id % 100;
+        for (int i=0; i<3; i++) {
+            if (tab[i] > 50) tab[i]=tab[i]-100;
+        }
+        return tab;
     }
 }

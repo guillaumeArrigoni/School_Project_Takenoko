@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,14 +18,16 @@ public class Bot {
      */
     private final String name;
     private final Board board;
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
     /**
      * Constructor of the bot
      * @param name : name of the bot
      */
-    public Bot(String name, Board board){
+    public Bot(String name, Board board, RetrieveBoxIdWithParameters retrieving){
         this.name = name;
         this.board = board;
+        this.retrieveBoxIdWithParameters = retrieving;
     }
 
     /**

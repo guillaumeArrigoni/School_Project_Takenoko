@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BotTest {
     Bot bot;
     Board board;
+    RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     @BeforeEach
     void setUp() {
         board = new Board();
-        bot = new Bot("testBot", board);
+        retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
+        bot = new Bot("testBot", board, retrieveBoxIdWithParameters);
     }
 
     @Test

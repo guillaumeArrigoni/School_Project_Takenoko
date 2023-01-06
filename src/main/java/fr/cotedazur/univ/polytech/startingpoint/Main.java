@@ -1,6 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.Arrays;
@@ -15,7 +17,7 @@ public class Main {
 
     public static void printBoardState(Board board) {
         int nbLigne = 5;
-        HashMap<int[], Integer> placedBox = board.getPlacedBox();
+        HashMap<int[], HexagoneBox> placedBox = board.getPlacedBox();
         for (Map.Entry tile : placedBox.entrySet()) {
             System.out.print(Arrays.toString((int[])tile.getKey()) + " ");
         }
@@ -24,8 +26,9 @@ public class Main {
 
     public static void main(String... args) {
         Board board = new Board();
-        Bot bot1 = new Bot("Bot1",board);
-        Bot bot2 = new Bot("Bot2",board);
+        RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
+        Bot bot1 = new Bot("Bot1",board, retrieving);
+        Bot bot2 = new Bot("Bot2",board, retrieving);
         MeteoDice meteoDice = new MeteoDice();
         System.out.println("Que la partie commence !");
         boolean playing = true;

@@ -25,7 +25,7 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private HashMap<int[],Integer> PlacedBox;
+    private HashMap<int[],HexagoneBox> PlacedBox;
 
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
@@ -46,15 +46,15 @@ public class Board {
             AvailableBox.put(lac.getAdjacentBoxOfIndex(i),1);
         }
 
-        PlacedBox = new HashMap<int[],Integer>();
-        PlacedBox.put(lac.getCoordinates(),0);
+        PlacedBox = new HashMap<int[],HexagoneBox>();
+        PlacedBox.put(lac.getCoordinates(),lac);
     }
 
     public int getNumberBoxPlaced() {
         return numberBoxPlaced;
     }
 
-    public HashMap<int[], Integer> getPlacedBox() {
+    public HashMap<int[], HexagoneBox> getPlacedBox() {
         return PlacedBox;
     }
 
@@ -65,10 +65,10 @@ public class Board {
     public void addBox(HexagoneBox box){
         int[] coord = box.getCoordinates();
         int[] newCoord1, newCoord2;
-        UpdateAvaiableBoxAndPlacedBox(coord);
+        UpdateAvaiableBoxAndPlacedBox(box);
         for (int i=1;i<7;i++){
             int[] adjacentCoord = box.getAdjacentBoxOfIndex(i);
-            if (containsKey(PlacedBox,adjacentCoord)){
+            if (PlacedBox.containsKey(adjacentCoord)){
                 //cherche toutes les tuiles adjacente à celle que l'on pose
                 int x = coord[0], y = coord[1], z = coord[2];
                 int x1 = adjacentCoord[0], y1 = adjacentCoord[1], z1 = adjacentCoord[2];
@@ -84,39 +84,32 @@ public class Board {
                     newCoord1 = new int[]{Math.min(x,x1),Math.min(y,y1),z+1};
                     newCoord2 = new int[]{Math.max(x,x1),Math.max(y,y1),z-1};
                 }
-                if (!containsKey(PlacedBox,newCoord1) && !containsKey(AvailableBox,newCoord1)) {
+
+                if (!PlacedBox.containsKey(newCoord1) && !AvailableBox.containsKey(newCoord1)) {
                     AvailableBox.put(newCoord1, Math.max(Math.abs(x-x1), Math.max(Math.abs(y-y1), Math.abs(z-z1))));
                 }
-                if (!containsKey(PlacedBox,newCoord2) && !containsKey(AvailableBox,newCoord2)) {
+                if (!PlacedBox.containsKey(newCoord2) && !AvailableBox.containsKey(newCoord2)) {
                     AvailableBox.put(newCoord2, Math.max(Math.abs(x-x1), Math.max(Math.abs(y-y1), Math.abs(z-z1))));
                 }
             }
         }
     }
 
-    public boolean containsKey(HashMap<int[], Integer> dico, int[] coord) {
-        for (int[] key : dico.keySet()) {
-            if (Arrays.equals(key, coord)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Check if the number of box placed is equals to 2
      * (correspond to the case when the players add the first HexagoneBox to the booard (the first is the lake)
      * Then remove in the Hasmap AvailableBox the box that we just place now and add the id of this new box into the Hasmap PlacedBox
-     * @param coordinates : of the new box that we place in the board.
+     * @param box : the new box that we place in the board.
      */
-    private void UpdateAvaiableBoxAndPlacedBox(int[] coordinates){
+    private void UpdateAvaiableBoxAndPlacedBox(HexagoneBox box){
         this.numberBoxPlaced = this.numberBoxPlaced +1;
         if (this.numberBoxPlaced == 2){
             AvailableBox.clear();
         } else {
-            AvailableBox.remove(coordinates);
+            AvailableBox.remove(box.getCoordinates());
         }
-        PlacedBox.put(coordinates,get_range_from_center(coordinates));
+        PlacedBox.put(box.getCoordinates(),box);
     }
 
     /*

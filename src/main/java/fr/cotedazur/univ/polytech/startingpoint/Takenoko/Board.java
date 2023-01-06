@@ -64,6 +64,7 @@ public class Board {
         this.gardenerCoords = newCoords;
     }
 
+    public void setPandaCoords(int[] newCoords) {this.pandaCoords = newCoords;}
     public int getNumberBoxPlaced() {
         return numberBoxPlaced;
     }
@@ -118,6 +119,15 @@ public class Board {
     public boolean containsKey(HashMap<int[], Integer> dico, int[] coord) {
         for (int[] key : dico.keySet()) {
             if (Arrays.equals(key, coord)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsValue(HashMap<Integer, int[]> dico, int coord[]) {
+        for (int[] value : dico.values()) {
+            if (Arrays.equals(value, coord)) {
                 return true;
             }
         }

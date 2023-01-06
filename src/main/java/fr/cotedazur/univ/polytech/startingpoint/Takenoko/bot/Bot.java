@@ -88,7 +88,7 @@ public class Bot {
     //Gestion Actions possibles
     private ActionPossible choisirActionAleatoire(){
         ActionPossible acp = actionPossibles.get(random.nextInt(actionPossibles.size()));
-        if (acp == BougerJardinier &&  Action.possibleMoveForGardener(board).isEmpty())
+        if (acp == BougerJardinier &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty())
             return choisirActionAleatoire();
         actionPossibles.remove(acp);
         return acp;
@@ -124,7 +124,7 @@ public class Bot {
      * This method move the gardener randomly on the board
      */
     private void moveGardenerRandomly(){
-        List<int[]> possibleMoves = Action.possibleMoveForGardener(board);
+        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
         System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }

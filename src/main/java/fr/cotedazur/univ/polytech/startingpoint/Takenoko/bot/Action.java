@@ -3,6 +3,8 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+
+import java.util.HashMap;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -19,10 +21,10 @@ public class Action {
         return new HexagoneBox(color, Special.Classique);
     }
 
-    public static ArrayList<int[]> possibleMoveForGardener(Board board) {
-        int x = board.getGardenerCoords()[0];
-        int y = board.getGardenerCoords()[1];
-        int z = board.getGardenerCoords()[2];
+    public static ArrayList<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {
+        int x = coord[0];
+        int y = coord[1];
+        int z = coord[2];
         ArrayList<int[]> possibleMove = new ArrayList<>();
         boolean possible = true;
         int count = 1;
@@ -50,5 +52,24 @@ public class Action {
         }
         return possibleMove;
     }
+
+    public static void moveGardener(Board board, HexagoneBox box) {
+        board.setGardenerCoords(box.getCoordinates());
+        box.growBamboo();
+        HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
+        ArrayList<HexagoneBox> placedBox = board.getPlacedBox();
+        for (HexagoneBox newBox : placedBox) {
+            if (board.containsValue(adjacentBox, box.getCoordinates())) {
+                newBox.growBamboo();
+            }
+        }
+    }
+
+    public static void movePanda(Board board, HexagoneBox box) {
+        board.setPandaCoords(box.getCoordinates());
+        box.eatBamboo();
+    }
+
+
 
 }

@@ -58,7 +58,7 @@ public class HexagoneBox {
     public int[] getCoordinates(){
         return this.coordinates;
     }
-    
+
     /*public int getId(){
         return this.id;
     }*/
@@ -78,6 +78,15 @@ public class HexagoneBox {
     public int getHeightBamboo() {
         return heightBamboo;
     }
+
+    public void growBamboo() {
+        if (this.heightBamboo < 3) this.heightBamboo++;
+    }
+
+    public void eatBamboo() {
+        if (this.heightBamboo > 0) this.heightBamboo--;
+    }
+
 
     public HashMap<Integer, int[]> getAdjacentBox() {
         return this.AdjacentBox;

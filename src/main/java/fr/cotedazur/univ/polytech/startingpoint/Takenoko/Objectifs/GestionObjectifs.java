@@ -116,7 +116,7 @@ public class GestionObjectifs {
 
     public boolean checkJardinierObjectives(Objectives objectives) {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
-
+        return false;
     }
 
     public boolean checkParcelleObjectives(Objectives objectives) {
@@ -130,24 +130,69 @@ public class GestionObjectifs {
     }
 
     private boolean checkParcelleLosangeObjectives(Objectives objectives) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objectives.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
+        for (int i=0;i<listOfIdAvailable.size();i++){
+            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
+            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
+                if (listOfIdAvailable.contains(box.getAdjacentBox().get(j))){
+                    idOfAdjacentBoxCorrect.add(j);
+                }
+                int size = idOfAdjacentBoxCorrect.size();
+            }
+            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
+                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+1)%6)
+                        && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)).getColor()==box.getColor()
+                        && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+2)%6)
+                        && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6)).getColor()!=box.getColor()
+                        && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+3)%6)
+                        && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+3)%6)).getColor()!=box.getColor()){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
     private boolean checkParcelleCourbeObjectives(Objectives objectives) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objectives.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
+        for (int i=0;i<listOfIdAvailable.size();i++){
+            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
+            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
+                if (listOfIdAvailable.contains(box.getAdjacentBox().get(j))){
+                    idOfAdjacentBoxCorrect.add(j);
+                }
+                int size = idOfAdjacentBoxCorrect.size();
+                if (size > 1 && ((idOfAdjacentBoxCorrect.get(size-1)-idOfAdjacentBoxCorrect.get(size-2) == 1) || (idOfAdjacentBoxCorrect.get(0)==1 && idOfAdjacentBoxCorrect.get(size-1)==6))){
+                    return true;
+                }
+            }
+            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
+                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+2)%6)){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
     private boolean checkParcelleLigneObjectives(Objectives objectives) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
-        for (int i=0;i<listOfIdAvailable.size();i++) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objectives.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
+        for (int i=0;i<listOfIdAvailable.size();i++){
             HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
-            for (int j = 1; j < box.getAdjacentBox().keySet().size() + 1; j++) {
-                if (listOfIdAvailable.contains(box.getAdjacentBox().get(j))) {
+            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
+                if (listOfIdAvailable.contains(box.getAdjacentBox().get(j))){
                     idOfAdjacentBoxCorrect.add(j);
                 }
                 int size = idOfAdjacentBoxCorrect.size();
-                if (size > 1 && ((idOfAdjacentBoxCorrect.get(size - 1) - idOfAdjacentBoxCorrect.get(size - 2) == 1) || (idOfAdjacentBoxCorrect.get(0) == 1 && idOfAdjacentBoxCorrect.get(size - 1) == 6))) {
+                if (size > 1 && ((idOfAdjacentBoxCorrect.get(size-1)-idOfAdjacentBoxCorrect.get(size-2) == 1) || (idOfAdjacentBoxCorrect.get(0)==1 && idOfAdjacentBoxCorrect.get(size-1)==6))){
+                    return true;
+                }
+            }
+            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
+                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+3)%6)){
                     return true;
                 }
             }
@@ -156,7 +201,7 @@ public class GestionObjectifs {
     }
 
     private boolean checkParcelleTriangleObjectives(Objectives objectives) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objectives.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();

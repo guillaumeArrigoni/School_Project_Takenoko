@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
+import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
@@ -15,13 +16,14 @@ import static org.mockito.Mockito.*;
 class BotTest {
     Bot bot;
     Board board;
-
     Random r;
+    MeteoDice meteoDice;
     @BeforeEach
     void setUp() {
         r = mock(Random.class);
         board = new Board();
-        bot = new Bot("testBot", board, r);
+        meteoDice = mock(MeteoDice.class);
+        bot = new Bot("testBot", board, r, meteoDice);
     }
 
     @Test
@@ -48,5 +50,39 @@ class BotTest {
         bot.placeRandomTile();
         assertEquals(2, board.getPlacedBox().size());
 
+    }
+
+    @Test
+    void playTurnWindPlaceBoxTwoTimes(){
+        when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0,1,2,1,1);
+        when(r.nextInt(anyInt())).thenReturn(0,0);
+        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
+        bot.playTurn();
+        verify(r, times(10)).nextInt(anyInt(),anyInt());
+        verify(r, times(2)).nextInt(anyInt());
+        assertEquals(3, board.getPlacedBox().size());
+    }
+
+    @Test
+    void playTurnWindPlaceBoxMoveGardener(){
+        when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0);
+        when(r.nextInt(anyInt())).thenReturn(0,1);
+        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
+        bot.playTurn();
+        verify(r, times(6)).nextInt(anyInt(),anyInt());
+        verify(r, times(2)).nextInt(anyInt());
+        assertEquals(2, board.getPlacedBox().size());
+        assertNotEquals(new int[]{0,0,0}, board.getGardenerCoords());
+
+    }
+
+    @Test
+    void playTurnMoveGardenerImpossible(){
+        when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0);
+        when(r.nextInt(anyInt())).thenReturn(1,0);
+        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
+        bot.playTurn();
+        verify(r, times(3)).nextInt(anyInt());
+        assertEquals(3, board.getPlacedBox().size());
     }
 }

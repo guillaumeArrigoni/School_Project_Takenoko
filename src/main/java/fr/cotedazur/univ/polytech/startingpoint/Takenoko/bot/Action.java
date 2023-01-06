@@ -20,37 +20,25 @@ public class Action {
         return new HexagoneBox(color, Special.Classique);
     }
 
-    public static ArrayList<int[]> possibleMoveForGardener(Board board, int[] gardenerCoords) {
-        int x = gardenerCoords[0], y = gardenerCoords[1], z = gardenerCoords[2];
+    public static ArrayList<int[]> possibleMoveForGardener(Board board) {
+        int x = board.getGardenerCoords()[0];
+        int y = board.getGardenerCoords()[1];
+        int z = board.getGardenerCoords()[2];
         ArrayList<int[]> possibleMove = new ArrayList<>();
         boolean possible = true;
-        int count = 0;
-        int[] newCoord = new int[]{};
+        int count = 1;
+        int[] newCoord;
         for (int i=0;i<6;i++) {
             while (possible) {
-                switch(i) {
-                    case 0:
-                        newCoord = new int[]{x,y+count,z-count};
-                        break;
-                    case 1:
-                        newCoord = new int[]{x,y-count,z+count};
-                        break;
-                    case 2:
-                        newCoord = new int[]{x+count,y,z-count};
-                        break;
-                    case 3:
-                        newCoord = new int[]{x-count,y+count,z+count};
-                        break;
-                    case 4:
-                        newCoord = new int[]{x-count,y+count,z};
-                        break;
-                    case 5:
-                        newCoord = new int[]{x+count,y-count,z};
-                        break;
-                    default:
-                        newCoord = new int[]{0,0,0};
-                        break;
-                }
+                newCoord = switch (i) {
+                    case 0 -> new int[]{x, y + count, z - count};
+                    case 1 -> new int[]{x, y - count, z + count};
+                    case 2 -> new int[]{x + count, y, z - count};
+                    case 3 -> new int[]{x - count, y, z + count};
+                    case 4 -> new int[]{x - count, y + count, z};
+                    case 5 -> new int[]{x + count, y - count, z};
+                    default -> new int[]{0, 0, 0};
+                };
 
                 if (!board.containsKey(board.getPlacedBox(),newCoord)) possible=false;
                 else {
@@ -59,10 +47,11 @@ public class Action {
                 }
             }
             possible = true;
-            count = 0;
+            count = 1;
         }
 
 
         return possibleMove;
     }
+
 }

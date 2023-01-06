@@ -13,7 +13,7 @@ public class Main {
         return "Hello World!";
     }
 
-    public static void printBoardState(Board board) {
+    /*public static void printBoardState(Board board) {
         int nbLigne = 5;
         ArrayList<HexagoneBox> placedBox = board.getPlacedBox();
         for (Map.Entry tile : placedBox.entrySet()) {
@@ -51,6 +51,6 @@ public class Main {
         printBoardState(board);
         System.out.println(Action.possibleMoveForGardener(board, board.getGardenerCoords()));
     }
-
+*/
 
 }

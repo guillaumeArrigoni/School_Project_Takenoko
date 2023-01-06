@@ -16,7 +16,8 @@ import java.util.HashMap;
 
 public class Board {
 
-    int numberBoxPlaced ;
+    private int numberBoxPlaced ;
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
     /**
      * PlacedBox is a Hashmap that contain in key all the box's id already place in the board
@@ -37,8 +38,9 @@ public class Board {
      */
     private HashMap<int[],Integer> AvailableBox;
 
-    public Board(){
-        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique);
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters);
         numberBoxPlaced = 1;
 
         AvailableBox = new HashMap<int[],Integer>();

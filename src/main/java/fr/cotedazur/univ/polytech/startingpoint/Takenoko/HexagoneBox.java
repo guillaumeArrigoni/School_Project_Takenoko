@@ -24,7 +24,7 @@ public class HexagoneBox {
     private int heightBamboo;
     private HashMap<Integer,int[]> AdjacentBox;
 
-
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
     /**
      *      1
@@ -37,7 +37,8 @@ public class HexagoneBox {
      * @param color : the color of the box
      * @param special : the particularity of the box
      */
-    public HexagoneBox (int x, int y, int z, Color color, Special special){
+    public HexagoneBox (int x, int y, int z, Color color, Special special, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
         this.color = color;
@@ -47,7 +48,8 @@ public class HexagoneBox {
         getAllAdjacenteBox();
     }
 
-    public HexagoneBox (Color color, Special special){
+    public HexagoneBox (Color color, Special special, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.coordinates = null;
         //this.id = -1;
         this.color = color;
@@ -83,6 +85,7 @@ public class HexagoneBox {
     public HashMap<Integer, int[]> getAdjacentBox() {
         return this.AdjacentBox;
     }
+
     public int[] getAdjacentBoxOfIndex(int index){
         return this.AdjacentBox.get(index);
     }
@@ -90,6 +93,18 @@ public class HexagoneBox {
     public void setCoordinates(int[] coordinates) {
         this.coordinates = coordinates;
         getAllAdjacenteBox();
+    }
+
+    public void setSpecial(Special special) {
+        this.special = special;
+    }
+
+    public void setIrrigate(boolean irrigate) {
+        this.irrigate = irrigate;
+    }
+
+    public void setHeightBamboo(int heightBamboo) {
+        this.heightBamboo = heightBamboo;
     }
 
     public void setId(int id){

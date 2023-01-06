@@ -1,8 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.*;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.Arrays;
@@ -25,8 +23,12 @@ public class Main {
     }
 
     public static void main(String... args) {
-        Board board = new Board();
         RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
+        Board board = new Board(retrieving);
+        ElementOfTheGame elementOfTheGame = new ElementOfTheGame();
+        UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
+        UniqueObjectCreated.setBoard(board);
+        UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieving);
         Bot bot1 = new Bot("Bot1",board, retrieving);
         Bot bot2 = new Bot("Bot2",board, retrieving);
         MeteoDice meteoDice = new MeteoDice();

@@ -1,12 +1,13 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
+
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.ArrayList;
 
 
 public class Action {

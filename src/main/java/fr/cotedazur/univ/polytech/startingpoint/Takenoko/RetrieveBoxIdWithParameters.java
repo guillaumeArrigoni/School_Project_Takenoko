@@ -7,7 +7,6 @@ import java.util.*;
 
 public class RetrieveBoxIdWithParameters {
 
-
     private HashMap<Color, ArrayList<Integer>> BoxColor = new HashMap<>();
     private HashMap<Boolean, ArrayList<Integer>> BoxIsIrrigated = new HashMap<>();
     private HashMap<Integer, ArrayList<Integer>> BoxHeight = new HashMap<>();

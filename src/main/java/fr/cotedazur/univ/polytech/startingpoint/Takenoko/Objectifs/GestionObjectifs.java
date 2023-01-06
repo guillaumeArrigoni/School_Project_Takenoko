@@ -62,13 +62,13 @@ public class GestionObjectifs {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    /*public Objectives rollObjective(Bot bot){
+    public Objectives rollObjective(Bot bot){
         TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll();
         return switch (typeObjective){
             case PARCELLE -> rollParcelleObjective();
             case JARDINIER -> rollJardinierObjective();
             /** Il n'y a pas encore d'Objectifs Panda.**/
-            /*case PANDA -> rollParcelleObjective();
+            case PANDA -> rollParcelleObjective();
         };
 
     }
@@ -115,7 +115,8 @@ public class GestionObjectifs {
     }
 
     public boolean checkJardinierObjectives(Objectives objectives) {
-        return false;
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
+
     }
 
     public boolean checkParcelleObjectives(Objectives objectives) {
@@ -137,6 +138,20 @@ public class GestionObjectifs {
     }
 
     private boolean checkParcelleLigneObjectives(Objectives objectives) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
+        for (int i=0;i<listOfIdAvailable.size();i++) {
+            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
+            for (int j = 1; j < box.getAdjacentBox().keySet().size() + 1; j++) {
+                if (listOfIdAvailable.contains(box.getAdjacentBox().get(j))) {
+                    idOfAdjacentBoxCorrect.add(j);
+                }
+                int size = idOfAdjacentBoxCorrect.size();
+                if (size > 1 && ((idOfAdjacentBoxCorrect.get(size - 1) - idOfAdjacentBoxCorrect.get(size - 2) == 1) || (idOfAdjacentBoxCorrect.get(0) == 1 && idOfAdjacentBoxCorrect.get(size - 1) == 6))) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 

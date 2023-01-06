@@ -3,6 +3,8 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.Objectives;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +25,8 @@ public class Bot {
     private final String name;
     private final Board board;
     private final Random random;
-
+    private int score;
+    private ArrayList<Objectives> objectives;
     private final MeteoDice meteoDice;
 
     //CONSTRUCTOR
@@ -36,6 +39,8 @@ public class Bot {
         this.board = board;
         this.random = random;
         this.meteoDice = meteoDice;
+        this.score = 0;
+        this.objectives = new ArrayList<>();
         resetActionsPossible();
     }
 
@@ -148,5 +153,12 @@ public class Bot {
         }
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public ArrayList<Objectives> getObjectives() {
+        return objectives;
+    }
 }
 

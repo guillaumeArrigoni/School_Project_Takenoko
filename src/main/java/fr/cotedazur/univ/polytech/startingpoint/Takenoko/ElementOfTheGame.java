@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 public class ElementOfTheGame {
 
-
     /**
      * StackOfAvailableBox is a Hashmap that contain in key all the box that can be picked and placed.
      * Associate to each key the number of same box available

@@ -4,6 +4,8 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.Objectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.TypeObjective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.UniqueObjectCreated;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +20,7 @@ public class Bot {
      */
     private final String name;
     private final Board board;
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
     private int score;
     private final int NB_MAX_OBJECTIFS = 5;
     private ArrayList<Objectives> objectives;

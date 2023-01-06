@@ -13,11 +13,11 @@ public class Main {
         return "Hello World!";
     }
 
-    /*public static void printBoardState(Board board) {
-        int nbLigne = 5;
+    public static void printBoardState(Board board) {
+        System.out.println("Voici l'état du board : ");
         ArrayList<HexagoneBox> placedBox = board.getPlacedBox();
-        for (Map.Entry tile : placedBox.entrySet()) {
-            System.out.print(Arrays.toString((int[])tile.getKey()));
+        for (HexagoneBox box : placedBox) {
+            System.out.println(Arrays.toString(box.getCoordinates()) + " : bamboo de hauteur " + box.getHeightBamboo());
         }
         System.out.println(" ");
     }
@@ -25,9 +25,9 @@ public class Main {
     public static void main(String... args) {
         Board board = new Board();
         Random random = new Random();
-        Bot bot1 = new Bot("Bot1",board,random);
-        Bot bot2 = new Bot("Bot2",board,random);
         MeteoDice meteoDice = new MeteoDice();
+        Bot bot1 = new Bot("Bot1",board,random, meteoDice);
+        Bot bot2 = new Bot("Bot2",board,random, meteoDice);
         System.out.println("Que la partie commence !");
         boolean playing = true;
         int turn = 0;
@@ -36,12 +36,10 @@ public class Main {
             MeteoDice.Meteo meteo = meteoDice.roll();
             System.out.println("Le dé a choisi : " + meteo);
             if (turn == 0) {
-                bot1.placeRandomTile();
-                bot1.placeRandomTile();
+                bot1.playTurn();
             }
             else {
-                bot2.placeRandomTile();
-                bot2.placeRandomTile();
+                bot2.playTurn();
             }
             turn = 1 - turn;
             if (board.getNumberBoxPlaced() == 11) {playing = false;}
@@ -49,8 +47,7 @@ public class Main {
         }
 
         printBoardState(board);
-        System.out.println(Action.possibleMoveForGardener(board, board.getGardenerCoords()));
     }
-*/
+
 
 }

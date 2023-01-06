@@ -80,7 +80,7 @@ public class HexagoneBox {
     }
 
     public void growBamboo() {
-        if (this.heightBamboo < 3) this.heightBamboo++;
+        if (this.heightBamboo < 4) this.heightBamboo++;
     }
 
     public void eatBamboo() {

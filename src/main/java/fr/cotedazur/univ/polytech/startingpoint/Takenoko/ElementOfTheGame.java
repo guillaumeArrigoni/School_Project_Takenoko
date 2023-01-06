@@ -13,9 +13,10 @@ public class ElementOfTheGame {
      *      - TypeOfStackBox : the type of the box category
      *      - Integer : the number of box from this type in the stack that can be picked
      */
-    private HashMap<TypeOfStackBox,Integer> StackOfAvailableBox;
+    private HashMap<TypeOfStackBox,Integer> StackOfAvailableBox = new HashMap<>();
 
     public ElementOfTheGame(){
+
         createStackOfAvailableBox();
     }
 

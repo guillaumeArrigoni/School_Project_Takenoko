@@ -1,52 +1,111 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
+import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.Objectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.TypeObjective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.UniqueObjectCreated;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot.ActionPossible.BougerJardinier;
+
 /**
  * This class is the bot that will play the game
  */
 public class Bot {
+
+    //ATTRIBUTES
     /**
      * Name of the bot
      */
+    private List<ActionPossible> actionPossibles;
     private final String name;
     private final Board board;
-    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
-    private int score;
-    private final int NB_MAX_OBJECTIFS = 5;
-    private ArrayList<Objectives> objectives;
-
     private final Random random;
 
+    private final MeteoDice meteoDice;
+
+    //CONSTRUCTOR
     /**
      * Constructor of the bot
      * @param name : name of the bot
      */
-    public Bot(String name, Board board, Random random) {
+    public Bot(String name, Board board, Random random, MeteoDice meteoDice) {
         this.name = name;
-        this.score = 0;
         this.board = board;
         this.random = random;
-        this.objectives = new ArrayList<>();
+        this.meteoDice = meteoDice;
+        resetActionsPossible();
     }
 
+    //METHODS
+    //Joueur fait les dés;
+    //fait action 2 actions
+    //placertuile
+    //prendre et poser s'il veut une irrigation
+    //Déplacer le jardinier
+    //Déplacer le panda
+    //piocher une carte objectif
+
+    public void playTurn(){
+        actionPossibles = ActionPossible.getAllActions();
+        switch (meteoDice.roll()){
+            case VENT -> {
+                //Deux fois la même action autorisé
+                System.out.println("Le dé a choisi : VENT");
+                faireActionAleatoire();
+                resetActionsPossible();
+                faireActionAleatoire();
+            }
+            case PLUIE -> {
+                //Le joueur peut faire pousser une tuile irriguée
+                //TODO c pas implémenté dans la classe hexagoneBox
+                System.out.println("Le dé a choisi : PLUIE");
+                faireActionAleatoire();
+                faireActionAleatoire();
+            }
+
+
+        }
+    }
+
+    private void faireActionAleatoire(){
+        ActionPossible action = choisirActionAleatoire();
+        switch (action){
+            case PiocherPoserTuile:
+                System.out.println("Le bot a choisi : PiocherPoserTuile");
+                placeRandomTile();
+                break;
+            case BougerJardinier:
+                System.out.println("Le bot a choisi : BougerJardinier");
+                moveGardenerRandomly();
+                break;
+        }
+
+    }
+
+    //Gestion Actions possibles
+    private ActionPossible choisirActionAleatoire(){
+        ActionPossible acp = actionPossibles.get(random.nextInt(actionPossibles.size()));
+        if (acp == BougerJardinier &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty())
+            return choisirActionAleatoire();
+        actionPossibles.remove(acp);
+        return acp;
+    }
+    private void resetActionsPossible(){
+        actionPossibles = ActionPossible.getAllActions();
+    }
+
+    //Actions
     /**
      * This method is used to place a random tile on the board
      */
-    public void placeRandomTile(){
+    protected void placeRandomTile(){
         //Init
         List<HexagoneBox> list = new ArrayList<>();
         //Get all the available coords
-        List<int[]> availableTilesList = board.getAvailableBox().keySet().stream().toList();
+        List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
             list.add(Action.drawTile(random));
@@ -61,28 +120,33 @@ public class Bot {
         System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
-    public ArrayList<Objectives> getObjectives() {
-        return objectives;
-    }
-
-    public int getScore() {
-        return score;
-    }
-    public void addScore(Objectives objectives){
-        this.score += objectives.getValue();
-    }
-
-    /** Le bot doit choisir quel type d'objectif piocher.
-     * A MODIFIER POUR QUE LE BOT CHOISISSE DE MANIERE INTELLIGENTE.
+    /**
+     * This method move the gardener randomly on the board
      */
-    public TypeObjective chooseTypeObjectiveToRoll(){
-        int i = (int) (Math.random() * 3) + 1 ;
-        return switch (i){
-            case 1 -> TypeObjective.PARCELLE;
-            case 2 -> TypeObjective.JARDINIER;
-            case 3 -> TypeObjective.PANDA;
-            default -> TypeObjective.PARCELLE;
-        };
+    private void moveGardenerRandomly(){
+        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
+        board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
+        System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
+
+
+    //Enum ActionPossibles
+    enum ActionPossible{
+        PiocherPoserTuile (1),
+        BougerJardinier (2);
+
+        ActionPossible(int i) {
+        }
+
+        //Return a non immutable list of all the actions possible
+        private static List<ActionPossible> getAllActions(){
+            return new ArrayList<>(Arrays.asList(ActionPossible.values()));
+        }
+
+        private static List<ActionPossible> getActionsPossible(){
+            return List.of(ActionPossible.values());
+        }
+    }
+
 }
 

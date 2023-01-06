@@ -1,14 +1,11 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.*;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectifs;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Main {
 
@@ -17,27 +14,20 @@ public class Main {
     }
 
     public static void printBoardState(Board board) {
-        int nbLigne = 5;
-        HashMap<int[], HexagoneBox> placedBox = board.getPlacedBox();
-        for (Map.Entry tile : placedBox.entrySet()) {
-            System.out.print(Arrays.toString((int[])tile.getKey()));
+        System.out.println("Voici l'état du board : ");
+        ArrayList<HexagoneBox> placedBox = board.getPlacedBox();
+        for (HexagoneBox box : placedBox) {
+            System.out.println(Arrays.toString(box.getCoordinates()) + " : bamboo de hauteur " + box.getHeightBamboo());
         }
         System.out.println(" ");
     }
 
     public static void main(String... args) {
-        RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
         Board board = new Board();
         Random random = new Random();
-        ElementOfTheGame elementOfTheGame = new ElementOfTheGame();
-        UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
-        UniqueObjectCreated.setBoard(board);
-        UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieving);
-        Bot bot1 = new Bot("Bot1",board,random);
-        Bot bot2 = new Bot("Bot2",board,random);
         MeteoDice meteoDice = new MeteoDice();
-        GestionObjectifs gestionnaire = new GestionObjectifs();
-        gestionnaire.initialize();
+        Bot bot1 = new Bot("Bot1",board,random, meteoDice);
+        Bot bot2 = new Bot("Bot2",board,random, meteoDice);
         System.out.println("Que la partie commence !");
         boolean playing = true;
         int turn = 0;
@@ -46,30 +36,18 @@ public class Main {
             MeteoDice.Meteo meteo = meteoDice.roll();
             System.out.println("Le dé a choisi : " + meteo);
             if (turn == 0) {
-                if(gestionnaire.checkIfBotCanDrawAnObjective(bot1)){
-                    gestionnaire.rollObjective(bot1);
-                }
-                gestionnaire.checkObjectives(bot1);
-                bot1.placeRandomTile();
-                bot1.placeRandomTile();
+                bot1.playTurn();
             }
             else {
-                if(gestionnaire.checkIfBotCanDrawAnObjective(bot2)){
-                    gestionnaire.rollObjective(bot2);
-                }
-                gestionnaire.checkObjectives(bot2);
-                bot2.placeRandomTile();
-                bot2.placeRandomTile();
+                bot2.playTurn();
             }
             turn = 1 - turn;
-            if (board.getNumberBoxPlaced() == 11) {
-                playing = false;
-                gestionnaire.printWinner(bot1, bot2);
-            }
+            if (board.getNumberBoxPlaced() == 11) {playing = false;}
             System.out.println("------------------------------------------");
         }
 
         printBoardState(board);
-        System.out.println(Action.possibleMoveForGardener(board, board.getGardenerCoords()));
     }
+
+
 }

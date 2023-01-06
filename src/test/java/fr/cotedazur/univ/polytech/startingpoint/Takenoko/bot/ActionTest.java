@@ -49,5 +49,4 @@ class ActionTest {
         assertEquals(Special.Classique, hexagoneBox.getSpecial());
     }
 
-
 }

@@ -62,13 +62,13 @@ public class GestionObjectifs {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    public Objectives rollObjective(Bot bot){
+    /*public Objectives rollObjective(Bot bot){
         TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll();
         return switch (typeObjective){
             case PARCELLE -> rollParcelleObjective();
             case JARDINIER -> rollJardinierObjective();
             /** Il n'y a pas encore d'Objectifs Panda.**/
-            case PANDA -> rollParcelleObjective();
+            /*case PANDA -> rollParcelleObjective();
         };
 
     }

@@ -2,7 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint;
 
 public class MeteoDice {
     private final int NBSIDE = 1;
-    enum Meteo {
+    public enum Meteo {
         VENT(1),
         PLUIE(2),
         ORAGE(3),

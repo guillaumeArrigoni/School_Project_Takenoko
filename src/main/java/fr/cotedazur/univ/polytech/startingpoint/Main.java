@@ -34,7 +34,7 @@ public class Main {
 
 
         while (playing) {
-            MeteoDice.Meteo meteo = meteoDice.roll();
+            meteoDice.roll();
             if (turn == 0) {
                 bot1.playTurn();
             }
@@ -46,8 +46,5 @@ public class Main {
             if (board.getNumberBoxPlaced() > 10) {playing = false;}
             System.out.println("------------------------------------------");
         }
-
     }
-
-
 }

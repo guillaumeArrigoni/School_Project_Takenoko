@@ -24,13 +24,13 @@ public class Main {
 
     public static void main(String... args) {
         RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-        Board board = new Board(retrieving);
+        Board board = new Board();
         ElementOfTheGame elementOfTheGame = new ElementOfTheGame();
         UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
         UniqueObjectCreated.setBoard(board);
         UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieving);
-        Bot bot1 = new Bot("Bot1",board, retrieving);
-        Bot bot2 = new Bot("Bot2",board, retrieving);
+        Bot bot1 = new Bot("Bot1",board);
+        Bot bot2 = new Bot("Bot2",board);
         MeteoDice meteoDice = new MeteoDice();
         System.out.println("Que la partie commence !");
         boolean playing = true;

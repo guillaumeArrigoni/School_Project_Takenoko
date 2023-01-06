@@ -23,8 +23,7 @@ public class HexagoneBox {
     private boolean irrigate;
     private int heightBamboo;
     private HashMap<Integer,int[]> AdjacentBox;
-
-    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
 
     /**
      *      1
@@ -37,8 +36,7 @@ public class HexagoneBox {
      * @param color : the color of the box
      * @param special : the particularity of the box
      */
-    public HexagoneBox (int x, int y, int z, Color color, Special special, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
-        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+    public HexagoneBox (int x, int y, int z, Color color, Special special){
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
         this.color = color;
@@ -46,10 +44,17 @@ public class HexagoneBox {
         this.irrigate = true;
         this.heightBamboo = 0;
         getAllAdjacenteBox();
+        updateRetrieveBox();
     }
 
-    public HexagoneBox (Color color, Special special, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
-        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+    private void updateRetrieveBox() {
+        retrieveBoxIdWithParameters.setBoxColor(this.id,this.color);
+        retrieveBoxIdWithParameters.setBoxHeight(this.id, this.heightBamboo);
+        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,this.irrigate);
+        retrieveBoxIdWithParameters.setBoxSpeciality(this.id, this.special);
+    }
+
+    public HexagoneBox (Color color, Special special){
         this.coordinates = null;
         //this.id = -1;
         this.color = color;
@@ -97,19 +102,17 @@ public class HexagoneBox {
 
     public void setSpecial(Special special) {
         this.special = special;
+        retrieveBoxIdWithParameters.setBoxSpeciality(this.id,this.special);
     }
 
     public void setIrrigate(boolean irrigate) {
         this.irrigate = irrigate;
+        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,this.irrigate);
     }
 
     public void setHeightBamboo(int heightBamboo) {
         this.heightBamboo = heightBamboo;
-    }
-
-    public void setId(int id){
-        this.id = id;
-        this.coordinates = separateID(id);
+        retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
 
     public void setAdjacentBox(ArrayList<Integer> ListOfAdjacentBox){

@@ -16,9 +16,9 @@ class BotTest {
     RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     @BeforeEach
     void setUp() {
-        board = new Board(retrieveBoxIdWithParameters);
+        board = new Board();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        bot = new Bot("testBot", board, retrieveBoxIdWithParameters);
+        bot = new Bot("testBot", board);
     }
 
     @Test

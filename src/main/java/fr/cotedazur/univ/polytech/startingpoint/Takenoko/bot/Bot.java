@@ -105,7 +105,7 @@ public class Bot {
         //Init
         List<HexagoneBox> list = new ArrayList<>();
         //Get all the available coords
-        List<int[]> availableTilesList = board.getAvailableBox().keySet().stream().toList();
+        List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
             list.add(Action.drawTile(random));

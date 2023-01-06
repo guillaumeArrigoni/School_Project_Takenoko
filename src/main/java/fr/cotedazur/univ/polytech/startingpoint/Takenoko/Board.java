@@ -25,7 +25,7 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private HashMap<int[],Integer> PlacedBox;
+    private ArrayList<HexagoneBox> PlacedBox;
 
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
@@ -35,27 +35,30 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private HashMap<int[],Integer> AvailableBox;
+    private ArrayList<int[]> AvailableBox;
 
     private int[] gardenerCoords;
+    private int[] pandaCoords;
 
     public Board(){
         HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique);
         numberBoxPlaced = 1;
 
-        AvailableBox = new HashMap<int[],Integer>();
+        AvailableBox = new ArrayList<>();
         for (int i=1;i<7;i++){
-            AvailableBox.put(lac.getAdjacentBoxOfIndex(i),1);
+            AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
         }
 
-        PlacedBox = new HashMap<int[],Integer>();
-        PlacedBox.put(lac.getCoordinates(),0);
+        PlacedBox = new ArrayList<>();
+        PlacedBox.add(lac);
         gardenerCoords = new int[]{0,0,0};
     }
 
     public int[] getGardenerCoords() {
         return this.gardenerCoords;
     }
+
+    public int[] getPandaCoords() {return this.pandaCoords;}
 
     public void setGardenerCoords(int[] newCoords) {
         this.gardenerCoords = newCoords;
@@ -65,21 +68,28 @@ public class Board {
         return numberBoxPlaced;
     }
 
-    public HashMap<int[], Integer> getPlacedBox() {
+    public ArrayList<HexagoneBox> getPlacedBox() {
         return PlacedBox;
+    }
+
+    public boolean coordInBoard(int[] Coord) {
+        for (HexagoneBox box : this.PlacedBox) {
+            if (Arrays.equals(Coord,box.getCoordinates())) return true;
+        }
+        return false;
     }
 
     /**
      * Add the HexagoneBox entered into the Hashmap PlacedBox and update the Hasmap AvaiableBox with the new box avalaible and delete the new box add.
      * @param box : the new Hexagone box to add to the board
      */
-    public void addBox(HexagoneBox box){
+    public void addBox(HexagoneBox box) {
         int[] coord = box.getCoordinates();
         int[] newCoord1, newCoord2;
-        UpdateAvaiableBoxAndPlacedBox(coord);
+        UpdateAvaiableBoxAndPlacedBox(box);
         for (int i=1;i<7;i++){
             int[] adjacentCoord = box.getAdjacentBoxOfIndex(i);
-            if (containsKey(PlacedBox,adjacentCoord)){
+            if (coordInBoard(adjacentCoord)) {
                 //cherche toutes les tuiles adjacente à celle que l'on pose
                 int x = coord[0], y = coord[1], z = coord[2];
                 int x1 = adjacentCoord[0], y1 = adjacentCoord[1], z1 = adjacentCoord[2];
@@ -95,11 +105,11 @@ public class Board {
                     newCoord1 = new int[]{Math.min(x,x1),Math.min(y,y1),z+1};
                     newCoord2 = new int[]{Math.max(x,x1),Math.max(y,y1),z-1};
                 }
-                if (!containsKey(PlacedBox,newCoord1) && !containsKey(AvailableBox,newCoord1)) {
-                    AvailableBox.put(newCoord1, Math.max(Math.abs(x-x1), Math.max(Math.abs(y-y1), Math.abs(z-z1))));
+                if (!(coordInBoard(newCoord1)) && !(AvailableBox.contains(newCoord1))) {
+                    AvailableBox.add(newCoord1);
                 }
-                if (!containsKey(PlacedBox,newCoord2) && !containsKey(AvailableBox,newCoord2)) {
-                    AvailableBox.put(newCoord2, Math.max(Math.abs(x-x1), Math.max(Math.abs(y-y1), Math.abs(z-z1))));
+                if (!(coordInBoard(newCoord2)) && !(AvailableBox.contains(newCoord2))) {
+                    AvailableBox.add(newCoord2);
                 }
             }
         }
@@ -118,16 +128,16 @@ public class Board {
      * Check if the number of box placed is equals to 2
      * (correspond to the case when the players add the first HexagoneBox to the booard (the first is the lake)
      * Then remove in the Hasmap AvailableBox the box that we just place now and add the id of this new box into the Hasmap PlacedBox
-     * @param coordinates : of the new box that we place in the board.
+     * @param box : box that we place in the board.
      */
-    private void UpdateAvaiableBoxAndPlacedBox(int[] coordinates){
+    private void UpdateAvaiableBoxAndPlacedBox(HexagoneBox box) {
         this.numberBoxPlaced = this.numberBoxPlaced +1;
-        if (this.numberBoxPlaced == 2){
+        if (this.numberBoxPlaced == 2) {
             AvailableBox.clear();
         } else {
-            AvailableBox.remove(coordinates);
+            AvailableBox.remove(box.getCoordinates());
         }
-        PlacedBox.put(coordinates,get_range_from_center(coordinates));
+        PlacedBox.add(box);
     }
 
     /*
@@ -194,7 +204,7 @@ public class Board {
         return generateID(generateCoordinate[0],generateCoordinate[1],generateCoordinate[2]);
     }*/
 
-    public HashMap<int[],Integer> getAvailableBox(){
+    public ArrayList<int[]> getAvailableBox(){
         return this.AvailableBox;
     }
 

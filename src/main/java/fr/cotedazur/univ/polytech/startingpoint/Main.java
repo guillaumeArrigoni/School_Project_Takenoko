@@ -1,13 +1,11 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Main {
 
@@ -15,14 +13,14 @@ public class Main {
         return "Hello World!";
     }
 
-    public static void printBoardState(Board board) {
+    /*public static void printBoardState(Board board) {
         int nbLigne = 5;
-        HashMap<int[], Integer> placedBox = board.getPlacedBox();
+        ArrayList<HexagoneBox> placedBox = board.getPlacedBox();
         for (Map.Entry tile : placedBox.entrySet()) {
             System.out.print(Arrays.toString((int[])tile.getKey()));
         }
         System.out.println(" ");
-    }
+    }*/
 /*
     public static void main(String... args) {
         Board board = new Board();

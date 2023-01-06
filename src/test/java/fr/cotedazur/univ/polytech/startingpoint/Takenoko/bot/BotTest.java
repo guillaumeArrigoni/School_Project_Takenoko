@@ -49,7 +49,6 @@ class BotTest {
         assertEquals(1, board.getPlacedBox().size());
         bot.placeRandomTile();
         assertEquals(2, board.getPlacedBox().size());
-
     }
 
     @Test

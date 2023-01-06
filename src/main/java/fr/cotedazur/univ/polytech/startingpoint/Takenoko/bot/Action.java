@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class Action {
 
-
     public static HexagoneBox drawTile(Random random) {
         Color color = switch (random.nextInt(0,3)) {
             case 1 -> Color.Vert;
@@ -40,7 +39,7 @@ public class Action {
                     default -> new int[]{0, 0, 0};
                 };
 
-                if (!board.containsKey(board.getPlacedBox(),newCoord)) possible=false;
+                if (!board.coordInBoard(newCoord)) possible=false;
                 else {
                     possibleMove.add(newCoord);
                     count++;
@@ -49,8 +48,6 @@ public class Action {
             possible = true;
             count = 1;
         }
-
-
         return possibleMove;
     }
 

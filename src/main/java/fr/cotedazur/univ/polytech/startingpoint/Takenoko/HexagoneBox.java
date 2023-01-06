@@ -11,7 +11,7 @@ import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod
 */
 public class HexagoneBox {
 
-    private int[] coordinates ;
+    private int[] coordinates;
     /**
      * Form : 1*1 000 000 + x*10 000 + y*100 + z
      * Example : 1020301 -> x = 02, y = 03, z = 01

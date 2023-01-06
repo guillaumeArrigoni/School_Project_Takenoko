@@ -27,7 +27,7 @@ public class Board {
      */
 
     private ArrayList<HexagoneBox> PlacedBox;
-    private HashMap<Integer,HexagoneBox> getBox;
+    private HashMap<Integer,HexagoneBox> getBox = new HashMap<>();
 
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.

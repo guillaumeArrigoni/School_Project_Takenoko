@@ -89,10 +89,12 @@ public class HexagoneBox {
 
     public void growBamboo() {
         if (this.heightBamboo < 4) this.heightBamboo++;
+        retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
 
     public void eatBamboo() {
         if (this.heightBamboo > 0) this.heightBamboo--;
+        retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
 
     public HashMap<Integer, int[]> getAdjacentBox() {

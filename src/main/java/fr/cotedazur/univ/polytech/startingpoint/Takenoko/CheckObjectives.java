@@ -12,14 +12,6 @@ public class CheckObjectives {
     HashMap<Boolean, ArrayList<Integer>> BoxIsIrrigated = new HashMap<>();
     HashMap<Integer, ArrayList<Integer>> BoxHeight = new HashMap<>();
     HashMap<Special, ArrayList<Integer>> BoxSpeciality = new HashMap<>();
-    /**
-     * Hashmap to know the height, the color, the special characteristic of the box :
-     *      Integer : Height of the bamboo
-     *      Color : color of the bamboo
-     *      Special : if the bamboo is from a special characteristic
-     *      ArrayList : id of all the box that complete this characteristic
-     */
-    HashMap<Integer,HashMap<Color,HashMap<Special,ArrayList<Integer>>>> BoxBambooSize;
 
     /**
      * Initiate all the value for the Hashmap in order to avoid checking if a key exist
@@ -93,16 +85,6 @@ public class CheckObjectives {
         ArrayList<ArrayList<Integer>> allList = new ArrayList<>();
         HashMap<Integer,ArrayList<Integer>> allListInDico = new HashMap<>();
         if (color.isPresent()){
-            /*for (int i=0;i<color.get().size();i++){
-                ArrayList<Integer> tempoList;
-                if (allListInDico.containsKey(1)){
-                    tempoList = BoxColor.get(color.get().get(i));
-                    tempoList.addAll(BoxColor.get(color.get().get(i)));
-                } else {
-                    tempoList = allListInDico.get(1);
-                }
-                allListInDico.put(1,tempoList);
-            }*/
             allList.add(mergeAllList(color.get(),BoxColor));
         }
         if (isIrrigated.isPresent()){
@@ -115,15 +97,6 @@ public class CheckObjectives {
             allList.add(mergeAllList(speciality.get(),BoxSpeciality));
         }
         ArrayList<Integer> listToReturn;
-        /*if (allListInDico.isEmpty()){
-            listToReturn = new ArrayList<>();
-        } else {
-            listToReturn = allListInDico.get(0);
-        }
-        for (int i=1;i<allListInDico.size();i++){
-            listToReturn.retainAll(allListInDico.get(i));
-        }
-        return listToReturn;*/
         if (allList.isEmpty()){
             listToReturn = new ArrayList<>();
         } else {

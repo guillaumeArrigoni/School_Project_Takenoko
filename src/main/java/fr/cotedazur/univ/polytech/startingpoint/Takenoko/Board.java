@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Board {
 
     int numberBoxPlaced ;
-
+    
     /**
      * PlacedBox is a Hashmap that contain in key all the box's id already place in the board
      * and associate for each one their range to the center of the board (lake)
@@ -21,10 +21,8 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-
-    private ArrayList<HexagoneBox> PlacedBox;
-    private HashMap<Integer,HexagoneBox> getBox = new HashMap<>();
-
+    private HashMap<Integer,HexagoneBox> placedBox;
+    
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
      * (= where new box can be place in the board).
@@ -34,69 +32,63 @@ public class Board {
      *      - Integer : range to the lake
      */
     private ArrayList<int[]> AvailableBox;
-
     private int[] gardenerCoords;
     private int[] pandaCoords;
 
     public Board(){
+        this.placedBox = new HashMap<>();
         HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique);
-        numberBoxPlaced = 1;
+        this.numberBoxPlaced = 1;
 
-        AvailableBox = new ArrayList<>();
+        this.AvailableBox = new ArrayList<>();
         for (int i=1;i<7;i++){
-            AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
+            this.AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
         }
-
-        PlacedBox = new ArrayList<>();
-        PlacedBox.add(lac);
-        gardenerCoords = new int[]{0,0,0};
+        
+        this.placedBox.put(lac.getId(),lac);
+        this.gardenerCoords = new int[]{0,0,0};
     }
 
     public int[] getGardenerCoords() {
         return this.gardenerCoords;
     }
-
     public int[] getPandaCoords() {return this.pandaCoords;}
-
+    public HexagoneBox getBoxWithCoordinates(int[] coords) {
+        return this.placedBox.get(HexagoneBox.generateID(coords));
+    }
+    public int getNumberBoxPlaced() {
+        return numberBoxPlaced;
+    }
+    public HashMap<Integer, HexagoneBox> getPlacedBox() {
+        return placedBox;
+    }
+    public ArrayList<HexagoneBox> getAllBoxPlaced() {
+        return new ArrayList<>(this.placedBox.values());
+    }
+    public ArrayList<int[]> getAvailableBox(){
+        return this.AvailableBox;
+    }
+    
+    public void setPandaCoords(int[] newCoords) {
+        this.pandaCoords = newCoords;
+        HexagoneBox box = getBoxWithCoordinates(newCoords);
+        if (box.getSpecial()!=Special.Protéger && box.getHeightBamboo()>0) box.eatBamboo();
+    }
     public void setGardenerCoords(int[] coords) {
         this.gardenerCoords = coords;
         growAfterMoveOfTheGardener(getBoxWithCoordinates(coords));
     }
 
-    private void growAfterMoveOfTheGardener(HexagoneBox box){
-        if (box.isIrrigate() && !Arrays.equals(box.getCoordinates(), new int[]{0,0,0})) box.growBamboo();
-        HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
-        for (int[] coordinate : adjacentBox.values()){
-            HexagoneBox newBox = getBoxWithCoordinates(coordinate);
-            if (this.getBox.containsKey(newBox.getId()) && newBox.isIrrigate() && newBox.getColor() == box.getColor()){
-                newBox.growBamboo();
-            }
-        }
-    }
-
-    public HexagoneBox getBoxWithCoordinates(int[] coords) {
-        return this.getBox.get(HexagoneBox.generateID(coords));
-    }
-
-    public void setPandaCoords(int[] newCoords) {
-        this.pandaCoords = newCoords;
-        HexagoneBox box = getBoxWithCoordinates(newCoords);
-        box.eatBamboo();
-    }
-    public int getNumberBoxPlaced() {
-        return numberBoxPlaced;
-    }
-
-    public ArrayList<HexagoneBox> getPlacedBox() {
-        return PlacedBox;
-    }
-
     public boolean isCoordinateInBoard(int[] Coord) {
-        return this.getBox.containsKey(getBoxWithCoordinates(Coord).getId());
+        return this.placedBox.containsKey(getBoxWithCoordinates(Coord).getId());
     }
 
     /**
-     * Add the HexagoneBox entered into the Hashmap PlacedBox and update the Hasmap AvaiableBox with the new box avalaible and delete the new box add.
+     * Method use to :
+     *      Add the HexagoneBox entered into the Hashmap PlacedBox.
+     *      Update the ArrayList AvaiableBox with the new box avalaible
+     *      Delete the new box add in AvailableBox.
+     *      Add the new adjacent box from the box placed and any other box placed before in the ArrayList AvailableBox
      * @param box : the new Hexagone box to add to the board
      */
     public void addBox(HexagoneBox box) {
@@ -106,33 +98,68 @@ public class Board {
         for (int i=1;i<7;i++){
             int[] adjacentCoord = box.getAdjacentBoxOfIndex(i);
             if (isCoordinateInBoard(adjacentCoord)) {
-                //look for every adjacent box to the one we are placing in the board
-                int x = coord[0], y = coord[1], z = coord[2];
-                int x1 = adjacentCoord[0], y1 = adjacentCoord[1], z1 = adjacentCoord[2];
-                if (x==x1) {
-                    newCoord1 = new int[]{x+1,Math.min(y,y1),Math.min(z,z1)};
-                    newCoord2 = new int[]{x-1,Math.max(y,y1),Math.max(z,z1)};
-                }
-                else if (y==y1) {
-                    newCoord1 = new int[]{Math.min(x,x1),y+1,Math.min(z,z1)};
-                    newCoord2 = new int[]{Math.max(x,x1),y-1,Math.max(z,z1)};
-                }
-                else {
-                    newCoord1 = new int[]{Math.min(x,x1),Math.min(y,y1),z+1};
-                    newCoord2 = new int[]{Math.max(x,x1),Math.max(y,y1),z-1};
-                }
-                if (!(isCoordinateInBoard(newCoord1)) && !(AvailableBox.contains(newCoord1))) {
-                    AvailableBox.add(newCoord1);
-                }
-                if (!(isCoordinateInBoard(newCoord2)) && !(AvailableBox.contains(newCoord2))) {
-                    AvailableBox.add(newCoord2);
-                }
+                generateNewAdjacentBox(coord, adjacentCoord);
             }
         }
     }
 
-    public HashMap<Integer, HexagoneBox> getGetBox() {
-        return getBox;
+    /**
+     * Method use to :
+     *      generate the adjacent box of 2 box (that are put as parameters in this method)
+     *      check if the nex box can be add in the ArrayList AvailableBox
+     * @param coord the coordinate of a box from which we want the new adjacent box
+     * @param adjacentCoord the coordinate of the second box in order to get the adjacent box
+     */
+    private void generateNewAdjacentBox(int[] coord, int[] adjacentCoord) {
+        int[] newCoord1;
+        int[] newCoord2;
+        //look for every adjacent box to the one we are placing in the board
+        int x = coord[0], y = coord[1], z = coord[2];
+        int x1 = adjacentCoord[0], y1 = adjacentCoord[1], z1 = adjacentCoord[2];
+        
+        if (x==x1) {
+            newCoord1 = new int[]{x+1,Math.min(y,y1),Math.min(z,z1)};
+            newCoord2 = new int[]{x-1,Math.max(y,y1),Math.max(z,z1)};
+        }
+        else if (y==y1) {
+            newCoord1 = new int[]{Math.min(x,x1),y+1,Math.min(z,z1)};
+            newCoord2 = new int[]{Math.max(x,x1),y-1,Math.max(z,z1)};
+        }
+        else {
+            newCoord1 = new int[]{Math.min(x,x1),Math.min(y,y1),z+1};
+            newCoord2 = new int[]{Math.max(x,x1),Math.max(y,y1),z-1};
+        }
+        addNewBoxInAvailableBox(newCoord1);
+        addNewBoxInAvailableBox(newCoord2);
+    }
+
+    /**
+     * Method use to add in AvailableBox a box if it is possible
+     * @param newCoord the coordinate of the box we want to add in AvailableBox
+     */
+    private void addNewBoxInAvailableBox(int[] newCoord) {
+        if (!(isCoordinateInBoard(newCoord)) && !(AvailableBox.contains(newCoord))) {
+            AvailableBox.add(newCoord);
+        }
+    }
+
+    /**
+     * Method use to grow the bamboo in the adjacentBox of the one where the gardener is placed
+     * @param box where the gardener is placed
+     */
+    private void growAfterMoveOfTheGardener(HexagoneBox box){
+        if (box.isIrrigate() &&
+                !Arrays.equals(box.getCoordinates(), new int[]{0,0,0}) &&
+                box.getHeightBamboo()<4) box.growBamboo();
+        HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
+        for (int[] coordinate : adjacentBox.values()){
+            HexagoneBox newBox = getBoxWithCoordinates(coordinate);
+            if (this.placedBox.containsKey(newBox.getId()) &&
+                    newBox.isIrrigate() &&
+                    newBox.getColor() == box.getColor() &&
+                    newBox.getHeightBamboo()<4) newBox.growBamboo();
+
+        }
     }
 
     /**
@@ -148,12 +175,6 @@ public class Board {
         } else {
             AvailableBox.remove(box.getCoordinates());
         }
-        PlacedBox.add(box);
-        getBox.put(box.getId(),box);
+        placedBox.put(box.getId(),box);
     }
-
-    public ArrayList<int[]> getAvailableBox(){
-        return this.AvailableBox;
-    }
-
 }

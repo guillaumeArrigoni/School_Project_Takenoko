@@ -70,6 +70,6 @@ public enum Objective {
 
     @Override
     public String toString() {
-        return "Type : " + this.type.toString() + ", Valeur : " + this.value ;
+        return this.getType().toString() + ", Valeur : " + this.value ;
     }
 }

@@ -13,9 +13,8 @@ public enum TypeObjective {
     public String getDescription() {
         return description;
     }
-
     @Override
     public String toString(){
-        return description;
+        return "Type : " + this.getDescription();
     }
 }

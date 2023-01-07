@@ -4,7 +4,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public enum Objectives {
+public enum Objective {
     PARCELLE1(2, TypeObjective.PARCELLE, Pattern.PATTERNPARCELLE1, new ArrayList<>(Arrays.asList( Color.Vert))),
     PARCELLE2(3, TypeObjective.PARCELLE, Pattern.PATTERNPARCELLE2, new ArrayList<>(Arrays.asList(Color.Jaune))),
     PARCELLE3(4, TypeObjective.PARCELLE, Pattern.PATTERNPARCELLE3, new ArrayList<>(Arrays.asList( Color.Rouge))),
@@ -42,7 +42,7 @@ public enum Objectives {
     private Pattern pattern;
     private ArrayList<Color> colors;
 
-    Objectives(int value,TypeObjective type, Pattern pattern, ArrayList<Color> colors) {
+    Objective(int value, TypeObjective type, Pattern pattern, ArrayList<Color> colors) {
         this.value = value;
         this.type = type;
         this.pattern = pattern;
@@ -70,6 +70,6 @@ public enum Objectives {
 
     @Override
     public String toString() {
-        return this.name() + " : valeur : " + this.value +", type : " + this.type.toString();
+        return this.getType().toString() + ", Valeur : " + this.value ;
     }
 }

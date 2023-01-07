@@ -88,11 +88,13 @@ public class HexagoneBox {
     }
 
     public void growBamboo() {
+        retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
         if (this.heightBamboo < 4) this.heightBamboo++;
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
 
     public void eatBamboo() {
+        retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
         if (this.heightBamboo > 0) this.heightBamboo--;
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
@@ -107,7 +109,9 @@ public class HexagoneBox {
 
     public void setCoordinates(int[] coordinates) {
         this.coordinates = coordinates;
+        this.id = generateID(this.coordinates);
         getAllAdjacenteBox();
+        updateRetrieveBox();
     }
 
     public void setSpecial(Special special) {
@@ -153,12 +157,15 @@ public class HexagoneBox {
      */
     public static int generateID(int[] coordinates) {
         int id = 1000000;
+        int tempo;
         for (int i=0;i<3;i++){
             if (coordinates[i]<0){
-                coordinates[i] = 100 + coordinates[i];
+                tempo = 100 + coordinates[i];
+            } else {
+                tempo = coordinates[i];
             }
+            id = id + tempo * (int) Math.pow(100,i);
         }
-        id = id + coordinates[0] * 10000 + coordinates[1] * 100 + coordinates[2];
         return id;
     }
 

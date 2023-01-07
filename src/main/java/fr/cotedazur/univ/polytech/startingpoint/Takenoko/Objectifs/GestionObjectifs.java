@@ -36,6 +36,7 @@ public class GestionObjectifs {
        int idJardinier = 1;
        int idPanda = 1;
        for(Objectives objectives : Objectives.values()) {
+           System.out.println(objectives);
            if(objectives.getType().equals(TypeObjective.PARCELLE)) {
                ParcelleObjectifs.put(idParcelle++, objectives);
            } if(objectives.getType().equals(TypeObjective.JARDINIER)){
@@ -74,16 +75,18 @@ public class GestionObjectifs {
     public void rollParcelleObjective(Bot bot){
         int i = new Random().nextInt(1, getParcelleObjectifs().size() +1);
         Objectives objective = getParcelleObjectifs().get(i);
-        getParcelleObjectifs().remove(i);
+        //getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
         System.out.println(bot.getName() + " a pioché un nouvel objectif.");
+        System.out.println(objective);
     }
     public void rollJardinierObjective(Bot bot){
         int i = new Random().nextInt(1, getJardinierObjectifs().size() +1);
         Objectives objective = getJardinierObjectifs().get(i);
-        getJardinierObjectifs().remove(i);
+        //getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
         System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
+        System.out.println(objective);
     }
     public void rollPandaObjective(Bot bot){
         int i = new Random().nextInt(1, getPandaObjectifs().size() +1);
@@ -93,7 +96,6 @@ public class GestionObjectifs {
         System.out.println(bot.getName() + " a pioché un nouvel objectif. " + objective.toString());
     }
     public void checkObjectives(Bot bot){
-        System.out.println(bot.getObjectives());
         for(Objectives objective : bot.getObjectives()){
             if(checkOneObjective(objective)){
                 bot.addScore(objective);

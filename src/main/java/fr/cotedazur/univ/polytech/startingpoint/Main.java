@@ -1,12 +1,5 @@
 package fr.cotedazur.univ.polytech.startingpoint;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-
-import java.util.*;
-
 public class Main {
 
     public static String hello() {

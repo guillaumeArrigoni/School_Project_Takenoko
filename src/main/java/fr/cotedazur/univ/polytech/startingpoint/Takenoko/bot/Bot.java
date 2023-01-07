@@ -2,42 +2,50 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot.ActionPossible.BougerJardinier;
-
-/**
- * This class is the bot that will play the game
- */
-public class Bot {
-
+public abstract class Bot {
     //ATTRIBUTES
     /**
      * Name of the bot
      */
-    private List<ActionPossible> actionPossibles;
-    private final String name;
-    private final Board board;
-    private final Random random;
-
-    private final MeteoDice meteoDice;
+    protected final String name;
+    /**
+     * The board of the game
+     */
+    protected final Board board;
+    /**
+     * The random generator
+     */
+    protected final Random random;
+    /**
+     * The meteo dice
+     */
+    protected final MeteoDice meteoDice;
+    /**
+     * The list of possible actions
+     */
+    protected List<PossibleActions> possibleActions;
 
     //CONSTRUCTOR
+
     /**
      * Constructor of the bot
-     * @param name : name of the bot
+     * @param name the name of the bot
+     * @param board the board of the game
+     * @param random the random generator
+     * @param meteoDice the meteo dice
      */
-    public Bot(String name, Board board, Random random, MeteoDice meteoDice) {
+    protected Bot(String name, Board board, Random random, MeteoDice meteoDice) {
         this.name = name;
         this.board = board;
         this.random = random;
         this.meteoDice = meteoDice;
-        resetActionsPossible();
+        resetPossibleAction();
     }
 
     //METHODS
@@ -49,105 +57,55 @@ public class Bot {
     //Déplacer le panda
     //piocher une carte objectif
 
-    public void playTurn(){
-        actionPossibles = ActionPossible.getAllActions();
-        switch (meteoDice.roll()){
-            case VENT -> {
-                //Deux fois la même action autorisé
-                System.out.println("Le dé a choisi : VENT");
-                faireActionAleatoire();
-                resetActionsPossible();
-                faireActionAleatoire();
-            }
-            case PLUIE -> {
-                //Le joueur peut faire pousser une tuile irriguée
-                //TODO c pas implémenté dans la classe hexagoneBox
-                System.out.println("Le dé a choisi : PLUIE");
-                faireActionAleatoire();
-                faireActionAleatoire();
-            }
 
+    /**
+     * This method is called at the beginning of the turn
+     */
+    public abstract void playTurn();
 
-        }
-    }
-
-    private void faireActionAleatoire(){
-        ActionPossible action = choisirActionAleatoire();
-        switch (action){
-            case PiocherPoserTuile:
-                System.out.println("Le bot a choisi : PiocherPoserTuile");
-                placeRandomTile();
-                break;
-            case BougerJardinier:
-                System.out.println("Le bot a choisi : BougerJardinier");
-                moveGardenerRandomly();
-                break;
-        }
-
-    }
+    /**
+     * This method is called to do an action
+     */
+    protected abstract void doAction();
 
     //Gestion Actions possibles
-    private ActionPossible choisirActionAleatoire(){
-        ActionPossible acp = actionPossibles.get(random.nextInt(actionPossibles.size()));
-        if (acp == BougerJardinier &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty())
-            return choisirActionAleatoire();
-        actionPossibles.remove(acp);
-        return acp;
-    }
-    private void resetActionsPossible(){
-        actionPossibles = ActionPossible.getAllActions();
-    }
-
-    //Actions
     /**
-     * This method is used to place a random tile on the board
+     * This method choose an action
      */
-    protected void placeRandomTile(){
-        //Init
-        List<HexagoneBox> list = new ArrayList<>();
-        //Get all the available coords
-        List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
-        //Draw three tiles
-        for(int i = 0; i < 3; i++)
-            list.add(Action.drawTile(random));
-        //Choose a random tile from the tiles drawn
-        HexagoneBox placedTile = list.get(random.nextInt(0, 3));
-        //Choose a random available space
-        int[] placedTileCoords = availableTilesList.get(random.nextInt(0, availableTilesList.size()));
-        //Set the coords of the tile
-        placedTile.setCoordinates(placedTileCoords);
-        //Add the tile to the board
-        board.addBox(placedTile);
-        System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
-    }
+    protected abstract PossibleActions chooseAction();
 
     /**
-     * This method move the gardener randomly on the board
+     * This method reset the list of possible actions
      */
-    private void moveGardenerRandomly(){
-        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
-        board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
-        System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+    protected abstract void resetPossibleAction();
+    /**
+     * This method place a tile on the board
+     */
+    protected abstract void placeTile();
+    /**
+     * This method move the gardener
+     */
+    protected abstract void moveGardener();
+
+    /**
+     * List of all the possible actions
+     */
+    protected enum PossibleActions {
+        DRAW_AND_PUT_TILE(1),
+        MOVE_GARDENER(2);
+
+        /**
+         * The value of the action
+         */
+        PossibleActions(int i) {
+        }
+
+        /**
+         * This method return the list of all the possible actions
+         * @return the list of all the possible actions
+         */
+        static List<PossibleActions> getAllActions() {
+            return new ArrayList<>(Arrays.asList(PossibleActions.values()));
+        }
     }
-
-
-    //Enum ActionPossibles
-    enum ActionPossible{
-        PiocherPoserTuile (1),
-        BougerJardinier (2);
-
-        ActionPossible(int i) {
-        }
-
-        //Return a non immutable list of all the actions possible
-        private static List<ActionPossible> getAllActions(){
-            return new ArrayList<>(Arrays.asList(ActionPossible.values()));
-        }
-
-        private static List<ActionPossible> getActionsPossible(){
-            return List.of(ActionPossible.values());
-        }
-    }
-
 }
-

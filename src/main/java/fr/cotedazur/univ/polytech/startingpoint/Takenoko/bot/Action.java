@@ -4,7 +4,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
-import java.util.HashMap;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -41,7 +40,7 @@ public class Action {
                     default -> new int[]{0, 0, 0};
                 };
 
-                if (!board.coordInBoard(newCoord)) possible=false;
+                if (!board.isCoordinateInBoard(newCoord)) possible=false;
                 else {
                     possibleMove.add(newCoord);
                     count++;

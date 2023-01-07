@@ -16,7 +16,7 @@ public class Main {
 
     public static void printBoardState(Board board) {
         System.out.println("Voici l'état du board : ");
-        ArrayList<HexagoneBox> placedBox = board.getPlacedBox();
+        ArrayList<HexagoneBox> placedBox = board.getAllBoxPlaced();
         for (HexagoneBox box : placedBox) {
             System.out.println(Arrays.toString(box.getCoordinates()) + " : bamboo de hauteur " + box.getHeightBamboo());
         }

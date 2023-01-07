@@ -90,14 +90,8 @@ public class RetrieveBoxIdWithParameters {
         if (speciality.isPresent()){
             allList.add(mergeAllList(speciality.get(),BoxSpeciality));
         }
-        System.out.println(("aaaaaaaaaaaaaaaaaaaaaa"));
-        System.out.println((allList));
         ArrayList<Integer> listToReturn = new ArrayList<>();
         for (int i=0;i<allList.size();i++){
-            System.out.println(("ooooooooooooooooooooooooooooooooooo"));
-            System.out.println((listToReturn.isEmpty()));
-            System.out.println(allList.get(i).isEmpty());
-            System.out.println(!allList.get(i).isEmpty());
             if (listToReturn.isEmpty() && !allList.get(i).isEmpty()){
                 listToReturn.addAll(allList.get(i));
             } else {
@@ -105,8 +99,6 @@ public class RetrieveBoxIdWithParameters {
             }
 
         }
-        System.out.println(("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"));
-        System.out.println((listToReturn));
         return listToReturn;
     }
 
@@ -119,14 +111,8 @@ public class RetrieveBoxIdWithParameters {
     private ArrayList<Integer> mergeAllList(ArrayList listToMerge, HashMap dicoRelated){
         ArrayList<Integer> tempoList = new ArrayList<>();
         for (int i=0;i<listToMerge.size();i++){
-            System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-            System.out.println(tempoList);
             tempoList.removeAll((ArrayList) dicoRelated.get(listToMerge.get(i)));
-            System.out.println(tempoList);
             tempoList.addAll((ArrayList) dicoRelated.get(listToMerge.get(i)));
-            System.out.println(dicoRelated.get(listToMerge.get(i)));
-            System.out.println(dicoRelated);
-            System.out.println(tempoList);
         }
         return tempoList;
     }

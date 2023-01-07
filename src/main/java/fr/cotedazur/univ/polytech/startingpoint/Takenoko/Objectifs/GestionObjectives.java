@@ -93,18 +93,17 @@ public class GestionObjectives {
         System.out.println(objective);
     }
     public void checkObjectives(Bot bot){
-        ArrayList<Objective> a = new ArrayList<>();
+        ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective)){
                 bot.addScore(objective);
                 System.out.println(objective.toString() + " a été réalisé");
-                a.add(objective);
-                //bot.getObjectives().remove(objective);
+                listOfObjectifDone.add(objective);
             }
         }
-        ArrayList<Objective> b = bot.getObjectives();
-        b.removeAll(a);
-        bot.setObjectives(b);
+        ArrayList<Objective> listOfAllObjectivesFromABot = bot.getObjectives();
+        listOfAllObjectivesFromABot.removeAll(listOfObjectifDone);
+        bot.setObjectives(listOfAllObjectivesFromABot);
     }
 
 

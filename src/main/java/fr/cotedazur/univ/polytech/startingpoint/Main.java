@@ -61,8 +61,8 @@ public class Main {
             printBoardState(board);
             if (board.getNumberBoxPlaced() > 10) {
                 playing = false;
-                System.out.println(bot1.getScore());
-                System.out.println(bot2.getScore());
+                System.out.println("Score du bot 1 : " + bot1.getScore());
+                System.out.println("Score du bot 2 : " + bot2.getScore());
             }
             System.out.println("------------------------------------------");
         }

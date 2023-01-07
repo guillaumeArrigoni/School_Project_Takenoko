@@ -3,11 +3,8 @@ package fr.cotedazur.univ.polytech.startingpoint;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectifs;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.*;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.*;
 
@@ -19,7 +16,7 @@ public class Main {
 
     public static void printBoardState(Board board) {
         System.out.println("Voici l'état du board : ");
-        ArrayList<HexagoneBox> placedBox = board.getPlacedBox();
+        ArrayList<HexagoneBox> placedBox = board.getAllBoxPlaced();
         for (HexagoneBox box : placedBox) {
             System.out.println(Arrays.toString(box.getCoordinates()) + " : bamboo de hauteur " + box.getHeightBamboo());
         }

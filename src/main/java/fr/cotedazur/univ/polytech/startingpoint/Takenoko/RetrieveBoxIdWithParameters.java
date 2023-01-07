@@ -16,17 +16,16 @@ public class RetrieveBoxIdWithParameters {
      * Initiate all the value for the Hashmap in order to avoid checking if a key exist
      */
     public RetrieveBoxIdWithParameters(){
-        ArrayList<Integer> empty = new ArrayList<>();
-        this.BoxIsIrrigated.put(true,empty);
-        this.BoxIsIrrigated.put(false,empty);
+        this.BoxIsIrrigated.put(true,new ArrayList<>());
+        this.BoxIsIrrigated.put(false,new ArrayList<>());
         for (int i=0;i<Color.values().length;i++){
-            this.BoxColor.put(Color.values()[i],empty);
+            this.BoxColor.put(Color.values()[i],new ArrayList<>());
         }
         for (int i=0;i<Special.values().length;i++){
-            this.BoxSpeciality.put(Special.values()[i],empty);
+            this.BoxSpeciality.put(Special.values()[i],new ArrayList<>());
         }
         for (int i=0;i<5;i++){
-            this.BoxHeight.put(i,empty);
+            this.BoxHeight.put(i,new ArrayList<>());
         }
     }
 
@@ -40,6 +39,9 @@ public class RetrieveBoxIdWithParameters {
         ArrayList<Integer> listId = BoxIsIrrigated.get(isIrrigated);
         listId.add(id);
         BoxIsIrrigated.put(isIrrigated,listId);
+        ArrayList<Integer> listIdToDelete = BoxIsIrrigated.get(!isIrrigated);
+        listIdToDelete.removeAll(new ArrayList<Integer>(Arrays.asList(id)));
+        BoxIsIrrigated.put(!isIrrigated,listIdToDelete);
     }
 
     public void setBoxHeight(int id, int height) {
@@ -48,10 +50,19 @@ public class RetrieveBoxIdWithParameters {
         BoxHeight.put(height,listId);
     }
 
+    public void setBoxHeightDelete(int id, int height) {
+        ArrayList<Integer> listId = BoxHeight.get(height);
+        listId.removeAll(new ArrayList<>(Arrays.asList(id)));
+        BoxHeight.put(height,listId);
+    }
+
     public void setBoxSpeciality(int id, Special speciality) {
         ArrayList<Integer> listId = BoxSpeciality.get(speciality);
         listId.add(id);
         BoxSpeciality.put(speciality,listId);
+        ArrayList<Integer> listIdToDelete = BoxSpeciality.get(Special.Classique);
+        listIdToDelete.removeAll(new ArrayList<>(Arrays.asList(id)));
+        BoxSpeciality.put(Special.Classique,listIdToDelete);
     }
 
 
@@ -79,14 +90,14 @@ public class RetrieveBoxIdWithParameters {
         if (speciality.isPresent()){
             allList.add(mergeAllList(speciality.get(),BoxSpeciality));
         }
-        ArrayList<Integer> listToReturn;
-        if (allList.isEmpty()){
-            listToReturn = new ArrayList<>();
-        } else {
-            listToReturn = allList.get(0);
-        }
-        for (int i=1;i<allList.size();i++){
-            listToReturn.retainAll(allList.get(i));
+        ArrayList<Integer> listToReturn = new ArrayList<>();
+        for (int i=0;i<allList.size();i++){
+            if (listToReturn.isEmpty() && !allList.get(i).isEmpty()){
+                listToReturn.addAll(allList.get(i));
+            } else {
+                listToReturn.retainAll(allList.get(i));
+            }
+
         }
         return listToReturn;
     }

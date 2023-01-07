@@ -2,12 +2,9 @@ package fr.cotedazur.univ.polytech.startingpoint;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectifs;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.*;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.*;
 
@@ -34,7 +31,7 @@ public class Main {
         ElementOfTheGame elementOfTheGame = new ElementOfTheGame();
         UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
         UniqueObjectCreated.setBoard(board);
-        GestionObjectifs gestionnaire = new GestionObjectifs();
+        GestionObjectives gestionnaire = new GestionObjectives();
         gestionnaire.initialize();
         MeteoDice meteoDice = new MeteoDice();
         Bot bot1 = new Bot("Bot1",board,random, meteoDice);
@@ -64,6 +61,8 @@ public class Main {
             printBoardState(board);
             if (board.getNumberBoxPlaced() > 10) {
                 playing = false;
+                System.out.println("Score du bot 1 : " + bot1.getScore());
+                System.out.println("Score du bot 2 : " + bot2.getScore());
             }
             System.out.println("------------------------------------------");
         }

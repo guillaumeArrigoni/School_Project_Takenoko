@@ -161,6 +161,11 @@ public class Bot {
     public ArrayList<Objective> getObjectives() {
         return objectives;
     }
+
+    public void setObjectives(ArrayList<Objective> objectives) {
+        this.objectives = objectives;
+    }
+
     public void addScore(Objective objective){
         this.score += objective.getValue();
     }

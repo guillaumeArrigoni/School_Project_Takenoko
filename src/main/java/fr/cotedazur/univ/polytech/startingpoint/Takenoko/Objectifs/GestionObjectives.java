@@ -69,7 +69,7 @@ public class GestionObjectives {
         };
     }
     public void rollParcelleObjective(Bot bot){
-        int i = new Random().nextInt(1, getParcelleObjectifs().size() +1);
+        int i = new Random().nextInt(0, getParcelleObjectifs().size());
         Objective objective = getParcelleObjectifs().get(i);
         getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
@@ -77,7 +77,7 @@ public class GestionObjectives {
         System.out.println(objective);
     }
     public void rollJardinierObjective(Bot bot){
-        int i = new Random().nextInt(1, getJardinierObjectifs().size() +1);
+        int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = getJardinierObjectifs().get(i);
         getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
@@ -85,7 +85,7 @@ public class GestionObjectives {
         System.out.println(objective);
     }
     public void rollPandaObjective(Bot bot){
-        int i = new Random().nextInt(1, getPandaObjectifs().size() +1);
+        int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = getPandaObjectifs().get(i);
         getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
@@ -93,13 +93,18 @@ public class GestionObjectives {
         System.out.println(objective);
     }
     public void checkObjectives(Bot bot){
+        ArrayList<Objective> a = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective)){
                 bot.addScore(objective);
-                System.out.println(objective.toString() + "a été réalisé");
-                bot.getObjectives().remove(objective);
+                System.out.println(objective.toString() + " a été réalisé");
+                a.add(objective);
+                //bot.getObjectives().remove(objective);
             }
         }
+        ArrayList<Objective> b = bot.getObjectives();
+        b.removeAll(a);
+        bot.setObjectives(b);
     }
 
 

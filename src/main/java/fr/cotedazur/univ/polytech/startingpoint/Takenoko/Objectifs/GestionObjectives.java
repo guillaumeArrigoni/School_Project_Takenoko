@@ -9,53 +9,49 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.*;
 
-public class GestionObjectifs {
+public class GestionObjectives {
 
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private final Board board;
-    private HashMap<Integer, Objectives> ParcelleObjectifs;
-    private HashMap<Integer, Objectives> JardinierObjectifs;
-    private HashMap<Integer, Objectives> PandaObjectifs;
+    private ArrayList<Objective> ParcelleObjectifs;
+    private ArrayList<Objective> JardinierObjectifs;
+    private ArrayList<Objective> PandaObjectifs;
 
     /**
      * Contient 3 hashmap qui stockent les differents types d'objectifs disponibles (les pioches).
      */
-    public GestionObjectifs(){
+    public GestionObjectives(){
         this.retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
         this.board = UniqueObjectCreated.getBoard();
-        this.ParcelleObjectifs = new HashMap<>();
-        this.JardinierObjectifs = new HashMap<>();
-        this.PandaObjectifs = new HashMap<>();
+        this.ParcelleObjectifs = new ArrayList<>();
+        this.JardinierObjectifs = new ArrayList<>();
+        this.PandaObjectifs = new ArrayList<>();
     }
 
     /**
      * Remplit les hashmap avec tous les objectifs du jeu.
      */
     public void initialize() {
-       int idParcelle = 1;
-       int idJardinier = 1;
-       int idPanda = 1;
-       for(Objectives objectives : Objectives.values()) {
-           System.out.println(objectives);
-           if(objectives.getType().equals(TypeObjective.PARCELLE)) {
-               ParcelleObjectifs.put(idParcelle++, objectives);
-           } if(objectives.getType().equals(TypeObjective.JARDINIER)){
-               JardinierObjectifs.put(idJardinier++, objectives);
-           } if(objectives.getType().equals(TypeObjective.PANDA)){
-               PandaObjectifs.put(idPanda++, objectives);
+       for(Objective objective : Objective.values()) {
+           if(objective.getType().equals(TypeObjective.PARCELLE)) {
+               ParcelleObjectifs.add(objective);
+           } if(objective.getType().equals(TypeObjective.JARDINIER)){
+               JardinierObjectifs.add(objective);
+           } if(objective.getType().equals(TypeObjective.PANDA)){
+               PandaObjectifs.add(objective);
            }
        }
     }
 
-    public HashMap<Integer, Objectives> getParcelleObjectifs() {
+    public ArrayList<Objective> getParcelleObjectifs() {
         return ParcelleObjectifs;
     }
 
-    public HashMap<Integer, Objectives> getJardinierObjectifs() {
+    public ArrayList<Objective> getJardinierObjectifs() {
         return JardinierObjectifs;
     }
 
-    public HashMap<Integer, Objectives> getPandaObjectifs() {
+    public ArrayList<Objective> getPandaObjectifs() {
         return PandaObjectifs;
     }
 
@@ -74,29 +70,30 @@ public class GestionObjectifs {
     }
     public void rollParcelleObjective(Bot bot){
         int i = new Random().nextInt(1, getParcelleObjectifs().size() +1);
-        Objectives objective = getParcelleObjectifs().get(i);
-        //getParcelleObjectifs().remove(i);
+        Objective objective = getParcelleObjectifs().get(i);
+        getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
         System.out.println(bot.getName() + " a pioché un nouvel objectif.");
         System.out.println(objective);
     }
     public void rollJardinierObjective(Bot bot){
         int i = new Random().nextInt(1, getJardinierObjectifs().size() +1);
-        Objectives objective = getJardinierObjectifs().get(i);
-        //getJardinierObjectifs().remove(i);
+        Objective objective = getJardinierObjectifs().get(i);
+        getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
         System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
         System.out.println(objective);
     }
     public void rollPandaObjective(Bot bot){
         int i = new Random().nextInt(1, getPandaObjectifs().size() +1);
-        Objectives objective = getPandaObjectifs().get(i);
+        Objective objective = getPandaObjectifs().get(i);
         getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif. " + objective.toString());
+        System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
+        System.out.println(objective);
     }
     public void checkObjectives(Bot bot){
-        for(Objectives objective : bot.getObjectives()){
+        for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective)){
                 bot.addScore(objective);
                 System.out.println(objective.toString() + "a été réalisé");
@@ -106,36 +103,36 @@ public class GestionObjectifs {
     }
 
 
-    public boolean checkOneObjective(Objectives objectives){
-        return switch(objectives.getType()) {
-            case PARCELLE -> checkParcelleObjectives(objectives);
-            case JARDINIER -> checkJardinierObjectives(objectives);
-            case PANDA -> checkPandaObjectives(objectives);
+    public boolean checkOneObjective(Objective objective){
+        return switch(objective.getType()) {
+            case PARCELLE -> checkParcelleObjectives(objective);
+            case JARDINIER -> checkJardinierObjectives(objective);
+            case PANDA -> checkPandaObjectives(objective);
         };
 
     }
 
-    public boolean checkPandaObjectives(Objectives objectives) {
+    public boolean checkPandaObjectives(Objective objective) {
         return false;
     }
 
-    public boolean checkJardinierObjectives(Objectives objectives) {
+    public boolean checkJardinierObjectives(Objective objective) {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
         return false;
     }
 
-    public boolean checkParcelleObjectives(Objectives objectives) {
-        return switch (objectives.getPattern().getForme()){
-            case "TRIANGLE" -> checkParcelleTriangleObjectives(objectives);
-            case "LIGNE" -> checkParcelleLigneObjectives(objectives);
-            case "COURBE" -> checkParcelleCourbeObjectives(objectives);
-            case "LOSANGE" -> checkParcelleLosangeObjectives(objectives);
+    public boolean checkParcelleObjectives(Objective objective) {
+        return switch (objective.getPattern().getForme()){
+            case "TRIANGLE" -> checkParcelleTriangleObjectives(objective);
+            case "LIGNE" -> checkParcelleLigneObjectives(objective);
+            case "COURBE" -> checkParcelleCourbeObjectives(objective);
+            case "LOSANGE" -> checkParcelleLosangeObjectives(objective);
             default -> false;
         };
     }
 
-    private boolean checkParcelleLosangeObjectives(Objectives objectives) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objectives.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
+    private boolean checkParcelleLosangeObjectives(Objective objective) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
@@ -159,8 +156,8 @@ public class GestionObjectifs {
         return false;
     }
 
-    private boolean checkParcelleCourbeObjectives(Objectives objectives) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objectives.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
+    private boolean checkParcelleCourbeObjectives(Objective objective) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
@@ -182,8 +179,8 @@ public class GestionObjectifs {
         return false;
     }
 
-    private boolean checkParcelleLigneObjectives(Objectives objectives) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objectives.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
+    private boolean checkParcelleLigneObjectives(Objective objective) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
@@ -205,8 +202,8 @@ public class GestionObjectifs {
         return false;
     }
 
-    private boolean checkParcelleTriangleObjectives(Objectives objectives) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objectives.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
+    private boolean checkParcelleTriangleObjectives(Objective objective) {
+        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();

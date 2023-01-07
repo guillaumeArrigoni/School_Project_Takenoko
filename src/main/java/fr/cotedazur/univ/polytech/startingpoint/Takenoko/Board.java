@@ -80,7 +80,7 @@ public class Board {
     }
 
     public boolean isCoordinateInBoard(int[] Coord) {
-        return this.placedBox.containsKey(getBoxWithCoordinates(Coord).getId());
+        return this.placedBox.containsKey(HexagoneBox.generateID(Coord));
     }
 
     /**
@@ -152,13 +152,15 @@ public class Board {
                 !Arrays.equals(box.getCoordinates(), new int[]{0,0,0}) &&
                 box.getHeightBamboo()<4) box.growBamboo();
         HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
-        for (int[] coordinate : adjacentBox.values()){
-            HexagoneBox newBox = getBoxWithCoordinates(coordinate);
-            if (this.placedBox.containsKey(newBox.getId()) &&
-                    newBox.isIrrigate() &&
-                    newBox.getColor() == box.getColor() &&
-                    newBox.getHeightBamboo()<4) newBox.growBamboo();
+        for (int[] coordinate : adjacentBox.values()) {
+            if (isCoordinateInBoard(coordinate)) {
+                HexagoneBox newBox = getBoxWithCoordinates(coordinate);
+                if (this.placedBox.containsKey(newBox.getId()) &&
+                        newBox.isIrrigate() &&
+                        newBox.getColor() == box.getColor() &&
+                        newBox.getHeightBamboo() < 4) newBox.growBamboo();
 
+            }
         }
     }
 

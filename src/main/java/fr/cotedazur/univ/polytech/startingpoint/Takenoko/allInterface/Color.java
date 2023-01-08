@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface;
 
 public enum Color {
     /**

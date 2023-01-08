@@ -1,8 +1,8 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private HashMap<Integer,HexagoneBox> placedBox;
+    private HashMap<Integer, HexagoneBox> placedBox;
     
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.

@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Exception;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception;
 
 public class AdjacenteException extends TakenokoException{
 

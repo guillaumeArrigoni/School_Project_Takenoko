@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 public enum TypeObjective {
     PARCELLE("Parcelle"),

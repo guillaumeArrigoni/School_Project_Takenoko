@@ -1,6 +1,6 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 
 public enum Pattern {
     PATTERNPARCELLE1("TRIANGLE",0,0,null ),

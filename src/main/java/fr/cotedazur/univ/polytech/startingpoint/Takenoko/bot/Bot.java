@@ -1,10 +1,10 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.TypeObjective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 
 import java.util.ArrayList;
 import java.util.Arrays;

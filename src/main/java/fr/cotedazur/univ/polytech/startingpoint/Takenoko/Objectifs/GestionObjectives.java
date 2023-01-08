@@ -173,11 +173,7 @@ public class GestionObjectives {
                     idOfAdjacentBoxCorrect.add(j);
                 }
             }
-            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
-                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+2)%6)){
-                    return true;
-                }
-            }
+            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, 2)) return true;
         }
         return false;
     }
@@ -192,11 +188,7 @@ public class GestionObjectives {
                     idOfAdjacentBoxCorrect.add(j);
                 }
             }
-            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
-                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+3)%6)){
-                    return true;
-                }
-            }
+            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, 3)) return true;
         }
         return false;
     }
@@ -210,14 +202,21 @@ public class GestionObjectives {
                 if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
                     idOfAdjacentBoxCorrect.add(j);
                 }
-                int size = idOfAdjacentBoxCorrect.size();
-                if (size > 1 && ((idOfAdjacentBoxCorrect.get(size-1)-idOfAdjacentBoxCorrect.get(size-2) == 1) || (idOfAdjacentBoxCorrect.get(0)==1 && idOfAdjacentBoxCorrect.get(size-1)==6))){
-                    return true;
-                }
+            }
+            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, 1)) return true;
+        }
+        return false;
+    }
+
+    private boolean ParcelleObjectifCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
+        for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
+            if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+ x)%6)){
+                return true;
             }
         }
         return false;
     }
+
     public void printWinner(Bot bot1, Bot bot2){
          int i = bot1.getScore() - bot2.getScore();
          if(i > 0){

@@ -247,18 +247,4 @@ public class GestionObjectives {
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
         return bot.getObjectives().size() < 5;
     }
-    /*public void printWinner(Bot ... bots){
-        int max=0;
-        int i=1;
-        int idWinner=0;
-        for(Bot bot : bots){
-            System.out.println("Score Bot" + i + " : " + bot.getScore());
-            if(bot.getScore() <max){
-                max = bot.getScore();
-                idWinner = i;
-            }
-            i++;
-        }
-        System.out.println("Winner :  Bot" + idWinner + " wins with " + max + " points" );
-    }
-*/}
+}

@@ -1,5 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
+
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
@@ -36,30 +38,26 @@ public class Main {
         GestionObjectives gestionnaire = new GestionObjectives();
         gestionnaire.initialize();
         MeteoDice meteoDice = new MeteoDice();
-        Bot bot1 = new Bot("Bot1",board,random, meteoDice);
-        Bot bot2 = new Bot("Bot2",board,random, meteoDice);
-        System.out.println("Que la partie commence !");
+        Bot bot1 = new BotRandom("Bot1",board,random, meteoDice,gestionnaire);
+        Bot bot2 = new BotRandom("Bot2",board,random, meteoDice,gestionnaire);
+
         boolean playing = true;
-        int turn = 0;
 
 
+        gestionnaire.rollParcelleObjective(bot1);
+        gestionnaire.rollParcelleObjective(bot2);
+        gestionnaire.rollJardinierObjective(bot1);
+        gestionnaire.rollJardinierObjective(bot2);
+        /* not implemented yet
+        gestionnaire.rollPandaObjective(bot1);
+        gestionnaire.rollPandaObjective(bot2);
+         */
+        System.out.println("Que la partie commence !");
         while (playing) {
-            meteoDice.roll();
-            if (turn == 0) {
-                if(gestionnaire.checkIfBotCanDrawAnObjective(bot1)){
-                    gestionnaire.rollObjective(bot1);
-                }
-                gestionnaire.checkObjectives(bot1);
-                bot1.playTurn();
-            }
-            else {
-                if(gestionnaire.checkIfBotCanDrawAnObjective(bot2)){
-                    gestionnaire.rollObjective(bot2);
-                }
-                gestionnaire.checkObjectives(bot2);
-                bot2.playTurn();
-            }
-            turn = 1 - turn;
+            bot1.playTurn();
+            gestionnaire.checkObjectives(bot1);
+            bot2.playTurn();
+            gestionnaire.checkObjectives(bot2);
             printBoardState(board);
             if (board.getNumberBoxPlaced() > 10) {
                 playing = false;

@@ -65,6 +65,7 @@ public class Main {
                 playing = false;
                 System.out.println("Score du bot 1 : " + bot1.getScore());
                 System.out.println("Score du bot 2 : " + bot2.getScore());
+                gestionnaire.printWinner(bot1,bot2);
             }
             System.out.println("------------------------------------------");
         }

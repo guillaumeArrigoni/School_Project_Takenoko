@@ -163,12 +163,16 @@ public class GestionObjectives {
      */
     private boolean ParcelleLosangeObjectifCondition(HexagoneBox box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
-            if (board.isCoordinateInBoard(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)) &&
-                    board.isCoordinateInBoard(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6))){
-                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 1) % 6)
-                        && board.getBoxWithCoordinates(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 1) % 6)).getColor() == box.getColor()
-                        && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 2) % 6)
-                        && board.getBoxWithCoordinates(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 2) % 6)).getColor() == box.getColor()){
+            int adjIndice1 = (idOfAdjacentBoxCorrect.get(j)+1)%7;
+            int adjIndice2 = (idOfAdjacentBoxCorrect.get(j)+2)%7;
+            if (adjIndice1 == 0) adjIndice1 = 1;
+            if (adjIndice2 == 0) adjIndice2 = 1;
+            if (board.isCoordinateInBoard(box.getAdjacentBox().get(adjIndice1)) &&
+                    board.isCoordinateInBoard(box.getAdjacentBox().get(adjIndice2))){
+                if (idOfAdjacentBoxCorrect.contains(adjIndice1)
+                        && board.getBoxWithCoordinates(box.getAdjacentBox().get(adjIndice1)).getColor() == box.getColor()
+                        && idOfAdjacentBoxCorrect.contains(adjIndice2)
+                        && board.getBoxWithCoordinates(box.getAdjacentBox().get(adjIndice2)).getColor() == box.getColor()){
                     return true;
                 }
             }
@@ -220,7 +224,9 @@ public class GestionObjectives {
      */
     private boolean ParcelleObjectifCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
-            if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+ x)%6)){
+            int adjIndice = (idOfAdjacentBoxCorrect.get(j)+ x)%7;
+            if (adjIndice == 0) adjIndice = 1;
+            if (idOfAdjacentBoxCorrect.contains(adjIndice)){
                 return true;
             }
         }

@@ -19,9 +19,11 @@ class GestionObjectivesTest {
     private static HexagoneBox Greenbox3;
     private static HexagoneBox Greenbox4;
     private static HexagoneBox Greenbox5;
+    private static HexagoneBox Greenbox6;
     private static Objective triangleVert;
     private static Objective ligneVert;
     private static Objective courbeVert;
+    private static Objective losangeVert;
     private static Board board;
     private static GestionObjectives gestionObjectives;
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
@@ -41,14 +43,17 @@ class GestionObjectivesTest {
         Greenbox3 = new HexagoneBox(-1, 2, -1, Color.Vert, Special.Classique);
         Greenbox4 = new HexagoneBox(-1, 0, 1, Color.Vert, Special.Classique);
         Greenbox5 = new HexagoneBox(0, -1, 1, Color.Vert, Special.Classique);
+        Greenbox6 = new HexagoneBox(0, 2, -2, Color.Vert, Special.Classique);
         triangleVert = Objective.PARCELLE1;
         ligneVert = Objective.PARCELLE4;
         courbeVert = Objective.PARCELLE7;
+        losangeVert = Objective.PARCELLE10;
         board.addBox(Greenbox1);
         board.addBox(Greenbox2);
         board.addBox(Greenbox3);
         board.addBox(Greenbox4);
         board.addBox(Greenbox5);
+        board.addBox(Greenbox6);
     }
 
     @Test
@@ -104,6 +109,7 @@ class GestionObjectivesTest {
         assertEquals(gestionObjectives.checkParcelleObjectives(ligneVert),true);
         assertEquals(gestionObjectives.checkParcelleObjectives(triangleVert),true);
         assertEquals(gestionObjectives.checkParcelleObjectives(courbeVert),true);
+        assertEquals(gestionObjectives.checkParcelleObjectives(losangeVert),true);
     }
 
     @Test

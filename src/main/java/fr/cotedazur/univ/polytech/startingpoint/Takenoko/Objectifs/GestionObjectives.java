@@ -163,15 +163,12 @@ public class GestionObjectives {
      */
     private boolean ParcelleLosangeObjectifCondition(HexagoneBox box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
-            if (board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)) &&
-                    board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6)) &&
-                    board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+3)%6))) {
+            if (board.isCoordinateInBoard(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)) &&
+                    board.isCoordinateInBoard(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6))){
                 if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 1) % 6)
-                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 1) % 6)).getColor() == box.getColor()
+                        && board.getBoxWithCoordinates(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 1) % 6)).getColor() == box.getColor()
                         && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 2) % 6)
-                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 2) % 6)).getColor() != box.getColor()
-                        && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 3) % 6)
-                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 3) % 6)).getColor() != box.getColor()) {
+                        && board.getBoxWithCoordinates(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 2) % 6)).getColor() == box.getColor()){
                     return true;
                 }
             }

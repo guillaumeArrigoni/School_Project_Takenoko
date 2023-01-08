@@ -1,10 +1,10 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectifs;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.TypeObjective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +17,8 @@ import java.util.Random;
  */
 public class BotRandom extends Bot {
 
-    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectifs gestionObjectifs) {
-        super(name, board, random, meteoDice, gestionObjectifs);
+    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives) {
+        super(name, board, random, meteoDice, gestionObjectives);
     }
 
 
@@ -109,12 +109,12 @@ public class BotRandom extends Bot {
 
     @Override
     public void drawObjective(){
-        gestionObjectifs.rollObjective(this);
+        gestionObjectives.rollObjective(this);
     }
 
     @Override
     public TypeObjective chooseTypeObjectiveToRoll(){
-        int i = random.nextInt(3) ;
+        int i = random.nextInt(0,3) ;
         return switch (i){
             case 0 -> TypeObjective.PARCELLE;
             case 1 -> TypeObjective.JARDINIER;

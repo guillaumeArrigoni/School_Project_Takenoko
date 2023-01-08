@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 public enum TypeObjective {
     PARCELLE("Parcelle"),
@@ -13,9 +13,8 @@ public enum TypeObjective {
     public String getDescription() {
         return description;
     }
-
     @Override
     public String toString(){
-        return description;
+        return "Type : " + this.getDescription();
     }
 }

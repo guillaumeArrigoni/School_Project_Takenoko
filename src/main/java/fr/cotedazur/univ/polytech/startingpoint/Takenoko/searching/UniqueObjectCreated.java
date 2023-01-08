@@ -1,4 +1,6 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching;
+
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 
 public class UniqueObjectCreated {
 

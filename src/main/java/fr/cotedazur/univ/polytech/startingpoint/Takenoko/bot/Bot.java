@@ -1,10 +1,11 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectifs;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.Objectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.TypeObjective;
+
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,11 +41,11 @@ public abstract class Bot {
     /**
      * The list of objectives of the bot
      */
-    protected ArrayList<Objectives> objectives;
+    protected ArrayList<Objective> objectives;
     /**
      *
      */
-    public GestionObjectifs gestionObjectifs;
+    public GestionObjectives gestionObjectives;
 
 
     //CONSTRUCTOR
@@ -56,14 +57,14 @@ public abstract class Bot {
      * @param random the random generator
      * @param meteoDice the meteo dice
      */
-    protected Bot(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectifs gestionObjectifs) {
+    protected Bot(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives) {
         this.name = name;
         this.board = board;
         this.random = random;
         this.meteoDice = meteoDice;
         this.score = 0;
         this.objectives = new ArrayList<>();
-        this.gestionObjectifs = gestionObjectifs;
+        this.gestionObjectives = gestionObjectives;
         resetPossibleAction();
     }
 
@@ -111,11 +112,16 @@ public abstract class Bot {
         return score;
     }
 
-    public ArrayList<Objectives> getObjectives() {
+    public ArrayList<Objective> getObjectives() {
         return objectives;
     }
-    public void addScore(Objectives objectives){
-        this.score += objectives.getValue();
+
+    public void setObjectives(ArrayList<Objective> objectives) {
+        this.objectives = objectives;
+    }
+
+    public void addScore(Objective objective){
+        this.score += objective.getValue();
     }
     public abstract void drawObjective();
     public abstract TypeObjective chooseTypeObjectiveToRoll();
@@ -129,9 +135,9 @@ public abstract class Bot {
      * List of all the possible actions
      */
     protected enum PossibleActions {
-        DRAW_AND_PUT_TILE(1),
-        MOVE_GARDENER(2),
-        DRAW_OBJECTIVE(3);
+        DRAW_AND_PUT_TILE(0),
+        MOVE_GARDENER(1),
+        DRAW_OBJECTIVE(2);
 
         /**
          * The value of the action

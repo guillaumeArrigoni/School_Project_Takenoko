@@ -1,10 +1,12 @@
-package fr.cotedazur.univ.polytech.startingpoint;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.*;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
 
 import java.util.*;
 

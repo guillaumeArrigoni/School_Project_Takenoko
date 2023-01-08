@@ -1,6 +1,6 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.TypeOfStackBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.TypeOfStackBox;
 
 import java.util.HashMap;
 

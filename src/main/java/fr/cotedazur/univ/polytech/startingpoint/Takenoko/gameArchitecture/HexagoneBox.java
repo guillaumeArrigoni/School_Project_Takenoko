@@ -1,10 +1,10 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /*import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.generateID;

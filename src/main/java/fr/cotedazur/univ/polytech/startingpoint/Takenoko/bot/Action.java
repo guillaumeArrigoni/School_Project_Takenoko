@@ -1,8 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 
 import java.util.Random;
 import java.util.ArrayList;

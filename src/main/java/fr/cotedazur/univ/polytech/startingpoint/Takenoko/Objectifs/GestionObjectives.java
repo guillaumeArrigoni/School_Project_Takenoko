@@ -127,14 +127,19 @@ public class GestionObjectives {
 
     public boolean checkParcelleObjectives(Objective objective) {
         return switch (objective.getPattern().getForme()){
-            case "TRIANGLE" -> checkParcelleTriangleObjectives(objective);
-            case "LIGNE" -> checkParcelleLigneObjectives(objective);
-            case "COURBE" -> checkParcelleCourbeObjectives(objective);
+            case "TRIANGLE" -> checkParcelleTriangleOrLigneOrCourbeObjectives(objective,1);
+            case "LIGNE" -> checkParcelleTriangleOrLigneOrCourbeObjectives(objective,3);
+            case "COURBE" -> checkParcelleTriangleOrLigneOrCourbeObjectives(objective,2);
             case "LOSANGE" -> checkParcelleLosangeObjectives(objective);
             default -> false;
         };
     }
 
+    /**
+     * Method use to know if a rhombus parcel Objective is complete
+     * @param objective that we want to check
+     * @return true if the objective is completed or false if it does not.
+     */
     private boolean checkParcelleLosangeObjectives(Objective objective) {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
@@ -145,69 +150,77 @@ public class GestionObjectives {
                     idOfAdjacentBoxCorrect.add(j);
                 }
             }
-            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
-                if (board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)) &&
-                        board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6)) &&
-                        board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+3)%6))) {
-                    if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 1) % 6)
-                            && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 1) % 6)).getColor() == box.getColor()
-                            && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 2) % 6)
-                            && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 2) % 6)).getColor() != box.getColor()
-                            && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 3) % 6)
-                            && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 3) % 6)).getColor() != box.getColor()) {
-                        return true;
-                    }
+            if (ParcelleLosangeObjectifCondition(box, idOfAdjacentBoxCorrect)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Method with the rhombus parcel condition
+     * @param box which we want to know if, with the adjacent box, the rhombus parcel is completed
+     * @param idOfAdjacentBoxCorrect contains all the adjacent box of the previous box that complete the objective condition (color, irrigated ...)
+     * @return true if the rhombus parcel is completed, false if it does not
+     */
+    private boolean ParcelleLosangeObjectifCondition(HexagoneBox box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
+        for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
+            if (board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)) &&
+                    board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6)) &&
+                    board.getPlacedBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+3)%6))) {
+                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 1) % 6)
+                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 1) % 6)).getColor() == box.getColor()
+                        && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 2) % 6)
+                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 2) % 6)).getColor() != box.getColor()
+                        && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 3) % 6)
+                        && board.getPlacedBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 3) % 6)).getColor() != box.getColor()) {
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    private boolean checkParcelleCourbeObjectives(Objective objective) {
+    /**
+     * Method use to know if a triangle, line or curve parcel Objective is complete
+     * @param objective that we want to check
+     * @param x that have the value :
+     *          1 if it is a triangle objective
+     *          2 if it is a curve objective
+     *          3 if it is a line objective
+     * @return true if the objective is completed or false if it does not.
+     */
+    private boolean checkParcelleTriangleOrLigneOrCourbeObjectives(Objective objective, int x){
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
-            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
-            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
-            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
-                if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
-                    idOfAdjacentBoxCorrect.add(j);
-                }
-            }
-            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, 2)) return true;
+            ArrayList<Integer> idOfAdjacentBoxCorrect = getAllAdjacentBoxThatCompleteTheCondition(listOfIdAvailable, i);
+            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, x)) return true;
         }
         return false;
     }
 
-    private boolean checkParcelleLigneObjectives(Objective objective) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
-        for (int i=0;i<listOfIdAvailable.size();i++){
-            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
-            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
-            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
-                if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
-                    idOfAdjacentBoxCorrect.add(j);
-                }
+
+    /**
+     * Method with the triangle, line and curve condition
+     * @param listOfIdAvailable contains all the box placed in the board that complete the requirement of the objective (color, irrigated,...)
+     * @param i that have the value as before
+     * @return true if the parcel is compelted, false if it does not
+     */
+    private ArrayList<Integer> getAllAdjacentBoxThatCompleteTheCondition(ArrayList<Integer> listOfIdAvailable, int i) {
+        HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+        ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
+        for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
+            if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
+                idOfAdjacentBoxCorrect.add(j);
             }
-            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, 3)) return true;
         }
-        return false;
+        return idOfAdjacentBoxCorrect;
     }
 
-    private boolean checkParcelleTriangleObjectives(Objective objective) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
-        for (int i=0;i<listOfIdAvailable.size();i++){
-            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
-            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
-            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
-                if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
-                    idOfAdjacentBoxCorrect.add(j);
-                }
-            }
-            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, 1)) return true;
-        }
-        return false;
-    }
-
+    /**
+     * Method with the triangle, line and curve condition
+     * @param idOfAdjacentBoxCorrect wontains all the box that filled the objective's requirement and are adjacent of another box that also complete the objective's requirement
+     * @param x that have the same value as before
+     * @return true if the objective is completed or false if it does not.
+     */
     private boolean ParcelleObjectifCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
             if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+ x)%6)){

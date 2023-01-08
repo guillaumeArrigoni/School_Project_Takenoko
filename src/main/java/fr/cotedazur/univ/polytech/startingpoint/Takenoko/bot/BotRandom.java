@@ -3,6 +3,8 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectifs;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.TypeObjective;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +17,8 @@ import java.util.Random;
  */
 public class BotRandom extends Bot {
 
-    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice) {
-        super(name, board, random, meteoDice);
+    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectifs gestionObjectifs) {
+        super(name, board, random, meteoDice, gestionObjectifs);
     }
 
 
@@ -55,15 +57,20 @@ public class BotRandom extends Bot {
                 System.out.println("Le bot a choisi : BougerJardinier");
                 moveGardener();
                 break;
+            case DRAW_OBJECTIVE:
+                System.out.println("Le bot a choisi : PiocherObjectif");
+                drawObjective();
+                break;
         }
 
     }
 
-
     @Override
     protected PossibleActions chooseAction(){
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
-        if (acp == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty())
+        //Check if the action is possible
+        if ((acp == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
+                (acp == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5))
             return chooseAction();
         possibleActions.remove(acp);
         return acp;
@@ -98,6 +105,22 @@ public class BotRandom extends Bot {
         List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
         System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+    }
+
+    @Override
+    public void drawObjective(){
+        gestionObjectifs.rollObjective(this);
+    }
+
+    @Override
+    public TypeObjective chooseTypeObjectiveToRoll(){
+        int i = random.nextInt(3) ;
+        return switch (i){
+            case 0 -> TypeObjective.PARCELLE;
+            case 1 -> TypeObjective.JARDINIER;
+            case 2 -> TypeObjective.PANDA;
+            default -> TypeObjective.PARCELLE;
+        };
     }
 
 

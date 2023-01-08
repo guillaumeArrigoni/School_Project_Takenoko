@@ -27,6 +27,7 @@ public class Board {
      */
 
     private ArrayList<HexagoneBox> PlacedBox;
+    private HashMap<Integer,HexagoneBox> getBox = new HashMap<>();
 
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
@@ -65,12 +66,12 @@ public class Board {
         this.gardenerCoords = coords;
         HexagoneBox box;
         box = getBoxWithCoordinates(coords);
-        if (box.isIrrigate()) box.growBamboo();
+        if (box.isIrrigate() && !Arrays.equals(box.getCoordinates(), new int[]{0,0,0})) box.growBamboo();
         HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
         ArrayList<HexagoneBox> placedBox = this.getPlacedBox();
         for (HexagoneBox newBox : placedBox) {
             if (this.containsValue(adjacentBox, box.getCoordinates())) {
-                if (newBox.isIrrigate()) newBox.growBamboo();
+                if (newBox.isIrrigate() && !Arrays.equals(newBox.getCoordinates(), new int[]{0,0,0})) newBox.growBamboo();
             }
         }
     }
@@ -157,6 +158,10 @@ public class Board {
         return false;
     }
 
+    public HashMap<Integer, HexagoneBox> getGetBox() {
+        return getBox;
+    }
+
     /**
      * Check if the number of box placed is equals to 2
      * (correspond to the case when the players add the first HexagoneBox to the booard (the first is the lake)
@@ -171,6 +176,7 @@ public class Board {
             AvailableBox.remove(box.getCoordinates());
         }
         PlacedBox.add(box);
+        getBox.put(box.getId(),box);
     }
 
     /*

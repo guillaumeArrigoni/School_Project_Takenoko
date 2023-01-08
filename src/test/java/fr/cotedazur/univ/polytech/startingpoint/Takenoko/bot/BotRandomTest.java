@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs.GestionObjectifs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,12 +17,16 @@ class BotRandomTest {
     Board board;
     Random r;
     MeteoDice meteoDice;
+
+    GestionObjectifs gestionObjectifs;
     @BeforeEach
     void setUp() {
+        gestionObjectifs = new GestionObjectifs();
+        gestionObjectifs.initialize();
         r = mock(Random.class);
         board = new Board();
         meteoDice = mock(MeteoDice.class);
-        botRandom = new BotRandom("testBot", board, r, meteoDice);
+        botRandom = new BotRandom("testBot", board, r, meteoDice,gestionObjectifs);
     }
 
     @Test

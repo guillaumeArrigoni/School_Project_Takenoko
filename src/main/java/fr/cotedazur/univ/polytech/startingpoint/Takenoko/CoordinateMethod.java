@@ -11,23 +11,26 @@ public class CoordinateMethod {
 
     /**
      * Method use to generate the id with the coordinates
-     * @param x : first coordinate
-     * @param y : second coordinate
-     * @param z : third coordinate
+     * @param coordinates : the list of coordinates with in index 0 : x, index 1 : y, index 2 : z
      * @return the id associated to the coordinates:
      */
-    /*public static int generateID(int x, int y, int z) {
+    public static int generateID(int[] coordinates) {
         int id = 1000000;
-        id = id + x * 10000 + y * 100 + z;
+        for (int i=0;i<3;i++){
+            if (coordinates[i]<0){
+                coordinates[i] = 100 + coordinates[i];
+            }
+        }
+        id = id + coordinates[0] * 10000 + coordinates[1] * 100 + coordinates[2];
         return id;
-    }*/
+    }
 
     /**
      * Method use to separate a id into a tab of 3 int with the coordinates associated to the id
      * @param id : the id we want to get the coordinates
      * @return a tab of 3 int with the coordinates
      */
-    /*public static int[] separateID(int id) {
+    public static int[] separateID(int id) {
         int[] tab = new int[3];
         tab[0] = (id % 1000000) / 10000;
         tab[1] = (id % 10000) / 100;
@@ -36,7 +39,7 @@ public class CoordinateMethod {
             if (tab[i] > 50) tab[i]=tab[i]-100;
         }
         return tab;
-    }*/
+    }
     /*public static int[] separateID(int id) {
         int[] coordinates = new int[3];
         String idString = Integer.toString(id);

@@ -138,6 +138,7 @@ class GestionObjectivesTest {
 
     }
 
+
     @Test
     void checkParcelleObjectives() {
         assertEquals(gestionObjectives.checkParcelleObjectives(ligneVert),true);

@@ -93,7 +93,7 @@ public class GestionObjectives {
     public void checkObjectives(Bot bot){
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
-            if(checkOneObjective(objective)){
+            if(checkOneObjective(objective, bot)){
                 bot.addScore(objective);
                 System.out.println(objective.toString() + ", a été réalisé");
                 listOfObjectifDone.add(objective);
@@ -105,17 +105,23 @@ public class GestionObjectives {
     }
 
 
-    public boolean checkOneObjective(Objective objective){
+    public boolean checkOneObjective(Objective objective, Bot bot){
         return switch(objective.getType()) {
             case PARCELLE -> checkParcelleObjectives(objective);
             case JARDINIER -> checkJardinierObjectives(objective);
-            case PANDA -> checkPandaObjectives(objective);
+            case PANDA -> checkPandaObjectives(objective, bot);
         };
 
     }
 
-    public boolean checkPandaObjectives(Objective objective) {
-        return false;
+    public boolean checkPandaObjectives(Objective objective, Bot bot) {
+        if (objective.getPattern() == Pattern.MANGER_TROIS_BAMBOUS){
+            return (bot.getBambooEated().get(Color.Jaune)>=1 &&
+                    bot.getBambooEated().get(Color.Vert)>=1 &&
+                    bot.getBambooEated().get(Color.Rouge)>=1);
+        } else {
+            return (bot.getBambooEated().get(objective.getColors())>=2);
+        }
     }
 
     public boolean checkJardinierObjectives(Objective objective) {

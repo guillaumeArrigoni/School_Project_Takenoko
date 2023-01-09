@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
@@ -9,6 +10,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxId
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +33,7 @@ class BotRandomTest {
         gestionObjectives.initialize();
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
-        botRandom = new BotRandom("testBot", board, r, meteoDice, gestionObjectives, retrieveBoxIdWithParameters);
+        botRandom = new BotRandom("testBot", board, r, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
     }
 
     @Test

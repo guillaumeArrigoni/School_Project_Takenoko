@@ -5,6 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 /*import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.generateID;
 import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
@@ -93,10 +94,15 @@ public class HexagoneBox {
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
 
-    public void eatBamboo() {
+    public Optional<Color> eatBamboo() {
         retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
-        if (this.heightBamboo > 0) this.heightBamboo--;
+        Optional<Color> bambooEatedColor = Optional.empty();
+        if (this.heightBamboo > 0) {
+            this.heightBamboo--;
+            bambooEatedColor = Optional.of(this.color);
+        }
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
+        return bambooEatedColor;
     }
 
     public HashMap<Integer, int[]> getAdjacentBox() {

@@ -26,12 +26,12 @@ class BotRandomTest {
     @BeforeEach
     void setUp() {
         this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        gestionObjectives = new GestionObjectives();
+        board = new Board(retrieveBoxIdWithParameters);
+        gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
         gestionObjectives.initialize();
         r = mock(Random.class);
-        board = new Board(retrieveBoxIdWithParameters);
         meteoDice = mock(MeteoDice.class);
-        botRandom = new BotRandom("testBot", board, r, meteoDice, gestionObjectives);
+        botRandom = new BotRandom("testBot", board, r, meteoDice, gestionObjectives, retrieveBoxIdWithParameters);
     }
 
     @Test

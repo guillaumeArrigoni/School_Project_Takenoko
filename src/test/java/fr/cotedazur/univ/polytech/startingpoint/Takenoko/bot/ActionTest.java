@@ -34,21 +34,21 @@ class ActionTest {
     @Test
     void drawYellowTile() {
         when(r.nextInt(0, 3)).thenReturn(0);
-        HexagoneBox hexagoneBox = Action.drawTile(r);
+        HexagoneBox hexagoneBox = Action.drawTile(r,retrieveBoxIdWithParameters);
         assertEquals(Color.Jaune, hexagoneBox.getColor());
     }
 
     @Test
     void drawGreenTile() {
         when(r.nextInt(0, 3)).thenReturn(1);
-        HexagoneBox hexagoneBox = Action.drawTile(r);
+        HexagoneBox hexagoneBox = Action.drawTile(r, retrieveBoxIdWithParameters);
         assertEquals(Color.Vert, hexagoneBox.getColor());
     }
 
     @Test
     void drawRedTile() {
         when(r.nextInt(0, 3)).thenReturn(2);
-        HexagoneBox hexagoneBox = Action.drawTile(r);
+        HexagoneBox hexagoneBox = Action.drawTile(r, retrieveBoxIdWithParameters);
         assertEquals(Color.Rouge, hexagoneBox.getColor());
     }
 

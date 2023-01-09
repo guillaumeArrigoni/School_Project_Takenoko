@@ -5,7 +5,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,9 +12,8 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 
 public class Action {
-    private static final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
 
-    public static HexagoneBox drawTile(Random random) {
+    public static HexagoneBox drawTile(Random random, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters) {
         Color color = switch (random.nextInt(0,3)) {
             case 1 -> Color.Vert;
             case 2 -> Color.Rouge;

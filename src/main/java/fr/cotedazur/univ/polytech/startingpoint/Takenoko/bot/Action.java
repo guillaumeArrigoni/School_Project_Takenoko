@@ -59,8 +59,8 @@ public class Action {
         board.setGardenerCoords(coords);
     }
 
-    public static void movePanda(Board board, int[] coords) {
-        board.setPandaCoords(coords);
+    public static void movePanda(Board board, int[] coords, Bot bot) {
+        board.setPandaCoords(coords, bot);
     }
 
 

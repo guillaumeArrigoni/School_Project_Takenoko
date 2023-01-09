@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
@@ -34,8 +35,8 @@ public class Main {
         GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
         gestionnaire.initialize();
         MeteoDice meteoDice = new MeteoDice();
-        Bot bot1 = new BotRandom("Bot1",board,random, meteoDice,gestionnaire, retrieving);
-        Bot bot2 = new BotRandom("Bot2",board,random, meteoDice,gestionnaire, retrieving);
+        Bot bot1 = new BotRandom("Bot1",board,random, meteoDice,gestionnaire, retrieving, new HashMap<Color,Integer>());
+        Bot bot2 = new BotRandom("Bot2",board,random, meteoDice,gestionnaire, retrieving, new HashMap<Color,Integer>());
 
         boolean playing = true;
 

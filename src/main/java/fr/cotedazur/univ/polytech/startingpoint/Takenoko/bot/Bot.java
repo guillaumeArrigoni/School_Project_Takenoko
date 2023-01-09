@@ -2,16 +2,14 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public abstract class Bot {
     //ATTRIBUTES
@@ -48,6 +46,8 @@ public abstract class Bot {
      */
     public GestionObjectives gestionObjectives;
     public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private AbstractMap <Color,Integer> bambooEated;
+
 
     //CONSTRUCTOR
 
@@ -58,7 +58,7 @@ public abstract class Bot {
      * @param random the random generator
      * @param meteoDice the meteo dice
      */
-    protected Bot(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters) {
+    protected Bot(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
         this.name = name;
         this.board = board;
         this.random = random;
@@ -67,6 +67,7 @@ public abstract class Bot {
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        this.bambooEated = bambooEated;
         resetPossibleAction();
     }
 
@@ -154,6 +155,15 @@ public abstract class Bot {
         static List<PossibleActions> getAllActions() {
             return new ArrayList<>(Arrays.asList(PossibleActions.values()));
         }
+    }
+
+    public void addBambooEated(Color colorEated){
+        int nbEated = bambooEated.get(colorEated) + 1;
+        bambooEated.put(colorEated,nbEated);
+    }
+
+    public AbstractMap<Color,Integer> getBambooEated(){
+        return this.bambooEated;
     }
 
 }

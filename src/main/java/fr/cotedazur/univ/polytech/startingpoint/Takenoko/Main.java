@@ -30,7 +30,7 @@ public class Main {
     public static void main(String... args) {
         RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
         UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieving);
-        Board board = new Board();
+        Board board = new Board(retrieving);
         Random random = new Random();
         ElementOfTheGame elementOfTheGame = new ElementOfTheGame();
         UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);

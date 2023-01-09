@@ -23,7 +23,7 @@ public class HexagoneBox {
     private boolean irrigate;
     private int heightBamboo;
     private HashMap<Integer,int[]> AdjacentBox;
-    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
     /**
      *      1
@@ -36,7 +36,8 @@ public class HexagoneBox {
      * @param color : the color of the box
      * @param special : the particularity of the box
      */
-    public HexagoneBox (int x, int y, int z, Color color, Special special){
+    public HexagoneBox (int x, int y, int z, Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
         this.color = color;
@@ -54,7 +55,8 @@ public class HexagoneBox {
         retrieveBoxIdWithParameters.setBoxSpeciality(this.id, this.special);
     }
 
-    public HexagoneBox (Color color, Special special){
+    public HexagoneBox (Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.coordinates = null;
         //this.id = -1;
         this.color = color;

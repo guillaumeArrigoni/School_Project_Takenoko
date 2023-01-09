@@ -3,6 +3,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,10 +35,12 @@ public class Board {
     private ArrayList<int[]> AvailableBox;
     private int[] gardenerCoords;
     private int[] pandaCoords;
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
-    public Board(){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.placedBox = new HashMap<>();
-        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique);
+        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters);
         this.numberBoxPlaced = 1;
 
         this.AvailableBox = new ArrayList<>();

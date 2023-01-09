@@ -4,12 +4,14 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 
 public class Action {
+    private static final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
 
     public static HexagoneBox drawTile(Random random) {
         Color color = switch (random.nextInt(0,3)) {
@@ -18,7 +20,7 @@ public class Action {
             default -> Color.Jaune;
         };
         System.out.println("drawTile : " + color);
-        return new HexagoneBox(color, Special.Classique);
+        return new HexagoneBox(color, Special.Classique, retrieveBoxIdWithParameters);
     }
 
     public static ArrayList<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {

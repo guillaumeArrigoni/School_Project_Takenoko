@@ -4,7 +4,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.*;
@@ -20,9 +19,9 @@ public class GestionObjectives {
     /**
      * Contient 3 hashmap qui stockent les differents types d'objectifs disponibles (les pioches).
      */
-    public GestionObjectives(){
-        this.retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
-        this.board = UniqueObjectCreated.getBoard();
+    public GestionObjectives(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        this.board = board;
         this.ParcelleObjectifs = new ArrayList<>();
         this.JardinierObjectifs = new ArrayList<>();
         this.PandaObjectifs = new ArrayList<>();
@@ -64,8 +63,7 @@ public class GestionObjectives {
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot);
         case JARDINIER -> rollJardinierObjective(bot);
-        /** Il n'y a pas encore d'Objectifs Panda.**/
-        case PANDA -> rollParcelleObjective(bot);
+        case PANDA -> rollPandaObjective(bot);
         };
     }
     public void rollParcelleObjective(Bot bot){
@@ -97,7 +95,7 @@ public class GestionObjectives {
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective)){
                 bot.addScore(objective);
-                System.out.println(objective.toString() + " a été réalisé");
+                System.out.println(objective.toString() + ", a été réalisé");
                 listOfObjectifDone.add(objective);
             }
         }

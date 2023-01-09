@@ -64,8 +64,7 @@ public class GestionObjectives {
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot);
         case JARDINIER -> rollJardinierObjective(bot);
-        /** Il n'y a pas encore d'Objectifs Panda.**/
-        case PANDA -> rollParcelleObjective(bot);
+        case PANDA -> rollPandaObjective(bot);
         };
     }
     public void rollParcelleObjective(Bot bot){
@@ -97,7 +96,7 @@ public class GestionObjectives {
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective)){
                 bot.addScore(objective);
-                System.out.println(objective.toString() + " a été réalisé");
+                System.out.println(objective.toString() + ", a été réalisé");
                 listOfObjectifDone.add(objective);
             }
         }

@@ -84,6 +84,6 @@ public enum Objective {
 
     @Override
     public String toString() {
-        return this.getType().toString() + ", Valeur : " + this.value ;
+        return "Objectif : " +  this.name() + ", Valeur : " + this.value ;
     }
 }

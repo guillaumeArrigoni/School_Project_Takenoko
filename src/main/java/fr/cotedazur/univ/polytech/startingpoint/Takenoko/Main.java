@@ -10,7 +10,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheG
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
-
+//https://www.redblobgames.com/grids/hexagons/#coordinates
 public class Main {
 
     public static String hello() {

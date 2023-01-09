@@ -45,45 +45,50 @@ class BoardTest {
     @Order(1)
     public static void setUpGeneral() {
         System.out.println("b");
-        retrieveBoxIdWithParameters = mock(RetrieveBoxIdWithParameters.class);
-        UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieveBoxIdWithParameters);
+        retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         elementOfTheGame = new ElementOfTheGame();
-        UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
-        board = new Board();
-        UniqueObjectCreated.setBoard(board);
-        System.out.println(UniqueObjectCreated.getBoard());
-        System.out.println(board);
 
+        vert01 = new HexagoneBox(0,1,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
+        vert02 = new HexagoneBox(-1,1,0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
+        vert07 = new HexagoneBox(-1,2,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
+        jaune03 = new HexagoneBox(-1,0,1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+        jaune08 = new HexagoneBox(-2,2,0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+        rouge09 = new HexagoneBox(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters);
+        vert01.setHeightBamboo(3);
+        vert02.setHeightBamboo(4);
+        jaune03.setHeightBamboo(2);
+        rouge09.setHeightBamboo(3);
+        vert01.setHeightBamboo(3);
+        vert02.setHeightBamboo(4);
+        jaune03.setHeightBamboo(2);
+        rouge09.setHeightBamboo(3);
 
     }
 
     @BeforeAll
     @Order(2)
     public static void setUpBox() {
-        vert01 = new HexagoneBox(0,1,-1, Color.Vert, Special.Classique);
-        vert02 = new HexagoneBox(-1,1,0, Color.Vert, Special.Classique);
-        vert07 = new HexagoneBox(-1,2,-1, Color.Vert, Special.Classique);
-        jaune03 = new HexagoneBox(-1,0,1, Color.Jaune, Special.Classique);
-        jaune08 = new HexagoneBox(-2,2,0, Color.Jaune, Special.Classique);
-        rouge09 = new HexagoneBox(-2,1,1, Color.Rouge, Special.Protéger);
-        vert01.setHeightBamboo(3);
-        vert02.setHeightBamboo(4);
-        jaune03.setHeightBamboo(2);
-        rouge09.setHeightBamboo(3);
+
     }
 
     @BeforeAll
     @Order(3)
+    public static void setUpBoxHeight() {
+
+    }
+
+    @BeforeAll
+    @Order(4)
     public static void setUpBoard() {
         System.out.println("a");
-        retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board();
+        board = new Board(retrieveBoxIdWithParameters);
         board.addBox(vert01);
         board.addBox(vert02);
         board.addBox(vert07);
         board.addBox(jaune03);
         board.addBox(jaune08);
         board.addBox(rouge09);
+
     }
 
     private static Stream<Arguments> provideComparisonEquals(){

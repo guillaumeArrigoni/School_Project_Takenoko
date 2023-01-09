@@ -6,7 +6,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -33,12 +32,9 @@ class GestionObjectivesTest {
     @BeforeAll
     public static void setupBox() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieveBoxIdWithParameters);
         elementOfTheGame = new ElementOfTheGame();
         board = new Board(retrieveBoxIdWithParameters);
-        UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
-        UniqueObjectCreated.setBoard(board);
-        gestionObjectives = new GestionObjectives();
+        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         Greenbox1 = new HexagoneBox(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox2 = new HexagoneBox(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox3 = new HexagoneBox(-1, 2, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);

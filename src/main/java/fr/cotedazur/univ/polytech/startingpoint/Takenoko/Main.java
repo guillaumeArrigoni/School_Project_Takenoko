@@ -8,7 +8,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjec
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
 
 import java.util.*;
 
@@ -29,17 +28,14 @@ public class Main {
 
     public static void main(String... args) {
         RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-        UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieving);
         Board board = new Board(retrieving);
         Random random = new Random();
         ElementOfTheGame elementOfTheGame = new ElementOfTheGame();
-        UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
-        UniqueObjectCreated.setBoard(board);
-        GestionObjectives gestionnaire = new GestionObjectives();
+        GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
         gestionnaire.initialize();
         MeteoDice meteoDice = new MeteoDice();
-        Bot bot1 = new BotRandom("Bot1",board,random, meteoDice,gestionnaire);
-        Bot bot2 = new BotRandom("Bot2",board,random, meteoDice,gestionnaire);
+        Bot bot1 = new BotRandom("Bot1",board,random, meteoDice,gestionnaire, retrieving);
+        Bot bot2 = new BotRandom("Bot2",board,random, meteoDice,gestionnaire, retrieving);
 
         boolean playing = true;
 

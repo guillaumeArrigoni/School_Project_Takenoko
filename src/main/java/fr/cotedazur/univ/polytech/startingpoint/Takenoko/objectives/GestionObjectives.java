@@ -4,7 +4,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.*;
@@ -20,9 +19,9 @@ public class GestionObjectives {
     /**
      * Contient 3 hashmap qui stockent les differents types d'objectifs disponibles (les pioches).
      */
-    public GestionObjectives(){
-        this.retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
-        this.board = UniqueObjectCreated.getBoard();
+    public GestionObjectives(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        this.board = board;
         this.ParcelleObjectifs = new ArrayList<>();
         this.JardinierObjectifs = new ArrayList<>();
         this.PandaObjectifs = new ArrayList<>();

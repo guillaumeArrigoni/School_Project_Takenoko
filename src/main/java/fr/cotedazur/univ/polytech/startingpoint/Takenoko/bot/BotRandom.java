@@ -5,6 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +18,8 @@ import java.util.Random;
  */
 public class BotRandom extends Bot {
 
-    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives) {
-        super(name, board, random, meteoDice, gestionObjectives);
+    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters) {
+        super(name, board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters);
     }
 
 
@@ -88,7 +89,7 @@ public class BotRandom extends Bot {
         List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(Action.drawTile(random));
+            list.add(Action.drawTile(random, retrieveBoxIdWithParameters));
         //Choose a random tile from the tiles drawn
         HexagoneBox placedTile = list.get(random.nextInt(0, 3));
         //Choose a random available space

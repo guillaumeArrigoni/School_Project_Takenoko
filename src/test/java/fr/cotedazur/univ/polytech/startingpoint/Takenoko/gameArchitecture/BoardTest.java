@@ -1,7 +1,10 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,7 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +30,10 @@ class BoardTest {
 
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Board board;
+    private static BotRandom botRandom;
+    private static Random random;
+    private static MeteoDice meteoDice;
+    private static GestionObjectives gestionObjectives;
     private static HexagoneBox vert01;
     private static HexagoneBox vert02;
     private static HexagoneBox vert07;
@@ -41,6 +55,11 @@ class BoardTest {
     public static void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         elementOfTheGame = new ElementOfTheGame();
+        board = new Board(retrieveBoxIdWithParameters);
+        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
+        random = mock(Random.class);
+        meteoDice = mock(MeteoDice.class);
+        botRandom = new BotRandom("testBot", board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
         vert01 = new HexagoneBox(0,1,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         vert02 = new HexagoneBox(-1,1,0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         vert07 = new HexagoneBox(-1,2,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
@@ -55,7 +74,6 @@ class BoardTest {
         vert02.setHeightBamboo(4);
         jaune03.setHeightBamboo(2);
         rouge09Protected.setHeightBamboo(3);
-        board = new Board(retrieveBoxIdWithParameters);
         board.addBox(vert01);
         board.addBox(vert02);
         board.addBox(vert07);
@@ -64,27 +82,77 @@ class BoardTest {
         board.addBox(rouge09Protected);
     }
 
-
-    private static Stream<Arguments> provideComparisonEquals(){
+    /**
+     * Parameters of the Arguments :
+     *      - HexagoneBox : the box
+     *      - int : Number of bamboo hold by the box
+     *      - Color : The color of the box
+     *      - int : Number of bamboo from the box's Color the bot should have
+     */
+    private static Stream<Arguments> providePandaMoveAndChecking(){
         return Stream.of(
-                Arguments.of(vert07, 0),
-                Arguments.of(jaune03, 1),
-                Arguments.of(vert01, 2),
-                Arguments.of(vert02, 3),
-                Arguments.of(rouge09Protected, 3)
+                Arguments.of(vert07, 0, Color.Vert,0),
+                Arguments.of(jaune03, 1, Color.Jaune,1),
+                Arguments.of(vert01, 2, Color.Vert,1),
+                Arguments.of(vert02, 3, Color.Vert,2),
+                Arguments.of(rouge09Protected, 3, Color.Rouge,0)
         );
     }
 
-    @Test
-    void getGardenerCoords() {
+    private static Stream<Arguments> provideGardenerMoveAndChecking(){
+        ArrayList<HexagoneBox> listOfBox = new ArrayList<>(Arrays.asList(vert01,vert02,jaune03,vert07,jaune08,rouge09Protected));
+        cleanAllBambooInBox(listOfBox);
+        return Stream.of(
+                Arguments.of(vert02, new ArrayList<>(Arrays.asList(1,1,0,1,0,0)),
+                        new ArrayList<>(Arrays.asList(vert01,vert02,jaune03,vert07,jaune08,rouge09Protected))),
+                Arguments.of(jaune08, new ArrayList<>(Arrays.asList(1,1,0,1,1,0)),
+                        new ArrayList<>(Arrays.asList(vert01,vert02,jaune03,vert07,jaune08,rouge09Protected))),
+                Arguments.of(vert07, new ArrayList<>(Arrays.asList(2,2,0,2,1,0)),
+                        new ArrayList<>(Arrays.asList(vert01,vert02,jaune03,vert07,jaune08,rouge09Protected)))
+        );
+    }
+
+    private static void cleanAllBambooInBox(ArrayList<HexagoneBox> boxTocleanBamboo){
+        for (int i =0;i<boxTocleanBamboo.size();i++){
+            boxTocleanBamboo.get(i).setHeightBamboo(0);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("provideGardenerMoveAndChecking")
+    void testsetGardenerCoords(HexagoneBox box, ArrayList<Integer> differentBambooHeightInTheBox1_2_3_7_8_9,
+                               ArrayList<HexagoneBox> listOfBox) {
+        int[] coords = box.getCoordinates();
+        board.setGardenerCoords(coords);
+        for (int i =0;i<differentBambooHeightInTheBox1_2_3_7_8_9.size();i++){
+            assertEquals(differentBambooHeightInTheBox1_2_3_7_8_9.get(i),listOfBox.get(i).getHeightBamboo());
+            System.out.println("The test on the box {" + listOfBox.get(i).toString() + "} passed successfully");
+        }
     }
 
     @ParameterizedTest
-    @MethodSource("provideComparisonEquals")
-    void testgetPandaCoords(HexagoneBox box, int x) {
+    @MethodSource("providePandaMoveAndChecking")
+    void testsetPandaCoordsBambooHeightDown(HexagoneBox box, int x) {
         int[] coords = box.getCoordinates();
-        board.setPandaCoords(coords);
+        board.setPandaCoords(coords,botRandom);
         assertTrue(board.getPlacedBox().get(HexagoneBox.generateID(board.getPandaCoords())).getHeightBamboo()==x);
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePandaMoveAndChecking")
+    void testsetPandaCoordsBambooEatedEarnByBot(HexagoneBox box, int Useless, Color color,int nbBambooAte) {
+        int[] coords = box.getCoordinates();
+        board.setPandaCoords(coords,botRandom);
+        assertTrue(nbBambooAte==botRandom.getBambooEated().get(color));
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePandaMoveAndChecking")
+    void testsetPandaCoordsMoveOfThePanda(HexagoneBox box) {
+        int[] coords = box.getCoordinates();
+        board.setPandaCoords(coords,botRandom);
+        assertTrue(board.getPandaCoords()==coords);
     }
 
     @Test
@@ -108,7 +176,7 @@ class BoardTest {
     }
 
     @Test
-    void setPandaCoords() {
+    void getPandaCoords() {
     }
 
     @Test

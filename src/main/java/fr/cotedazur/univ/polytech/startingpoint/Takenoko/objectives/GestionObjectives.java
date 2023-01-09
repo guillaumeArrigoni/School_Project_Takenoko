@@ -120,7 +120,7 @@ public class GestionObjectives {
                     bot.getBambooEated().get(Color.Vert)>=1 &&
                     bot.getBambooEated().get(Color.Rouge)>=1);
         } else {
-            return (bot.getBambooEated().get(objective.getColors())>=2);
+            return (bot.getBambooEated().get(objective.getColors().get(0))>=2);
         }
     }
 

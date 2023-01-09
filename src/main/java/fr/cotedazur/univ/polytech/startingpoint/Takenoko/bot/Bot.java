@@ -68,6 +68,9 @@ public abstract class Bot {
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.bambooEated = bambooEated;
+        this.bambooEated.put(Color.Rouge,0);
+        this.bambooEated.put(Color.Jaune,0);
+        this.bambooEated.put(Color.Vert,0);
         resetPossibleAction();
     }
 

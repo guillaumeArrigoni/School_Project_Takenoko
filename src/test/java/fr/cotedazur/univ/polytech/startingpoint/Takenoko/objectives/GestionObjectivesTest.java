@@ -45,10 +45,10 @@ class GestionObjectivesTest {
         Greenbox4 = new HexagoneBox(-1, 0, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox5 = new HexagoneBox(0, -1, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox6 = new HexagoneBox(0, 2, -2, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
-        triangleVert = Objective.PARCELLE1;
-        ligneVert = Objective.PARCELLE4;
-        courbeVert = Objective.PARCELLE7;
-        losangeVert = Objective.PARCELLE10;
+        triangleVert = Objective.POSER_TRIANGLE_VERT;
+        ligneVert = Objective.POSER_LIGNE_VERTE;
+        courbeVert = Objective.POSER_COURBE_VERTE;
+        losangeVert = Objective.POSER_LOSANGE_VERT;
         board.addBox(Greenbox1);
         board.addBox(Greenbox2);
         board.addBox(Greenbox3);

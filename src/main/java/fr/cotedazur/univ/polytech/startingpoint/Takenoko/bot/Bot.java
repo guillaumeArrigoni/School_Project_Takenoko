@@ -6,6 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public abstract class Bot {
      *
      */
     public GestionObjectives gestionObjectives;
-
+    public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
     //CONSTRUCTOR
 
@@ -57,7 +58,7 @@ public abstract class Bot {
      * @param random the random generator
      * @param meteoDice the meteo dice
      */
-    protected Bot(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives) {
+    protected Bot(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters) {
         this.name = name;
         this.board = board;
         this.random = random;
@@ -65,6 +66,7 @@ public abstract class Bot {
         this.score = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         resetPossibleAction();
     }
 

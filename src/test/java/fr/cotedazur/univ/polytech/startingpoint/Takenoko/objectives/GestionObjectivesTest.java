@@ -6,7 +6,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -33,22 +32,19 @@ class GestionObjectivesTest {
     @BeforeAll
     public static void setupBox() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieveBoxIdWithParameters);
         elementOfTheGame = new ElementOfTheGame();
         board = new Board(retrieveBoxIdWithParameters);
-        UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
-        UniqueObjectCreated.setBoard(board);
-        gestionObjectives = new GestionObjectives();
+        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         Greenbox1 = new HexagoneBox(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox2 = new HexagoneBox(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox3 = new HexagoneBox(-1, 2, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox4 = new HexagoneBox(-1, 0, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox5 = new HexagoneBox(0, -1, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
         Greenbox6 = new HexagoneBox(0, 2, -2, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
-        triangleVert = Objective.PARCELLE1;
-        ligneVert = Objective.PARCELLE4;
-        courbeVert = Objective.PARCELLE7;
-        losangeVert = Objective.PARCELLE10;
+        triangleVert = Objective.POSER_TRIANGLE_VERT;
+        ligneVert = Objective.POSER_LIGNE_VERTE;
+        courbeVert = Objective.POSER_COURBE_VERTE;
+        losangeVert = Objective.POSER_LOSANGE_VERT;
         board.addBox(Greenbox1);
         board.addBox(Greenbox2);
         board.addBox(Greenbox3);

@@ -64,7 +64,7 @@ public class GestionObjectives {
         case PARCELLE -> rollParcelleObjective(bot);
         case JARDINIER -> rollJardinierObjective(bot);
         case PANDA -> rollPandaObjective(bot);
-        };
+        }
     }
     public void rollParcelleObjective(Bot bot){
         int i = new Random().nextInt(0, getParcelleObjectifs().size());

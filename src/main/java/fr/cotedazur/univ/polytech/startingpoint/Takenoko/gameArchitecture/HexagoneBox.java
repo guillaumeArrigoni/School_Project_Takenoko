@@ -58,7 +58,6 @@ public class HexagoneBox {
     public HexagoneBox (Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.coordinates = null;
-        //this.id = -1;
         this.color = color;
         this.special = special;
         this.irrigate = true;

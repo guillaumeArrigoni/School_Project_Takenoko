@@ -1,10 +1,10 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /*import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.generateID;
@@ -23,7 +23,7 @@ public class HexagoneBox {
     private boolean irrigate;
     private int heightBamboo;
     private HashMap<Integer,int[]> AdjacentBox;
-    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
+    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
     /**
      *      1
@@ -36,7 +36,8 @@ public class HexagoneBox {
      * @param color : the color of the box
      * @param special : the particularity of the box
      */
-    public HexagoneBox (int x, int y, int z, Color color, Special special){
+    public HexagoneBox (int x, int y, int z, Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
         this.color = color;
@@ -54,9 +55,9 @@ public class HexagoneBox {
         retrieveBoxIdWithParameters.setBoxSpeciality(this.id, this.special);
     }
 
-    public HexagoneBox (Color color, Special special){
+    public HexagoneBox (Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.coordinates = null;
-        //this.id = -1;
         this.color = color;
         this.special = special;
         this.irrigate = true;

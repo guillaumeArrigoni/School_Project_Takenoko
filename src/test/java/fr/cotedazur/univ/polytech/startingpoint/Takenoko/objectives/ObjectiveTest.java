@@ -1,6 +1,6 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

@@ -1,15 +1,19 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Special;
 
-import java.util.HashMap;
-import java.util.Random;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
+
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 
 public class Action {
+    private static final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = UniqueObjectCreated.getRetrieveBoxIdWithParameters();
 
     public static HexagoneBox drawTile(Random random) {
         Color color = switch (random.nextInt(0,3)) {
@@ -18,7 +22,7 @@ public class Action {
             default -> Color.Jaune;
         };
         System.out.println("drawTile : " + color);
-        return new HexagoneBox(color, Special.Classique);
+        return new HexagoneBox(color, Special.Classique, retrieveBoxIdWithParameters);
     }
 
     public static ArrayList<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {
@@ -41,7 +45,7 @@ public class Action {
                     default -> new int[]{0, 0, 0};
                 };
 
-                if (!board.coordInBoard(newCoord)) possible=false;
+                if (!board.isCoordinateInBoard(newCoord)) possible=false;
                 else {
                     possibleMove.add(newCoord);
                     count++;

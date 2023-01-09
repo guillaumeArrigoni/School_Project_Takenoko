@@ -1,10 +1,10 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.Objectifs;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Interface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.UniqueObjectCreated;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.UniqueObjectCreated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.*;
@@ -127,54 +127,52 @@ public class GestionObjectives {
 
     public boolean checkParcelleObjectives(Objective objective) {
         return switch (objective.getPattern().getForme()){
-            case "TRIANGLE" -> checkParcelleTriangleObjectives(objective);
-            case "LIGNE" -> checkParcelleLigneObjectives(objective);
-            case "COURBE" -> checkParcelleCourbeObjectives(objective);
+            case "TRIANGLE" -> checkParcelleTriangleOrLigneOrCourbeObjectives(objective,1);
+            case "LIGNE" -> checkParcelleTriangleOrLigneOrCourbeObjectives(objective,3);
+            case "COURBE" -> checkParcelleTriangleOrLigneOrCourbeObjectives(objective,2);
             case "LOSANGE" -> checkParcelleLosangeObjectives(objective);
             default -> false;
         };
     }
 
+    /**
+     * Method use to know if a rhombus parcel Objective is complete
+     * @param objective that we want to check
+     * @return true if the objective is completed or false if it does not.
+     */
     private boolean checkParcelleLosangeObjectives(Objective objective) {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
-            HexagoneBox box = board.getGetBox().get(listOfIdAvailable.get(i));
+            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
             for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
                 if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
                     idOfAdjacentBoxCorrect.add(j);
                 }
             }
-            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
-                if (board.getGetBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+1)%6)) &&
-                        board.getGetBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+2)%6)) &&
-                        board.getGetBox().containsKey(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j)+3)%6))) {
-                    if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 1) % 6)
-                            && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 1) % 6)).getColor() == box.getColor()
-                            && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 2) % 6)
-                            && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 2) % 6)).getColor() != box.getColor()
-                            && idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j) + 3) % 6)
-                            && board.getGetBox().get(box.getAdjacentBox().get((idOfAdjacentBoxCorrect.get(j) + 3) % 6)).getColor() != box.getColor()) {
-                        return true;
-                    }
-                }
-            }
+            if (ParcelleLosangeObjectifCondition(box, idOfAdjacentBoxCorrect)) return true;
         }
         return false;
     }
 
-    private boolean checkParcelleCourbeObjectives(Objective objective) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
-        for (int i=0;i<listOfIdAvailable.size();i++){
-            HexagoneBox box = board.getGetBox().get(listOfIdAvailable.get(i));
-            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
-            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
-                if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
-                    idOfAdjacentBoxCorrect.add(j);
-                }
-            }
-            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
-                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+2)%6)){
+    /**
+     * Method with the rhombus parcel condition
+     * @param box which we want to know if, with the adjacent box, the rhombus parcel is completed
+     * @param idOfAdjacentBoxCorrect contains all the adjacent box of the previous box that complete the objective condition (color, irrigated ...)
+     * @return true if the rhombus parcel is completed, false if it does not
+     */
+    private boolean ParcelleLosangeObjectifCondition(HexagoneBox box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
+        for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
+            int adjIndice1 = (idOfAdjacentBoxCorrect.get(j)+1)%7;
+            int adjIndice2 = (idOfAdjacentBoxCorrect.get(j)+2)%7;
+            if (adjIndice1 == 0) adjIndice1 = 1;
+            if (adjIndice2 == 0) adjIndice2 = 1;
+            if (board.isCoordinateInBoard(box.getAdjacentBox().get(adjIndice1)) &&
+                    board.isCoordinateInBoard(box.getAdjacentBox().get(adjIndice2))){
+                if (idOfAdjacentBoxCorrect.contains(adjIndice1)
+                        && board.getBoxWithCoordinates(box.getAdjacentBox().get(adjIndice1)).getColor() == box.getColor()
+                        && idOfAdjacentBoxCorrect.contains(adjIndice2)
+                        && board.getBoxWithCoordinates(box.getAdjacentBox().get(adjIndice2)).getColor() == box.getColor()){
                     return true;
                 }
             }
@@ -182,68 +180,71 @@ public class GestionObjectives {
         return false;
     }
 
-    private boolean checkParcelleLigneObjectives(Objective objective) {
+    /**
+     * Method use to know if a triangle, line or curve parcel Objective is complete
+     * @param objective that we want to check
+     * @param x that have the value :
+     *          1 if it is a triangle objective
+     *          2 if it is a curve objective
+     *          3 if it is a line objective
+     * @return true if the objective is completed or false if it does not.
+     */
+    private boolean checkParcelleTriangleOrLigneOrCourbeObjectives(Objective objective, int x){
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
-            HexagoneBox box = board.getGetBox().get(listOfIdAvailable.get(i));
-            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
-            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
-                if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
-                    idOfAdjacentBoxCorrect.add(j);
-                }
+            ArrayList<Integer> idOfAdjacentBoxCorrect = getAllAdjacentBoxThatCompleteTheCondition(listOfIdAvailable, i);
+            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, x)) return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * Method with the triangle, line and curve condition
+     * @param listOfIdAvailable contains all the box placed in the board that complete the requirement of the objective (color, irrigated,...)
+     * @param i that have the value as before
+     * @return true if the parcel is compelted, false if it does not
+     */
+    private ArrayList<Integer> getAllAdjacentBoxThatCompleteTheCondition(ArrayList<Integer> listOfIdAvailable, int i) {
+        HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+        ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
+        for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
+            if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
+                idOfAdjacentBoxCorrect.add(j);
             }
-            for (int j=0;j<idOfAdjacentBoxCorrect.size();j++){
-                if (idOfAdjacentBoxCorrect.contains((idOfAdjacentBoxCorrect.get(j)+3)%6)){
-                    return true;
-                }
+        }
+        return idOfAdjacentBoxCorrect;
+    }
+
+    /**
+     * Method with the triangle, line and curve condition
+     * @param idOfAdjacentBoxCorrect wontains all the box that filled the objective's requirement and are adjacent of another box that also complete the objective's requirement
+     * @param x that have the same value as before
+     * @return true if the objective is completed or false if it does not.
+     */
+    private boolean ParcelleObjectifCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
+        for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
+            int adjIndice = (idOfAdjacentBoxCorrect.get(j)+ x)%7;
+            if (adjIndice == 0) adjIndice = 1;
+            if (idOfAdjacentBoxCorrect.contains(adjIndice)){
+                return true;
             }
         }
         return false;
     }
 
-    private boolean checkParcelleTriangleObjectives(Objective objective) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
-        for (int i=0;i<listOfIdAvailable.size();i++){
-            HexagoneBox box = board.getGetBox().get(listOfIdAvailable.get(i));
-            ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
-            for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
-                if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
-                    idOfAdjacentBoxCorrect.add(j);
-                }
-                int size = idOfAdjacentBoxCorrect.size();
-                if (size > 1 && ((idOfAdjacentBoxCorrect.get(size-1)-idOfAdjacentBoxCorrect.get(size-2) == 1) || (idOfAdjacentBoxCorrect.get(0)==1 && idOfAdjacentBoxCorrect.get(size-1)==6))){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
     public void printWinner(Bot bot1, Bot bot2){
          int i = bot1.getScore() - bot2.getScore();
          if(i > 0){
-             System.out.println("Bot1 wins with " + bot1.getScore() + " points !");
+             System.out.println("Bot1 a gagné avec " + bot1.getScore() + " points !");
         } else if (i < 0) {
-             System.out.println("Bot2 wins with " + bot1.getScore() + " points !");
+             System.out.println("Bot2 a gagné avec " + bot2.getScore() + " points !");
          } else {
-             System.out.println("Draw ! Nobody wins.");
+             System.out.println("Egalité !");
          }
     }
 
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
         return bot.getObjectives().size() < 5;
     }
-    /*public void printWinner(Bot ... bots){
-        int max=0;
-        int i=1;
-        int idWinner=0;
-        for(Bot bot : bots){
-            System.out.println("Score Bot" + i + " : " + bot.getScore());
-            if(bot.getScore() <max){
-                max = bot.getScore();
-                idWinner = i;
-            }
-            i++;
-        }
-        System.out.println("Winner :  Bot" + idWinner + " wins with " + max + " points" );
-    }
-*/}
+}

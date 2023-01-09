@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 public class MeteoDice {
     private final int NBSIDE = 1;

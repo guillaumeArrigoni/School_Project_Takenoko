@@ -30,7 +30,7 @@ public class Main {
     public static void main(String... args) {
         RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
         UniqueObjectCreated.setRetrieveBoxIdWithParameters(retrieving);
-        Board board = new Board();
+        Board board = new Board(retrieving);
         Random random = new Random();
         ElementOfTheGame elementOfTheGame = new ElementOfTheGame();
         UniqueObjectCreated.setElementOfTheGame(elementOfTheGame);
@@ -59,7 +59,7 @@ public class Main {
             bot2.playTurn();
             gestionnaire.checkObjectives(bot2);
             printBoardState(board);
-            if (board.getNumberBoxPlaced() > 10) {
+            if (board.getNumberBoxPlaced() > 20) {
                 playing = false;
                 System.out.println("Score du bot 1 : " + bot1.getScore());
                 System.out.println("Score du bot 2 : " + bot2.getScore());

@@ -5,6 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,14 +20,16 @@ class BotRandomTest {
     Board board;
     Random r;
     MeteoDice meteoDice;
+    RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
     GestionObjectives gestionObjectives;
     @BeforeEach
     void setUp() {
+        this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         gestionObjectives = new GestionObjectives();
         gestionObjectives.initialize();
         r = mock(Random.class);
-        board = new Board();
+        board = new Board(retrieveBoxIdWithParameters);
         meteoDice = mock(MeteoDice.class);
         botRandom = new BotRandom("testBot", board, r, meteoDice, gestionObjectives);
     }

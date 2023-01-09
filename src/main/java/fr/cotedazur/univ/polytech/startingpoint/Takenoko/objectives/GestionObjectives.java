@@ -125,8 +125,14 @@ public class GestionObjectives {
     }
 
     public boolean checkJardinierObjectives(Objective objective) {
-        ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<Color>(Arrays.asList(Color.Lac))), Optional.empty(),Optional.empty(),Optional.empty());
-        return false;
+        ArrayList<Integer> listOfIdAvailable = new ArrayList<>();
+        if(objective.getPattern().getSpecial() == null){
+            listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.of(new ArrayList<>(Arrays.asList(objective.getPattern().getHauteurBambou()))),Optional.empty());
+        }
+        else {
+            listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(), Optional.of(new ArrayList<>(Arrays.asList(objective.getPattern().getHauteurBambou()))), Optional.of(new ArrayList<>(Arrays.asList(objective.getPattern().getSpecial()))));
+        }
+        return listOfIdAvailable.size() == objective.getPattern().getNbBambou();
     }
 
     public boolean checkParcelleObjectives(Objective objective) {

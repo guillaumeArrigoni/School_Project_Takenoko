@@ -1,16 +1,14 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -18,8 +16,8 @@ import java.util.Random;
  */
 public class BotRandom extends Bot {
 
-    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters) {
-        super(name, board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters);
+    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
+        super(name, board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
     }
 
 

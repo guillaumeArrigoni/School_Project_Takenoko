@@ -3,12 +3,13 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
+import java.util.Optional;
 
 
 public class Board {
@@ -72,10 +73,15 @@ public class Board {
         return this.AvailableBox;
     }
     
-    public void setPandaCoords(int[] newCoords) {
+    public void setPandaCoords(int[] newCoords, Bot bot) {
         this.pandaCoords = newCoords;
         HexagoneBox box = getBoxWithCoordinates(newCoords);
-        if (box.getSpecial()!=Special.Protéger && box.getHeightBamboo()>0) box.eatBamboo();
+        if (box.getSpecial()!=Special.Protéger && box.getHeightBamboo()>0) {
+            Optional<Color> bambooEatedColor = box.eatBamboo();
+            if (bambooEatedColor.isPresent()){
+                bot.addBambooEated(bambooEatedColor.get());
+            }
+        }
     }
     public void setGardenerCoords(int[] coords) {
         this.gardenerCoords = coords;

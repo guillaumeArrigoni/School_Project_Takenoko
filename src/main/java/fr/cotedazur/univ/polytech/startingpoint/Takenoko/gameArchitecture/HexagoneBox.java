@@ -7,9 +7,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import java.util.HashMap;
 import java.util.Optional;
 
-/*import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.generateID;
-import static fr.cotedazur.univ.polytech.startingpoint.Takenoko.CoordinateMethod.separateID;
-*/
 public class HexagoneBox {
 
     private int[] coordinates ;
@@ -182,9 +179,9 @@ public class HexagoneBox {
      */
     public static int[] separateID(int id) {
         int[] tab = new int[3];
-        tab[0] = (id % 1000000) / 10000;
+        tab[2] = (id % 1000000) / 10000;
         tab[1] = (id % 10000) / 100;
-        tab[2] = id % 100;
+        tab[0] = id % 100;
         for (int i=0; i<3; i++) {
             if (tab[i] > 50) tab[i]=tab[i]-100;
         }

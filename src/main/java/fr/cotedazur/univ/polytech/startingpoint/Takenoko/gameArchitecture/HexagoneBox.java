@@ -190,4 +190,11 @@ public class HexagoneBox {
         }
         return tab;
     }
+
+    @Override
+    public String toString() {
+        return "Box of id : " + id +
+                ", color : " + color +
+                " and is " + special;
+    }
 }

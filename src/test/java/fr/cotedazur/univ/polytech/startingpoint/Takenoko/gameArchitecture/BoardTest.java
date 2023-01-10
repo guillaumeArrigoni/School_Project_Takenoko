@@ -13,10 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.platform.commons.logging.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,6 +37,8 @@ class BoardTest {
     private static HexagoneBox jaune03;
     private static HexagoneBox jaune08;
     private static HexagoneBox rouge09Protected;
+    private static HexagoneBox vert18Engrais;
+    private static HexagoneBox notPlacedInBoard;
     private static ElementOfTheGame elementOfTheGame;
     /**
      *                  12     13      14
@@ -66,6 +65,8 @@ class BoardTest {
         jaune03 = new HexagoneBox(-1,0,1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
         jaune08 = new HexagoneBox(-2,2,0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
         rouge09Protected = new HexagoneBox(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters);
+        vert18Engrais = new HexagoneBox(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters);
+        notPlacedInBoard = new HexagoneBox(1,1,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters);
         vert01.setHeightBamboo(3);
         vert02.setHeightBamboo(4);
         jaune03.setHeightBamboo(2);
@@ -112,16 +113,32 @@ class BoardTest {
         );
     }
 
+    private static Stream<Arguments> provideBoxAndChecking(){
+        return Stream.of(
+                Arguments.of(vert07),
+                Arguments.of(jaune03),
+                Arguments.of(vert01),
+                Arguments.of(vert02),
+                Arguments.of(rouge09Protected)
+        );
+    }
+
     private static void cleanAllBambooInBox(ArrayList<HexagoneBox> boxTocleanBamboo){
         for (int i =0;i<boxTocleanBamboo.size();i++){
             boxTocleanBamboo.get(i).setHeightBamboo(0);
         }
     }
 
+    @Test
+    void testGetNumberBoxPlaced() {
+        assertEquals(7,board.getNumberBoxPlaced());
+        board.addBox(vert18Engrais);
+        assertEquals(8,board.getNumberBoxPlaced());
+    }
 
     @ParameterizedTest
     @MethodSource("provideGardenerMoveAndChecking")
-    void testsetGardenerCoords(HexagoneBox box, ArrayList<Integer> differentBambooHeightInTheBox1_2_3_7_8_9,
+    void testsetGardenerCoordsBambooHeight(HexagoneBox box, ArrayList<Integer> differentBambooHeightInTheBox1_2_3_7_8_9,
                                ArrayList<HexagoneBox> listOfBox) {
         int[] coords = box.getCoordinates();
         board.setGardenerCoords(coords);
@@ -132,8 +149,16 @@ class BoardTest {
     }
 
     @ParameterizedTest
+    @MethodSource("provideGardenerMoveAndChecking")
+    void testSet_AND_GetGardenerCoords(HexagoneBox box) {
+        int[] coords = box.getCoordinates();
+        board.setGardenerCoords(coords);
+        assertEquals(coords,board.getGardenerCoords());
+    }
+
+    @ParameterizedTest
     @MethodSource("providePandaMoveAndChecking")
-    void testsetPandaCoordsBambooHeightDown(HexagoneBox box, int x) {
+    void testSetPandaCoordsBambooHeightDown(HexagoneBox box, int x) {
         int[] coords = box.getCoordinates();
         board.setPandaCoords(coords,botRandom);
         assertTrue(board.getPlacedBox().get(HexagoneBox.generateID(board.getPandaCoords())).getHeightBamboo()==x);
@@ -141,7 +166,7 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("providePandaMoveAndChecking")
-    void testsetPandaCoordsBambooEatedEarnByBot(HexagoneBox box, int Useless, Color color,int nbBambooAte) {
+    void testSetPandaCoordsBambooEatedEarnByBot(HexagoneBox box, int Useless, Color color,int nbBambooAte) {
         int[] coords = box.getCoordinates();
         board.setPandaCoords(coords,botRandom);
         assertTrue(nbBambooAte==botRandom.getBambooEated().get(color));
@@ -149,45 +174,22 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("providePandaMoveAndChecking")
-    void testsetPandaCoordsMoveOfThePanda(HexagoneBox box) {
+    void testSet_AND_GetPandaCoords(HexagoneBox box) {
         int[] coords = box.getCoordinates();
         board.setPandaCoords(coords,botRandom);
         assertTrue(board.getPandaCoords()==coords);
     }
 
-    @Test
-    void getBoxWithCoordinates() {
+    @ParameterizedTest
+    @MethodSource("providePandaMoveAndChecking")
+    void testGetBoxWithCoordinates(HexagoneBox box) {
+        assertEquals(box,board.getBoxWithCoordinates(box.getCoordinates()));
     }
 
-    @Test
-    void getNumberBoxPlaced() {
-    }
 
     @Test
-    void getPlacedBox() {
-    }
-
-    @Test
-    void getAllBoxPlaced() {
-    }
-
-    @Test
-    void getAvailableBox() {
-    }
-
-    @Test
-    void getPandaCoords() {
-    }
-
-    @Test
-    void setGardenerCoords() {
-    }
-
-    @Test
-    void isCoordinateInBoard() {
-    }
-
-    @Test
-    void addBox() {
+    void testIsCoordinateInBoard() {
+        assertFalse(board.isCoordinateInBoard(notPlacedInBoard.getCoordinates()));
+        assertTrue(board.isCoordinateInBoard(vert01.getCoordinates()));
     }
 }

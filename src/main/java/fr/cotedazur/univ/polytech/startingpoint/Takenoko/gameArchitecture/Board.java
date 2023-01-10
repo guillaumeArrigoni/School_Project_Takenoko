@@ -14,6 +14,10 @@ import java.util.Optional;
 
 public class Board {
 
+    /**
+     * Return the number of box placed in the board
+     * WARNING : the lake is counted in the number of box placed
+     */
     int numberBoxPlaced ;
     
     /**

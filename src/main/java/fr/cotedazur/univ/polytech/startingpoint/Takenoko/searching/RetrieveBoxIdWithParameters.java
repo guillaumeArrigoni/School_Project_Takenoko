@@ -60,11 +60,16 @@ public class RetrieveBoxIdWithParameters {
         ArrayList<Integer> listId = BoxSpeciality.get(speciality);
         listId.add(id);
         BoxSpeciality.put(speciality,listId);
-        ArrayList<Integer> listIdToDelete = BoxSpeciality.get(Special.Classique);
-        listIdToDelete.removeAll(new ArrayList<>(Arrays.asList(id)));
-        BoxSpeciality.put(Special.Classique,listIdToDelete);
+        if (speciality != Special.Classique){
+            ArrayList<Integer> listIdToDelete = BoxSpeciality.get(Special.Classique);
+            listIdToDelete.removeAll(new ArrayList<>(Arrays.asList(id)));
+            BoxSpeciality.put(Special.Classique,listIdToDelete);
+        }
     }
 
+    public HashMap<Color, ArrayList<Integer>> getBoxColor() {
+        return BoxColor;
+    }
 
     /**
      * Method use to get all the id of the box that complete the requirement below
@@ -91,13 +96,18 @@ public class RetrieveBoxIdWithParameters {
             allList.add(mergeAllList(speciality.get(),BoxSpeciality));
         }
         ArrayList<Integer> listToReturn = new ArrayList<>();
+        boolean initiated = false;
         for (int i=0;i<allList.size();i++){
-            if (listToReturn.isEmpty() && !allList.get(i).isEmpty()){
+            if (listToReturn.isEmpty() && !allList.get(i).isEmpty() && !initiated){
                 listToReturn.addAll(allList.get(i));
+                initiated = true;
             } else {
                 listToReturn.retainAll(allList.get(i));
             }
 
+        }
+        if (color.isEmpty() && isIrrigated.isEmpty() && height.isEmpty() && speciality.isEmpty()){
+            return mergeAllList(new ArrayList<>(Arrays.asList(true,false)),BoxIsIrrigated);
         }
         return listToReturn;
     }

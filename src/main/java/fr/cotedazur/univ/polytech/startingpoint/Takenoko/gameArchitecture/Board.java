@@ -83,7 +83,7 @@ public class Board {
         if (box.getSpecial()!=Special.Protéger && box.getHeightBamboo()>0) {
             Optional<Color> bambooEatedColor = box.eatBamboo();
             if (bambooEatedColor.isPresent()){
-                bot.addBambooEated(bambooEatedColor.get());
+                bot.addBambooAte(bambooEatedColor.get());
             }
         }
     }

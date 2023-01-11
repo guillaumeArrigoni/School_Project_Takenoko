@@ -3,6 +3,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
@@ -160,9 +161,25 @@ public abstract class Bot {
         }
     }
 
-    public void addBambooEated(Color colorEated){
-        int nbEated = bambooEated.get(colorEated) + 1;
-        bambooEated.put(colorEated,nbEated);
+    public void addBambooAte(Color colorAte){
+        int nbAte = bambooEated.get(colorAte) + 1;
+        bambooEated.put(colorAte,nbAte);
+    }
+
+    public void deleteBambooAte (ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
+        ArrayList<Color> errorImpossibleToDeleteTheseBamboo = new ArrayList<>();
+        for (int i=0;i<listBambooToDelete.size();i++){
+            int nbBambooOfOneColorAte = bambooEated.get(listBambooToDelete.get(i));
+            if (nbBambooOfOneColorAte>0){
+                bambooEated.put(listBambooToDelete.get(i),nbBambooOfOneColorAte-1);
+            } else {
+                errorImpossibleToDeleteTheseBamboo.add(listBambooToDelete.get(i));
+            }
+        }
+        if (errorImpossibleToDeleteTheseBamboo.size()!=0){
+            throw new DeletingBotBambooException(errorImpossibleToDeleteTheseBamboo);
+        }
+
     }
 
     public AbstractMap<Color,Integer> getBambooEated(){

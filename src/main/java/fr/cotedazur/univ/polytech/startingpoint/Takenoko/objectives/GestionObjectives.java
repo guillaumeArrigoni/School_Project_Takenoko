@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
@@ -7,6 +8,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxId
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class GestionObjectives {
 
@@ -115,13 +117,25 @@ public class GestionObjectives {
     }
 
     public boolean checkPandaObjectives(Objective objective, Bot bot) {
-        if (objective.getPattern() == Pattern.MANGER_TROIS_BAMBOUS){
-            return (bot.getBambooEated().get(Color.Jaune)>=1 &&
-                    bot.getBambooEated().get(Color.Vert)>=1 &&
-                    bot.getBambooEated().get(Color.Rouge)>=1);
-        } else {
-            return (bot.getBambooEated().get(objective.getColors().get(0))>=2);
+        boolean isDone = false;
+        try{
+            if (objective.getPattern() == Pattern.MANGER_TROIS_BAMBOUS){
+                if (bot.getBambooEated().get(Color.Jaune)>=1 &&
+                        bot.getBambooEated().get(Color.Vert)>=1 &&
+                        bot.getBambooEated().get(Color.Rouge)>=1){
+                    bot.deleteBambooAte(new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
+                    isDone = true;
+                }
+            } else {
+                if (bot.getBambooEated().get(objective.getColors().get(0))>=2){
+                    bot.deleteBambooAte(new ArrayList<>(Arrays.asList(objective.getColors().get(0),objective.getColors().get(0))));
+                    isDone = true;
+                }
+            }
+        } catch (DeletingBotBambooException e) {
+            System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
         }
+        return isDone;
     }
 
     public boolean checkJardinierObjectives(Objective objective) {

@@ -87,7 +87,7 @@ public class BotRandom extends Bot {
         List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(Action.drawTile(random, retrieveBoxIdWithParameters));
+            list.add(Action.drawTile(random, retrieveBoxIdWithParameters,board));
         //Choose a random tile from the tiles drawn
         HexagoneBox placedTile = list.get(random.nextInt(0, 3));
         //Choose a random available space

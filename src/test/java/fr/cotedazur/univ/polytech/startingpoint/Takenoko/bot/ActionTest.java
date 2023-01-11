@@ -34,28 +34,28 @@ class ActionTest {
     @Test
     void drawYellowTile() {
         when(r.nextInt(0, 3)).thenReturn(0);
-        HexagoneBox hexagoneBox = Action.drawTile(r,retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = Action.drawTile(r,retrieveBoxIdWithParameters,board);
         assertEquals(Color.Jaune, hexagoneBox.getColor());
     }
 
     @Test
     void drawGreenTile() {
         when(r.nextInt(0, 3)).thenReturn(1);
-        HexagoneBox hexagoneBox = Action.drawTile(r, retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = Action.drawTile(r, retrieveBoxIdWithParameters,board);
         assertEquals(Color.Vert, hexagoneBox.getColor());
     }
 
     @Test
     void drawRedTile() {
         when(r.nextInt(0, 3)).thenReturn(2);
-        HexagoneBox hexagoneBox = Action.drawTile(r, retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = Action.drawTile(r, retrieveBoxIdWithParameters,board);
         assertEquals(Color.Rouge, hexagoneBox.getColor());
     }
 
     //GetMovesForGardenerOrPanda
     @Test
     void getMovesForGardenerOrPandaTopRight() {
-        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique,retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique,retrieveBoxIdWithParameters,board);
         hexagoneBox.setCoordinates(new int[]{1, -1, 0});
         board.addBox(hexagoneBox);
         assertEquals(1,Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
@@ -67,7 +67,7 @@ class ActionTest {
 
     @Test
     void getMovesForGardenerOrPandaRight() {
-        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
         hexagoneBox.setCoordinates(new int[]{1, 0, -1});
         board.addBox(hexagoneBox);
         assertEquals(1,Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
@@ -79,7 +79,7 @@ class ActionTest {
 
     @Test
     void getMovesForGardenerOrPandaBottomRight() {
-        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
         hexagoneBox.setCoordinates(new int[]{0, 1, -1});
         board.addBox(hexagoneBox);
         assertEquals(1,Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
@@ -91,7 +91,7 @@ class ActionTest {
 
     @Test
     void getMovesForGardenerOrPandaBottomLeft() {
-        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
         hexagoneBox.setCoordinates(new int[]{-1, 1, 0});
         board.addBox(hexagoneBox);
         assertEquals(1,Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
@@ -103,7 +103,7 @@ class ActionTest {
 
     @Test
     void getMovesForGardenerOrPandaLeft() {
-        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
         hexagoneBox.setCoordinates(new int[]{-1, 0, 1});
         board.addBox(hexagoneBox);
         assertEquals(1,Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
@@ -115,7 +115,7 @@ class ActionTest {
 
     @Test
     void getMovesForGardenerOrPandaTopLeft() {
-        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
         hexagoneBox.setCoordinates(new int[]{0, -1, 1});
         board.addBox(hexagoneBox);
         assertEquals(1,Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
@@ -127,12 +127,12 @@ class ActionTest {
 
     @Test
     void getMovesForGardenerOrPandaGlobal() {
-        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
-        HexagoneBox hexagoneBox2 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
-        HexagoneBox hexagoneBox3 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
-        HexagoneBox hexagoneBox4 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
-        HexagoneBox hexagoneBox5 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
-        HexagoneBox hexagoneBox6 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+        HexagoneBox hexagoneBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        HexagoneBox hexagoneBox2 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        HexagoneBox hexagoneBox3 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        HexagoneBox hexagoneBox4 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        HexagoneBox hexagoneBox5 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        HexagoneBox hexagoneBox6 = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
         hexagoneBox.setCoordinates(new int[]{1, -1, 0});
         hexagoneBox2.setCoordinates(new int[]{1, 0, -1});
         hexagoneBox3.setCoordinates(new int[]{0, 1, -1});

@@ -6,10 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 
 public class Board {
@@ -42,10 +39,99 @@ public class Board {
     private int[] pandaCoords;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
+    private HashMap<Integer,ArrayList<Crest>> rangeFromIrrigated;
+    private HashMap<Crest,Integer> rangeFromIrrigated2;
+    private HashMap<Crest, ArrayList<Crest>> linkCrestChildrenToCrestParent;
+    private HashMap<Crest, ArrayList<Crest>> linkCrestParentToCrestChildren;
+    private ArrayList<Crest> parentChildless; // parent with no children
+    private ArrayList<HexagoneBox> alreadyIrrigated; // for the hexagoneBox not place but that are
+                                                    // already irrigated if they were placed
+
+
+    public ArrayList<HexagoneBox> getAlreadyIrrigated() {
+        return alreadyIrrigated;
+    }
+
+    /**
+     * TODO put parent value to 0, to do in the method that call this one
+     * @param parent : the new Irrigation that has been placed
+     */
+    private void rewriteRangeToIrrigatedAfterNewIrrigation(Crest parent){
+        ArrayList<Crest> children = this.linkCrestParentToCrestChildren.get(parent);
+        if (!children.isEmpty()){
+            for (int i = 0; i<children.size();i++){
+                Crest child = children.get(i);
+                int candidateNewValue = rangeFromIrrigated2.get(parent)+1;
+                if (candidateNewValue<this.rangeFromIrrigated2.get(child)){
+                    this.rangeFromIrrigated2.put(child,candidateNewValue);
+                }
+                rewriteRangeToIrrigatedAfterNewIrrigation(child);
+            }
+        }
+    }
+
+    /**
+     * Method use to add to the different Hashmap about Crest the last Crest add thanks to the newBox placed.
+     * In order to do that :
+     *      - The method add new Crest from the parent crest with their children not Implemented
+     *      until the new list of Crest is Implemented
+     *      - The Hashmap to link the parent to the children is updated
+     *      - The Hashmap to link the Crest to its range to the irrigation is updated
+     *
+     * @param newCrestToImplement : the listOfCrest link to the last box add
+     *                            and that have to be implemented in the different Hashmap of Crest
+     */
+    private void actualizeCrestVariable(ArrayList<Crest> newCrestToImplement){
+        Set<Crest> allCrestImplemented = this.linkCrestParentToCrestChildren.keySet();
+        while (!this.linkCrestParentToCrestChildren.keySet().containsAll(newCrestToImplement)){
+            ArrayList<Crest> newParentChildless = new ArrayList<>();
+            for(int i = 0; i< this.parentChildless.size(); i++){
+                Crest parent = this.parentChildless.get(i);
+                ArrayList<Crest> listOfChildForParent = parent.getListOfCrestChildren();
+                listOfChildForParent.removeAll(allCrestImplemented);
+                this.linkCrestParentToCrestChildren.put(parent,listOfChildForParent);
+                for (int j=0;j<listOfChildForParent.size();j++){
+                    Crest child = listOfChildForParent.get(j);
+                    int rangeOfParent = this.rangeFromIrrigated2.get(parent);
+                    this.rangeFromIrrigated2.put(child,rangeOfParent + 1);
+                    this.linkCrestParentToCrestChildren.put(child,new ArrayList<>());
+                    newParentChildless.add(child);
+                }
+            }
+            this.parentChildless = newParentChildless;
+        }
+    }
+
+    private void updateCrestVariableWithNewBoxAdded(HexagoneBox box){
+        actualizeCrestVariable(box.getListOfCrestAroundBox());
+    }
+
+
+    /**
+     * Ne gère pas le cas où une des 2 tuiles n'est pas placé
+     * @param crest
+     */
+    public void placeIrrigation(Crest crest){
+        crest.setIrrigated(true);
+        this.rangeFromIrrigated2.put(crest,0);
+        rewriteRangeToIrrigatedAfterNewIrrigation(crest);
+        for (int i = 0; i<2;i++) {
+            if (this.placedBox.containsKey(crest.getCoordinateAdjacent()[i])) {
+                this.placedBox.get(crest.getCoordinateAdjacent()[i]).setIrrigate(true);
+            } else {
+                this.alreadyIrrigated.add(placedBox.get(crest.getCoordinateAdjacent()[i]));
+            }
+        }
+    }
+
+
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.placedBox = new HashMap<>();
-        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters);
+        this.linkCrestParentToCrestChildren = new HashMap<>();
+        this.rangeFromIrrigated2 = new HashMap<>();
+        this.parentChildless = new ArrayList<>();
+        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
         this.numberBoxPlaced = 1;
 
         this.AvailableBox = new ArrayList<>();
@@ -146,6 +232,29 @@ public class Board {
         addNewBoxInAvailableBox(newCoord2);
     }
 
+    private void generateNewAdjacentBox2(int[] coord, int[] adjacentCoord) {
+        int[] newCoord1;
+        int[] newCoord2;
+        //look for every adjacent box to the one we are placing in the board
+        int x = coord[0], y = coord[1], z = coord[2];
+        int x1 = adjacentCoord[0], y1 = adjacentCoord[1], z1 = adjacentCoord[2];
+
+        if (x==x1) {
+            newCoord1 = new int[]{x+1,Math.min(y,y1),Math.min(z,z1)};
+            newCoord2 = new int[]{x-1,Math.max(y,y1),Math.max(z,z1)};
+        }
+        else if (y==y1) {
+            newCoord1 = new int[]{Math.min(x,x1),y+1,Math.min(z,z1)};
+            newCoord2 = new int[]{Math.max(x,x1),y-1,Math.max(z,z1)};
+        }
+        else {
+            newCoord1 = new int[]{Math.min(x,x1),Math.min(y,y1),z+1};
+            newCoord2 = new int[]{Math.max(x,x1),Math.max(y,y1),z-1};
+        }
+        addNewBoxInAvailableBox(newCoord1);
+        addNewBoxInAvailableBox(newCoord2);
+    }
+
     /**
      * Method use to add in AvailableBox a box if it is possible
      * @param newCoord the coordinate of the box we want to add in AvailableBox
@@ -192,4 +301,11 @@ public class Board {
         }
         placedBox.put(box.getId(),box);
     }
+
+
+
+
+
+
+
 }

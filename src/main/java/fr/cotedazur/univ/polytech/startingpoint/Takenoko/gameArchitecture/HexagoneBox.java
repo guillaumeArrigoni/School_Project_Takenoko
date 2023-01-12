@@ -24,7 +24,6 @@ public class HexagoneBox {
     private HashMap<Integer,int[]> AdjacentBox;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private final Board board;
-
     private ArrayList<Crest> listOfCrestAroundBox;
 
     /**
@@ -46,10 +45,9 @@ public class HexagoneBox {
         this.color = color;
         this.special = special;
         this.heightBamboo = 0;
-        setAutoIrrigation();
         getAllAdjacenteBox();
         updateRetrieveBox();
-        generateCoordinatesThanksToBox();
+        generateCrestAroundBox();
     }
 
     private void updateRetrieveBox() {
@@ -123,8 +121,7 @@ public class HexagoneBox {
         this.id = generateID(this.coordinates);
         getAllAdjacenteBox();
         updateRetrieveBox();
-        generateCoordinatesThanksToBox();
-        setAutoIrrigation();
+        generateCrestAroundBox();
     }
 
     public void setSpecial(Special special) {
@@ -222,16 +219,16 @@ public class HexagoneBox {
 
 
 
-    private void generateCoordinatesThanksToBox(){
+    private void generateCrestAroundBox(){
         ArrayList<Crest> listOfCoordiante = new ArrayList<>();
-        int x = this.coordinates[0];
-        int y = this.coordinates[1];
-        listOfCoordiante.add(new Crest(x+15,y+05,1));
-        listOfCoordiante.add(new Crest(x+15,y,2));
-        listOfCoordiante.add(new Crest(x,y-05,3));
-        listOfCoordiante.add(new Crest(x-15,y-05,1));
-        listOfCoordiante.add(new Crest(x-15,y,2));
-        listOfCoordiante.add(new Crest(x,y+05,3));
+        int x = this.coordinates[0]*10;
+        int y = this.coordinates[1]*10;
+        listOfCoordiante.add(new Crest(x+5,y-5,1));
+        listOfCoordiante.add(new Crest(x+5,y,2));
+        listOfCoordiante.add(new Crest(x,y+5,3));
+        listOfCoordiante.add(new Crest(x-5,y+5,1));
+        listOfCoordiante.add(new Crest(x-5,y,2));
+        listOfCoordiante.add(new Crest(x,y-5,3));
         this.listOfCrestAroundBox =  listOfCoordiante;
     }
 
@@ -244,8 +241,22 @@ public class HexagoneBox {
             board.getAlreadyIrrigated().removeAll(Arrays.asList(this));
             this.irrigate = true;
         } else {
-            this.irrigate = false;
+            //TODO change below to false
+            this.irrigate = true;
         }
+    }
+
+    private void initiateLacIrrigation(){
+        if (this.color == Color.Lac){
+            for (int i=0; i<this.listOfCrestAroundBox.size();i++){
+                this.board.placeIrrigation(listOfCrestAroundBox.get(i));
+            }
+        }
+    }
+
+    public void launchIrrigationChecking(){
+        initiateLacIrrigation();
+        setAutoIrrigation();
 
     }
 }

@@ -1,10 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -46,20 +43,19 @@ class CrestTest {
                         new ArrayList<Integer>(Arrays.asList(5,5,1)),
                         new ArrayList<Integer>(Arrays.asList(-5,10,2)),
                         new ArrayList<Integer>(Arrays.asList(-5,5,1)))
-
         );
     }
 
 
     private static Stream<Arguments> provideAdjacentBox(){
         return Stream.of(
-                Arguments.of(crest1.getCoordinatesOfAdjacentBox(),
+                Arguments.of(crest1.getIdOfAdjacentBox(),
                         HexagoneBox.generateID(new int[]{1,-1,0}),
                         HexagoneBox.generateID(new int[]{0,0,0})),
-                Arguments.of(crest2.getCoordinatesOfAdjacentBox(),
+                Arguments.of(crest2.getIdOfAdjacentBox(),
                         HexagoneBox.generateID(new int[]{1,0,-1}),
                         HexagoneBox.generateID(new int[]{0,0,0})),
-                Arguments.of(crest3.getCoordinatesOfAdjacentBox(),
+                Arguments.of(crest3.getIdOfAdjacentBox(),
                         HexagoneBox.generateID(new int[]{0,1,-1}),
                         HexagoneBox.generateID(new int[]{0,0,0}))
         );

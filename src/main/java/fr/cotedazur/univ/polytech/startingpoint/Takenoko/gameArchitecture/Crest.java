@@ -2,8 +2,9 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
-public class Crest implements GenerateMethods {
+public class Crest implements GenerateMethods, Comparable<Crest> {
 
     private int range_to_irrigation;
     private int id;
@@ -11,7 +12,7 @@ public class Crest implements GenerateMethods {
     private ArrayList<ArrayList<Integer>> listOfCrestChildren;
     private int order;
     private boolean isIrrigated;
-    private int[] coordinatesOfAdjacentBox;
+    private int[] idOfAdjacentBox;
 
     public int getRange_to_irrigation() {
         return range_to_irrigation;
@@ -21,8 +22,8 @@ public class Crest implements GenerateMethods {
         return id;
     }
 
-    public int[] getCoordinatesOfAdjacentBox(){
-        return this.coordinatesOfAdjacentBox;
+    public int[] getIdOfAdjacentBox(){
+        return this.idOfAdjacentBox;
     }
     /**
      * x = [0]
@@ -159,6 +160,33 @@ public class Crest implements GenerateMethods {
                 tabOfTheCoords[2] = -tabOfTheCoords[0] - tabOfTheCoords[1];
                 idOfTheThwBoxThatAreSharingThisCrest[1] = HexagoneBox.generateID(tabOfTheCoords);
         }
-        this.coordinatesOfAdjacentBox =  idOfTheThwBoxThatAreSharingThisCrest;
+        this.idOfAdjacentBox =  idOfTheThwBoxThatAreSharingThisCrest;
+    }
+
+    @Override
+    public int compareTo(Crest crest) {
+        if (this.id == crest.id){
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (object == this) {
+            return true;
+        }
+        if (!(object instanceof Crest)) {
+            return false;
+        }
+        Crest secondCrest = (Crest) object;
+
+        return (secondCrest.id == this.id);
+    }
+
+    @Override
+    public String toString(){
+        return String.valueOf(this.id);
     }
 }

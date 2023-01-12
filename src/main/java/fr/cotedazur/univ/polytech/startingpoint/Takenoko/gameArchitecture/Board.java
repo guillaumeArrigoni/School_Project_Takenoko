@@ -57,8 +57,8 @@ public class Board {
      * @param parent : the new Irrigation that has been placed
      */
     private void rewriteRangeToIrrigatedAfterNewIrrigation(Crest parent){
-        ArrayList<Crest> children = this.linkCrestParentToCrestChildren.get(parent);
-        if (!children.isEmpty()){
+        if (linkCrestParentToCrestChildren.containsKey(parent) && !linkCrestParentToCrestChildren.get(parent).isEmpty()){
+            ArrayList<Crest> children = this.linkCrestParentToCrestChildren.get(parent);
             for (int i = 0; i<children.size();i++){
                 Crest child = children.get(i);
                 int candidateNewValue = rangeFromIrrigated2.get(parent)+1;
@@ -81,16 +81,20 @@ public class Board {
      * @param newCrestToImplement : the listOfCrest link to the last box add
      *                            and that have to be implemented in the different Hashmap of Crest
      */
+    //TODO mettre les id et non l'objet pour éviter les erruers lors de l'évaluation de l'égalité entre 2 Crest
     private void actualizeCrestVariable(ArrayList<Crest> newCrestToImplement){
         Set<Crest> allCrestImplemented = this.linkCrestParentToCrestChildren.keySet();
+        System.out.println(allCrestImplemented);
+        System.out.println(newCrestToImplement);
         while (!this.linkCrestParentToCrestChildren.keySet().containsAll(newCrestToImplement)){
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             for(int i = 0; i< this.parentChildless.size(); i++){
                 Crest parent = this.parentChildless.get(i);
                 ArrayList<Crest> listOfChildForParent = new ArrayList<>();
                 for (int k = 0;k<parent.getListOfCrestChildren().size();k++){
-                    ArrayList<Integer> listOfParameters = parent.getListOfCrestChildren().get(k);
-                    listOfChildForParent.add(new Crest(listOfParameters.get(0),listOfParameters.get(1),listOfParameters.get(2)));
+                    ArrayList<Integer> listOfParametersOfChild = parent.getListOfCrestChildren().get(k);
+                    listOfChildForParent.add(new Crest(listOfParametersOfChild.get(0),listOfParametersOfChild.get(1),listOfParametersOfChild.get(2)));
+                    System.out.println(listOfChildForParent.get(listOfChildForParent.size()-1));
                 }
                 listOfChildForParent.removeAll(allCrestImplemented);
                 this.linkCrestParentToCrestChildren.put(parent,listOfChildForParent);
@@ -107,7 +111,14 @@ public class Board {
     }
 
     private void updateCrestVariableWithNewBoxAdded(HexagoneBox box){
-        actualizeCrestVariable(box.getListOfCrestAroundBox());
+        if (box.getColor() == Color.Lac){
+            for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
+                linkCrestParentToCrestChildren.put(box.getListOfCrestAroundBox().get(i), new ArrayList<>());
+                parentChildless.add(box.getListOfCrestAroundBox().get(i));
+            }
+        } else {
+            actualizeCrestVariable(box.getListOfCrestAroundBox());
+        }
     }
 
 
@@ -120,10 +131,10 @@ public class Board {
         this.rangeFromIrrigated2.put(crest,0);
         rewriteRangeToIrrigatedAfterNewIrrigation(crest);
         for (int i = 0; i<2;i++) {
-            if (this.placedBox.containsKey(crest.getCoordinatesOfAdjacentBox()[i])) {
-                this.placedBox.get(crest.getCoordinatesOfAdjacentBox()[i]).setIrrigate(true);
+            if (this.placedBox.containsKey(crest.getIdOfAdjacentBox()[i])) {
+                this.placedBox.get(crest.getIdOfAdjacentBox()[i]).setIrrigate(true);
             } else {
-                this.alreadyIrrigated.add(placedBox.get(crest.getCoordinatesOfAdjacentBox()[i]));
+                this.alreadyIrrigated.add(placedBox.get(crest.getIdOfAdjacentBox()[i]));
             }
         }
     }
@@ -145,6 +156,8 @@ public class Board {
         }
         
         this.placedBox.put(lac.getId(),lac);
+        this.updateCrestVariableWithNewBoxAdded(lac);
+        lac.launchIrrigationChecking();
         this.gardenerCoords = new int[]{0,0,0};
     }
 
@@ -305,6 +318,8 @@ public class Board {
             AvailableBox.remove(box.getCoordinates());
         }
         placedBox.put(box.getId(),box);
+        updateCrestVariableWithNewBoxAdded(box);
+        box.launchIrrigationChecking();
     }
 
 

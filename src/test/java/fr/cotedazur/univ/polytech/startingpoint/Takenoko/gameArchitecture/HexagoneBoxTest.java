@@ -5,7 +5,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
@@ -14,6 +13,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -104,11 +105,23 @@ class HexagoneBoxTest {
         );
     }
 
-    private static Stream<Arguments> generateAndSeparateId(){
+    private static Stream<Arguments> provideGenerateAndSeparateId(){
         return Stream.of(
                 Arguments.of(new int[]{0,1,-1},1990100),
                 Arguments.of(new int[]{-1,0,1},1010099),
                 Arguments.of(new int[]{1,-1,0},1009901)
+                );
+    }
+
+    private static Stream<Arguments> provideCrest(){
+        return Stream.of(
+                Arguments.of(vert01,
+                        new Crest(5,5,1),
+                        new Crest(5,10,2),
+                        new Crest(0,15,3),
+                        new Crest(-5,15,1),
+                        new Crest(-5,10,2),
+                        new Crest(0,5,3))
                 );
     }
 
@@ -140,15 +153,37 @@ class HexagoneBoxTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateAndSeparateId")
-    void generateID(int[] coords, int id) {
+    @MethodSource("provideGenerateAndSeparateId")
+    void testGenerateID(int[] coords, int id) {
         assertEquals(id,HexagoneBox.generateID(coords));
     }
 
     @ParameterizedTest
-    @MethodSource("generateAndSeparateId")
-    void separateID(int[] coords, int id) {
+    @MethodSource("provideGenerateAndSeparateId")
+    void testSeparateID(int[] coords, int id) {
         assertTrue(equals(coords,HexagoneBox.separateID(id)));
     }
 
+    @ParameterizedTest
+    @MethodSource("provideCrest")
+    void testCrestAroundBox(HexagoneBox box, Crest c1, Crest c2, Crest c3, Crest c4, Crest c5, Crest c6){
+        assertEquals(box.getListOfCrestAroundBox().get(0).getId(),c1.getId());
+        assertEquals(box.getListOfCrestAroundBox().get(1).getId(),c2.getId());
+        assertEquals(box.getListOfCrestAroundBox().get(2).getId(),c3.getId());
+        assertEquals(box.getListOfCrestAroundBox().get(3).getId(),c4.getId());
+        assertEquals(box.getListOfCrestAroundBox().get(4).getId(),c5.getId());
+        assertEquals(box.getListOfCrestAroundBox().get(5).getId(),c6.getId());
+    }
+
+    /**
+     * Test should work when box are not irrigated by default.
+     */
+    /*@Test
+    void testIrrigationAutomatic(){
+        RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
+        Board board = new Board(retrieveBoxIdWithParameters);
+        HexagoneBox vertClassique = new HexagoneBox(0,1,-1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        board.addBox(vertClassique);
+        assertEquals(true,vertClassique.isIrrigate());
+    }*/
 }

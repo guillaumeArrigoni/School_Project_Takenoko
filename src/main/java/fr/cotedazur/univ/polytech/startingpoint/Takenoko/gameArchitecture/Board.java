@@ -87,7 +87,11 @@ public class Board {
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             for(int i = 0; i< this.parentChildless.size(); i++){
                 Crest parent = this.parentChildless.get(i);
-                ArrayList<Crest> listOfChildForParent = parent.getListOfCrestChildren();
+                ArrayList<Crest> listOfChildForParent = new ArrayList<>();
+                for (int k = 0;k<parent.getListOfCrestChildren().size();k++){
+                    ArrayList<Integer> listOfParameters = parent.getListOfCrestChildren().get(k);
+                    listOfChildForParent.add(new Crest(listOfParameters.get(0),listOfParameters.get(1),listOfParameters.get(2)));
+                }
                 listOfChildForParent.removeAll(allCrestImplemented);
                 this.linkCrestParentToCrestChildren.put(parent,listOfChildForParent);
                 for (int j=0;j<listOfChildForParent.size();j++){
@@ -131,6 +135,7 @@ public class Board {
         this.linkCrestParentToCrestChildren = new HashMap<>();
         this.rangeFromIrrigated2 = new HashMap<>();
         this.parentChildless = new ArrayList<>();
+        this.alreadyIrrigated = new ArrayList<>();
         HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
         this.numberBoxPlaced = 1;
 

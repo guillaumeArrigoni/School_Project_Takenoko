@@ -1,13 +1,14 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Crest implements GenerateMethods {
 
     private int range_from_origin;
     private int id;
     private int[] coordinates;
-    private ArrayList<Crest> listOfCrestChildren;
+    private ArrayList<ArrayList<Integer>> listOfCrestChildren;
     private int order;
     private boolean isIrrigated;
 
@@ -28,7 +29,7 @@ public class Crest implements GenerateMethods {
         return coordinates;
     }
 
-    public ArrayList<Crest> getListOfCrestChildren() {
+    public ArrayList<ArrayList<Integer>> getListOfCrestChildren() {
         return listOfCrestChildren;
     }
 
@@ -114,27 +115,27 @@ public class Crest implements GenerateMethods {
     }
 
     private void generateNewAdjacentCrest(){
-        ArrayList<Crest> newCrest = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> newCrest = new ArrayList<>();
         int x = this.coordinates[0];
         int y = this.coordinates[1];
         switch(this.order){
             case 1 : case 4 :
-                newCrest.add(new Crest(x-5,y,3));
-                newCrest.add(new Crest(x,y-5,2));
-                newCrest.add(new Crest(x+5,y,3));
-                newCrest.add(new Crest(x,y+5,2));
+                newCrest.add(new ArrayList<>(Arrays.asList(x-5,y,3)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x,y-5,2)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x+5,y,3)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x,y+5,2)));
                 break;
             case 2 : case 5 :
-                newCrest.add(new Crest(x,y-5,1));
-                newCrest.add(new Crest(x+5,y-5,3));
-                newCrest.add(new Crest(x,y+5,1));
-                newCrest.add(new Crest(x-5,y+5,3));
+                newCrest.add(new ArrayList<>(Arrays.asList(x,y-5,1)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x+5,y-5,3)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x,y+5,1)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x-5,y+5,3)));
                 break;
             default:
-                newCrest.add(new Crest(x+5,y-5,2));
-                newCrest.add(new Crest(x+5,y,1));
-                newCrest.add(new Crest(x-5,y,2));
-                newCrest.add(new Crest(x-5,y+5,1));
+                newCrest.add(new ArrayList<>(Arrays.asList(x+5,y-5,2)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x+5,y,1)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x-5,y,2)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x-5,y+5,1)));
         }
         this.listOfCrestChildren = newCrest;
     }

@@ -246,5 +246,6 @@ public class HexagoneBox {
         } else {
             this.irrigate = false;
         }
+
     }
 }

@@ -120,10 +120,10 @@ public class Board {
         this.rangeFromIrrigated2.put(crest,0);
         rewriteRangeToIrrigatedAfterNewIrrigation(crest);
         for (int i = 0; i<2;i++) {
-            if (this.placedBox.containsKey(crest.getCoordinateAdjacent()[i])) {
-                this.placedBox.get(crest.getCoordinateAdjacent()[i]).setIrrigate(true);
+            if (this.placedBox.containsKey(crest.getCoordinatesOfAdjacentBox()[i])) {
+                this.placedBox.get(crest.getCoordinatesOfAdjacentBox()[i]).setIrrigate(true);
             } else {
-                this.alreadyIrrigated.add(placedBox.get(crest.getCoordinateAdjacent()[i]));
+                this.alreadyIrrigated.add(placedBox.get(crest.getCoordinatesOfAdjacentBox()[i]));
             }
         }
     }

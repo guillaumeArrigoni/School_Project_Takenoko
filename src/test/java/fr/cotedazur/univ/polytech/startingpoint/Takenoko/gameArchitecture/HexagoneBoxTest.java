@@ -178,12 +178,12 @@ class HexagoneBoxTest {
     /**
      * Test should work when box are not irrigated by default.
      */
-    /*@Test
+    @Test
     void testIrrigationAutomatic(){
         RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         Board board = new Board(retrieveBoxIdWithParameters);
         HexagoneBox vertClassique = new HexagoneBox(0,1,-1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         board.addBox(vertClassique);
         assertEquals(true,vertClassique.isIrrigate());
-    }*/
+    }
 }

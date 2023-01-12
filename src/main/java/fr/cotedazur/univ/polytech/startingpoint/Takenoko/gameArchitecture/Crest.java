@@ -3,6 +3,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 public class Crest implements GenerateMethods, Comparable<Crest> {
 
@@ -188,5 +189,10 @@ public class Crest implements GenerateMethods, Comparable<Crest> {
     @Override
     public String toString(){
         return String.valueOf(this.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

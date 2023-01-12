@@ -88,6 +88,9 @@ public class Board {
         System.out.println(newCrestToImplement);
         while (!this.linkCrestParentToCrestChildren.keySet().containsAll(newCrestToImplement)){
             ArrayList<Crest> newParentChildless = new ArrayList<>();
+            System.out.println("-------------------------");
+            System.out.println(parentChildless);
+            System.out.println("-------------------------");
             for(int i = 0; i< this.parentChildless.size(); i++){
                 Crest parent = this.parentChildless.get(i);
                 ArrayList<Crest> listOfChildForParent = new ArrayList<>();

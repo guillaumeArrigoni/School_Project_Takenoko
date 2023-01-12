@@ -74,10 +74,12 @@ public class Crest implements GenerateMethods {
 
     @Override
     public int generateID(int[] coordinate){
-        int id = 0;
+        int id = 1000000;
         for (int i=0;i<2;i++){
             if (coordinate[i]<0){
-                id = id + (1000 -  coordinate[i]) * (int) Math.pow(1000,i);
+                id = id + (1000 +  coordinate[i]) * (int) Math.pow(1000,i);
+            } else {
+                id = id + coordinate[i] * (int) Math.pow(1000,i);
             }
         }
         return id;
@@ -114,8 +116,8 @@ public class Crest implements GenerateMethods {
             default:
                 newCrest.add(new ArrayList<>(Arrays.asList(x+5,y-5,2)));
                 newCrest.add(new ArrayList<>(Arrays.asList(x+5,y,1)));
-                newCrest.add(new ArrayList<>(Arrays.asList(x-5,y,2)));
-                newCrest.add(new ArrayList<>(Arrays.asList(x-5,y+5,1)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x-5,y+5,2)));
+                newCrest.add(new ArrayList<>(Arrays.asList(x-5,y,1)));
         }
         this.listOfCrestChildren = newCrest;
     }
@@ -125,35 +127,35 @@ public class Crest implements GenerateMethods {
         int[] idOfTheThwBoxThatAreSharingThisCrest = new int[2];
         switch(this.order){
             case 1 :
-                tabOfTheCoords[0] = this.coordinates[0]-5;
-                tabOfTheCoords[1] = this.coordinates[1]+5;
+                tabOfTheCoords[0] = (this.coordinates[0]-5)/10;
+                tabOfTheCoords[1] = (this.coordinates[1]+5)/10;
                 tabOfTheCoords[2] = -tabOfTheCoords[0] - tabOfTheCoords[1];
                 idOfTheThwBoxThatAreSharingThisCrest[0] = HexagoneBox.generateID(tabOfTheCoords);
 
-                tabOfTheCoords[0] = this.coordinates[0]+5;
-                tabOfTheCoords[1] = this.coordinates[1]-5;
+                tabOfTheCoords[0] = (this.coordinates[0]+5)/10;
+                tabOfTheCoords[1] = (this.coordinates[1]-5)/10;
                 tabOfTheCoords[2] = -tabOfTheCoords[0] - tabOfTheCoords[1];
                 idOfTheThwBoxThatAreSharingThisCrest[1] = HexagoneBox.generateID(tabOfTheCoords);
                 break;
             case 2 :
-                tabOfTheCoords[0] = this.coordinates[0]-5;
-                tabOfTheCoords[1] = this.coordinates[1];
+                tabOfTheCoords[0] = (this.coordinates[0]-5)/10;
+                tabOfTheCoords[1] = (this.coordinates[1])/10;
                 tabOfTheCoords[2] = -tabOfTheCoords[0] - tabOfTheCoords[1];
                 idOfTheThwBoxThatAreSharingThisCrest[0] = HexagoneBox.generateID(tabOfTheCoords);
 
-                tabOfTheCoords[0] = this.coordinates[0]+5;
-                tabOfTheCoords[1] = this.coordinates[1];
+                tabOfTheCoords[0] = (this.coordinates[0]+5)/10;
+                tabOfTheCoords[1] = (this.coordinates[1])/10;
                 tabOfTheCoords[2] = -tabOfTheCoords[0] - tabOfTheCoords[1];
                 idOfTheThwBoxThatAreSharingThisCrest[1] = HexagoneBox.generateID(tabOfTheCoords);
                 break;
             default :
-                tabOfTheCoords[0] = this.coordinates[0];
-                tabOfTheCoords[1] = this.coordinates[1]-5;
+                tabOfTheCoords[0] = (this.coordinates[0])/10;
+                tabOfTheCoords[1] = (this.coordinates[1]-5)/10;
                 tabOfTheCoords[2] = -tabOfTheCoords[0] - tabOfTheCoords[1];
                 idOfTheThwBoxThatAreSharingThisCrest[0] = HexagoneBox.generateID(tabOfTheCoords);
 
-                tabOfTheCoords[0] = this.coordinates[0];
-                tabOfTheCoords[1] = this.coordinates[1]+5;
+                tabOfTheCoords[0] = (this.coordinates[0])/10;
+                tabOfTheCoords[1] = (this.coordinates[1]+5)/10;
                 tabOfTheCoords[2] = -tabOfTheCoords[0] - tabOfTheCoords[1];
                 idOfTheThwBoxThatAreSharingThisCrest[1] = HexagoneBox.generateID(tabOfTheCoords);
         }

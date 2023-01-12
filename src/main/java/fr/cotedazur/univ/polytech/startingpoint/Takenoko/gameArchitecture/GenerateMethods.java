@@ -9,6 +9,4 @@ public interface GenerateMethods {
         return 1;
     }
      */
-
-
 }

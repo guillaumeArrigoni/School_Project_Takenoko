@@ -51,31 +51,65 @@ public class Board {
     public ArrayList<HexagoneBox> getAlreadyIrrigated() {
         return alreadyIrrigated;
     }
-    private ArrayList<Crest> listOfCrestZeroRangeToIrrigated;
+    private ArrayList<Crest> listOfCrestOneRangeToIrrigated;
+
+
+
+    /**
+     *
+     * @param crest
+     */
+    public void placeIrrigation(Crest crest){
+        if (this.listOfCrestOneRangeToIrrigated.contains(crest)){
+            crest.setIrrigated(true);
+            this.rangeFromIrrigatedReversed.put(crest,0);
+            this.listOfCrestOneRangeToIrrigated.remove(crest);
+            rewriteRangeToIrrigatedAfterNewIrrigation(crest);
+            for (int i = 0; i<2;i++) {
+                if (this.placedBox.containsKey(crest.getIdOfAdjacentBox()[i])) {
+                    this.placedBox.get(crest.getIdOfAdjacentBox()[i]).setIrrigate(true);
+                } else {
+                    this.alreadyIrrigated.add(placedBox.get(crest.getIdOfAdjacentBox()[i]));
+                }
+            }
+        } else {
+            // TODO throw an error because impossible to place an Irrigation where there is no box
+        }
+    }
+
 
     /**
      * TODO put parent value to 0, to do in the method that call this one
+     * Method use to change the genealogy of Crest issue from the parent that has been change to irrigated
+     * Method recursive :
+     *      - call itself until we reach the end of a genealogy branch
      * @param parent : the new Irrigation that has been placed
      */
     private void rewriteRangeToIrrigatedAfterNewIrrigation(Crest parent){
-        if (rangeFromIrrigatedReversed.get(parent) == 0){
-            this.listOfCrestZeroRangeToIrrigated.add(parent);
-        }
         if (linkCrestParentToCrestChildren.containsKey(parent) && !linkCrestParentToCrestChildren.get(parent).isEmpty()){
             ArrayList<Crest> children = this.linkCrestParentToCrestChildren.get(parent);
             for (int i = 0; i<children.size();i++){
                 Crest child = children.get(i);
-                int candidateNewValue = rangeFromIrrigatedReversed.get(parent)+1;
-                if (candidateNewValue<this.rangeFromIrrigatedReversed.get(child)){
-                    this.rangeFromIrrigatedReversed.put(child,candidateNewValue);
-                    this.linkCrestChildrenToCrestParent.put(child, new ArrayList<Crest>(Arrays.asList(parent)));
-                } else if (candidateNewValue == this.rangeFromIrrigatedReversed.get(child)){
-                    ArrayList<Crest> a = this.linkCrestChildrenToCrestParent.get(child);
-                    a.add(parent);
-                    this.linkCrestChildrenToCrestParent.put(child,a);
-                }
+                int candidateNewRange = rangeFromIrrigatedReversed.get(parent)+1;
+                updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewRange);
                 rewriteRangeToIrrigatedAfterNewIrrigation(child);
             }
+        }
+    }
+
+    private void launchUpdatingCRestWithAddingNewBox(HexagoneBox box){
+        this.updateCrestVariableWithNewBoxAdded(box);
+    }
+
+    private void updateCrestVariableWithNewBoxAdded(HexagoneBox box){
+        if (box.getColor() == Color.Lac){
+            for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
+                linkCrestParentToCrestChildren.put(box.getListOfCrestAroundBox().get(i), new ArrayList<>());
+                parentChildless.add(box.getListOfCrestAroundBox().get(i));
+                listOfCrestOneRangeToIrrigated.add(box.getListOfCrestAroundBox().get(i));
+            }
+        } else {
+            actualizeCrestVariable(box.getListOfCrestAroundBox());
         }
     }
 
@@ -90,88 +124,71 @@ public class Board {
      * @param newCrestToImplement : the listOfCrest link to the last box add
      *                            and that have to be implemented in the different Hashmap of Crest
      */
-    //TODO mettre les id et non l'objet pour éviter les erruers lors de l'évaluation de l'égalité entre 2 Crest
     private void actualizeCrestVariable(ArrayList<Crest> newCrestToImplement){
         Set<Crest> allCrestImplemented = this.linkCrestParentToCrestChildren.keySet();
-        System.out.println(allCrestImplemented);
-        System.out.println(newCrestToImplement);
-        while (!this.linkCrestParentToCrestChildren.keySet().containsAll(newCrestToImplement)){
+        boolean doesAllTheNewCrestToImplementAreExisting = !this.linkCrestParentToCrestChildren.keySet().containsAll(newCrestToImplement);
+        while (doesAllTheNewCrestToImplementAreExisting){
             ArrayList<Crest> newParentChildless = new ArrayList<>();
-            System.out.println("-------------------------");
-            System.out.println(parentChildless);
-            System.out.println("-------------------------");
             for(int i = 0; i< this.parentChildless.size(); i++){
-                Crest parent = this.parentChildless.get(i);
-                ArrayList<Crest> listOfChildrenForParent = new ArrayList<>();
-                for (int k = 0;k<parent.getListOfCrestChildren().size();k++){
-                    ArrayList<Integer> listOfParametersOfChild = parent.getListOfCrestChildren().get(k);
-                    Crest child = new Crest(listOfParametersOfChild.get(0),listOfParametersOfChild.get(1),listOfParametersOfChild.get(2));
-                    listOfChildrenForParent.add(child);
-                    System.out.println(listOfChildrenForParent.get(listOfChildrenForParent.size()-1));
-                    if (allCrestImplemented.contains(child)){
-                        if (this.rangeFromIrrigatedReversed.get(parent)+1 == this.rangeFromIrrigatedReversed.get(child)){
-                            ArrayList<Crest> a = this.linkCrestChildrenToCrestParent.get(child);
-                            a.add(parent);
-                            this.linkCrestChildrenToCrestParent.put(child,a);
-                        } else if (this.rangeFromIrrigatedReversed.get(parent)+1 < this.rangeFromIrrigatedReversed.get(child)){
-                            this.linkCrestChildrenToCrestParent.put(child,new ArrayList<>(Arrays.asList(parent)));
-                            this.rangeFromIrrigatedReversed.put(child,this.rangeFromIrrigatedReversed.get(parent)+1);
-                            if (this.rangeFromIrrigatedReversed.get(parent) == 0 && !this.listOfCrestZeroRangeToIrrigated.contains(child)){
-                                this.listOfCrestZeroRangeToIrrigated.add(child);
-                            }
-                        }
-                    } else {
-                        this.linkCrestChildrenToCrestParent.put(child,new ArrayList<>(Arrays.asList(parent)));
-                    }
-                }
-                listOfChildrenForParent.removeAll(allCrestImplemented);
-                this.linkCrestParentToCrestChildren.put(parent,listOfChildrenForParent);
-                for (int j=0;j<listOfChildrenForParent.size();j++){
-                    Crest child = listOfChildrenForParent.get(j);
-                    int rangeOfParent = this.rangeFromIrrigatedReversed.get(parent);
-                    this.rangeFromIrrigatedReversed.put(child,rangeOfParent + 1);
-                    this.linkCrestParentToCrestChildren.put(child,new ArrayList<>());
-                    newParentChildless.add(child);
-                }
+                createAndImplementTheChildCrestOfTheParent(allCrestImplemented, newParentChildless, i);
             }
             this.parentChildless = newParentChildless;
         }
     }
 
-    private void updateCrestVariableWithNewBoxAdded(HexagoneBox box){
-        if (box.getColor() == Color.Lac){
-            for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
-                linkCrestParentToCrestChildren.put(box.getListOfCrestAroundBox().get(i), new ArrayList<>());
-                parentChildless.add(box.getListOfCrestAroundBox().get(i));
-                listOfCrestZeroRangeToIrrigated.add(box.getListOfCrestAroundBox().get(i));
-            }
-        } else {
-            actualizeCrestVariable(box.getListOfCrestAroundBox());
+    private void createAndImplementTheChildCrestOfTheParent(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, int i) {
+        Crest parent = this.parentChildless.get(i);
+        ArrayList<Crest> listOfChildrenForParent = new ArrayList<>();
+        for (int k = 0;k<parent.getListOfCrestChildren().size();k++){
+            ArrayList<Integer> listOfParametersOfChild = parent.getListOfCrestChildren().get(k);
+            Crest child = new Crest(listOfParametersOfChild.get(0),listOfParametersOfChild.get(1),listOfParametersOfChild.get(2));
+            listOfChildrenForParent.add(child);
+            makeImplementationNeededForChildCrest(allCrestImplemented, newParentChildless, parent, listOfChildrenForParent, child);
         }
+        this.linkCrestParentToCrestChildren.put(parent,listOfChildrenForParent);
     }
 
+    private void makeImplementationNeededForChildCrest(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, Crest parent, ArrayList<Crest> listOfChildrenForParent, Crest child) {
+        if (allCrestImplemented.contains(child)){
+            int candidateNewValue = this.rangeFromIrrigatedReversed.get(parent)+1;
+            updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewValue);
+            listOfChildrenForParent.remove(child);
+        } else {
+            this.linkCrestChildrenToCrestParent.put(child,new ArrayList<>(Arrays.asList(parent)));
+            int rangeOfParent = this.rangeFromIrrigatedReversed.get(parent);
+            this.rangeFromIrrigatedReversed.put(child,rangeOfParent + 1);
+            this.linkCrestParentToCrestChildren.put(child,new ArrayList<>());
+            newParentChildless.add(child);
+        }
+    }
 
     /**
-     * Ne gère pas le cas où une des 2 tuiles n'est pas placé
-     * @param crest
+     * Method use to change the child Crest if the potential new range to Irrigation is less or equals than before :
+     *      - if equals :
+     *              - add the parent to the list of parent in linkCrestChildrenToCrestParent
+     *      - if less :
+     *              - check if the parent range is 0 (he is irrigated) :
+     *                      - add the child to the list of the next crest that can be irrigated
+     *              - change rangeFromIrrigatedReversed with the new range
+     *              - change linkCrestChildrenToCrestParent with only this parent associated
+     * @param parent : the Crest parent
+     * @param child : the Crest child
+     * @param candidateNewValue : the new range that may be added to the child if the condition are passed
      */
-    public void placeIrrigation(Crest crest){
-        if (this.listOfCrestZeroRangeToIrrigated.contains(crest)){
-            crest.setIrrigated(true);
-            this.rangeFromIrrigatedReversed.put(crest,0);
-            rewriteRangeToIrrigatedAfterNewIrrigation(crest);
-            for (int i = 0; i<2;i++) {
-                if (this.placedBox.containsKey(crest.getIdOfAdjacentBox()[i])) {
-                    this.placedBox.get(crest.getIdOfAdjacentBox()[i]).setIrrigate(true);
-                } else {
-                    this.alreadyIrrigated.add(placedBox.get(crest.getIdOfAdjacentBox()[i]));
-                }
+    private void updateChildRangeIfLessOrEqualsThanBefore(Crest parent, Crest child, int candidateNewValue) {
+        if (candidateNewValue <this.rangeFromIrrigatedReversed.get(child)){
+            if (rangeFromIrrigatedReversed.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
+                this.listOfCrestOneRangeToIrrigated.add(parent);
             }
-        } else {
-            // TODO throw an error
+            this.rangeFromIrrigatedReversed.put(child, candidateNewValue);
+            this.linkCrestChildrenToCrestParent.put(child, new ArrayList<Crest>(Arrays.asList(parent)));
+        } else if (candidateNewValue == this.rangeFromIrrigatedReversed.get(child)){
+            ArrayList<Crest> listOfParent = this.linkCrestChildrenToCrestParent.get(child);
+            listOfParent.add(parent);
+            this.linkCrestChildrenToCrestParent.put(child,listOfParent);
         }
-
     }
+
 
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
@@ -182,7 +199,7 @@ public class Board {
         this.rangeFromIrrigatedReversed = new HashMap<>();
         this.parentChildless = new ArrayList<>();
         this.alreadyIrrigated = new ArrayList<>();
-        this.listOfCrestZeroRangeToIrrigated = new ArrayList<>();
+        this.listOfCrestOneRangeToIrrigated = new ArrayList<>();
         HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
         this.numberBoxPlaced = 1;
 

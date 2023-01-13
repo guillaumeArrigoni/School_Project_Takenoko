@@ -241,7 +241,7 @@ public class HexagoneBox {
             board.getAlreadyIrrigated().removeAll(Arrays.asList(this));
             this.irrigate = true;
         } else {
-            //TODO change below to false
+            //TODO change below to false when add irrigation option to the game
             this.irrigate = true;
         }
     }
@@ -257,6 +257,5 @@ public class HexagoneBox {
     public void launchIrrigationChecking(){
         initiateLacIrrigation();
         setAutoIrrigation();
-
     }
 }

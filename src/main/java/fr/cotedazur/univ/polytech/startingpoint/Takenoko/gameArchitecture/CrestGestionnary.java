@@ -2,19 +2,28 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
 
 import java.util.*;
 
 
 public class CrestGestionnary {
 
-    private HashMap<Integer,ArrayList<Crest>> rangeFromIrrigated;
     private HashMap<Crest,Integer> rangeFromIrrigatedReversed;
     private HashMap<Crest, ArrayList<Crest>> linkCrestChildrenToCrestParent;
     private HashMap<Crest, ArrayList<Crest>> linkCrestParentToCrestChildren;
     private ArrayList<Crest> parentChildless; // parent with no children
     private ArrayList<HexagoneBox> alreadyIrrigated; // for the hexagoneBox not place but that are
-                                                    // already irrigated if they were placed
+
+    public ArrayList<Crest> getParentChildless() {
+        return parentChildless;
+    }
+
+    public ArrayList<Crest> getListOfCrestOneRangeToIrrigated() {
+        return listOfCrestOneRangeToIrrigated;
+    }
+
+    // already irrigated if they were placed
     private ArrayList<Crest> listOfCrestOneRangeToIrrigated;
 
     public CrestGestionnary(){
@@ -34,9 +43,43 @@ public class CrestGestionnary {
         this.updateCrestVariableWithNewBoxAdded(box);
     }
 
+    /**
+     * Ne gère pas le cas où une des 2 tuiles n'est pas placé
+     * @param crest
+     * @param placedBox
+     */
+    public void placeIrrigation(Crest crest, HashMap<Integer,HexagoneBox> placedBox) throws ImpossibleToPlaceIrrigationException {
+        if (irrigationCanBePlace(crest, placedBox)){
+            crest.setIrrigated(true);
+            this.rangeFromIrrigatedReversed.put(crest,0);
+            this.listOfCrestOneRangeToIrrigated.remove(crest);
+            rewriteRangeToIrrigatedAfterNewIrrigation(crest);
+            for (int i = 0; i<2;i++) {
+                if (placedBox.containsKey(crest.getIdOfAdjacentBox()[i])) {
+                    placedBox.get(crest.getIdOfAdjacentBox()[i]).setIrrigate(true);
+                } else {
+                    this.alreadyIrrigated.add(placedBox.get(crest.getIdOfAdjacentBox()[i]));
+                }
+            }
+        } else {
+            throw new ImpossibleToPlaceIrrigationException(crest);
+            // TODO throw an error because impossible to place an Irrigation where there is no box
+        }
+    }
+
+    private boolean irrigationCanBePlace(Crest crest, HashMap<Integer,HexagoneBox> placedBox){
+        System.out.println(listOfCrestOneRangeToIrrigated);
+        System.out.println(crest);
+        System.out.println(linkCrestParentToCrestChildren.containsKey(crest));
+        System.out.println(linkCrestParentToCrestChildren.get(crest));
+        return (this.listOfCrestOneRangeToIrrigated.contains(crest) && (
+                placedBox.containsKey(crest.getIdOfAdjacentBox()[0]) ||
+                placedBox.containsKey(crest.getIdOfAdjacentBox()[1]))
+        );
+    }
+
 
     /**
-     * TODO put parent value to 0, to do in the method that call this one
      * Method use to change the genealogy of Crest issue from the parent that has been change to irrigated
      * Method recursive :
      *      - call itself until we reach the end of a genealogy branch
@@ -68,16 +111,22 @@ public class CrestGestionnary {
      * @param candidateNewValue : the new range that may be added to the child if the condition are passed
      */
     private void updateChildRangeIfLessOrEqualsThanBefore(Crest parent, Crest child, int candidateNewValue) {
-        if (candidateNewValue <this.rangeFromIrrigatedReversed.get(child)){
-            if (rangeFromIrrigatedReversed.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
-                this.listOfCrestOneRangeToIrrigated.add(parent);
-            }
-            this.rangeFromIrrigatedReversed.put(child, candidateNewValue);
-            this.linkCrestChildrenToCrestParent.put(child, new ArrayList<Crest>(Arrays.asList(parent)));
-        } else if (candidateNewValue == this.rangeFromIrrigatedReversed.get(child)){
+        System.out.println("rrrrr");
+        System.out.println(candidateNewValue);
+        System.out.println(rangeFromIrrigatedReversed.get(child));
+        if (candidateNewValue == this.rangeFromIrrigatedReversed.get(child)){
             ArrayList<Crest> listOfParent = this.linkCrestChildrenToCrestParent.get(child);
             listOfParent.add(parent);
             this.linkCrestChildrenToCrestParent.put(child,listOfParent);
+            if (rangeFromIrrigatedReversed.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
+                this.listOfCrestOneRangeToIrrigated.add(child);
+            }
+        } else if (candidateNewValue < this.rangeFromIrrigatedReversed.get(child)){
+            if (rangeFromIrrigatedReversed.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
+                this.listOfCrestOneRangeToIrrigated.add(child);
+            }
+            this.rangeFromIrrigatedReversed.put(child, candidateNewValue);
+            this.linkCrestChildrenToCrestParent.put(child, new ArrayList<Crest>(Arrays.asList(parent)));
         }
     }
 
@@ -104,6 +153,13 @@ public class CrestGestionnary {
         }
     }
 
+    /**
+     * Method use to
+     * @param allCrestImplemented
+     * @param newParentChildless
+     * @param i
+     * @return
+     */
     private ArrayList<Crest> createAndImplementTheChildCrestOfTheParent(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, int i) {
         Crest parent = this.parentChildless.get(i);
         ArrayList<Crest> listOfChildrenForParent = new ArrayList<>();
@@ -117,7 +173,19 @@ public class CrestGestionnary {
         return newParentChildless;
     }
 
+    /**
+     *
+     * @param allCrestImplemented
+     * @param newParentChildless
+     * @param parent
+     * @param listOfChildrenForParent
+     * @param child
+     * @return
+     */
     private ArrayList<Crest> makeImplementationNeededForChildCrest(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, Crest parent, ArrayList<Crest> listOfChildrenForParent, Crest child) {
+        System.out.println("(((((((((((((((((((((((");
+        System.out.println(allCrestImplemented.contains(child));
+        System.out.println(this.rangeFromIrrigatedReversed.get(parent));
         if (allCrestImplemented.contains(child)){
             int candidateNewValue = this.rangeFromIrrigatedReversed.get(parent)+1;
             updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewValue);
@@ -132,39 +200,29 @@ public class CrestGestionnary {
         return newParentChildless;
     }
 
+    /**
+     *
+     * @param box
+     */
     private void updateCrestVariableWithNewBoxAdded(HexagoneBox box){
         if (box.getColor() == Color.Lac){
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
-                linkCrestParentToCrestChildren.put(box.getListOfCrestAroundBox().get(i), new ArrayList<>());
-                parentChildless.add(box.getListOfCrestAroundBox().get(i));
-                listOfCrestOneRangeToIrrigated.add(box.getListOfCrestAroundBox().get(i));
+                Crest crest = box.getListOfCrestAroundBox().get(i);
+                linkCrestParentToCrestChildren.put(crest, new ArrayList<>());
+                parentChildless.add(crest);
+                listOfCrestOneRangeToIrrigated.add(crest);
+                rangeFromIrrigatedReversed.put(crest,0);
             }
+            ArrayList<Crest> newParentChildless = new ArrayList<>();
+            //actualizeCrestVariable(box.getListOfCrestAroundBox());
+            for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
+                System.out.println(box.getListOfCrestAroundBox());
+                newParentChildless = createAndImplementTheChildCrestOfTheParent(this.linkCrestParentToCrestChildren.keySet(),newParentChildless,i);
+            }
+            this.parentChildless = newParentChildless;
+            //actualizeCrestVariable(new ArrayList<>(Arrays.asList(new Crest(5,-10,2))));
         } else {
             actualizeCrestVariable(box.getListOfCrestAroundBox());
         }
-    }
-
-
-    /**
-     * Ne gère pas le cas où une des 2 tuiles n'est pas placé
-     * @param crest
-     */
-    public void placeIrrigation(Crest crest, HashMap<Integer,HexagoneBox> placedBox){
-        if (this.listOfCrestOneRangeToIrrigated.contains(crest)){
-            crest.setIrrigated(true);
-            this.rangeFromIrrigatedReversed.put(crest,0);
-            this.listOfCrestOneRangeToIrrigated.remove(crest);
-            rewriteRangeToIrrigatedAfterNewIrrigation(crest);
-            for (int i = 0; i<2;i++) {
-                if (placedBox.containsKey(crest.getIdOfAdjacentBox()[i])) {
-                    placedBox.get(crest.getIdOfAdjacentBox()[i]).setIrrigate(true);
-                } else {
-                    this.alreadyIrrigated.add(placedBox.get(crest.getIdOfAdjacentBox()[i]));
-                }
-            }
-        } else {
-            // TODO throw an error because impossible to place an Irrigation where there is no box
-        }
-
     }
 }

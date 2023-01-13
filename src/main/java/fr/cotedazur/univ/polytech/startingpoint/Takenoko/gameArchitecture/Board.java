@@ -4,6 +4,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
@@ -40,32 +41,41 @@ public class Board {
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private final CrestGestionnary crestGestionnary;
 
-
+    public CrestGestionnary getCrestGestionnary() {
+        return crestGestionnary;
+    }
 
     public ArrayList<HexagoneBox> getCrestGestionnaryAlreadyIrrigated(){
         return crestGestionnary.getAlreadyIrrigated();
     }
 
     public void placeIrrigation(Crest crest){
-        crestGestionnary.placeIrrigation(crest,this.placedBox);
+        try {
+            crestGestionnary.placeIrrigation(crest,this.placedBox);
+        } catch (ImpossibleToPlaceIrrigationException e) {
+            System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+            throw new RuntimeException(e);
+        }
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.placedBox = new HashMap<>();
         this.crestGestionnary = new CrestGestionnary();
+        this.AvailableBox = new ArrayList<>();
+        this.generateLac();
+        this.gardenerCoords = new int[]{0,0,0};
+    }
+
+    private void generateLac(){
         HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
         this.numberBoxPlaced = 1;
-
-        this.AvailableBox = new ArrayList<>();
         for (int i=1;i<7;i++){
             this.AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
         }
-        
         this.placedBox.put(lac.getId(),lac);
         crestGestionnary.launchUpdatingCrestWithAddingNewBox(lac);
         lac.launchIrrigationChecking();
-        this.gardenerCoords = new int[]{0,0,0};
     }
 
     public int[] getGardenerCoords() {

@@ -242,7 +242,7 @@ public class HexagoneBox {
             this.irrigate = true;
         } else {
             //TODO change below to false when add irrigation option to the game
-            this.irrigate = true;
+            this.irrigate = false;
         }
     }
 

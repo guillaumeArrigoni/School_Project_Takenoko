@@ -258,10 +258,4 @@ class GestionObjectivesTest {
     void testCheckParcelleObjectives(Objective objective,boolean isCorrect) {
         assertEquals(gestionObjectives.checkParcelleObjectives(objective),isCorrect);
     }
-
-    @Test
-    void printWinner() {
-    }
-
-
 }

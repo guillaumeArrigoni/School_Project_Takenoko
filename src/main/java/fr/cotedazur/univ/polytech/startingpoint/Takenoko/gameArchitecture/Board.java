@@ -55,7 +55,6 @@ public class Board {
         this.gardenerCoords = new int[]{0,0,0};
         this.cardDeck = new ArrayList<>();
         setCardDeck();
-        for (HexagoneBox box : this.cardDeck) System.out.println(box.getColor());
     }
 
     public void setCardDeck() {

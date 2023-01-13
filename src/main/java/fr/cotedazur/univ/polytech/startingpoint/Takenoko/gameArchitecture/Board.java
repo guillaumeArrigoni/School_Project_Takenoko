@@ -6,10 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 
 public class Board {
@@ -41,6 +38,7 @@ public class Board {
     private int[] gardenerCoords;
     private int[] pandaCoords;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private ArrayList<HexagoneBox> cardDeck;
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -55,6 +53,21 @@ public class Board {
         
         this.placedBox.put(lac.getId(),lac);
         this.gardenerCoords = new int[]{0,0,0};
+        this.cardDeck = new ArrayList<>();
+        setCardDeck();
+        for (HexagoneBox box : this.cardDeck) System.out.println(box.getColor());
+    }
+
+    public void setCardDeck() {
+        for (int i = 0; i < 9; i++) {
+            HexagoneBox newRedBox = new HexagoneBox(Color.Rouge, Special.Classique, retrieveBoxIdWithParameters);
+            HexagoneBox newGreenBox = new HexagoneBox(Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
+            HexagoneBox newYellowBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+            this.cardDeck.add(newYellowBox);
+            this.cardDeck.add(newRedBox);
+            this.cardDeck.add(newGreenBox);
+        }
+        Collections.shuffle(this.cardDeck);
     }
 
     public int[] getGardenerCoords() {

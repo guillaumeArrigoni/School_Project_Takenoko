@@ -95,8 +95,7 @@ public class CrestGestionnary {
      */
     private void actualizeCrestVariable(ArrayList<Crest> newCrestToImplement){
         Set<Crest> allCrestImplemented = this.linkCrestParentToCrestChildren.keySet();
-        boolean doesAllTheNewCrestToImplementAreExisting = !this.linkCrestParentToCrestChildren.keySet().containsAll(newCrestToImplement);
-        while (doesAllTheNewCrestToImplementAreExisting){
+        while (!this.linkCrestParentToCrestChildren.keySet().containsAll(newCrestToImplement)){
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             for(int i = 0; i< this.parentChildless.size(); i++){
                 newParentChildless = createAndImplementTheChildCrestOfTheParent(allCrestImplemented, newParentChildless, i);

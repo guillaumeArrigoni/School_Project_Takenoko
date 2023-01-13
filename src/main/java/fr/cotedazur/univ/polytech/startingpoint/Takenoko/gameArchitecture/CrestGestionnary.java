@@ -2,9 +2,6 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
 
@@ -33,7 +30,7 @@ public class CrestGestionnary {
         return alreadyIrrigated;
     }
 
-    public void launchUpdatingCRestWithAddingNewBox(HexagoneBox box){
+    public void launchUpdatingCrestWithAddingNewBox(HexagoneBox box){
         this.updateCrestVariableWithNewBoxAdded(box);
     }
 
@@ -102,25 +99,26 @@ public class CrestGestionnary {
         while (doesAllTheNewCrestToImplementAreExisting){
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             for(int i = 0; i< this.parentChildless.size(); i++){
-                createAndImplementTheChildCrestOfTheParent(allCrestImplemented, newParentChildless, i);
+                newParentChildless = createAndImplementTheChildCrestOfTheParent(allCrestImplemented, newParentChildless, i);
             }
             this.parentChildless = newParentChildless;
         }
     }
 
-    private void createAndImplementTheChildCrestOfTheParent(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, int i) {
+    private ArrayList<Crest> createAndImplementTheChildCrestOfTheParent(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, int i) {
         Crest parent = this.parentChildless.get(i);
         ArrayList<Crest> listOfChildrenForParent = new ArrayList<>();
         for (int k = 0;k<parent.getListOfCrestChildren().size();k++){
             ArrayList<Integer> listOfParametersOfChild = parent.getListOfCrestChildren().get(k);
             Crest child = new Crest(listOfParametersOfChild.get(0),listOfParametersOfChild.get(1),listOfParametersOfChild.get(2));
             listOfChildrenForParent.add(child);
-            makeImplementationNeededForChildCrest(allCrestImplemented, newParentChildless, parent, listOfChildrenForParent, child);
+            newParentChildless = makeImplementationNeededForChildCrest(allCrestImplemented, newParentChildless, parent, listOfChildrenForParent, child);
         }
         this.linkCrestParentToCrestChildren.put(parent,listOfChildrenForParent);
+        return newParentChildless;
     }
 
-    private void makeImplementationNeededForChildCrest(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, Crest parent, ArrayList<Crest> listOfChildrenForParent, Crest child) {
+    private ArrayList<Crest> makeImplementationNeededForChildCrest(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, Crest parent, ArrayList<Crest> listOfChildrenForParent, Crest child) {
         if (allCrestImplemented.contains(child)){
             int candidateNewValue = this.rangeFromIrrigatedReversed.get(parent)+1;
             updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewValue);
@@ -132,6 +130,7 @@ public class CrestGestionnary {
             this.linkCrestParentToCrestChildren.put(child,new ArrayList<>());
             newParentChildless.add(child);
         }
+        return newParentChildless;
     }
 
     private void updateCrestVariableWithNewBoxAdded(HexagoneBox box){

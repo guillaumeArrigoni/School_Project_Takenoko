@@ -237,8 +237,8 @@ public class HexagoneBox {
     }
 
     private void setAutoIrrigation(){
-        if (board.getAlreadyIrrigated().contains(this)){
-            board.getAlreadyIrrigated().removeAll(Arrays.asList(this));
+        if (board.getCrestGestionnaryAlreadyIrrigated().contains(this)){
+            board.getCrestGestionnaryAlreadyIrrigated().removeAll(Arrays.asList(this));
             this.irrigate = true;
         } else {
             //TODO change below to false when add irrigation option to the game

@@ -9,11 +9,23 @@ import java.util.*;
 
 public class CrestGestionnary {
 
-    private HashMap<Crest,Integer> rangeFromIrrigatedReversed;
+    private HashMap<Crest,Integer> rangeFromIrrigated;
     private HashMap<Crest, ArrayList<Crest>> linkCrestChildrenToCrestParent;
     private HashMap<Crest, ArrayList<Crest>> linkCrestParentToCrestChildren;
     private ArrayList<Crest> parentChildless; // parent with no children
     private ArrayList<Integer> alreadyIrrigated; // for the hexagoneBox not place but that are
+
+    public HashMap<Crest, Integer> getRangeFromIrrigated() {
+        return rangeFromIrrigated;
+    }
+
+    public HashMap<Crest, ArrayList<Crest>> getLinkCrestChildrenToCrestParent() {
+        return linkCrestChildrenToCrestParent;
+    }
+
+    public HashMap<Crest, ArrayList<Crest>> getLinkCrestParentToCrestChildren() {
+        return linkCrestParentToCrestChildren;
+    }
 
     public ArrayList<Crest> getParentChildless() {
         return parentChildless;
@@ -29,7 +41,7 @@ public class CrestGestionnary {
     public CrestGestionnary(){
         this.linkCrestParentToCrestChildren = new HashMap<>();
         this.linkCrestChildrenToCrestParent = new HashMap<>();
-        this.rangeFromIrrigatedReversed = new HashMap<>();
+        this.rangeFromIrrigated = new HashMap<>();
         this.parentChildless = new ArrayList<>();
         this.alreadyIrrigated = new ArrayList<>();
         this.listOfCrestOneRangeToIrrigated = new ArrayList<>();
@@ -51,7 +63,7 @@ public class CrestGestionnary {
     public void placeIrrigation(Crest crest, HashMap<Integer,HexagoneBox> placedBox) throws ImpossibleToPlaceIrrigationException {
         if (irrigationCanBePlace(crest, placedBox)){
             crest.setIrrigated(true);
-            this.rangeFromIrrigatedReversed.put(crest,0);
+            this.rangeFromIrrigated.put(crest,0);
             this.listOfCrestOneRangeToIrrigated.remove(crest);
             rewriteRangeToIrrigatedAfterNewIrrigation(crest);
             for (int i = 0; i<2;i++) {
@@ -85,7 +97,7 @@ public class CrestGestionnary {
             ArrayList<Crest> children = this.linkCrestParentToCrestChildren.get(parent);
             for (int i = 0; i<children.size();i++){
                 Crest child = children.get(i);
-                int candidateNewRange = rangeFromIrrigatedReversed.get(parent)+1;
+                int candidateNewRange = rangeFromIrrigated.get(parent)+1;
                 updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewRange);
                 rewriteRangeToIrrigatedAfterNewIrrigation(child);
             }
@@ -106,18 +118,18 @@ public class CrestGestionnary {
      * @param candidateNewValue : the new range that may be added to the child if the condition are passed
      */
     private void updateChildRangeIfLessOrEqualsThanBefore(Crest parent, Crest child, int candidateNewValue) {
-        if (candidateNewValue == this.rangeFromIrrigatedReversed.get(child)){
+        if (candidateNewValue == this.rangeFromIrrigated.get(child)){
             ArrayList<Crest> listOfParent = this.linkCrestChildrenToCrestParent.get(child);
             listOfParent.add(parent);
             this.linkCrestChildrenToCrestParent.put(child,listOfParent);
-            if (rangeFromIrrigatedReversed.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
+            if (rangeFromIrrigated.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
                 this.listOfCrestOneRangeToIrrigated.add(child);
             }
-        } else if (candidateNewValue < this.rangeFromIrrigatedReversed.get(child)){
-            if (rangeFromIrrigatedReversed.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
+        } else if (candidateNewValue < this.rangeFromIrrigated.get(child)){
+            if (rangeFromIrrigated.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
                 this.listOfCrestOneRangeToIrrigated.add(child);
             }
-            this.rangeFromIrrigatedReversed.put(child, candidateNewValue);
+            this.rangeFromIrrigated.put(child, candidateNewValue);
             this.linkCrestChildrenToCrestParent.put(child, new ArrayList<Crest>(Arrays.asList(parent)));
         }
     }
@@ -176,13 +188,13 @@ public class CrestGestionnary {
      */
     private ArrayList<Crest> makeImplementationNeededForChildCrest(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, Crest parent, ArrayList<Crest> listOfChildrenForParent, Crest child) {
         if (allCrestImplemented.contains(child)){
-            int candidateNewValue = this.rangeFromIrrigatedReversed.get(parent)+1;
+            int candidateNewValue = this.rangeFromIrrigated.get(parent)+1;
             updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewValue);
             listOfChildrenForParent.remove(child);
         } else {
             this.linkCrestChildrenToCrestParent.put(child,new ArrayList<>(Arrays.asList(parent)));
-            int rangeOfParent = this.rangeFromIrrigatedReversed.get(parent);
-            this.rangeFromIrrigatedReversed.put(child,rangeOfParent + 1);
+            int rangeOfParent = this.rangeFromIrrigated.get(parent);
+            this.rangeFromIrrigated.put(child,rangeOfParent + 1);
             this.linkCrestParentToCrestChildren.put(child,new ArrayList<>());
             newParentChildless.add(child);
         }
@@ -200,7 +212,7 @@ public class CrestGestionnary {
                 linkCrestParentToCrestChildren.put(crest, new ArrayList<>());
                 parentChildless.add(crest);
                 listOfCrestOneRangeToIrrigated.add(crest);
-                rangeFromIrrigatedReversed.put(crest,0);
+                rangeFromIrrigated.put(crest,0);
             }
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             //actualizeCrestVariable(box.getListOfCrestAroundBox());

@@ -4,12 +4,15 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
 
 
 public class Board {
+
+    private final boolean allIrrigated;
 
     /**
      * Return the number of box placed in the board
@@ -39,27 +42,60 @@ public class Board {
     private int[] pandaCoords;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private ArrayList<HexagoneBox> cardDeck;
+    private final CrestGestionnary crestGestionnary;
 
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+    public CrestGestionnary getCrestGestionnary() {
+        return crestGestionnary;
+    }
+
+    public ArrayList<Integer> getCrestGestionnaryAlreadyIrrigated(){
+        return crestGestionnary.getAlreadyIrrigated();
+    }
+
+    public boolean getAllIrrigated(){
+        return this.allIrrigated;
+    }
+
+    public void placeIrrigation(Crest crest){
+        try {
+            crestGestionnary.placeIrrigation(crest,this.placedBox);
+        } catch (ImpossibleToPlaceIrrigationException e) {
+            System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated){
+        this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.placedBox = new HashMap<>();
-        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters);
-        this.numberBoxPlaced = 1;
-
+        this.crestGestionnary = new CrestGestionnary();
         this.AvailableBox = new ArrayList<>();
-        for (int i=1;i<7;i++){
-            this.AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
-        }
-        
-        this.placedBox.put(lac.getId(),lac);
+        this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
         this.cardDeck = new ArrayList<>();
         setCardDeck();
     }
 
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        //TODO set allIrrigated to false when irrigation add to the game
+        this(retrieveBoxIdWithParameters,true);
+    }
+
+    private void generateLac(){
+        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
+        this.numberBoxPlaced = 1;
+        for (int i=1;i<7;i++){
+            this.AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
+        }
+        this.placedBox.put(lac.getId(),lac);
+        crestGestionnary.launchUpdatingCrestWithAddingNewBox(lac);
+        lac.launchIrrigationChecking();
+    }
+
     public void setCardDeck() {
         for (int i = 0; i < 9; i++) {
-            HexagoneBox newYellowBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+            HexagoneBox newYellowBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,this);
             switch (i) {
                 case 0 -> newYellowBox.setSpecial(Special.Engrais);
                 case 1 -> newYellowBox.setSpecial(Special.Protéger);
@@ -70,7 +106,7 @@ public class Board {
             this.cardDeck.add(newYellowBox);
         }
         for (int i = 0; i < 11; i++) {
-            HexagoneBox newGreenBox = new HexagoneBox(Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
+            HexagoneBox newGreenBox = new HexagoneBox(Color.Vert, Special.Classique, retrieveBoxIdWithParameters,this);
             switch (i) {
                 case 0 -> newGreenBox.setSpecial(Special.Engrais);
                 case 1, 2 -> newGreenBox.setSpecial(Special.Protéger);
@@ -81,7 +117,7 @@ public class Board {
             this.cardDeck.add(newGreenBox);
         }
         for (int i = 0; i < 7; i++) {
-            HexagoneBox newRedBox = new HexagoneBox(Color.Rouge, Special.Classique, retrieveBoxIdWithParameters);
+            HexagoneBox newRedBox = new HexagoneBox(Color.Rouge, Special.Classique, retrieveBoxIdWithParameters,this);
             switch (i) {
                 case 0 -> newRedBox.setSpecial(Special.Engrais);
                 case 1 -> newRedBox.setSpecial(Special.Protéger);
@@ -228,5 +264,7 @@ public class Board {
             AvailableBox.remove(box.getCoordinates());
         }
         placedBox.put(box.getId(),box);
+        crestGestionnary.launchUpdatingCrestWithAddingNewBox(box);
+        box.launchIrrigationChecking();
     }
 }

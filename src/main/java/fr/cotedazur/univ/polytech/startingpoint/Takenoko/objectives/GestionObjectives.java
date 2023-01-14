@@ -260,9 +260,9 @@ public class GestionObjectives {
     public void printWinner(Bot bot1, Bot bot2){
          int i = bot1.getScore() - bot2.getScore();
          if(i > 0){
-             System.out.println("Bot1 a gagné avec " + bot1.getScore() + " points !");
+             System.out.println( bot1.getName() + " a gagné avec " + bot1.getScore() + " points !");
         } else if (i < 0) {
-             System.out.println("Bot2 a gagné avec " + bot2.getScore() + " points !");
+             System.out.println(bot2.getName() + " a gagné avec " + bot2.getScore() + " points !");
          } else {
              System.out.println("Egalité !");
          }

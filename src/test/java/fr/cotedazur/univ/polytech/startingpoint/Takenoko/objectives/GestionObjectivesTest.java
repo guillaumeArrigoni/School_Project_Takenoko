@@ -10,6 +10,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -65,18 +66,19 @@ class GestionObjectivesTest {
         meteoDice = new MeteoDice();
         random = new Random();
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
+        gestionObjectives.initialize();
         bot = new BotRandom("Bot",board,random, meteoDice,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
-        Greenbox1 = new HexagoneBox(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
-        Greenbox2 = new HexagoneBox(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
-        Greenbox3 = new HexagoneBox(-1, 2, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
-        Greenbox4 = new HexagoneBox(-1, 0, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
-        Greenbox5 = new HexagoneBox(0, -1, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
-        Greenbox6 = new HexagoneBox(-2, 2, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
-        Yellowbox = new HexagoneBox(0, 2, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
-        Yellowbox2 = new HexagoneBox(1, 1, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
-        Redbox = new HexagoneBox(1,-1,0,Color.Rouge,Special.Classique,retrieveBoxIdWithParameters);
-        YellowEngraisbox = new HexagoneBox(1,0,-1,Color.Jaune,Special.Engrais,retrieveBoxIdWithParameters);
-        RedProtegerbox = new HexagoneBox(-2,1,1,Color.Rouge,Special.Protéger,retrieveBoxIdWithParameters);
+        Greenbox1 = new HexagoneBox(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox2 = new HexagoneBox(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox3 = new HexagoneBox(-1, 2, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox4 = new HexagoneBox(-1, 0, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox5 = new HexagoneBox(0, -1, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox6 = new HexagoneBox(-2, 2, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Yellowbox = new HexagoneBox(0, 2, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        Yellowbox2 = new HexagoneBox(1, 1, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        Redbox = new HexagoneBox(1,-1,0,Color.Rouge,Special.Classique,retrieveBoxIdWithParameters,board);
+        YellowEngraisbox = new HexagoneBox(1,0,-1,Color.Jaune,Special.Engrais,retrieveBoxIdWithParameters,board);
+        RedProtegerbox = new HexagoneBox(-2,1,1,Color.Rouge,Special.Protéger,retrieveBoxIdWithParameters,board);
         triangleVert = Objective.POSER_TRIANGLE_VERT;
         ligneVert = Objective.POSER_LIGNE_VERTE;
         courbeVert = Objective.POSER_COURBE_VERTE;
@@ -86,6 +88,11 @@ class GestionObjectivesTest {
         planterBambouJauneEngrais = Objective.PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE;
         planterBambouRougeProteger = Objective.PLANTER_SUR_PROTEGER_BAMBOU_ROUGE;
         planterDeuxBambousRouges = Objective.PLANTER_DEUX_BAMBOUS_ROUGES;
+        bot.getObjectives().add(triangleVert);
+        bot.getObjectives().add(ligneVert);
+        bot.getObjectives().add(planterBambouJauneClassique);
+        bot.getObjectives().add(planterBambouRougeProteger);
+        bot.getObjectives().add(planterDeuxBambousRouges);
         board.addBox(Greenbox1);
         board.addBox(Greenbox2);
         board.addBox(Greenbox3);
@@ -153,42 +160,81 @@ class GestionObjectivesTest {
 
     @Test
     void initialize() {
+        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        gestionObjectives2.initialize();
+        assertEquals(15, gestionObjectives2.getParcelleObjectifs().size());
+        assertEquals(15, gestionObjectives2.getJardinierObjectifs().size());
+        assertEquals(15, gestionObjectives2.getPandaObjectifs().size());
+
     }
 
     @Test
     void getParcelleObjectifs() {
+        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        gestionObjectives2.initialize();
+        assertEquals(15, gestionObjectives2.getParcelleObjectifs().size());
     }
 
     @Test
     void getJardinierObjectifs() {
+        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        gestionObjectives2.initialize();
+        assertEquals(15, gestionObjectives2.getJardinierObjectifs().size());
     }
 
     @Test
     void getPandaObjectifs() {
+        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        gestionObjectives2.initialize();
+        assertEquals(15, gestionObjectives2.getPandaObjectifs().size());
     }
 
     @Test
     void rollObjective() {
+        Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
+        for(int i = 0;i<5; i++){
+            gestionObjectives.rollObjective(botRoll);
+        }
+        assertEquals(5, botRoll.getObjectives().size());
+
     }
 
     @Test
     void rollParcelleObjective() {
+        Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
+        gestionObjectives.rollParcelleObjective(botRoll);
+        assertEquals(TypeObjective.PARCELLE, botRoll.getObjectives().get(0).getType());
+
     }
 
     @Test
     void rollJardinierObjective() {
+        Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
+        gestionObjectives.rollJardinierObjective(botRoll);
+        assertEquals(TypeObjective.JARDINIER,botRoll.getObjectives().get(0).getType());
     }
 
     @Test
     void rollPandaObjective() {
+        Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
+        gestionObjectives.rollPandaObjective(botRoll);
+        assertEquals(TypeObjective.PANDA,botRoll.getObjectives().get(0).getType());
+    }
+    @Test
+    void checkIfBotCanDrawAnObjective() {
+        bot.getObjectives().add(triangleVert);
+        bot.getObjectives().add(ligneVert);
+        bot.getObjectives().add(planterBambouJauneClassique);
+        bot.getObjectives().add(planterBambouRougeProteger);
+        bot.getObjectives().add(planterDeuxBambousRouges);
+        assertFalse(gestionObjectives.checkIfBotCanDrawAnObjective(bot));
     }
 
     @Test
     void checkObjectives() {
-    }
-
-    @Test
-    void checkOneObjective() {
+        assertEquals(5, bot.getObjectives().size());
+        gestionObjectives.checkObjectives(bot);
+        assertEquals(1, bot.getObjectives().size());
     }
 
     @ParameterizedTest
@@ -211,13 +257,5 @@ class GestionObjectivesTest {
     @MethodSource("provideParcelleObjectiveChecking")
     void testCheckParcelleObjectives(Objective objective,boolean isCorrect) {
         assertEquals(gestionObjectives.checkParcelleObjectives(objective),isCorrect);
-    }
-
-    @Test
-    void printWinner() {
-    }
-
-    @Test
-    void checkIfBotCanDrawAnObjective() {
     }
 }

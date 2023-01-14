@@ -41,26 +41,22 @@ class CrestGestionnaryTest {
     @Order(1)
     public void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters);
+        board = new Board(retrieveBoxIdWithParameters,false);
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
 
     }
 
-
-
-    @Test
-    void getAlreadyIrrigated() {
-    }
-
     @Test
     void launchUpdatingCrestWithAddingNewBox() {
+
     }
 
     //Should work when irrigation add to the game (box not always irrigated)
     @Test
     void testPlaceIrrigation_WithTwoBoxPlaced() throws ImpossibleToPlaceIrrigationException {
+        System.out.println("\nRunning test from : testPlaceIrrigation_WithTwoBoxPlaced\n");
         HexagoneBox BoxAimedToBeIrrigated = setup_testPlaceIrrigation_WithTwoBoxPlaced();
         assertFalse(BoxAimedToBeIrrigated.isIrrigate());
         System.out.println("First test passed");
@@ -72,8 +68,27 @@ class CrestGestionnaryTest {
         board.getCrestGestionnary().placeIrrigation(secondCrestToPlace, board.getPlacedBox());
         assertTrue(BoxAimedToBeIrrigated.isIrrigate());
         System.out.println("Third test passed");
-        System.out.println(board.getCrestGestionnary().getParentChildless());
-        System.out.println(board.getCrestGestionnary().getListOfCrestOneRangeToIrrigated());
+    }
+
+    @Test
+    void testPlaceIrrigation_WithOneBoxPlaced() throws ImpossibleToPlaceIrrigationException {
+        System.out.println("\nRunning test from : testPlaceIrrigation_WithOneBoxPlaced\n");
+        HexagoneBox BoxAlreadyIrrigated = setup_testPlaceIrrigation_WithOneBoxPlaced();
+        assertTrue(BoxAlreadyIrrigated.isIrrigate());
+        System.out.println("First test passed");
+        Crest crestToPlace = new Crest(5,-10,2);
+        Crest secondCrestToPlace = new Crest(5,-15,1);
+        board.getCrestGestionnary().placeIrrigation(crestToPlace, board.getPlacedBox());
+        board.getCrestGestionnary().placeIrrigation(secondCrestToPlace, board.getPlacedBox());
+        System.out.println("Second test passed"); //Because no Exception is thrown
+    }
+
+    @Test
+    void testPlaceIrrigation_ExceptionThrownZeroBoxPlaced() {
+        Crest nonAlreadyPlaced = new Crest(5,-10,2);
+        ImpossibleToPlaceIrrigationException exception = assertThrows(ImpossibleToPlaceIrrigationException.class, () -> {
+            board.getCrestGestionnary().placeIrrigation(nonAlreadyPlaced,board.getPlacedBox());
+        });
     }
 
     private HexagoneBox setup_testPlaceIrrigation_WithTwoBoxPlaced(){
@@ -86,11 +101,16 @@ class CrestGestionnaryTest {
         return boxIn13;
     }
 
-    @Test
-    void testPlaceIrrigation_ExceptionThrownZeroBoxPlaced() {
-        Crest nonAlreadyPlaced = new Crest(5,-10,2);
-        ImpossibleToPlaceIrrigationException exception = assertThrows(ImpossibleToPlaceIrrigationException.class, () -> {
-            board.getCrestGestionnary().placeIrrigation(nonAlreadyPlaced,board.getPlacedBox());
-        });
+    private HexagoneBox setup_testPlaceIrrigation_WithOneBoxPlaced(){
+        HexagoneBox boxIn5 = new HexagoneBox(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBox boxIn4 = new HexagoneBox(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        board.addBox(boxIn5);
+        board.addBox(boxIn4);
+        return boxIn4;
+    }
+
+    @AfterAll
+    public static void ending(){
+        System.out.println("\nAll test passed successfully !");
     }
 }

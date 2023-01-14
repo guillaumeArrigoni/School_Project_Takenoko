@@ -12,6 +12,8 @@ import java.util.*;
 
 public class Board {
 
+    private final boolean allIrrigated;
+
     /**
      * Return the number of box placed in the board
      * WARNING : the lake is counted in the number of box placed
@@ -45,8 +47,12 @@ public class Board {
         return crestGestionnary;
     }
 
-    public ArrayList<HexagoneBox> getCrestGestionnaryAlreadyIrrigated(){
+    public ArrayList<Integer> getCrestGestionnaryAlreadyIrrigated(){
         return crestGestionnary.getAlreadyIrrigated();
+    }
+
+    public boolean getAllIrrigated(){
+        return this.allIrrigated;
     }
 
     public void placeIrrigation(Crest crest){
@@ -58,13 +64,19 @@ public class Board {
         }
     }
 
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated){
+        this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.placedBox = new HashMap<>();
         this.crestGestionnary = new CrestGestionnary();
         this.AvailableBox = new ArrayList<>();
         this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
+    }
+
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        //TODO set allIrrigated to false when irrigation add to the game
+        this(retrieveBoxIdWithParameters,true);
     }
 
     private void generateLac(){

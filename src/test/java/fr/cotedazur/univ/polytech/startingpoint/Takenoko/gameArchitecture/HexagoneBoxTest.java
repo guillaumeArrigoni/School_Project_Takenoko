@@ -6,6 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,7 @@ class HexagoneBoxTest {
     @Order(1)
     public static void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters);
+        board = new Board(retrieveBoxIdWithParameters,true);
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
@@ -125,6 +126,18 @@ class HexagoneBoxTest {
                 );
     }
 
+    private static Stream<Arguments> provideIrrigationAutomatic(){
+        RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
+        Board board = new Board(retrieveBoxIdWithParameters,false);
+        HexagoneBox vertClassique04 = new HexagoneBox(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        board.addBox(vertClassique04);
+        HexagoneBox vertClassique05 = new HexagoneBox(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBox vertClassique13 = new HexagoneBox(1,-2,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        board.addBox(vertClassique05);
+        board.addBox(vertClassique13);
+        return Stream.of(Arguments.of(vertClassique04,vertClassique13));
+    }
+
     private boolean equals(int[] coord1, int[] coord2){
         return (coord1[0]==coord2[0] &&
                 coord1[1]==coord2[1] &&
@@ -178,12 +191,15 @@ class HexagoneBoxTest {
     /**
      * Test should work when box are not irrigated by default.
      */
-    @Test
-    void testIrrigationAutomatic(){
-        RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        Board board = new Board(retrieveBoxIdWithParameters);
-        HexagoneBox vertClassique = new HexagoneBox(0,1,-1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        board.addBox(vertClassique);
-        assertEquals(true,vertClassique.isIrrigate());
+    @ParameterizedTest
+    @MethodSource("provideIrrigationAutomatic")
+    void testIrrigationAutomatic(HexagoneBox vertClassique04, HexagoneBox vertClassique13){
+        assertTrue(vertClassique04.isIrrigate());
+        assertFalse(vertClassique13.isIrrigate());
+    }
+
+    @AfterAll
+    public static void ending(){
+        System.out.println("\nAll test passed successfully !");
     }
 }

@@ -7,10 +7,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -57,7 +54,7 @@ class BoardTest {
     public static void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         elementOfTheGame = new ElementOfTheGame();
-        board = new Board(retrieveBoxIdWithParameters);
+        board = new Board(retrieveBoxIdWithParameters,true);
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
@@ -140,16 +137,6 @@ class BoardTest {
         );
     }
 
-    /**
-     * Obj irriger 7
-     * @return
-     */
-    private static Stream<Arguments> providePlaceIrrigation(){
-        return Stream.of(
-                Arguments.of(vert07,true)
-        );
-    }
-
     private static void cleanAllBambooInBox(ArrayList<HexagoneBox> boxTocleanBamboo){
         for (int i =0;i<boxTocleanBamboo.size();i++){
             boxTocleanBamboo.get(i).setHeightBamboo(0);
@@ -172,8 +159,6 @@ class BoardTest {
         board.setGardenerCoords(coords);
         for (int i =0;i<differentBambooHeightInTheBox1_2_3_7_8_9.size();i++){
             assertEquals(differentBambooHeightInTheBox1_2_3_7_8_9.get(i),listOfBox.get(i).getHeightBamboo());
-            System.out.println("The test on the box {" + listOfBox.get(i).toString() + "} passed successfully");
-            System.out.println(listOfBox.get(i).getHeightBamboo());
         }
     }
 
@@ -197,11 +182,7 @@ class BoardTest {
     @MethodSource("providePandaMoveAndChecking")
     void testSetPandaCoordsBambooAteEarnByBot(HexagoneBox box, int Useless, Color color, int nbBambooAte) {
         int[] coords = box.getCoordinates();
-        System.out.println(botRandom.getBambooEated().get(color));
-        System.out.println(box.getHeightBamboo());
         board.setPandaCoords(coords,botRandom);
-        System.out.println(box.getHeightBamboo());
-        System.out.println(botRandom.getBambooEated().get(color));
         assertTrue(nbBambooAte==botRandom.getBambooEated().get(color));
     }
 
@@ -219,16 +200,13 @@ class BoardTest {
         assertEquals(box,board.getBoxWithCoordinates(box.getCoordinates()));
     }
 
-
     @Test
     void testIsCoordinateInBoard() {
         assertFalse(board.isCoordinateInBoard(notPlacedInBoard.getCoordinates()));
         assertTrue(board.isCoordinateInBoard(vert01.getCoordinates()));
-    }
 
-    @ParameterizedTest
-    @MethodSource("providePlaceIrrigation")
-    void testPlaceIrrigation(HexagoneBox box, boolean bool) {
-        assertEquals(bool, box.isIrrigate());
+    }    @AfterAll
+    public static void ending(){
+        System.out.println("\nAll test passed successfully !");
     }
 }

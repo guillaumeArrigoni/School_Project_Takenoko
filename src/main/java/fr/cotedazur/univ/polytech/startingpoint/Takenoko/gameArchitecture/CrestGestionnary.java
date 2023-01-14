@@ -13,7 +13,7 @@ public class CrestGestionnary {
     private HashMap<Crest, ArrayList<Crest>> linkCrestChildrenToCrestParent;
     private HashMap<Crest, ArrayList<Crest>> linkCrestParentToCrestChildren;
     private ArrayList<Crest> parentChildless; // parent with no children
-    private ArrayList<HexagoneBox> alreadyIrrigated; // for the hexagoneBox not place but that are
+    private ArrayList<Integer> alreadyIrrigated; // for the hexagoneBox not place but that are
 
     public ArrayList<Crest> getParentChildless() {
         return parentChildless;
@@ -35,7 +35,7 @@ public class CrestGestionnary {
         this.listOfCrestOneRangeToIrrigated = new ArrayList<>();
     }
 
-    public ArrayList<HexagoneBox> getAlreadyIrrigated() {
+    public ArrayList<Integer> getAlreadyIrrigated() {
         return alreadyIrrigated;
     }
 
@@ -58,20 +58,15 @@ public class CrestGestionnary {
                 if (placedBox.containsKey(crest.getIdOfAdjacentBox()[i])) {
                     placedBox.get(crest.getIdOfAdjacentBox()[i]).setIrrigate(true);
                 } else {
-                    this.alreadyIrrigated.add(placedBox.get(crest.getIdOfAdjacentBox()[i]));
+                    this.alreadyIrrigated.add(crest.getIdOfAdjacentBox()[i]);
                 }
             }
         } else {
             throw new ImpossibleToPlaceIrrigationException(crest);
-            // TODO throw an error because impossible to place an Irrigation where there is no box
         }
     }
 
     private boolean irrigationCanBePlace(Crest crest, HashMap<Integer,HexagoneBox> placedBox){
-        System.out.println(listOfCrestOneRangeToIrrigated);
-        System.out.println(crest);
-        System.out.println(linkCrestParentToCrestChildren.containsKey(crest));
-        System.out.println(linkCrestParentToCrestChildren.get(crest));
         return (this.listOfCrestOneRangeToIrrigated.contains(crest) && (
                 placedBox.containsKey(crest.getIdOfAdjacentBox()[0]) ||
                 placedBox.containsKey(crest.getIdOfAdjacentBox()[1]))
@@ -111,9 +106,6 @@ public class CrestGestionnary {
      * @param candidateNewValue : the new range that may be added to the child if the condition are passed
      */
     private void updateChildRangeIfLessOrEqualsThanBefore(Crest parent, Crest child, int candidateNewValue) {
-        System.out.println("rrrrr");
-        System.out.println(candidateNewValue);
-        System.out.println(rangeFromIrrigatedReversed.get(child));
         if (candidateNewValue == this.rangeFromIrrigatedReversed.get(child)){
             ArrayList<Crest> listOfParent = this.linkCrestChildrenToCrestParent.get(child);
             listOfParent.add(parent);
@@ -183,9 +175,6 @@ public class CrestGestionnary {
      * @return
      */
     private ArrayList<Crest> makeImplementationNeededForChildCrest(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, Crest parent, ArrayList<Crest> listOfChildrenForParent, Crest child) {
-        System.out.println("(((((((((((((((((((((((");
-        System.out.println(allCrestImplemented.contains(child));
-        System.out.println(this.rangeFromIrrigatedReversed.get(parent));
         if (allCrestImplemented.contains(child)){
             int candidateNewValue = this.rangeFromIrrigatedReversed.get(parent)+1;
             updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewValue);
@@ -216,7 +205,6 @@ public class CrestGestionnary {
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             //actualizeCrestVariable(box.getListOfCrestAroundBox());
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
-                System.out.println(box.getListOfCrestAroundBox());
                 newParentChildless = createAndImplementTheChildCrestOfTheParent(this.linkCrestParentToCrestChildren.keySet(),newParentChildless,i);
             }
             this.parentChildless = newParentChildless;

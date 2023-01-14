@@ -41,6 +41,7 @@ public class Board {
     private int[] gardenerCoords;
     private int[] pandaCoords;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private ArrayList<HexagoneBox> cardDeck;
     private final CrestGestionnary crestGestionnary;
 
     public CrestGestionnary getCrestGestionnary() {
@@ -72,6 +73,8 @@ public class Board {
         this.AvailableBox = new ArrayList<>();
         this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
+        this.cardDeck = new ArrayList<>();
+        setCardDeck();
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
@@ -88,6 +91,43 @@ public class Board {
         this.placedBox.put(lac.getId(),lac);
         crestGestionnary.launchUpdatingCrestWithAddingNewBox(lac);
         lac.launchIrrigationChecking();
+    }
+
+    public void setCardDeck() {
+        for (int i = 0; i < 9; i++) {
+            HexagoneBox newYellowBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+            switch (i) {
+                case 0 -> newYellowBox.setSpecial(Special.Engrais);
+                case 1 -> newYellowBox.setSpecial(Special.Protéger);
+                case 2 -> newYellowBox.setSpecial(Special.SourceEau);
+                default -> {
+                }
+            }
+            this.cardDeck.add(newYellowBox);
+        }
+        for (int i = 0; i < 11; i++) {
+            HexagoneBox newGreenBox = new HexagoneBox(Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
+            switch (i) {
+                case 0 -> newGreenBox.setSpecial(Special.Engrais);
+                case 1, 2 -> newGreenBox.setSpecial(Special.Protéger);
+                case 3, 4 -> newGreenBox.setSpecial(Special.SourceEau);
+                default -> {
+                }
+            }
+            this.cardDeck.add(newGreenBox);
+        }
+        for (int i = 0; i < 7; i++) {
+            HexagoneBox newRedBox = new HexagoneBox(Color.Rouge, Special.Classique, retrieveBoxIdWithParameters);
+            switch (i) {
+                case 0 -> newRedBox.setSpecial(Special.Engrais);
+                case 1 -> newRedBox.setSpecial(Special.Protéger);
+                case 2 -> newRedBox.setSpecial(Special.SourceEau);
+                default -> {
+                }
+            }
+            this.cardDeck.add(newRedBox);
+        }
+        Collections.shuffle(this.cardDeck);
     }
 
     public int[] getGardenerCoords() {

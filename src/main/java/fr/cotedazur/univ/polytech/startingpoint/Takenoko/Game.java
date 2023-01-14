@@ -19,7 +19,7 @@ public class Game {
     private List<Bot> playerList;
     private Board board;
     int turn;
-    int nbTurn;
+    int turnNumber;
     boolean playing;
     MeteoDice meteoDice;
 
@@ -27,7 +27,7 @@ public class Game {
         this.playerList = playerList;
         this.board = board;
         this.turn = 0;
-        this.nbTurn = 0;
+        this.turnNumber = 1;
         this.playing = true;
         this.meteoDice = new MeteoDice();
     }
@@ -49,7 +49,9 @@ public class Game {
         }
         int numberPlayer = this.playerList.size();
         while (playing) {
-            meteoDice.roll();
+            System.out.println("Tour n°" + turnNumber + " :");
+            if (turnNumber == 2) System.out.println("Deuxième tour, la météo entre en jeu !");
+            if (turnNumber != 1) meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);
             playingBot.playTurn();
             gestionnaire.checkObjectives(playingBot);
@@ -66,6 +68,7 @@ public class Game {
             }
             System.out.println("------------------------------------------");
             turn = (turn + 1)%numberPlayer;
+            this.turnNumber++;
         }
     }
 }

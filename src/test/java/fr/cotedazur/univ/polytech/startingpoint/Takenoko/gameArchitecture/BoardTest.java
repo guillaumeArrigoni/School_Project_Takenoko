@@ -138,8 +138,8 @@ class BoardTest {
     }
 
     private static void cleanAllBambooInBox(ArrayList<HexagoneBox> boxTocleanBamboo){
-        for (int i =0;i<boxTocleanBamboo.size();i++){
-            boxTocleanBamboo.get(i).setHeightBamboo(0);
+        for (HexagoneBox hexagoneBox : boxTocleanBamboo) {
+            hexagoneBox.setHeightBamboo(0);
         }
     }
 

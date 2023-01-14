@@ -95,7 +95,7 @@ public class Board {
 
     public void setCardDeck() {
         for (int i = 0; i < 9; i++) {
-            HexagoneBox newYellowBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters);
+            HexagoneBox newYellowBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,this);
             switch (i) {
                 case 0 -> newYellowBox.setSpecial(Special.Engrais);
                 case 1 -> newYellowBox.setSpecial(Special.Protéger);
@@ -106,7 +106,7 @@ public class Board {
             this.cardDeck.add(newYellowBox);
         }
         for (int i = 0; i < 11; i++) {
-            HexagoneBox newGreenBox = new HexagoneBox(Color.Vert, Special.Classique, retrieveBoxIdWithParameters);
+            HexagoneBox newGreenBox = new HexagoneBox(Color.Vert, Special.Classique, retrieveBoxIdWithParameters,this);
             switch (i) {
                 case 0 -> newGreenBox.setSpecial(Special.Engrais);
                 case 1, 2 -> newGreenBox.setSpecial(Special.Protéger);
@@ -117,7 +117,7 @@ public class Board {
             this.cardDeck.add(newGreenBox);
         }
         for (int i = 0; i < 7; i++) {
-            HexagoneBox newRedBox = new HexagoneBox(Color.Rouge, Special.Classique, retrieveBoxIdWithParameters);
+            HexagoneBox newRedBox = new HexagoneBox(Color.Rouge, Special.Classique, retrieveBoxIdWithParameters,this);
             switch (i) {
                 case 0 -> newRedBox.setSpecial(Special.Engrais);
                 case 1 -> newRedBox.setSpecial(Special.Protéger);
@@ -203,29 +203,6 @@ public class Board {
         int x = coord[0], y = coord[1], z = coord[2];
         int x1 = adjacentCoord[0], y1 = adjacentCoord[1], z1 = adjacentCoord[2];
         
-        if (x==x1) {
-            newCoord1 = new int[]{x+1,Math.min(y,y1),Math.min(z,z1)};
-            newCoord2 = new int[]{x-1,Math.max(y,y1),Math.max(z,z1)};
-        }
-        else if (y==y1) {
-            newCoord1 = new int[]{Math.min(x,x1),y+1,Math.min(z,z1)};
-            newCoord2 = new int[]{Math.max(x,x1),y-1,Math.max(z,z1)};
-        }
-        else {
-            newCoord1 = new int[]{Math.min(x,x1),Math.min(y,y1),z+1};
-            newCoord2 = new int[]{Math.max(x,x1),Math.max(y,y1),z-1};
-        }
-        addNewBoxInAvailableBox(newCoord1);
-        addNewBoxInAvailableBox(newCoord2);
-    }
-
-    private void generateNewAdjacentBox2(int[] coord, int[] adjacentCoord) {
-        int[] newCoord1;
-        int[] newCoord2;
-        //look for every adjacent box to the one we are placing in the board
-        int x = coord[0], y = coord[1], z = coord[2];
-        int x1 = adjacentCoord[0], y1 = adjacentCoord[1], z1 = adjacentCoord[2];
-
         if (x==x1) {
             newCoord1 = new int[]{x+1,Math.min(y,y1),Math.min(z,z1)};
             newCoord2 = new int[]{x-1,Math.max(y,y1),Math.max(z,z1)};

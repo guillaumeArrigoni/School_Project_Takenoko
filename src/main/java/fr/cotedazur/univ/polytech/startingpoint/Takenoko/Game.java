@@ -59,7 +59,7 @@ public class Game {
             if (board.getNumberBoxPlaced() > 20) {
                 playing = false;
                 for (int i = 0; i < numberPlayer; i++) {
-                    System.out.println("Scode du bot " + i + " : " + this.playerList.get(i).getScore());
+                    System.out.println("Score de " + this.playerList.get(i).getName() + " : " + this.playerList.get(i).getScore());
                 }
                 //A changer pour avoir un nombre indéfini de joueur
                 Bot bot1 = this.playerList.get(0);

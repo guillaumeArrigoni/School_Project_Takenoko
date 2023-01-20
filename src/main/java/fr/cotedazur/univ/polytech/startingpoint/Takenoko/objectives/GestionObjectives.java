@@ -271,4 +271,39 @@ public class GestionObjectives {
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
         return bot.getObjectives().size() < 5;
     }
+
+    /**
+     * int[] numberOfTypeObjectiveDone : - numberOfTypeObjectiveDone[0] -> PARCELLE
+     *                                   - numberOfTypeObjectiveDone[1] -> JARDINIER
+     *                                   - numberOfTypeObjectiveDone[2] -> PANDA
+     *
+     * This method checks all the drawable Objectives and counts the amount of Objectives currently done,
+     * and increments the array values associated to the TypeObjective of the objectives done.
+     * It returns the TypeObjective that is the most done when all the drawable Objectives are checked.
+     */
+    public TypeObjective chooseTypeObjectiveByCheckingUnknownObjectives(Bot bot){
+        int[] numberOfTypeObjectiveDone = new int[3];
+        ArrayList<Objective> listOfAllObjectivesDrawable = new ArrayList<>();
+        listOfAllObjectivesDrawable.addAll(this.getParcelleObjectifs());
+        listOfAllObjectivesDrawable.addAll(this.getJardinierObjectifs());
+        listOfAllObjectivesDrawable.addAll(this.getPandaObjectifs());
+        for(Objective objective : listOfAllObjectivesDrawable){
+            if(checkOneObjective(objective,bot)){
+                switch (objective.getType()){
+                    case PARCELLE -> numberOfTypeObjectiveDone[0]++;
+                    case JARDINIER -> numberOfTypeObjectiveDone[1]++;
+                    case PANDA ->  numberOfTypeObjectiveDone[2]++;
+                }
+            }
+        }
+        int max = numberOfTypeObjectiveDone[0];
+        TypeObjective res = TypeObjective.PARCELLE;
+        if(numberOfTypeObjectiveDone[1] > max){
+            max = numberOfTypeObjectiveDone[1];
+            res =TypeObjective.JARDINIER;
+        }if(numberOfTypeObjectiveDone[2] > max){
+            res =TypeObjective.PANDA;
+        }
+        return res;
+    }
 }

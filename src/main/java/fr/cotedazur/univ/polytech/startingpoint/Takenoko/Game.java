@@ -48,10 +48,11 @@ public class Game {
             gestionnaire.rollJardinierObjective(bot);
         }
         int numberPlayer = this.playerList.size();
+        MeteoDice.Meteo meteo;
         while (playing) {
-            meteoDice.roll();
+            meteo = meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);
-            playingBot.playTurn();
+            playingBot.playTurn(meteo);
             gestionnaire.checkObjectives(playingBot);
             printBoardState(board);
             if (board.getNumberBoxPlaced() > 20) {

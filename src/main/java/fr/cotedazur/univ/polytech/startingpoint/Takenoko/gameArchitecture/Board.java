@@ -57,6 +57,22 @@ public class Board {
         this.gardenerCoords = new int[]{0,0,0};
     }
 
+    public Board copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        Board copy = new Board(retrieveBoxIdWithParameters.copy());
+        copy.numberBoxPlaced = this.numberBoxPlaced;
+        copy.placedBox = new HashMap<>();
+        for (int id : this.placedBox.keySet()){
+            copy.placedBox.put(id,this.placedBox.get(id).copy(copy.retrieveBoxIdWithParameters));
+        }
+        copy.AvailableBox = new ArrayList<>();
+        for (int[] coords : this.AvailableBox){
+            copy.AvailableBox.add(coords);
+        }
+        copy.gardenerCoords = this.gardenerCoords;
+        copy.pandaCoords = this.pandaCoords;
+        return copy;
+    }
+
     public int[] getGardenerCoords() {
         return this.gardenerCoords;
     }

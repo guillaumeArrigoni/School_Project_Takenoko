@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
@@ -27,6 +28,14 @@ public class GestionObjectives {
         this.ParcelleObjectifs = new ArrayList<>();
         this.JardinierObjectifs = new ArrayList<>();
         this.PandaObjectifs = new ArrayList<>();
+    }
+
+    public GestionObjectives copy(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        GestionObjectives gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        gestionObjectives.ParcelleObjectifs = new ArrayList<>(this.ParcelleObjectifs);
+        gestionObjectives.JardinierObjectifs = new ArrayList<>(this.JardinierObjectifs);
+        gestionObjectives.PandaObjectifs = new ArrayList<>(this.PandaObjectifs);
+        return gestionObjectives;
     }
 
     /**
@@ -60,7 +69,7 @@ public class GestionObjectives {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    public void rollObjective(Bot bot){
+    public void rollObjective(BotRandom bot){
         TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll();
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot);

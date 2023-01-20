@@ -33,7 +33,7 @@ class BotRandomTest {
         gestionObjectives.initialize();
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
-        botRandom = new BotRandom("testBot", board, r, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
     }
 
     @Test
@@ -65,8 +65,7 @@ class BotRandomTest {
     void playTurnWindPlaceBoxTwoTimes(){
         when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0,1,2,1,1);
         when(r.nextInt(anyInt())).thenReturn(0,0);
-        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
-        botRandom.playTurn();
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
         verify(r, times(10)).nextInt(anyInt(),anyInt());
         verify(r, times(2)).nextInt(anyInt());
         assertEquals(3, board.getAllBoxPlaced().size());
@@ -76,8 +75,7 @@ class BotRandomTest {
     void playTurnWindPlaceBoxMoveGardener(){
         when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0);
         when(r.nextInt(anyInt())).thenReturn(0,1);
-        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
-        botRandom.playTurn();
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
         verify(r, times(6)).nextInt(anyInt(),anyInt());
         verify(r, times(2)).nextInt(anyInt());
         assertEquals(2, board.getAllBoxPlaced().size());
@@ -89,8 +87,7 @@ class BotRandomTest {
     void playTurnMoveGardenerImpossible(){
         when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0);
         when(r.nextInt(anyInt())).thenReturn(1,0);
-        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
-        botRandom.playTurn();
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
         verify(r, times(3)).nextInt(anyInt());
         assertEquals(3, board.getAllBoxPlaced().size());
     }
@@ -99,8 +96,7 @@ class BotRandomTest {
     void playTurnDrawParcelObjective(){
         when(r.nextInt(anyInt(), anyInt())).thenReturn(0);
         when(r.nextInt(anyInt())).thenReturn(2);
-        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
-        botRandom.playTurn();
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
         verify(r, times(2)).nextInt(anyInt());
         assertEquals(2, botRandom.getObjectives().size());
         assertEquals(TypeObjective.PARCELLE, botRandom.getObjectives().get(0).getType());
@@ -111,8 +107,7 @@ class BotRandomTest {
     void playTurnDrawGardenerObjective(){
         when(r.nextInt(anyInt(), anyInt())).thenReturn(1);
         when(r.nextInt(anyInt())).thenReturn(2);
-        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
-        botRandom.playTurn();
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
         verify(r, times(2)).nextInt(anyInt());
         assertEquals(2, botRandom.getObjectives().size());
         assertEquals(TypeObjective.JARDINIER, botRandom.getObjectives().get(0).getType());
@@ -134,8 +129,7 @@ class BotRandomTest {
     @Test
     void playTurnDrawRandomObjectiveTwice(){
         when(r.nextInt(anyInt())).thenReturn(2);
-        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
-        botRandom.playTurn();
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
         verify(r, times(2)).nextInt(anyInt());
         assertEquals(2, botRandom.getObjectives().size());
     }
@@ -143,10 +137,9 @@ class BotRandomTest {
     @Test
     void playTurnDrawRandomObjectiveTooMuch(){
         when(r.nextInt(anyInt())).thenReturn(2,2,2,2,2,2,0);
-        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
-        botRandom.playTurn();
-        botRandom.playTurn();
-        botRandom.playTurn();
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
         verify(r, times(7)).nextInt(anyInt());
         assertEquals(5, botRandom.getObjectives().size());
     }

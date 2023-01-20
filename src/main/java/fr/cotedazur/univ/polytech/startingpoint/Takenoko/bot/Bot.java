@@ -3,11 +3,11 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
@@ -26,14 +26,7 @@ public abstract class Bot {
      * The score of the bot
      */
     protected int score;
-    /**
-     * The random generator
-     */
-    protected final Random random;
-    /**
-     * The meteo dice
-     */
-    protected final MeteoDice meteoDice;
+
     /**
      * The list of possible actions
      */
@@ -56,14 +49,10 @@ public abstract class Bot {
      * Constructor of the bot
      * @param name the name of the bot
      * @param board the board of the game
-     * @param random the random generator
-     * @param meteoDice the meteo dice
      */
-    protected Bot(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
+    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
         this.name = name;
         this.board = board;
-        this.random = random;
-        this.meteoDice = meteoDice;
         this.score = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
@@ -73,6 +62,17 @@ public abstract class Bot {
         this.bambooEated.put(Color.Jaune,0);
         this.bambooEated.put(Color.Vert,0);
         resetPossibleAction();
+    }
+
+    public BotSimulator createBotSimulator(ActionLog... instructions){
+        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
+        Board tmpBoard = this.board.copy(tmp);
+        return new BotSimulator(this.name,
+                tmpBoard,
+                this.gestionObjectives.copy(tmpBoard, tmp),
+                tmp,
+                new HashMap<>(this.getBambooEated()),
+                null);
     }
 
     //METHODS
@@ -88,7 +88,7 @@ public abstract class Bot {
     /**
      * This method is called at the beginning of the turn
      */
-    public abstract void playTurn();
+    public abstract void playTurn(MeteoDice.Meteo meteo);
 
     /**
      * This method is called to do an action
@@ -96,15 +96,11 @@ public abstract class Bot {
     protected abstract void doAction();
 
     //Gestion Actions possibles
-    /**
-     * This method choose an action
-     */
-    protected abstract PossibleActions chooseAction();
 
-    /**
-     * This method reset the list of possible actions
-     */
-    protected abstract void resetPossibleAction();
+
+    protected void resetPossibleAction(){
+        possibleActions = PossibleActions.getAllActions();
+    }
     /**
      * This method place a tile on the board
      */
@@ -131,34 +127,10 @@ public abstract class Bot {
         this.score += objective.getValue();
     }
     public abstract void drawObjective();
-    public abstract TypeObjective chooseTypeObjectiveToRoll();
 
 
     public String getName() {
         return name;
-    }
-
-    /**
-     * List of all the possible actions
-     */
-    protected enum PossibleActions {
-        DRAW_AND_PUT_TILE(0),
-        MOVE_GARDENER(1),
-        DRAW_OBJECTIVE(2);
-
-        /**
-         * The value of the action
-         */
-        PossibleActions(int i) {
-        }
-
-        /**
-         * This method return the list of all the possible actions
-         * @return the list of all the possible actions
-         */
-        static List<PossibleActions> getAllActions() {
-            return new ArrayList<>(Arrays.asList(PossibleActions.values()));
-        }
     }
 
     public void addBambooAte(Color colorAte){
@@ -186,4 +158,19 @@ public abstract class Bot {
         return this.bambooEated;
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
+    public List<PossibleActions> getPossibleActions() {
+        return possibleActions;
+    }
+
+    public GestionObjectives getGestionObjectives() {
+        return gestionObjectives;
+    }
+
+    public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
+        return retrieveBoxIdWithParameters;
+    }
 }

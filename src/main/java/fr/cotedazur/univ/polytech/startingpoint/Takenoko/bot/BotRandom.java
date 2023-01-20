@@ -16,15 +16,23 @@ import java.util.*;
  */
 public class BotRandom extends Bot {
 
-    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
-        super(name, board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+    /**
+     * The random generator
+     */
+    private final Random random;
+
+    public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
+        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+        this.random = random;
     }
 
 
+
+
     @Override
-    public void playTurn(){
+    public void playTurn(MeteoDice.Meteo meteo){
         possibleActions = PossibleActions.getAllActions();
-        switch (meteoDice.roll()){
+        switch (meteo){
             case VENT -> {
                 //Deux fois la même action autorisé
                 System.out.println("Le dé a choisi : VENT");
@@ -64,7 +72,8 @@ public class BotRandom extends Bot {
 
     }
 
-    @Override
+
+
     protected PossibleActions chooseAction(){
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
@@ -73,10 +82,6 @@ public class BotRandom extends Bot {
             return chooseAction();
         possibleActions.remove(acp);
         return acp;
-    }
-    @Override
-    protected void resetPossibleAction(){
-        possibleActions = PossibleActions.getAllActions();
     }
 
     @Override
@@ -111,7 +116,8 @@ public class BotRandom extends Bot {
         gestionObjectives.rollObjective(this);
     }
 
-    @Override
+
+
     public TypeObjective chooseTypeObjectiveToRoll(){
         int i = random.nextInt(0,3) ;
         return switch (i){
@@ -121,7 +127,6 @@ public class BotRandom extends Bot {
             default -> TypeObjective.PARCELLE;
         };
     }
-
 
 }
 

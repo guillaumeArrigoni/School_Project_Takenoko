@@ -16,11 +16,10 @@ public class Main {
     public static void main(String... args) {
         RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
         Board board = new Board(retrieving);
-        MeteoDice meteoDice = new MeteoDice();
         Random random = new Random();
         GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
-        Bot bot1 = new BotRandom("Bot1",board,random, meteoDice,gestionnaire, retrieving, new HashMap<Color,Integer>());
-        Bot bot2 = new BotRandom("Bot2",board,random, meteoDice,gestionnaire, retrieving, new HashMap<Color,Integer>());
+        Bot bot1 = new BotRandom("Bot1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
+        Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
         List<Bot> playerList = new ArrayList<>();
         playerList.add(bot1);
         playerList.add(bot2);

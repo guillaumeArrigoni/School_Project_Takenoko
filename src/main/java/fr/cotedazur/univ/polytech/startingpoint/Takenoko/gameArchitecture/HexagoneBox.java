@@ -45,6 +45,13 @@ public class HexagoneBox {
         updateRetrieveBox();
     }
 
+    public HexagoneBox copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        HexagoneBox hexagoneBox = new HexagoneBox(this.coordinates[0],this.coordinates[1],this.coordinates[2],this.color,this.special,retrieveBoxIdWithParameters);
+        hexagoneBox.setIrrigate(this.irrigate);
+        hexagoneBox.setHeightBamboo(this.heightBamboo);
+        return hexagoneBox;
+    }
+
     private void updateRetrieveBox() {
         retrieveBoxIdWithParameters.setBoxColor(this.id,this.color);
         retrieveBoxIdWithParameters.setBoxHeight(this.id, this.heightBamboo);

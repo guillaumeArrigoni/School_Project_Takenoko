@@ -47,7 +47,7 @@ public abstract class Bot {
      */
     public GestionObjectives gestionObjectives;
     public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private AbstractMap <Color,Integer> bambooEated;
+    private AbstractMap <Color,Integer> bambooEaten;
 
 
     //CONSTRUCTOR
@@ -68,10 +68,10 @@ public abstract class Bot {
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
-        this.bambooEated = bambooEated;
-        this.bambooEated.put(Color.Rouge,0);
-        this.bambooEated.put(Color.Jaune,0);
-        this.bambooEated.put(Color.Vert,0);
+        this.bambooEaten = bambooEated;
+        this.bambooEaten.put(Color.Rouge,0);
+        this.bambooEaten.put(Color.Jaune,0);
+        this.bambooEaten.put(Color.Vert,0);
         resetPossibleAction();
     }
 
@@ -161,17 +161,17 @@ public abstract class Bot {
         }
     }
 
-    public void addBambooAte(Color colorAte){
-        int nbAte = bambooEated.get(colorAte) + 1;
-        bambooEated.put(colorAte,nbAte);
+    public void addBambooEaten(Color colorAte){
+        int nbAte = bambooEaten.get(colorAte) + 1;
+        bambooEaten.put(colorAte,nbAte);
     }
 
-    public void deleteBambooAte (ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
+    public void deleteBambooEaten(ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
         ArrayList<Color> errorImpossibleToDeleteTheseBamboo = new ArrayList<>();
         for (int i=0;i<listBambooToDelete.size();i++){
-            int nbBambooOfOneColorAte = bambooEated.get(listBambooToDelete.get(i));
+            int nbBambooOfOneColorAte = bambooEaten.get(listBambooToDelete.get(i));
             if (nbBambooOfOneColorAte>0){
-                bambooEated.put(listBambooToDelete.get(i),nbBambooOfOneColorAte-1);
+                bambooEaten.put(listBambooToDelete.get(i),nbBambooOfOneColorAte-1);
             } else {
                 errorImpossibleToDeleteTheseBamboo.add(listBambooToDelete.get(i));
             }
@@ -182,8 +182,8 @@ public abstract class Bot {
 
     }
 
-    public AbstractMap<Color,Integer> getBambooEated(){
-        return this.bambooEated;
+    public AbstractMap<Color,Integer> getBambooEaten(){
+        return this.bambooEaten;
     }
 
 }

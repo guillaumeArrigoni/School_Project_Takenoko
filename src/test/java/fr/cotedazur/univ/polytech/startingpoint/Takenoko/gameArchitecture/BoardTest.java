@@ -183,7 +183,7 @@ class BoardTest {
     void testSetPandaCoordsBambooAteEarnByBot(HexagoneBox box, int Useless, Color color, int nbBambooAte) {
         int[] coords = box.getCoordinates();
         board.setPandaCoords(coords,botRandom);
-        assertTrue(nbBambooAte==botRandom.getBambooEated().get(color));
+        assertTrue(nbBambooAte==botRandom.getBambooEaten().get(color));
     }
 
     @ParameterizedTest

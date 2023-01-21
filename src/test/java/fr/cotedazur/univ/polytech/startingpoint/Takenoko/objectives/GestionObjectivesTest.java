@@ -10,7 +10,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -120,15 +119,15 @@ class GestionObjectivesTest {
         Redbox.growBamboo();
         Redbox.growBamboo();
 
-        bot.addBambooAte(Color.Vert);
-        bot.addBambooAte(Color.Vert);
-        bot.addBambooAte(Color.Vert);
-        bot.addBambooAte(Color.Jaune);
-        bot.addBambooAte(Color.Jaune);
-        bot.addBambooAte(Color.Jaune);
-        bot.addBambooAte(Color.Rouge);
-        bot.addBambooAte(Color.Rouge);
-        bot.addBambooAte(Color.Rouge);
+        bot.addBambooEaten(Color.Vert);
+        bot.addBambooEaten(Color.Vert);
+        bot.addBambooEaten(Color.Vert);
+        bot.addBambooEaten(Color.Jaune);
+        bot.addBambooEaten(Color.Jaune);
+        bot.addBambooEaten(Color.Jaune);
+        bot.addBambooEaten(Color.Rouge);
+        bot.addBambooEaten(Color.Rouge);
+        bot.addBambooEaten(Color.Rouge);
         pandaJaune = Objective.MANGER_DEUX_JAUNES_1;
         pandaRouge = Objective.MANGER_DEUX_ROUGES_1;
         pandaVert = Objective.MANGER_DEUX_VERTS_1;

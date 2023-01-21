@@ -40,5 +40,8 @@ public class Objective {
         return colors;
     }
 
-
+    @Override
+    public String toString(){
+        return "Objectif : " +  this.getName() + ", Valeur : " + this.getValue();
+    }
 }

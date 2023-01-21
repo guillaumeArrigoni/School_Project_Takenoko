@@ -42,7 +42,11 @@ public class Game {
     }
 
     public void play(GestionObjectives gestionnaire) {
-        gestionnaire.initialize();
+        gestionnaire.initialize(
+                gestionnaire.ListOfObjectiveParcelleByDefault(),
+                gestionnaire.ListOfObjectiveJardinierByDefault(),
+                gestionnaire.ListOfObjectivePandaByDefault()
+        );
         for (Bot bot : this.playerList) {
             gestionnaire.rollParcelleObjective(bot);
             gestionnaire.rollJardinierObjective(bot);

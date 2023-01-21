@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
@@ -8,7 +9,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxId
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class GestionObjectives {
 
@@ -17,6 +17,65 @@ public class GestionObjectives {
     private ArrayList<ObjectiveParcelle> ParcelleObjectifs;
     private ArrayList<ObjectiveJardinier> JardinierObjectifs;
     private ArrayList<ObjectivePanda> PandaObjectifs;
+
+    PatternParcelle POSER_TRIANGLE = new PatternParcelle("TRIANGLE");
+    PatternParcelle POSER_LIGNE = new PatternParcelle("LIGNE");
+    PatternParcelle POSER_COURBE = new PatternParcelle("COURBE");
+    PatternParcelle POSER_LOSANGE = new PatternParcelle("LOSANGE");
+    PatternJardinier PLANTER_SUR_SOURCE_EAU = new PatternJardinier(1,4, Special.SourceEau);
+    PatternJardinier PLANTER_SUR_ENGRAIS = new PatternJardinier(1,4,Special.Engrais);
+    PatternJardinier PLANTER_SUR_PROTEGER = new PatternJardinier(1,4,Special.Protéger);
+    PatternJardinier PLANTER_SUR_CLASSIQUE = new PatternJardinier(1,4,Special.Classique);
+    PatternJardinier PLANTER_DEUX_ROUGES = new PatternJardinier(2,3,null);
+    PatternJardinier PLANTER_TROIS_JAUNES = new PatternJardinier(3,3,null);
+    PatternJardinier PLANTER_QUATRE_VERTS = new PatternJardinier(4,3,null);
+    PatternPanda MANGER_DEUX_BAMBOUS = new PatternPanda(2,1,null);
+    PatternPanda MANGER_TROIS_BAMBOUS = new PatternPanda(3,1,null);
+    ObjectiveParcelle POSER_TRIANGLE_VERT = new ObjectiveParcelle("POSER_TRIANGLE_VERT",2, POSER_TRIANGLE, new ArrayList<>(Arrays.asList( Color.Vert)));
+    ObjectiveParcelle POSER_TRIANGLE_JAUNE= new ObjectiveParcelle("POSER_TRIANGLE_JAUNE",3, POSER_TRIANGLE, new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectiveParcelle POSER_TRIANGLE_ROUGE= new ObjectiveParcelle("POSER_TRIANGLE_ROUGE",4, POSER_TRIANGLE, new ArrayList<>(Arrays.asList( Color.Rouge)));
+    ObjectiveParcelle POSER_LIGNE_VERTE= new ObjectiveParcelle("POSER_LIGNE_VERTE",2, POSER_LIGNE, new ArrayList<>(Arrays.asList( Color.Vert)));
+    ObjectiveParcelle POSER_LIGNE_JAUNE= new ObjectiveParcelle("POSER_LIGNE_JAUNE",3, POSER_LIGNE, new ArrayList<>(Arrays.asList( Color.Jaune)));
+    ObjectiveParcelle POSER_LIGNE_ROUGE= new ObjectiveParcelle("POSER_LIGNE_ROUGE",4, POSER_LIGNE, new ArrayList<>(Arrays.asList( Color.Rouge)));
+    ObjectiveParcelle POSER_COURBE_VERTE= new ObjectiveParcelle("POSER_COURBE_VERTE",2, POSER_COURBE, new ArrayList<>(Arrays.asList( Color.Vert)));
+    ObjectiveParcelle POSER_COURBE_JAUNE= new ObjectiveParcelle("POSER_COURBE_JAUNE",3, POSER_COURBE, new ArrayList<>(Arrays.asList( Color.Jaune)));
+    ObjectiveParcelle POSER_COURBE_ROUGE= new ObjectiveParcelle("POSER_COURBE_ROUGE",4, POSER_COURBE, new ArrayList<>(Arrays.asList( Color.Rouge)));
+    ObjectiveParcelle POSER_LOSANGE_VERT= new ObjectiveParcelle("POSER_LOSANGE_VERT",3, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Vert)));
+    ObjectiveParcelle POSER_LOSANGE_JAUNE= new ObjectiveParcelle("POSER_LOSANGE_JAUNE",4, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Jaune)));
+    ObjectiveParcelle POSER_LOSANGE_ROUGE= new ObjectiveParcelle("POSER_LOSANGE_ROUGE",5, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Rouge)));
+    ObjectiveParcelle POSER_LOSANGE_VERT_JAUNE= new ObjectiveParcelle("POSER_LOSANGE_VERT_JAUNE",3, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Vert,Color.Jaune)));
+    ObjectiveParcelle POSER_LOSANGE_VERT_ROUGE= new ObjectiveParcelle("POSER_LOSANGE_VERT_ROUGE",4, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Vert,Color.Rouge)));
+    ObjectiveParcelle POSER_LOSANGE_ROUGE_JAUNE= new ObjectiveParcelle("POSER_LOSANGE_ROUGE_JAUNE",5, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Rouge,Color.Jaune)));
+    ObjectiveJardinier PLANTER_SUR_SOURCE_EAU_BAMBOU_VERT = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_VERT",4,PLANTER_SUR_SOURCE_EAU,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectiveJardinier PLANTER_SUR_SOURCE_EAU_BAMBOU_JAUNE = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_JAUNE",4,PLANTER_SUR_SOURCE_EAU,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectiveJardinier PLANTER_SUR_SOURCE_EAU_BAMBOU_ROUGE = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_ROUGE",4,PLANTER_SUR_SOURCE_EAU,new ArrayList<>(Arrays.asList(Color.Rouge)));
+    ObjectiveJardinier PLANTER_SUR_ENGRAIS_BAMBOU_VERT = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_VERT",3,PLANTER_SUR_ENGRAIS,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectiveJardinier PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE",4,PLANTER_SUR_ENGRAIS,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectiveJardinier PLANTER_SUR_ENGRAIS_BAMBOU_ROUGE = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_ROUGE",5,PLANTER_SUR_ENGRAIS,new ArrayList<>(Arrays.asList(Color.Rouge)));
+    ObjectiveJardinier PLANTER_SUR_PROTEGER_BAMBOU_VERT = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_VERT",4,PLANTER_SUR_PROTEGER,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectiveJardinier PLANTER_SUR_PROTEGER_BAMBOU_JAUNE = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_JAUNE",5,PLANTER_SUR_PROTEGER,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectiveJardinier PLANTER_SUR_PROTEGER_BAMBOU_ROUGE = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_ROUGE",6,PLANTER_SUR_PROTEGER,new ArrayList<>(Arrays.asList(Color.Rouge)));
+    ObjectiveJardinier PLANTER_SUR_CLASSIQUE_BAMBOU_VERT = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_VERT",5,PLANTER_SUR_CLASSIQUE,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectiveJardinier PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE",6,PLANTER_SUR_CLASSIQUE,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectiveJardinier PLANTER_SUR_CLASSIQUE_BAMBOU_ROUGE = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_ROUGE",7,PLANTER_SUR_CLASSIQUE,new ArrayList<>(Arrays.asList(Color.Rouge)));
+    ObjectiveJardinier PLANTER_DEUX_BAMBOUS_ROUGES = new ObjectiveJardinier("PLANTER_DEUX_BAMBOUS_ROUGES",6,PLANTER_DEUX_ROUGES,new ArrayList<>(Arrays.asList(Color.Rouge)));
+    ObjectiveJardinier PLANTER_TROIS_BAMBOUS_JAUNES = new ObjectiveJardinier("PLANTER_TROIS_BAMBOUS_JAUNES",7,PLANTER_TROIS_JAUNES,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectiveJardinier PLANTER_QUATRE_BAMBOUS_VERTS = new ObjectiveJardinier("PLANTER_QUATRE_BAMBOUS_VERTS",8,PLANTER_QUATRE_VERTS,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectivePanda MANGER_DEUX_VERTS_1 = new ObjectivePanda("MANGER_DEUX_VERTS_1",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectivePanda MANGER_DEUX_VERTS_2 = new ObjectivePanda("MANGER_DEUX_VERTS_2",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectivePanda MANGER_DEUX_VERTS_3 = new ObjectivePanda("MANGER_DEUX_VERTS_3",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectivePanda MANGER_DEUX_VERTS_4 = new ObjectivePanda("MANGER_DEUX_VERTS_4",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectivePanda MANGER_DEUX_VERTS_5 = new ObjectivePanda("MANGER_DEUX_VERTS_5",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
+    ObjectivePanda MANGER_DEUX_JAUNES_1 = new ObjectivePanda("MANGER_DEUX_JAUNES_1",4,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectivePanda MANGER_DEUX_JAUNES_2 = new ObjectivePanda("MANGER_DEUX_JAUNES_2",4,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectivePanda MANGER_DEUX_JAUNES_3 = new ObjectivePanda("MANGER_DEUX_JAUNES_3",4,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectivePanda MANGER_DEUX_JAUNES_4 = new ObjectivePanda("MANGER_DEUX_JAUNES_4",4,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Jaune)));
+    ObjectivePanda MANGER_DEUX_ROUGES_1 = new ObjectivePanda("MANGER_DEUX_ROUGES_1",5,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Rouge)));
+    ObjectivePanda MANGER_DEUX_ROUGES_2 = new ObjectivePanda("MANGER_DEUX_ROUGES_2",5,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Rouge)));
+    ObjectivePanda MANGER_DEUX_ROUGES_3 = new ObjectivePanda("MANGER_DEUX_ROUGES_3",5,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Rouge)));
+    ObjectivePanda MANGER_TRICOLORE_1 = new ObjectivePanda("MANGER_TRICOLORE_1",6,MANGER_TROIS_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
+    ObjectivePanda MANGER_TRICOLORE_2 = new ObjectivePanda("MANGER_TRICOLORE_2",6,MANGER_TROIS_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
+    ObjectivePanda MANGER_TRICOLORE_3 = new ObjectivePanda("MANGER_TRICOLORE_3",6,MANGER_TROIS_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
 
     /**
      * Contient 3 hashmap qui stockent les differents types d'objectifs disponibles (les pioches).
@@ -27,21 +86,72 @@ public class GestionObjectives {
         this.ParcelleObjectifs = new ArrayList<>();
         this.JardinierObjectifs = new ArrayList<>();
         this.PandaObjectifs = new ArrayList<>();
+
+    }
+    public ArrayList<ObjectiveParcelle> ListOfObjectiveParcelleByDefault(){
+        return new ArrayList<>(Arrays.asList(
+                POSER_TRIANGLE_VERT,
+                POSER_TRIANGLE_JAUNE,POSER_TRIANGLE_ROUGE,
+                POSER_LIGNE_VERTE,
+                POSER_LIGNE_JAUNE,
+                POSER_LIGNE_JAUNE,
+                POSER_LIGNE_ROUGE,
+                POSER_COURBE_VERTE,
+                POSER_COURBE_VERTE,
+                POSER_COURBE_JAUNE,
+                POSER_COURBE_ROUGE,
+                POSER_LOSANGE_VERT,
+                POSER_LOSANGE_JAUNE,
+                POSER_LOSANGE_ROUGE,
+                POSER_LOSANGE_VERT_ROUGE,
+                POSER_LOSANGE_VERT_JAUNE,
+                POSER_LOSANGE_ROUGE_JAUNE));
+    }
+    public ArrayList<ObjectiveJardinier> ListOfObjectiveJardinierByDefault(){
+        return new ArrayList<>(Arrays.asList(
+                PLANTER_SUR_SOURCE_EAU_BAMBOU_VERT,
+                PLANTER_SUR_SOURCE_EAU_BAMBOU_JAUNE,
+                PLANTER_SUR_SOURCE_EAU_BAMBOU_ROUGE,
+                PLANTER_SUR_ENGRAIS_BAMBOU_VERT,
+                PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE,
+                PLANTER_SUR_ENGRAIS_BAMBOU_ROUGE,
+                PLANTER_SUR_PROTEGER_BAMBOU_VERT,
+                PLANTER_SUR_PROTEGER_BAMBOU_JAUNE,
+                PLANTER_SUR_PROTEGER_BAMBOU_ROUGE,
+                PLANTER_SUR_CLASSIQUE_BAMBOU_VERT,
+                PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE,
+                PLANTER_SUR_CLASSIQUE_BAMBOU_ROUGE,
+                PLANTER_DEUX_BAMBOUS_ROUGES,
+                PLANTER_TROIS_BAMBOUS_JAUNES,
+                PLANTER_QUATRE_BAMBOUS_VERTS));
+    }
+    public ArrayList<ObjectivePanda> ListOfObjectivePandaByDefault(){
+        return new ArrayList<>(Arrays.asList(
+                MANGER_DEUX_VERTS_1,
+                MANGER_DEUX_VERTS_2,
+                MANGER_DEUX_VERTS_3,
+                MANGER_DEUX_VERTS_4,
+                MANGER_DEUX_VERTS_5,
+                MANGER_DEUX_JAUNES_1,
+                MANGER_DEUX_JAUNES_2,
+                MANGER_DEUX_JAUNES_3,
+                MANGER_DEUX_JAUNES_4,
+                MANGER_DEUX_ROUGES_1,
+                MANGER_DEUX_ROUGES_2,
+                MANGER_DEUX_ROUGES_3,
+                MANGER_TRICOLORE_1,
+                MANGER_TRICOLORE_2,
+                MANGER_TRICOLORE_3
+        ));
     }
 
     /**
      * Remplit les hashmap avec tous les objectifs du jeu.
      */
-    public void initialize() {
-       for(Objective objective : Objective.values()) {
-           if(objective.getType().equals(TypeObjective.PARCELLE)) {
-               ParcelleObjectifs.add(objective);
-           } if(objective.getType().equals(TypeObjective.JARDINIER)){
-               JardinierObjectifs.add(objective);
-           } if(objective.getType().equals(TypeObjective.PANDA)){
-               PandaObjectifs.add(objective);
-           }
-       }
+    public void initialize(ArrayList<ObjectiveParcelle> objectiveParcelleArrayList,ArrayList<ObjectiveJardinier> objectiveJardinierArrayList, ArrayList<ObjectivePanda> objectivePandaArrayList) {
+        this.ParcelleObjectifs = objectiveParcelleArrayList;
+        this.JardinierObjectifs = objectiveJardinierArrayList;
+        this.PandaObjectifs = objectivePandaArrayList;
     }
 
     public ArrayList<ObjectiveParcelle> getParcelleObjectifs() {
@@ -119,16 +229,16 @@ public class GestionObjectives {
     public boolean checkPandaObjectives(Objective objective, Bot bot) {
         boolean isDone = false;
         try{
-            if (objective.getPattern() == Pattern.MANGER_TROIS_BAMBOUS){
-                if (bot.getBambooEated().get(Color.Jaune)>=1 &&
-                        bot.getBambooEated().get(Color.Vert)>=1 &&
-                        bot.getBambooEated().get(Color.Rouge)>=1){
-                    bot.deleteBambooAte(new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
+            if (objective.getPattern().getNbBambou() == 3){
+                if (bot.getBambooEaten().get(Color.Jaune)>=1 &&
+                        bot.getBambooEaten().get(Color.Vert)>=1 &&
+                        bot.getBambooEaten().get(Color.Rouge)>=1){
+                    bot.deleteBambooEaten(new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
                     isDone = true;
                 }
             } else {
-                if (bot.getBambooEated().get(objective.getColors().get(0))>=2){
-                    bot.deleteBambooAte(new ArrayList<>(Arrays.asList(objective.getColors().get(0),objective.getColors().get(0))));
+                if (bot.getBambooEaten().get(objective.getColors().get(0))>=2){
+                    bot.deleteBambooEaten(new ArrayList<>(Arrays.asList(objective.getColors().get(0),objective.getColors().get(0))));
                     isDone = true;
                 }
             }

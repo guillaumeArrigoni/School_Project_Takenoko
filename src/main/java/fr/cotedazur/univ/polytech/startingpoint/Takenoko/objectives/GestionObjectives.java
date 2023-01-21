@@ -14,9 +14,9 @@ public class GestionObjectives {
 
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private final Board board;
-    private ArrayList<Objective> ParcelleObjectifs;
-    private ArrayList<Objective> JardinierObjectifs;
-    private ArrayList<Objective> PandaObjectifs;
+    private ArrayList<ObjectiveParcelle> ParcelleObjectifs;
+    private ArrayList<ObjectiveJardinier> JardinierObjectifs;
+    private ArrayList<ObjectivePanda> PandaObjectifs;
 
     /**
      * Contient 3 hashmap qui stockent les differents types d'objectifs disponibles (les pioches).
@@ -44,15 +44,15 @@ public class GestionObjectives {
        }
     }
 
-    public ArrayList<Objective> getParcelleObjectifs() {
+    public ArrayList<ObjectiveParcelle> getParcelleObjectifs() {
         return ParcelleObjectifs;
     }
 
-    public ArrayList<Objective> getJardinierObjectifs() {
+    public ArrayList<ObjectiveJardinier> getJardinierObjectifs() {
         return JardinierObjectifs;
     }
 
-    public ArrayList<Objective> getPandaObjectifs() {
+    public ArrayList<ObjectivePanda> getPandaObjectifs() {
         return PandaObjectifs;
     }
 

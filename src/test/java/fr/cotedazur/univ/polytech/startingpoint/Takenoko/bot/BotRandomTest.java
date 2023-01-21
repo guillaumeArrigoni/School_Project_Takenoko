@@ -30,7 +30,10 @@ class BotRandomTest {
         this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters);
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
-        gestionObjectives.initialize();
+        gestionObjectives.initialize(
+                gestionObjectives.ListOfObjectiveParcelleByDefault(),
+                gestionObjectives.ListOfObjectiveJardinierByDefault(),
+                gestionObjectives.ListOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         botRandom = new BotRandom("testBot", board, r, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());

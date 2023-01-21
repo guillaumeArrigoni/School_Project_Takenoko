@@ -65,7 +65,11 @@ class GestionObjectivesTest {
         meteoDice = new MeteoDice();
         random = new Random();
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
-        gestionObjectives.initialize();
+        gestionObjectives.initialize(
+                gestionObjectives.ListOfObjectiveParcelleByDefault(),
+                gestionObjectives.ListOfObjectiveJardinierByDefault(),
+                gestionObjectives.ListOfObjectivePandaByDefault()
+        );
         bot = new BotRandom("Bot",board,random, meteoDice,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
         Greenbox1 = new HexagoneBox(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
         Greenbox2 = new HexagoneBox(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
@@ -78,15 +82,15 @@ class GestionObjectivesTest {
         Redbox = new HexagoneBox(1,-1,0,Color.Rouge,Special.Classique,retrieveBoxIdWithParameters,board);
         YellowEngraisbox = new HexagoneBox(1,0,-1,Color.Jaune,Special.Engrais,retrieveBoxIdWithParameters,board);
         RedProtegerbox = new HexagoneBox(-2,1,1,Color.Rouge,Special.Protéger,retrieveBoxIdWithParameters,board);
-        triangleVert = Objective.POSER_TRIANGLE_VERT;
-        ligneVert = Objective.POSER_LIGNE_VERTE;
-        courbeVert = Objective.POSER_COURBE_VERTE;
-        losangeVert = Objective.POSER_LOSANGE_VERT;
-        losangeVertJaune = Objective.POSER_LOSANGE_VERT_JAUNE;
-        planterBambouJauneClassique = Objective.PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE;
-        planterBambouJauneEngrais = Objective.PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE;
-        planterBambouRougeProteger = Objective.PLANTER_SUR_PROTEGER_BAMBOU_ROUGE;
-        planterDeuxBambousRouges = Objective.PLANTER_DEUX_BAMBOUS_ROUGES;
+        triangleVert = gestionObjectives.POSER_TRIANGLE_VERT;
+        ligneVert = gestionObjectives.POSER_LIGNE_VERTE;
+        courbeVert = gestionObjectives.POSER_COURBE_VERTE;
+        losangeVert = gestionObjectives.POSER_LOSANGE_VERT;
+        losangeVertJaune = gestionObjectives.POSER_LOSANGE_VERT_JAUNE;
+        planterBambouJauneClassique = gestionObjectives.PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE;
+        planterBambouJauneEngrais = gestionObjectives.PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE;
+        planterBambouRougeProteger = gestionObjectives.PLANTER_SUR_PROTEGER_BAMBOU_ROUGE;
+        planterDeuxBambousRouges = gestionObjectives.PLANTER_DEUX_BAMBOUS_ROUGES;
         bot.getObjectives().add(triangleVert);
         bot.getObjectives().add(ligneVert);
         bot.getObjectives().add(planterBambouJauneClassique);
@@ -128,10 +132,10 @@ class GestionObjectivesTest {
         bot.addBambooEaten(Color.Rouge);
         bot.addBambooEaten(Color.Rouge);
         bot.addBambooEaten(Color.Rouge);
-        pandaJaune = Objective.MANGER_DEUX_JAUNES_1;
-        pandaRouge = Objective.MANGER_DEUX_ROUGES_1;
-        pandaVert = Objective.MANGER_DEUX_VERTS_1;
-        pandaTricolore = Objective.MANGER_TRICOLORE_1;
+        pandaJaune = gestionObjectives.MANGER_DEUX_JAUNES_1;
+        pandaRouge = gestionObjectives.MANGER_DEUX_ROUGES_1;
+        pandaVert = gestionObjectives.MANGER_DEUX_VERTS_1;
+        pandaTricolore = gestionObjectives.MANGER_TRICOLORE_1;
     }
 
     private static Stream<Arguments> provideParcelleObjectiveChecking(){
@@ -160,7 +164,11 @@ class GestionObjectivesTest {
     @Test
     void initialize() {
         GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
-        gestionObjectives2.initialize();
+        gestionObjectives2.initialize(
+                gestionObjectives2.ListOfObjectiveParcelleByDefault(),
+                gestionObjectives2.ListOfObjectiveJardinierByDefault(),
+                gestionObjectives2.ListOfObjectivePandaByDefault()
+        );
         assertEquals(15, gestionObjectives2.getParcelleObjectifs().size());
         assertEquals(15, gestionObjectives2.getJardinierObjectifs().size());
         assertEquals(15, gestionObjectives2.getPandaObjectifs().size());
@@ -170,21 +178,33 @@ class GestionObjectivesTest {
     @Test
     void getParcelleObjectifs() {
         GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
-        gestionObjectives2.initialize();
+        gestionObjectives2.initialize(
+                gestionObjectives2.ListOfObjectiveParcelleByDefault(),
+                gestionObjectives2.ListOfObjectiveJardinierByDefault(),
+                gestionObjectives2.ListOfObjectivePandaByDefault()
+        );
         assertEquals(15, gestionObjectives2.getParcelleObjectifs().size());
     }
 
     @Test
     void getJardinierObjectifs() {
         GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
-        gestionObjectives2.initialize();
+        gestionObjectives2.initialize(
+                gestionObjectives2.ListOfObjectiveParcelleByDefault(),
+                gestionObjectives2.ListOfObjectiveJardinierByDefault(),
+                gestionObjectives2.ListOfObjectivePandaByDefault()
+        );
         assertEquals(15, gestionObjectives2.getJardinierObjectifs().size());
     }
 
     @Test
     void getPandaObjectifs() {
         GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
-        gestionObjectives2.initialize();
+        gestionObjectives2.initialize(
+                gestionObjectives2.ListOfObjectiveParcelleByDefault(),
+                gestionObjectives2.ListOfObjectiveJardinierByDefault(),
+                gestionObjectives2.ListOfObjectivePandaByDefault()
+        );
         assertEquals(15, gestionObjectives2.getPandaObjectifs().size());
     }
 
@@ -239,7 +259,7 @@ class GestionObjectivesTest {
     @ParameterizedTest
     @MethodSource("providePandaObjectiveChecking")
     void testCheckPandaObjectives(Objective objective,boolean isCorrect) {
-        assertEquals(gestionObjectives.checkPandaObjectives(objective,this.bot),isCorrect);
+        assertEquals(isCorrect,gestionObjectives.checkPandaObjectives(objective,this.bot));
     }
 
     @Test

@@ -1,6 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +12,9 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ObjectiveTest {
-
+    private static GestionObjectives gestionnaire;
+    private static Board board;
+    private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Objective objective1;
     private static Objective objective2;
     private static Objective objective3;
@@ -20,12 +24,15 @@ class ObjectiveTest {
 
     @BeforeAll
     public static void setUp(){
-        objective1 = Objective.POSER_TRIANGLE_VERT;
-        objective2 = Objective.POSER_LIGNE_JAUNE;
-        objective3 = Objective.PLANTER_SUR_PROTEGER_BAMBOU_VERT;
-        objective4 = Objective.PLANTER_SUR_ENGRAIS_BAMBOU_VERT;
-        objective5 = Objective.POSER_LOSANGE_ROUGE_JAUNE;
-        objective6 = Objective.MANGER_DEUX_JAUNES_1;}
+        retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
+        board = new Board(retrieveBoxIdWithParameters);
+        gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        objective1 = gestionnaire.POSER_TRIANGLE_VERT;
+        objective2 = gestionnaire.POSER_LIGNE_JAUNE;
+        objective3 = gestionnaire.PLANTER_SUR_PROTEGER_BAMBOU_VERT;
+        objective4 = gestionnaire.PLANTER_SUR_ENGRAIS_BAMBOU_VERT;
+        objective5 = gestionnaire.POSER_LOSANGE_ROUGE_JAUNE;
+        objective6 = gestionnaire.MANGER_DEUX_JAUNES_1;}
 
     @Test
     void getValue() {
@@ -39,12 +46,12 @@ class ObjectiveTest {
 
     @Test
     void getPattern() {
-        assertEquals(Pattern.POSER_TRIANGLE,objective1.getPattern());
-        assertEquals(Pattern.POSER_LIGNE,objective2.getPattern());
-        assertEquals(Pattern.PLANTER_SUR_PROTEGER,objective3.getPattern());
-        assertEquals(Pattern.PLANTER_SUR_ENGRAIS,objective4.getPattern());
-        assertEquals(Pattern.POSER_LOSANGE, objective5.getPattern());
-        assertEquals(Pattern.MANGER_DEUX_BAMBOUS, objective6.getPattern());
+        assertEquals(gestionnaire.POSER_TRIANGLE,objective1.getPattern());
+        assertEquals(gestionnaire.POSER_LIGNE,objective2.getPattern());
+        assertEquals(gestionnaire.PLANTER_SUR_PROTEGER,objective3.getPattern());
+        assertEquals(gestionnaire.PLANTER_SUR_ENGRAIS,objective4.getPattern());
+        assertEquals(gestionnaire.POSER_LOSANGE, objective5.getPattern());
+        assertEquals(gestionnaire.MANGER_DEUX_BAMBOUS, objective6.getPattern());
     }
 
     @Test
@@ -69,11 +76,11 @@ class ObjectiveTest {
 
     @Test
     void testToString() {
-        assertEquals("Type : Parcelle, Valeur : 2", objective1.toString());
-        assertEquals("Type : Parcelle, Valeur : 3", objective2.toString());
-        assertEquals("Type : Jardinier, Valeur : 4", objective3.toString());
-        assertEquals("Type : Jardinier, Valeur : 3", objective4.toString());
-        assertEquals("Type : Parcelle, Valeur : 5", objective5.toString());
-        assertEquals("Type : Panda, Valeur : 4", objective6.toString());
+        assertEquals("Objectif : POSER_TRIANGLE_VERT, Valeur : 2", objective1.toString());
+        assertEquals("Objectif : POSER_LIGNE_JAUNE, Valeur : 3", objective2.toString());
+        assertEquals("Objectif : PLANTER_SUR_PROTEGER_BAMBOU_VERT, Valeur : 4", objective3.toString());
+        assertEquals("Objectif : PLANTER_SUR_ENGRAIS_BAMBOU_VERT, Valeur : 3", objective4.toString());
+        assertEquals("Objectif : POSER_LOSANGE_ROUGE_JAUNE, Valeur : 5", objective5.toString());
+        assertEquals("Objectif : MANGER_DEUX_JAUNES_1, Valeur : 4", objective6.toString());
     }
 }

@@ -91,12 +91,11 @@ public class GestionObjectives {
     public ArrayList<ObjectiveParcelle> ListOfObjectiveParcelleByDefault(){
         return new ArrayList<>(Arrays.asList(
                 POSER_TRIANGLE_VERT,
-                POSER_TRIANGLE_JAUNE,POSER_TRIANGLE_ROUGE,
+                POSER_TRIANGLE_JAUNE,
+                POSER_TRIANGLE_ROUGE,
                 POSER_LIGNE_VERTE,
                 POSER_LIGNE_JAUNE,
-                POSER_LIGNE_JAUNE,
                 POSER_LIGNE_ROUGE,
-                POSER_COURBE_VERTE,
                 POSER_COURBE_VERTE,
                 POSER_COURBE_JAUNE,
                 POSER_COURBE_ROUGE,
@@ -180,24 +179,24 @@ public class GestionObjectives {
     }
     public void rollParcelleObjective(Bot bot){
         int i = new Random().nextInt(0, getParcelleObjectifs().size());
-        Objective objective = getParcelleObjectifs().get(i);
-        getParcelleObjectifs().remove(i);
+        Objective objective = this.getParcelleObjectifs().get(i);
+        this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
         System.out.println(bot.getName() + " a pioché un nouvel objectif.");
         System.out.println(objective);
     }
     public void rollJardinierObjective(Bot bot){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
-        Objective objective = getJardinierObjectifs().get(i);
-        getJardinierObjectifs().remove(i);
+        Objective objective = this.getJardinierObjectifs().get(i);
+        this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
         System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
         System.out.println(objective);
     }
     public void rollPandaObjective(Bot bot){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
-        Objective objective = getPandaObjectifs().get(i);
-        getPandaObjectifs().remove(i);
+        Objective objective = this.getPandaObjectifs().get(i);
+        this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
         System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
         System.out.println(objective);

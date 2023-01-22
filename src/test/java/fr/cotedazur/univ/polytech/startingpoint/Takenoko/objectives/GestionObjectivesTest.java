@@ -138,6 +138,18 @@ class GestionObjectivesTest {
         pandaTricolore = gestionObjectives.MANGER_TRICOLORE_1;
     }
 
+    private static void setupPandaBambooEaten(){
+        bot.addBambooEaten(Color.Vert);
+        bot.addBambooEaten(Color.Vert);
+        bot.addBambooEaten(Color.Vert);
+        bot.addBambooEaten(Color.Jaune);
+        bot.addBambooEaten(Color.Jaune);
+        bot.addBambooEaten(Color.Jaune);
+        bot.addBambooEaten(Color.Rouge);
+        bot.addBambooEaten(Color.Rouge);
+        bot.addBambooEaten(Color.Rouge);
+    }
+
     private static Stream<Arguments> provideParcelleObjectiveChecking(){
         return Stream.of(
                 Arguments.of(true,ligneVert),
@@ -149,6 +161,7 @@ class GestionObjectivesTest {
     }
 
     private static Stream<Arguments> providePandaObjectiveChecking(){
+        setupPandaBambooEaten();
         return Stream.of(
                 Arguments.of(true,pandaJaune),
                 Arguments.of(false,pandaJaune),

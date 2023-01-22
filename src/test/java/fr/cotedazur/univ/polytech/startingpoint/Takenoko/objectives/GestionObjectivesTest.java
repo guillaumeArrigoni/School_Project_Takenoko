@@ -284,6 +284,6 @@ class GestionObjectivesTest {
     @Test
     void chooseTypeObjectiveByCheckingUnknownObjectives() {
         TypeObjective res = gestionObjectives.chooseTypeObjectiveByCheckingUnknownObjectives(bot);
-        assertTrue(res == TypeObjective.PARCELLE);
+        assertTrue(res == TypeObjective.JARDINIER);
     }
 }

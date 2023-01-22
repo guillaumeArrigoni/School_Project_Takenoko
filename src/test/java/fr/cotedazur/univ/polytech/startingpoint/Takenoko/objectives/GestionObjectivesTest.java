@@ -140,24 +140,24 @@ class GestionObjectivesTest {
 
     private static Stream<Arguments> provideParcelleObjectiveChecking(){
         return Stream.of(
-                Arguments.of(ligneVert,true),
-                Arguments.of(triangleVert,true),
-                Arguments.of(courbeVert,true),
-                Arguments.of(losangeVert,true),
-                Arguments.of(losangeVertJaune,true)
+                Arguments.of(true,ligneVert),
+                Arguments.of(true,triangleVert),
+                Arguments.of(true,courbeVert),
+                Arguments.of(true,losangeVert),
+                Arguments.of(true,losangeVertJaune)
                 );
     }
 
     private static Stream<Arguments> providePandaObjectiveChecking(){
         return Stream.of(
-                Arguments.of(pandaJaune,true),
-                Arguments.of(pandaJaune,false),
-                Arguments.of(pandaVert,true),
-                Arguments.of(pandaVert,false),
-                Arguments.of(pandaRouge,true),
-                Arguments.of(pandaRouge,false),
-                Arguments.of(pandaTricolore,true),
-                Arguments.of(pandaTricolore,false)
+                Arguments.of(true,pandaJaune),
+                Arguments.of(false,pandaJaune),
+                Arguments.of(true,pandaVert),
+                Arguments.of(false,pandaVert),
+                Arguments.of(true,pandaRouge),
+                Arguments.of(false,pandaRouge),
+                Arguments.of(true,pandaTricolore),
+                Arguments.of(false,pandaTricolore)
         );
     }
 
@@ -256,9 +256,12 @@ class GestionObjectivesTest {
         assertEquals(1, bot.getObjectives().size());
     }
 
+    /**
+     * le test passe quand on le lance seul, mais échoue sur certaines assertions quand on lance la classe test
+     **/
     @ParameterizedTest
     @MethodSource("providePandaObjectiveChecking")
-    void testCheckPandaObjectives(Objective objective,boolean isCorrect) {
+    void testCheckPandaObjectives(boolean isCorrect,Objective objective) {
         assertEquals(isCorrect,gestionObjectives.checkPandaObjectives(objective,this.bot));
     }
 
@@ -274,8 +277,8 @@ class GestionObjectivesTest {
 
     @ParameterizedTest
     @MethodSource("provideParcelleObjectiveChecking")
-    void testCheckParcelleObjectives(Objective objective,boolean isCorrect) {
-        assertEquals(gestionObjectives.checkParcelleObjectives(objective),isCorrect);
+    void testCheckParcelleObjectives(boolean isCorrect,Objective objective) {
+        assertEquals(isCorrect,gestionObjectives.checkParcelleObjectives(objective));
     }
 
     @Test

@@ -18,6 +18,8 @@ public class GestionObjectives {
     private ArrayList<ObjectiveJardinier> JardinierObjectifs;
     private ArrayList<ObjectivePanda> PandaObjectifs;
 
+    private final int NB_LISTES_OBJECTIVES = 3;
+
     PatternParcelle POSER_TRIANGLE = new PatternParcelle("TRIANGLE");
     PatternParcelle POSER_LIGNE = new PatternParcelle("LIGNE");
     PatternParcelle POSER_COURBE = new PatternParcelle("COURBE");
@@ -391,28 +393,90 @@ public class GestionObjectives {
      * It returns the TypeObjective that is the most done when all the drawable Objectives are checked.
      */
     public TypeObjective chooseTypeObjectiveByCheckingUnknownObjectives(Bot bot){
-        int[] numberOfTypeObjectiveDone = new int[3];
+        int[] numberOfTypeObjectiveDone = new int[NB_LISTES_OBJECTIVES];
+        int[] moyennePointsObjectives = new int[NB_LISTES_OBJECTIVES];
+        int sizeParcellle = this.getParcelleObjectifs().size();
+        int sizeJardinier = this.getJardinierObjectifs().size();
+        int sizePanda = this.getPandaObjectifs().size();
         ArrayList<Objective> listOfAllObjectivesDrawable = new ArrayList<>();
         listOfAllObjectivesDrawable.addAll(this.getParcelleObjectifs());
         listOfAllObjectivesDrawable.addAll(this.getJardinierObjectifs());
         listOfAllObjectivesDrawable.addAll(this.getPandaObjectifs());
+        int n = listOfAllObjectivesDrawable.size();
         for(Objective objective : listOfAllObjectivesDrawable){
             if(checkOneObjective(objective,bot)){
                 switch (objective.getType()){
-                    case PARCELLE -> numberOfTypeObjectiveDone[0]++;
-                    case JARDINIER -> numberOfTypeObjectiveDone[1]++;
-                    case PANDA ->  numberOfTypeObjectiveDone[2]++;
+                    case PARCELLE -> {numberOfTypeObjectiveDone[0]++;moyennePointsObjectives[0]+= objective.getValue();}
+                    case JARDINIER -> {numberOfTypeObjectiveDone[1]++;moyennePointsObjectives[1]+= objective.getValue();}
+                    case PANDA ->  {numberOfTypeObjectiveDone[2]++;moyennePointsObjectives[2]+= objective.getValue();}
                 }
             }
         }
-        int max = numberOfTypeObjectiveDone[0];
-        TypeObjective res = TypeObjective.PARCELLE;
-        if(numberOfTypeObjectiveDone[1] > max){
-            max = numberOfTypeObjectiveDone[1];
-            res =TypeObjective.JARDINIER;
-        }if(numberOfTypeObjectiveDone[2] > max){
-            res =TypeObjective.PANDA;
+        if(sizeParcellle != 0) {
+            if(numberOfTypeObjectiveDone[0] != 0){
+                moyennePointsObjectives[0] /= numberOfTypeObjectiveDone[0];
+            }
+            numberOfTypeObjectiveDone[0] /= sizeParcellle;
+        }
+        if(sizeJardinier != 0) {
+            if(numberOfTypeObjectiveDone[1] != 0){
+                moyennePointsObjectives[1] /= numberOfTypeObjectiveDone[1];
+            }
+            numberOfTypeObjectiveDone[1] /= sizeJardinier;
+        }
+        if(sizePanda != 0) {
+            if(numberOfTypeObjectiveDone[2] != 0){
+                moyennePointsObjectives[2] /= numberOfTypeObjectiveDone[2];
+            }
+            numberOfTypeObjectiveDone[2] /= sizePanda;
+        }
+        ArrayList<Integer> indices = indiceMax(numberOfTypeObjectiveDone);
+        if(indices.size() == 1){
+            return switch (indices.get(0)){
+                case 0 -> TypeObjective.PARCELLE;
+                case 1 -> TypeObjective.JARDINIER;
+                default -> TypeObjective.PANDA;
+            };
+        }
+        else{
+            ArrayList<Integer> indicesMoyenne = indiceMax(moyennePointsObjectives);
+            return switch (indicesMoyenne.get(0)){
+                case 0 -> TypeObjective.PARCELLE;
+                case 1 -> TypeObjective.JARDINIER;
+                default -> TypeObjective.PANDA;
+            };
+        }
+    }
+
+    public ArrayList<Integer> indiceMax(int[] array){
+        int max=0;
+        ArrayList<Integer> res = new ArrayList<>();
+        res.add(max);
+        for(int i=0;i< array.length;i++){
+            if(array[i]>max){
+                max = array[i];
+                res.removeAll(res);
+                res.add(i);
+            }
+            if(array[i] == max){
+                res.add(i);
+            }
         }
         return res;
+    }
+    public TypeObjective mostPresentTypeObjectiveAvailableToDraw(){
+        int[] numberOfTypeObjectiveAvailable = new int[NB_LISTES_OBJECTIVES];
+        numberOfTypeObjectiveAvailable[0] = this.getParcelleObjectifs().size();
+        numberOfTypeObjectiveAvailable[1] = this.getJardinierObjectifs().size();
+        numberOfTypeObjectiveAvailable[2] = this.getPandaObjectifs().size();
+        ArrayList<Integer> indices = indiceMax(numberOfTypeObjectiveAvailable);
+        if(numberOfTypeObjectiveAvailable[indices.get(0)] !=0){
+            return switch (indices.get(0)){
+                case 0 -> TypeObjective.PARCELLE;
+                case 1 -> TypeObjective.JARDINIER;
+                default -> TypeObjective.PANDA;
+            };
+        }
+        return null;
     }
 }

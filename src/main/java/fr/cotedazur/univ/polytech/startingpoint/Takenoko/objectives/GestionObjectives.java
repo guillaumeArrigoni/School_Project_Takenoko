@@ -4,6 +4,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
@@ -278,7 +279,7 @@ public class GestionObjectives {
     private boolean checkParcelleLosangeObjectives(Objective objective) {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
-            HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+            HexagoneBoxPlaced box = board.getPlacedBox().get(listOfIdAvailable.get(i));
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
             for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
                 if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
@@ -296,7 +297,7 @@ public class GestionObjectives {
      * @param idOfAdjacentBoxCorrect contains all the adjacent box of the previous box that complete the objective condition (color, irrigated ...)
      * @return true if the rhombus parcel is completed, false if it does not
      */
-    private boolean ParcelleLosangeObjectifCondition(HexagoneBox box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
+    private boolean ParcelleLosangeObjectifCondition(HexagoneBoxPlaced box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
             int adjIndice1 = (idOfAdjacentBoxCorrect.get(j)+1)%7;
             int adjIndice2 = (idOfAdjacentBoxCorrect.get(j)+2)%7;
@@ -341,7 +342,7 @@ public class GestionObjectives {
      * @return true if the parcel is compelted, false if it does not
      */
     private ArrayList<Integer> getAllAdjacentBoxThatCompleteTheCondition(ArrayList<Integer> listOfIdAvailable, int i) {
-        HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+        HexagoneBoxPlaced box = board.getPlacedBox().get(listOfIdAvailable.get(i));
         ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
         for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
             if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){

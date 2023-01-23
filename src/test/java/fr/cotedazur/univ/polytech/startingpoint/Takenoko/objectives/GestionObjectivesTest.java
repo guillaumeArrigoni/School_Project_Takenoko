@@ -6,8 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,17 +23,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class GestionObjectivesTest {
 
 
-    private static HexagoneBox Greenbox1;
-    private static HexagoneBox Greenbox2;
-    private static HexagoneBox Greenbox3;
-    private static HexagoneBox Greenbox4;
-    private static HexagoneBox Greenbox5;
-    private static HexagoneBox Greenbox6;
-    private static HexagoneBox Yellowbox;
-    private static HexagoneBox Yellowbox2;
-    private static HexagoneBox YellowEngraisbox;
-    private static HexagoneBox RedProtegerbox;
-    private static HexagoneBox Redbox;
+    private static HexagoneBoxPlaced Greenbox1;
+    private static HexagoneBoxPlaced Greenbox2;
+    private static HexagoneBoxPlaced Greenbox3;
+    private static HexagoneBoxPlaced Greenbox4;
+    private static HexagoneBoxPlaced Greenbox5;
+    private static HexagoneBoxPlaced Greenbox6;
+    private static HexagoneBoxPlaced Yellowbox;
+    private static HexagoneBoxPlaced Yellowbox2;
+    private static HexagoneBoxPlaced YellowEngraisbox;
+    private static HexagoneBoxPlaced RedProtegerbox;
+    private static HexagoneBoxPlaced Redbox;
     private static Objective triangleVert;
     private static Objective ligneVert;
     private static Objective courbeVert;
@@ -55,12 +54,10 @@ class GestionObjectivesTest {
     private static Random random;
     private static GestionObjectives gestionObjectives;
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private static ElementOfTheGame elementOfTheGame;
 
     @BeforeAll
     public static void setupBox() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        elementOfTheGame = new ElementOfTheGame();
         board = new Board(retrieveBoxIdWithParameters);
         meteoDice = new MeteoDice();
         random = new Random();
@@ -71,17 +68,17 @@ class GestionObjectivesTest {
                 gestionObjectives.ListOfObjectivePandaByDefault()
         );
         bot = new BotRandom("Bot",board,random, meteoDice,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
-        Greenbox1 = new HexagoneBox(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox2 = new HexagoneBox(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox3 = new HexagoneBox(-1, 2, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox4 = new HexagoneBox(-1, 0, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox5 = new HexagoneBox(0, -1, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox6 = new HexagoneBox(-2, 2, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Yellowbox = new HexagoneBox(0, 2, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        Yellowbox2 = new HexagoneBox(1, 1, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        Redbox = new HexagoneBox(1,-1,0,Color.Rouge,Special.Classique,retrieveBoxIdWithParameters,board);
-        YellowEngraisbox = new HexagoneBox(1,0,-1,Color.Jaune,Special.Engrais,retrieveBoxIdWithParameters,board);
-        RedProtegerbox = new HexagoneBox(-2,1,1,Color.Rouge,Special.Protéger,retrieveBoxIdWithParameters,board);
+        Greenbox1 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox2 = new HexagoneBoxPlaced(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox3 = new HexagoneBoxPlaced(-1, 2, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox4 = new HexagoneBoxPlaced(-1, 0, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox5 = new HexagoneBoxPlaced(0, -1, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Greenbox6 = new HexagoneBoxPlaced(-2, 2, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        Yellowbox = new HexagoneBoxPlaced(0, 2, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        Yellowbox2 = new HexagoneBoxPlaced(1, 1, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        Redbox = new HexagoneBoxPlaced(1,-1,0,Color.Rouge,Special.Classique,retrieveBoxIdWithParameters,board);
+        YellowEngraisbox = new HexagoneBoxPlaced(1,0,-1,Color.Jaune,Special.Engrais,retrieveBoxIdWithParameters,board);
+        RedProtegerbox = new HexagoneBoxPlaced(-2,1,1,Color.Rouge,Special.Protéger,retrieveBoxIdWithParameters,board);
         triangleVert = gestionObjectives.POSER_TRIANGLE_VERT;
         ligneVert = gestionObjectives.POSER_LIGNE_VERTE;
         courbeVert = gestionObjectives.POSER_COURBE_VERTE;

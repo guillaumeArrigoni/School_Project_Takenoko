@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class HexagoneBoxPlaced extends HexagoneBox {
+public class HexagoneBoxPlaced extends HexagoneBox  {
 
     private int[] coordinates ;
     /**
@@ -131,48 +131,12 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         this.AdjacentBox.put(6,new int[] {x,y-1,z+1});
     }
 
-    /**
-     * Method use to generate the id with the coordinates
-     * @param coordinates : the list of coordinates with in index 0 : x, index 1 : y, index 2 : z
-     * @return the id associated to the coordinates:
-     */
-    public static int generateID(int[] coordinates) {
-        int id = 1000000;
-        int tempo;
-        for (int i=0;i<3;i++){
-            if (coordinates[i]<0){
-                tempo = 100 + coordinates[i];
-            } else {
-                tempo = coordinates[i];
-            }
-            id = id + tempo * (int) Math.pow(100,i);
-        }
-        return id;
-    }
-
-    /**
-     * Method use to separate an id into a tab of 3 int with the coordinates associated to the id
-     * @param id : the id we want to get the coordinates
-     * @return a tab of 3 int with the coordinates
-     */
-    public static int[] separateID(int id) {
-        int[] tab = new int[3];
-        tab[2] = (id % 1000000) / 10000;
-        tab[1] = (id % 10000) / 100;
-        tab[0] = id % 100;
-        for (int i=0; i<3; i++) {
-            if (tab[i] > 50) tab[i]=tab[i]-100;
-        }
-        return tab;
-    }
-
     @Override
     public String toString() {
         return "Box of id : " + id +
                 ", color : " + color +
                 " and is " + special;
     }
-
 
 
     private void generateCrestAroundBox(){

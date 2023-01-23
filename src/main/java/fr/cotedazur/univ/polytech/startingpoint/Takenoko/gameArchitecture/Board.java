@@ -27,7 +27,7 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private HashMap<Integer, HexagoneBox> placedBox;
+    private HashMap<Integer, HexagoneBoxPlaced> placedBox;
     
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
@@ -41,7 +41,6 @@ public class Board {
     private int[] gardenerCoords;
     private int[] pandaCoords;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private ArrayList<HexagoneBox> cardDeck;
     private final CrestGestionnary crestGestionnary;
 
     public CrestGestionnary getCrestGestionnary() {
@@ -73,8 +72,6 @@ public class Board {
         this.AvailableBox = new ArrayList<>();
         this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
-        this.cardDeck = new ArrayList<>();
-        setCardDeck();
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
@@ -83,7 +80,7 @@ public class Board {
     }
 
     private void generateLac(){
-        HexagoneBox lac = new HexagoneBox(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
+        HexagoneBoxPlaced lac = new HexagoneBoxPlaced(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
         this.numberBoxPlaced = 1;
         for (int i=1;i<7;i++){
             this.AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
@@ -93,57 +90,20 @@ public class Board {
         lac.launchIrrigationChecking();
     }
 
-    public void setCardDeck() {
-        for (int i = 0; i < 9; i++) {
-            HexagoneBox newYellowBox = new HexagoneBox(Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,this);
-            switch (i) {
-                case 0 -> newYellowBox.setSpecial(Special.Engrais);
-                case 1 -> newYellowBox.setSpecial(Special.Protéger);
-                case 2 -> newYellowBox.setSpecial(Special.SourceEau);
-                default -> {
-                }
-            }
-            this.cardDeck.add(newYellowBox);
-        }
-        for (int i = 0; i < 11; i++) {
-            HexagoneBox newGreenBox = new HexagoneBox(Color.Vert, Special.Classique, retrieveBoxIdWithParameters,this);
-            switch (i) {
-                case 0 -> newGreenBox.setSpecial(Special.Engrais);
-                case 1, 2 -> newGreenBox.setSpecial(Special.Protéger);
-                case 3, 4 -> newGreenBox.setSpecial(Special.SourceEau);
-                default -> {
-                }
-            }
-            this.cardDeck.add(newGreenBox);
-        }
-        for (int i = 0; i < 7; i++) {
-            HexagoneBox newRedBox = new HexagoneBox(Color.Rouge, Special.Classique, retrieveBoxIdWithParameters,this);
-            switch (i) {
-                case 0 -> newRedBox.setSpecial(Special.Engrais);
-                case 1 -> newRedBox.setSpecial(Special.Protéger);
-                case 2 -> newRedBox.setSpecial(Special.SourceEau);
-                default -> {
-                }
-            }
-            this.cardDeck.add(newRedBox);
-        }
-        Collections.shuffle(this.cardDeck);
-    }
-
     public int[] getGardenerCoords() {
         return this.gardenerCoords;
     }
     public int[] getPandaCoords() {return this.pandaCoords;}
-    public HexagoneBox getBoxWithCoordinates(int[] coords) {
+    public HexagoneBoxPlaced getBoxWithCoordinates(int[] coords) {
         return this.placedBox.get(HexagoneBox.generateID(coords));
     }
     public int getNumberBoxPlaced() {
         return numberBoxPlaced;
     }
-    public HashMap<Integer, HexagoneBox> getPlacedBox() {
+    public HashMap<Integer, HexagoneBoxPlaced> getPlacedBox() {
         return placedBox;
     }
-    public ArrayList<HexagoneBox> getAllBoxPlaced() {
+    public ArrayList<HexagoneBoxPlaced> getAllBoxPlaced() {
         return new ArrayList<>(this.placedBox.values());
     }
     public ArrayList<int[]> getAvailableBox(){
@@ -152,7 +112,7 @@ public class Board {
     
     public void setPandaCoords(int[] newCoords, Bot bot) {
         this.pandaCoords = newCoords;
-        HexagoneBox box = getBoxWithCoordinates(newCoords);
+        HexagoneBoxPlaced box = getBoxWithCoordinates(newCoords);
         if (box.getSpecial()!=Special.Protéger && box.getHeightBamboo()>0) {
             Optional<Color> bambooEatedColor = box.eatBamboo();
             if (bambooEatedColor.isPresent()){
@@ -177,7 +137,7 @@ public class Board {
      *      Add the new adjacent box from the box placed and any other box placed before in the ArrayList AvailableBox
      * @param box : the new Hexagone box to add to the board
      */
-    public void addBox(HexagoneBox box) {
+    public void addBox(HexagoneBoxPlaced box) {
         int[] coord = box.getCoordinates();
         int[] newCoord1, newCoord2;
         UpdateAvaiableBoxAndPlacedBox(box);
@@ -233,14 +193,14 @@ public class Board {
      * Method use to grow the bamboo in the adjacentBox of the one where the gardener is placed
      * @param box where the gardener is placed
      */
-    private void growAfterMoveOfTheGardener(HexagoneBox box){
+    private void growAfterMoveOfTheGardener(HexagoneBoxPlaced box){
         if (box.isIrrigate() &&
                 !Arrays.equals(box.getCoordinates(), new int[]{0,0,0}) &&
                 box.getHeightBamboo()<4) box.growBamboo();
         HashMap<Integer, int[]> adjacentBox = box.getAdjacentBox();
         for (int[] coordinate : adjacentBox.values()) {
             if (isCoordinateInBoard(coordinate)) {
-                HexagoneBox newBox = getBoxWithCoordinates(coordinate);
+                HexagoneBoxPlaced newBox = getBoxWithCoordinates(coordinate);
                 if (this.placedBox.containsKey(newBox.getId()) &&
                         newBox.isIrrigate() &&
                         newBox.getColor() == box.getColor() &&
@@ -256,7 +216,7 @@ public class Board {
      * Then remove in the Hasmap AvailableBox the box that we just place now and add the id of this new box into the Hasmap PlacedBox
      * @param box : box that we place in the board.
      */
-    private void UpdateAvaiableBoxAndPlacedBox(HexagoneBox box) {
+    private void UpdateAvaiableBoxAndPlacedBox(HexagoneBoxPlaced box) {
         this.numberBoxPlaced = this.numberBoxPlaced +1;
         if (this.numberBoxPlaced == 2) {
             AvailableBox.clear();

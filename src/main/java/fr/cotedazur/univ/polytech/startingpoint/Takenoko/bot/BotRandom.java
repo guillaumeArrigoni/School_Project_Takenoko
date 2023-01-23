@@ -4,6 +4,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -89,14 +90,14 @@ public class BotRandom extends Bot {
         for(int i = 0; i < 3; i++)
             list.add(Action.drawTile(random, retrieveBoxIdWithParameters,board));
         //Choose a random tile from the tiles drawn
-        HexagoneBox placedTile = list.get(random.nextInt(0, 3));
+        HexagoneBox tileToPlace = list.get(random.nextInt(0, 3));
         //Choose a random available space
         int[] placedTileCoords = availableTilesList.get(random.nextInt(0, availableTilesList.size()));
         //Set the coords of the tile
-        placedTile.setCoordinates(placedTileCoords);
+        HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-        System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+        System.out.println(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
     @Override

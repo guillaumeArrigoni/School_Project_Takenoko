@@ -2,10 +2,9 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Objects;
 
-public class Crest implements GenerateMethods, Comparable<Crest> {
+public class Crest implements Comparable<Crest> {
 
     private int range_to_irrigation;
     private int id;
@@ -74,7 +73,6 @@ public class Crest implements GenerateMethods, Comparable<Crest> {
         this.order = x;
     }
 
-    @Override
     public int generateID(int[] coordinate){
         int id = 1000000;
         for (int i=0;i<2;i++){
@@ -87,7 +85,6 @@ public class Crest implements GenerateMethods, Comparable<Crest> {
         return id;
     }
 
-    @Override
     public int[] separateID(int id) {
         int[] tab = new int[2];
         tab[1] = (id % 1000000) / 1000;

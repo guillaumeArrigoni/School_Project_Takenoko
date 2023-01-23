@@ -1,15 +1,14 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
-public class HexagoneBox {
+public class HexagoneBoxPlaced extends HexagoneBox {
 
     private int[] coordinates ;
     /**
@@ -17,9 +16,6 @@ public class HexagoneBox {
      * Example : 1020301 -> x = 02, y = 03, z = 01
      */
     private int id ;
-    private Color color;
-    private Special special;
-    private boolean irrigate;
     private int heightBamboo;
     private HashMap<Integer,int[]> AdjacentBox;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
@@ -34,37 +30,32 @@ public class HexagoneBox {
      * @param z : 5-4 (or 1-2) edge
      * @param y : 6-5 (or 2-3) edge
      * @param x : 1-6 (or 3-4) edge
-     * @param color : the color of the box
-     * @param special : the particularity of the box
      */
-    public HexagoneBox (int x, int y, int z, Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
+    public HexagoneBoxPlaced (int x, int y, int z, HexagoneBox boxNotPlaced,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
+        super(boxNotPlaced);
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.board = board;
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
-        this.color = color;
-        this.special = special;
-        this.heightBamboo = 0;
+        if(super.irrigate){
+            this.heightBamboo = 1;
+        } else {
+            this.heightBamboo = 0;
+        }
         getAllAdjacenteBox();
         updateRetrieveBox();
         generateCrestAroundBox();
     }
 
-    private void updateRetrieveBox() {
-        retrieveBoxIdWithParameters.setBoxColor(this.id,this.color);
-        retrieveBoxIdWithParameters.setBoxHeight(this.id, this.heightBamboo);
-        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,this.irrigate);
-        retrieveBoxIdWithParameters.setBoxSpeciality(this.id, this.special);
+    public HexagoneBoxPlaced (int x, int y, int z, Color color,Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
+        this(x,y,z,new HexagoneBox(color,special),retrieveBoxIdWithParameters,board);
     }
 
-    public HexagoneBox (Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
-        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
-        this.board = board;
-        this.coordinates = null;
-        this.color = color;
-        this.special = special;
-        this.irrigate = true;
-        this.heightBamboo = 0;
+    private void updateRetrieveBox() {
+        retrieveBoxIdWithParameters.setBoxColor(this.id,super.color);
+        retrieveBoxIdWithParameters.setBoxHeight(this.id, this.heightBamboo);
+        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,super.irrigate);
+        retrieveBoxIdWithParameters.setBoxSpeciality(this.id, super.special);
     }
 
     public int[] getCoordinates(){
@@ -75,25 +66,19 @@ public class HexagoneBox {
         return this.id;
     }
 
-    public Color getColor(){
-        return this.color;
-    }
-
-    public Special getSpecial() {
-        return special;
-    }
-
-    public boolean isIrrigate() {
-        return irrigate;
-    }
-
     public int getHeightBamboo() {
         return heightBamboo;
     }
 
     public void growBamboo() {
+        int boucle = 1;
+        if (super.special==Special.Engrais){
+            boucle = 2;
+        }
         retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
-        if (this.heightBamboo < 4) this.heightBamboo++;
+        for (int i=0;i<boucle;i++){
+            if (this.heightBamboo < 4) this.heightBamboo++;
+        }
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
 
@@ -102,7 +87,7 @@ public class HexagoneBox {
         Optional<Color> bambooEatedColor = Optional.empty();
         if (this.heightBamboo > 0) {
             this.heightBamboo--;
-            bambooEatedColor = Optional.of(this.color);
+            bambooEatedColor = Optional.of(super.color);
         }
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
         return bambooEatedColor;
@@ -116,22 +101,18 @@ public class HexagoneBox {
         return this.AdjacentBox.get(index);
     }
 
-    public void setCoordinates(int[] coordinates) {
-        this.coordinates = coordinates;
-        this.id = generateID(this.coordinates);
-        getAllAdjacenteBox();
-        updateRetrieveBox();
-        generateCrestAroundBox();
-    }
-
     public void setSpecial(Special special) {
-        this.special = special;
-        retrieveBoxIdWithParameters.setBoxSpeciality(this.id,this.special);
+        super.special = special;
+        retrieveBoxIdWithParameters.setBoxSpeciality(this.id,super.special);
     }
 
     public void setIrrigate(boolean irrigate) {
-        this.irrigate = irrigate;
-        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,this.irrigate);
+        super.irrigate = irrigate;
+        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,super.irrigate);
+        if (irrigate){
+            this.heightBamboo = 1;
+            retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
+        }
     }
 
     public void setHeightBamboo(int heightBamboo) {
@@ -160,63 +141,12 @@ public class HexagoneBox {
         this.AdjacentBox.put(6,new int[] {x,y-1,z+1});
     }
 
-    private void getAllAdjacenteBoxOfRange(int range){
-        this.AdjacentBox = new HashMap<Integer,int[]>();
-        int x = this.coordinates[0];
-        int y = this.coordinates[1];
-        int z = this.coordinates[2];
-        for (int i = 0;i<5;i++){
-        }
-        this.AdjacentBox.put(1,new int[]{x+1,y-1,z});
-        this.AdjacentBox.put(2,new int[] {x+1,y,z-1});
-        this.AdjacentBox.put(3,new int[] {x,y+1,z-1});
-        this.AdjacentBox.put(4,new int[] {x-1,y+1,z});
-        this.AdjacentBox.put(5,new int[] {x-1,y,z+1});
-        this.AdjacentBox.put(6,new int[] {x,y-1,z+1});
-    }
-
-    /**
-     * Method use to generate the id with the coordinates
-     * @param coordinates : the list of coordinates with in index 0 : x, index 1 : y, index 2 : z
-     * @return the id associated to the coordinates:
-     */
-    public static int generateID(int[] coordinates) {
-        int id = 1000000;
-        int tempo;
-        for (int i=0;i<3;i++){
-            if (coordinates[i]<0){
-                tempo = 100 + coordinates[i];
-            } else {
-                tempo = coordinates[i];
-            }
-            id = id + tempo * (int) Math.pow(100,i);
-        }
-        return id;
-    }
-
-    /**
-     * Method use to separate an id into a tab of 3 int with the coordinates associated to the id
-     * @param id : the id we want to get the coordinates
-     * @return a tab of 3 int with the coordinates
-     */
-    public static int[] separateID(int id) {
-        int[] tab = new int[3];
-        tab[2] = (id % 1000000) / 10000;
-        tab[1] = (id % 10000) / 100;
-        tab[0] = id % 100;
-        for (int i=0; i<3; i++) {
-            if (tab[i] > 50) tab[i]=tab[i]-100;
-        }
-        return tab;
-    }
-
     @Override
     public String toString() {
         return "Box of id : " + id +
-                ", color : " + color +
-                " and is " + special;
+                ", color : " + super.color +
+                " and is " + super.special;
     }
-
 
 
     private void generateCrestAroundBox(){
@@ -239,15 +169,15 @@ public class HexagoneBox {
     private void setAutoIrrigation(){
         if (board.getCrestGestionnaryAlreadyIrrigated().contains(this.id)){
             board.getCrestGestionnaryAlreadyIrrigated().removeAll(Arrays.asList(this.id));
-            this.irrigate = true;
+            this.setIrrigate(true);
         } else {
-            //TODO change below to false when add irrigation option to the game
-            this.irrigate = board.getAllIrrigated();
+            //TODO change above to false when add irrigation option to the game
+            super.irrigate = board.getAllIrrigated();
         }
     }
 
     private void initiateLacIrrigation(){
-        if (this.color == Color.Lac){
+        if (super.color == Color.Lac){
             for (int i=0; i<this.listOfCrestAroundBox.size();i++){
                 this.board.placeIrrigation(listOfCrestAroundBox.get(i));
             }
@@ -257,5 +187,26 @@ public class HexagoneBox {
     public void launchIrrigationChecking(){
         initiateLacIrrigation();
         setAutoIrrigation();
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (object == this) {
+            return true;
+        }
+        if (!(object instanceof HexagoneBoxPlaced)) {
+            return false;
+        }
+        HexagoneBoxPlaced hexagoneBoxPlaced = (HexagoneBoxPlaced) object;
+
+        return (this.id == hexagoneBoxPlaced.id &&
+                this.board == hexagoneBoxPlaced.board &&
+                super.color==hexagoneBoxPlaced.color &&
+                super.special == hexagoneBoxPlaced.special);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id + this.board.getIdOfTheBoard()*10000000);
     }
 }

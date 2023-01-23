@@ -1,13 +1,11 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
@@ -15,7 +13,7 @@ import java.util.*;
 public class Main {
     public static void main(String... args) {
         RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-        Board board = new Board(retrieving);
+        Board board = new Board(retrieving, 1);
         MeteoDice meteoDice = new MeteoDice();
         Random random = new Random();
         GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);

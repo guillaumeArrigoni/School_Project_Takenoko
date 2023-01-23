@@ -1,8 +1,9 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 
 import java.util.*;
 
@@ -51,7 +52,7 @@ public class CrestGestionnary {
         return alreadyIrrigated;
     }
 
-    public void launchUpdatingCrestWithAddingNewBox(HexagoneBox box){
+    public void launchUpdatingCrestWithAddingNewBox(HexagoneBoxPlaced box){
         this.updateCrestVariableWithNewBoxAdded(box);
     }
 
@@ -60,7 +61,7 @@ public class CrestGestionnary {
      * @param crest
      * @param placedBox
      */
-    public void placeIrrigation(Crest crest, HashMap<Integer,HexagoneBox> placedBox) throws ImpossibleToPlaceIrrigationException {
+    public void placeIrrigation(Crest crest, HashMap<Integer, HexagoneBoxPlaced> placedBox) throws ImpossibleToPlaceIrrigationException {
         if (irrigationCanBePlace(crest, placedBox)){
             crest.setIrrigated(true);
             this.rangeFromIrrigated.put(crest,0);
@@ -78,7 +79,7 @@ public class CrestGestionnary {
         }
     }
 
-    private boolean irrigationCanBePlace(Crest crest, HashMap<Integer,HexagoneBox> placedBox){
+    private boolean irrigationCanBePlace(Crest crest, HashMap<Integer, HexagoneBoxPlaced> placedBox){
         return (this.listOfCrestOneRangeToIrrigated.contains(crest) && (
                 placedBox.containsKey(crest.getIdOfAdjacentBox()[0]) ||
                 placedBox.containsKey(crest.getIdOfAdjacentBox()[1]))
@@ -205,7 +206,7 @@ public class CrestGestionnary {
      *
      * @param box
      */
-    private void updateCrestVariableWithNewBoxAdded(HexagoneBox box){
+    private void updateCrestVariableWithNewBoxAdded(HexagoneBoxPlaced box){
         if (box.getColor() == Color.Lac){
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
                 Crest crest = box.getListOfCrestAroundBox().get(i);

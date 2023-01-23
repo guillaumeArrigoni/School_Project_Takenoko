@@ -1,9 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Crest;
-
-import java.util.ArrayList;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 
 public class ImpossibleToPlaceIrrigationException extends TakenokoException{
 

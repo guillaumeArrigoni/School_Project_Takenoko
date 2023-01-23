@@ -1,11 +1,13 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.ElementOfTheGame;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,15 +31,14 @@ class BoardTest {
     private static Random random;
     private static MeteoDice meteoDice;
     private static GestionObjectives gestionObjectives;
-    private static HexagoneBox vert01;
-    private static HexagoneBox vert02;
-    private static HexagoneBox vert07;
-    private static HexagoneBox jaune03;
-    private static HexagoneBox jaune08;
-    private static HexagoneBox rouge09Protected;
-    private static HexagoneBox vert18Engrais;
-    private static HexagoneBox notPlacedInBoard;
-    private static ElementOfTheGame elementOfTheGame;
+    private static HexagoneBoxPlaced vert01;
+    private static HexagoneBoxPlaced vert02;
+    private static HexagoneBoxPlaced vert07;
+    private static HexagoneBoxPlaced jaune03;
+    private static HexagoneBoxPlaced jaune08;
+    private static HexagoneBoxPlaced rouge09Protected;
+    private static HexagoneBoxPlaced vert18Engrais;
+    private static HexagoneBoxPlaced notPlacedInBoard;
     private static Crest crest1;
     private static Crest crest2;
     /**
@@ -53,19 +54,18 @@ class BoardTest {
     @Order(1)
     public static void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        elementOfTheGame = new ElementOfTheGame();
-        board = new Board(retrieveBoxIdWithParameters,true);
+        board = new Board(retrieveBoxIdWithParameters,true, 1);
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
-        vert01 = new HexagoneBox(0,1,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        vert02 = new HexagoneBox(-1,1,0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        vert07 = new HexagoneBox(-1,2,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        jaune03 = new HexagoneBox(-1,0,1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        jaune08 = new HexagoneBox(-2,2,0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        rouge09Protected = new HexagoneBox(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters,board);
-        vert18Engrais = new HexagoneBox(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board);
-        notPlacedInBoard = new HexagoneBox(1,1,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        vert01 = new HexagoneBoxPlaced(0,1,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        vert02 = new HexagoneBoxPlaced(-1,1,0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        vert07 = new HexagoneBoxPlaced(-1,2,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        jaune03 = new HexagoneBoxPlaced(-1,0,1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        jaune08 = new HexagoneBoxPlaced(-2,2,0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        rouge09Protected = new HexagoneBoxPlaced(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters,board);
+        vert18Engrais = new HexagoneBoxPlaced(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board);
+        notPlacedInBoard = new HexagoneBoxPlaced(1,1,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         board.addBox(vert01);
         board.addBox(vert02);
         board.addBox(vert07);
@@ -115,7 +115,7 @@ class BoardTest {
     }
 
     private static Stream<Arguments> provideGardenerMoveAndChecking(){
-        ArrayList<HexagoneBox> listOfBox = new ArrayList<>(Arrays.asList(vert01,vert02,jaune03,vert07,jaune08,rouge09Protected));
+        ArrayList<HexagoneBoxPlaced> listOfBox = new ArrayList<>(Arrays.asList(vert01,vert02,jaune03,vert07,jaune08,rouge09Protected));
         setupHeight(new ArrayList<>(Arrays.asList(3,4,2,0,0,3)));
         return Stream.of(
                 Arguments.of(jaune08, new ArrayList<>(Arrays.asList(3,4,2,0,1,3)),
@@ -137,9 +137,9 @@ class BoardTest {
         );
     }
 
-    private static void cleanAllBambooInBox(ArrayList<HexagoneBox> boxTocleanBamboo){
-        for (HexagoneBox hexagoneBox : boxTocleanBamboo) {
-            hexagoneBox.setHeightBamboo(0);
+    private static void cleanAllBambooInBox(ArrayList<HexagoneBoxPlaced> boxTocleanBamboo){
+        for (HexagoneBoxPlaced hexagoneBoxPlaced : boxTocleanBamboo) {
+            hexagoneBoxPlaced.setHeightBamboo(0);
         }
     }
 
@@ -152,9 +152,9 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("provideGardenerMoveAndChecking")
-    void testsetGardenerCoordsBambooHeight(HexagoneBox box,
+    void testsetGardenerCoordsBambooHeight(HexagoneBoxPlaced box,
                                            ArrayList<Integer> differentBambooHeightInTheBox1_2_3_7_8_9,
-                                            ArrayList<HexagoneBox> listOfBox) {
+                                           ArrayList<HexagoneBoxPlaced> listOfBox) {
         int[] coords = box.getCoordinates();
         board.setGardenerCoords(coords);
         for (int i =0;i<differentBambooHeightInTheBox1_2_3_7_8_9.size();i++){
@@ -164,7 +164,7 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("provideGardenerMoveAndChecking")
-    void testSet_AND_GetGardenerCoords(HexagoneBox box) {
+    void testSet_AND_GetGardenerCoords(HexagoneBoxPlaced box) {
         int[] coords = box.getCoordinates();
         board.setGardenerCoords(coords);
         assertEquals(coords,board.getGardenerCoords());
@@ -172,7 +172,7 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("providePandaMoveAndChecking")
-    void testSetPandaCoordsBambooHeightDown(HexagoneBox box, int x) {
+    void testSetPandaCoordsBambooHeightDown(HexagoneBoxPlaced box, int x) {
         int[] coords = box.getCoordinates();
         board.setPandaCoords(coords,botRandom);
         assertTrue(board.getPlacedBox().get(HexagoneBox.generateID(board.getPandaCoords())).getHeightBamboo()==x);
@@ -180,15 +180,15 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("providePandaMoveAndChecking")
-    void testSetPandaCoordsBambooAteEarnByBot(HexagoneBox box, int Useless, Color color, int nbBambooAte) {
+    void testSetPandaCoordsBambooAteEarnByBot(HexagoneBoxPlaced box, int Useless, Color color, int nbBambooAte) {
         int[] coords = box.getCoordinates();
         board.setPandaCoords(coords,botRandom);
-        assertTrue(nbBambooAte==botRandom.getBambooEated().get(color));
+        assertTrue(nbBambooAte==botRandom.getBambooEaten().get(color));
     }
 
     @ParameterizedTest
     @MethodSource("providePandaMoveAndChecking")
-    void testSet_AND_GetPandaCoords(HexagoneBox box) {
+    void testSet_AND_GetPandaCoords(HexagoneBoxPlaced box) {
         int[] coords = box.getCoordinates();
         board.setPandaCoords(coords,botRandom);
         assertTrue(board.getPandaCoords()==coords);
@@ -196,7 +196,7 @@ class BoardTest {
 
     @ParameterizedTest
     @MethodSource("providePandaMoveAndChecking")
-    void testGetBoxWithCoordinates(HexagoneBox box) {
+    void testGetBoxWithCoordinates(HexagoneBoxPlaced box) {
         assertEquals(box,board.getBoxWithCoordinates(box.getCoordinates()));
     }
 
@@ -204,8 +204,8 @@ class BoardTest {
     void testIsCoordinateInBoard() {
         assertFalse(board.isCoordinateInBoard(notPlacedInBoard.getCoordinates()));
         assertTrue(board.isCoordinateInBoard(vert01.getCoordinates()));
-
-    }    @AfterAll
+    }
+    @AfterAll
     public static void ending(){
         System.out.println("\nAll test passed successfully !");
     }

@@ -12,68 +12,104 @@ import static java.util.Map.entry;
 public class ElementOfTheBoard {
 
     private HashMap<Color,Integer> nbOfBambooForEachColorAvailable;
-    private HashMap<Color,Integer> defaultInstructionBamboo;
-    private HashMap<HexagoneBox,Integer> defaultInstructionBox;
-    private final StackOfBox stackOfBox;
-    private final Board board;
-    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private final HashMap<Color,Integer> defaultInstructionBamboo = (HashMap<Color, Integer>) Map.ofEntries(
+            entry(Color.Vert,36),
+            entry(Color.Jaune,30),
+            entry(Color.Rouge,24)
+    );
 
-    private void setup_defaultInstructionBox(){
-        defaultInstructionBox = (HashMap<HexagoneBox, Integer>) Map.ofEntries(
-                entry(new HexagoneBox(Color.Lac,Special.Classique,retrieveBoxIdWithParameters,board),1),
-                entry(new HexagoneBox(Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board),6),
-                entry(new HexagoneBox(Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board),1),
-                entry(new HexagoneBox(Color.Vert,Special.Protéger,retrieveBoxIdWithParameters,board),2),
-                entry(new HexagoneBox(Color.Vert,Special.SourceEau,retrieveBoxIdWithParameters,board),2),
-                entry(new HexagoneBox(Color.Jaune,Special.Classique,retrieveBoxIdWithParameters,board),6),
-                entry(new HexagoneBox(Color.Jaune,Special.Engrais,retrieveBoxIdWithParameters,board),1),
-                entry(new HexagoneBox(Color.Jaune,Special.Protéger,retrieveBoxIdWithParameters,board),1),
-                entry(new HexagoneBox(Color.Jaune,Special.SourceEau,retrieveBoxIdWithParameters,board),1),
-                entry(new HexagoneBox(Color.Rouge,Special.Classique,retrieveBoxIdWithParameters,board),6),
-                entry(new HexagoneBox(Color.Rouge,Special.Engrais,retrieveBoxIdWithParameters,board),1),
-                entry(new HexagoneBox(Color.Rouge,Special.Protéger,retrieveBoxIdWithParameters,board),1),
-                entry(new HexagoneBox(Color.Rouge,Special.SourceEau,retrieveBoxIdWithParameters,board),1)
-        );
+    private final HashMap<HexagoneBox,Integer> defaultInstructionBox = (HashMap<HexagoneBox, Integer>) Map.ofEntries(
+            entry(new HexagoneBox(Color.Lac,Special.Classique),1),
+            entry(new HexagoneBox(Color.Vert,Special.Classique),6),
+            entry(new HexagoneBox(Color.Vert,Special.Engrais),1),
+            entry(new HexagoneBox(Color.Vert,Special.Protéger),2),
+            entry(new HexagoneBox(Color.Vert,Special.SourceEau),2),
+            entry(new HexagoneBox(Color.Jaune,Special.Classique),6),
+            entry(new HexagoneBox(Color.Jaune,Special.Engrais),1),
+            entry(new HexagoneBox(Color.Jaune,Special.Protéger),1),
+            entry(new HexagoneBox(Color.Jaune,Special.SourceEau),1),
+            entry(new HexagoneBox(Color.Rouge,Special.Classique),6),
+            entry(new HexagoneBox(Color.Rouge,Special.Engrais),1),
+            entry(new HexagoneBox(Color.Rouge,Special.Protéger),1),
+            entry(new HexagoneBox(Color.Rouge,Special.SourceEau),1)
+    );
+    private StackOfBox stackOfBox;
+
+    public ElementOfTheBoard(HashMap<Color,Integer> instructionBamboo, HashMap<HexagoneBox,Integer> instructionBox){
+        this.stackOfBox = new StackOfBox(instructionBox);
+        this.nbOfBambooForEachColorAvailable = instructionBamboo;
     }
 
-    public ElementOfTheBoard(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> instructionBamboo, HashMap<HexagoneBox,Integer> instructionBox){
-        this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
-        this.board = board;
-        Color c = new Color(1,"a");
-        setup_defaultInstructionBamboo();
-        setup_defaultInstructionBox();
-        this.stackOfBox = new StackOfBox(board,retrieveBoxIdWithParameters,instructionBox);
-        setup_NbOfBambooForEachColorAvailable(instructionBamboo);
+    public ElementOfTheBoard(){
+        this.stackOfBox = new StackOfBox(defaultInstructionBox);
+        this.nbOfBambooForEachColorAvailable = defaultInstructionBamboo;
     }
 
-    public ElementOfTheBoard(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
-        this(board,retrieveBoxIdWithParameters,new HashMap<>(),);
-        setup_NbOfBambooForEachColorAvailable(defaultInstruction);
+    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo,
+                             ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox, boolean fromBeginingBox){
+        this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginingBox));
+        this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginingBamboo);
     }
 
-    public ElementOfTheBoard(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters,
-                             ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor,
-                             boolean fromBegining){
-        this(board,retrieveBoxIdWithParameters,new HashMap<>());
-        setup_NbOfBambooForEachColorAvailable(generateWithArrayListBasement(listOfBambooAvailable,listOfColor,fromBegining));
+    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo){
+        this.stackOfBox = new StackOfBox(defaultInstructionBox);
+        this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginingBamboo);
+    }
+
+    public ElementOfTheBoard(boolean fromBeginingBox,ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox){
+        this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginingBox));
+        this.nbOfBambooForEachColorAvailable = defaultInstructionBamboo;
+    }
+
+    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor,
+                             ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox){
+        this(listOfBambooAvailable,listOfColor,false,listOfBoxAvailable,listOfBox,false);
     }
 
     /**
-     * Method use to generate execute the different option when the constructor with boolean different option is create
+     * Method use to launch creation of box instruction with list of Box
      * @param listOfNumberToCreate
-     * @param listColor
-     * @param fromBegining
+     * @param listBox
+     * @param fromBegining : true if the default instruction are not used
      * @return
      */
-    private HashMap<Color, Integer> generateWithArrayListBasement(ArrayList<Integer> listOfNumberToCreate,
-                                                                        ArrayList<Color> listColor, boolean fromBegining) {
-        HashMap<Color,Integer> instruction = defaultInstruction;
+    private HashMap<HexagoneBox, Integer> generateWithArrayListBasementBox(ArrayList<Integer> listOfNumberToCreate,
+                                                                        ArrayList<HexagoneBox> listBox, boolean fromBegining) {
+        HashMap<HexagoneBox,Integer> instruction = defaultInstructionBox;
+        instruction = getColorIntegerHashMap(listOfNumberToCreate, listBox, fromBegining, instruction);
+        return instruction;
+    }
+
+    /**
+     * Method use to launch creation of bamboo instruction with list of Color
+     * @param listOfNumberToCreate
+     * @param listColor
+     * @param fromBegining : true if the default instruction are not used
+     * @return
+     */
+    private HashMap<Color, Integer> generateWithArrayListBasementBamboo(ArrayList<Integer> listOfNumberToCreate,
+                                                                  ArrayList<Color> listColor, boolean fromBegining) {
+        HashMap<Color,Integer> instruction = defaultInstructionBamboo;
+        instruction = getColorIntegerHashMap(listOfNumberToCreate, listColor, fromBegining, instruction);
+        return instruction;
+    }
+
+    /**
+     * Method use to handle exception if the list don't have the same size, and launch the generation of the instruction
+     * @param listOfNumberToCreate
+     * @param listKey
+     * @param fromBegining : true if the default instruction are not used
+     * @param instruction
+     * @return
+     * @param <T>
+     */
+    private <T> HashMap<T, Integer> getColorIntegerHashMap(ArrayList<Integer> listOfNumberToCreate, ArrayList<T> listKey, boolean fromBegining, HashMap<T, Integer> instruction) {
         try {
-            checkForThrowing_ListOfDifferentSize_Exception(listColor.size(), listOfNumberToCreate.size());
+            checkForThrowing_ListOfDifferentSize_Exception(listKey.size(), listOfNumberToCreate.size());
             if (fromBegining){
                 instruction = new HashMap<>();
             }
-            instruction = generateWithArrayList(instruction, listOfNumberToCreate, listColor);
+            instruction = generateWithArrayList(instruction, listOfNumberToCreate, listKey);
         } catch (ListOfDifferentSize e) {
             System.err.println("\n  -> An error has occurred : "
                     + e.getErrorTitle()
@@ -102,15 +138,15 @@ public class ElementOfTheBoard {
      * Method use to add the new instruction to those already implement in defaultInstruction
      * @param instructionToComplete the hashmap of instruction that have to be completed
      * @param listOfNumberToCreate
-     * @param listColor
+     * @param listKey
      * @return
      */
-    private HashMap<Color,Integer> generateWithArrayList(HashMap<Color,Integer> instructionToComplete,
+    private <T> HashMap<T,Integer> generateWithArrayList(HashMap<T,Integer> instructionToComplete,
                                                                ArrayList<Integer> listOfNumberToCreate,
-                                                               ArrayList<Color> listColor){
-        HashMap<Color,Integer> instructionForGeneration = instructionToComplete;
-        for (int i =0;i<listColor.size();i++){
-            Color key = listColor.get(i);
+                                                               ArrayList<T> listKey){
+        HashMap<T,Integer> instructionForGeneration = instructionToComplete;
+        for (int i =0;i<listKey.size();i++){
+            T key = listKey.get(i);
             int numberToCreate = listOfNumberToCreate.get(i);
             if (instructionForGeneration.containsKey(key)){
                 numberToCreate = numberToCreate + instructionForGeneration.get(key);
@@ -121,27 +157,11 @@ public class ElementOfTheBoard {
     }
 
 
-
-
-
-
     public StackOfBox getStackOfBox(){
         return stackOfBox;
     }
 
     public HashMap<Color,Integer> getNbOfBambooForEachColorAvailable(){
         return nbOfBambooForEachColorAvailable;
-    }
-
-    private void setup_defaultInstructionBamboo(){
-        this.defaultInstruction = (HashMap<Color, Integer>) Map.ofEntries(
-                entry(Color.Vert,36),
-                entry(Color.Jaune,30),
-                entry(Color.Rouge,24)
-        );
-    }
-
-    private void setup_NbOfBambooForEachColorAvailable(HashMap<Color,Integer> instruction){
-
     }
 }

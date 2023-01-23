@@ -22,7 +22,7 @@ public class StackOfBox {
      * Method use to add a new element in the stack of HexagoneBox
      * @param box
      */
-    public void addNewBox(HexagoneBoxPlaced box){
+    public void addNewBox(HexagoneBox box){
         this.stackOfBox.add(box);
     }
 

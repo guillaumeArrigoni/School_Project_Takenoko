@@ -17,9 +17,6 @@ public class HexagoneBoxPlaced extends HexagoneBox  {
      * Example : 1020301 -> x = 02, y = 03, z = 01
      */
     private int id ;
-    private Color color;
-    private Special special;
-    private boolean irrigate;
     private int heightBamboo;
     private HashMap<Integer,int[]> AdjacentBox;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
@@ -52,10 +49,10 @@ public class HexagoneBoxPlaced extends HexagoneBox  {
     }
 
     private void updateRetrieveBox() {
-        retrieveBoxIdWithParameters.setBoxColor(this.id,this.color);
+        retrieveBoxIdWithParameters.setBoxColor(this.id,super.color);
         retrieveBoxIdWithParameters.setBoxHeight(this.id, this.heightBamboo);
-        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,this.irrigate);
-        retrieveBoxIdWithParameters.setBoxSpeciality(this.id, this.special);
+        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,super.irrigate);
+        retrieveBoxIdWithParameters.setBoxSpeciality(this.id, super.special);
     }
 
     public int[] getCoordinates(){
@@ -81,7 +78,7 @@ public class HexagoneBoxPlaced extends HexagoneBox  {
         Optional<Color> bambooEatedColor = Optional.empty();
         if (this.heightBamboo > 0) {
             this.heightBamboo--;
-            bambooEatedColor = Optional.of(this.color);
+            bambooEatedColor = Optional.of(super.color);
         }
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
         return bambooEatedColor;
@@ -96,13 +93,13 @@ public class HexagoneBoxPlaced extends HexagoneBox  {
     }
 
     public void setSpecial(Special special) {
-        this.special = special;
-        retrieveBoxIdWithParameters.setBoxSpeciality(this.id,this.special);
+        super.special = special;
+        retrieveBoxIdWithParameters.setBoxSpeciality(this.id,super.special);
     }
 
     public void setIrrigate(boolean irrigate) {
-        this.irrigate = irrigate;
-        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,this.irrigate);
+        super.irrigate = irrigate;
+        retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,super.irrigate);
     }
 
     public void setHeightBamboo(int heightBamboo) {
@@ -134,8 +131,8 @@ public class HexagoneBoxPlaced extends HexagoneBox  {
     @Override
     public String toString() {
         return "Box of id : " + id +
-                ", color : " + color +
-                " and is " + special;
+                ", color : " + super.color +
+                " and is " + super.special;
     }
 
 
@@ -159,15 +156,15 @@ public class HexagoneBoxPlaced extends HexagoneBox  {
     private void setAutoIrrigation(){
         if (board.getCrestGestionnaryAlreadyIrrigated().contains(this.id)){
             board.getCrestGestionnaryAlreadyIrrigated().removeAll(Arrays.asList(this.id));
-            this.irrigate = true;
+            super.irrigate = true;
         } else {
             //TODO change below to false when add irrigation option to the game
-            this.irrigate = board.getAllIrrigated();
+            super.irrigate = board.getAllIrrigated();
         }
     }
 
     private void initiateLacIrrigation(){
-        if (this.color == Color.Lac){
+        if (super.color == Color.Lac){
             for (int i=0; i<this.listOfCrestAroundBox.size();i++){
                 this.board.placeIrrigation(listOfCrestAroundBox.get(i));
             }

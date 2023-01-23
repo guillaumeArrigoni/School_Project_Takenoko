@@ -12,21 +12,42 @@ import static java.util.Map.entry;
 public class ElementOfTheBoard {
 
     private HashMap<Color,Integer> nbOfBambooForEachColorAvailable;
-    private HashMap<Color,Integer> defaultInstruction;
+    private HashMap<Color,Integer> defaultInstructionBamboo;
+    private HashMap<HexagoneBox,Integer> defaultInstructionBox;
     private final StackOfBox stackOfBox;
     private final Board board;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
 
-    public ElementOfTheBoard(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> instruction){
+    private void setup_defaultInstructionBox(){
+        defaultInstructionBox = (HashMap<HexagoneBox, Integer>) Map.ofEntries(
+                entry(new HexagoneBox(Color.Lac,Special.Classique,retrieveBoxIdWithParameters,board),1),
+                entry(new HexagoneBox(Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board),6),
+                entry(new HexagoneBox(Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board),1),
+                entry(new HexagoneBox(Color.Vert,Special.Protéger,retrieveBoxIdWithParameters,board),2),
+                entry(new HexagoneBox(Color.Vert,Special.SourceEau,retrieveBoxIdWithParameters,board),2),
+                entry(new HexagoneBox(Color.Jaune,Special.Classique,retrieveBoxIdWithParameters,board),6),
+                entry(new HexagoneBox(Color.Jaune,Special.Engrais,retrieveBoxIdWithParameters,board),1),
+                entry(new HexagoneBox(Color.Jaune,Special.Protéger,retrieveBoxIdWithParameters,board),1),
+                entry(new HexagoneBox(Color.Jaune,Special.SourceEau,retrieveBoxIdWithParameters,board),1),
+                entry(new HexagoneBox(Color.Rouge,Special.Classique,retrieveBoxIdWithParameters,board),6),
+                entry(new HexagoneBox(Color.Rouge,Special.Engrais,retrieveBoxIdWithParameters,board),1),
+                entry(new HexagoneBox(Color.Rouge,Special.Protéger,retrieveBoxIdWithParameters,board),1),
+                entry(new HexagoneBox(Color.Rouge,Special.SourceEau,retrieveBoxIdWithParameters,board),1)
+        );
+    }
+
+    public ElementOfTheBoard(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> instructionBamboo, HashMap<HexagoneBox,Integer> instructionBox){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.board = board;
-        this.stackOfBox = new StackOfBox(board,retrieveBoxIdWithParameters);
-        setup_defaultInstruction();
-        setup_NbOfBambooForEachColorAvailable(instruction);
+        Color c = new Color(1,"a");
+        setup_defaultInstructionBamboo();
+        setup_defaultInstructionBox();
+        this.stackOfBox = new StackOfBox(board,retrieveBoxIdWithParameters,instructionBox);
+        setup_NbOfBambooForEachColorAvailable(instructionBamboo);
     }
 
     public ElementOfTheBoard(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
-        this(board,retrieveBoxIdWithParameters,new HashMap<>());
+        this(board,retrieveBoxIdWithParameters,new HashMap<>(),);
         setup_NbOfBambooForEachColorAvailable(defaultInstruction);
     }
 
@@ -112,7 +133,7 @@ public class ElementOfTheBoard {
         return nbOfBambooForEachColorAvailable;
     }
 
-    private void setup_defaultInstruction(){
+    private void setup_defaultInstructionBamboo(){
         this.defaultInstruction = (HashMap<Color, Integer>) Map.ofEntries(
                 entry(Color.Vert,36),
                 entry(Color.Jaune,30),

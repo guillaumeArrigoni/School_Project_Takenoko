@@ -1,10 +1,14 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
@@ -43,6 +47,12 @@ public class Board {
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private final CrestGestionnary crestGestionnary;
 
+    /**
+     * Must be >0.
+     * Use to the hashcode if different board are used
+     */
+    private final int idOfTheBoard;
+
     public CrestGestionnary getCrestGestionnary() {
         return crestGestionnary;
     }
@@ -64,7 +74,8 @@ public class Board {
         }
     }
 
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id){
+        this.idOfTheBoard = id;
         this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.placedBox = new HashMap<>();
@@ -74,9 +85,9 @@ public class Board {
         this.gardenerCoords = new int[]{0,0,0};
     }
 
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
         //TODO set allIrrigated to false when irrigation add to the game
-        this(retrieveBoxIdWithParameters,true);
+        this(retrieveBoxIdWithParameters,true,id);
     }
 
     private void generateLac(){
@@ -108,6 +119,9 @@ public class Board {
     }
     public ArrayList<int[]> getAvailableBox(){
         return this.AvailableBox;
+    }
+    public int getIdOfTheBoard(){
+        return this.idOfTheBoard;
     }
     
     public void setPandaCoords(int[] newCoords, Bot bot) {

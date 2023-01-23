@@ -1,6 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,7 +25,7 @@ class ObjectiveTest {
     @BeforeAll
     public static void setUp(){
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters);
+        board = new Board(retrieveBoxIdWithParameters, 1);
         gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters);
         objective1 = gestionnaire.POSER_TRIANGLE_VERT;
         objective2 = gestionnaire.POSER_LIGNE_JAUNE;

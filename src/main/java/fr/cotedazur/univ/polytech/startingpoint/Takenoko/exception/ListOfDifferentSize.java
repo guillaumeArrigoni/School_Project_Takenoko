@@ -1,7 +1,5 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Crest;
-
 public class ListOfDifferentSize extends TakenokoException{
 
     private int firstSize;

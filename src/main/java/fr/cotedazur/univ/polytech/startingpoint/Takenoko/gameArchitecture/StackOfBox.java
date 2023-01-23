@@ -1,17 +1,15 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ListOfDifferentSize;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 
 import java.util.*;
 
-import static java.util.Map.entry;
-
 public class StackOfBox {
 
-    private ArrayList<HexagoneBox> stackOfBox;
+    protected ArrayList<HexagoneBox> stackOfBox = new ArrayList<>();
 
     /**
      * @param generationInstruction : Hashmpa with as key the example of HexagoneBox and as value the number to create

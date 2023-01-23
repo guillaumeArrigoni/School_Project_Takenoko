@@ -1,10 +1,12 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+
+import java.util.Objects;
 
 
-public class HexagoneBox{
+public class HexagoneBox implements Comparable<HexagoneBox> {
 
     protected Color color;
     protected Special special;
@@ -67,9 +69,37 @@ public class HexagoneBox{
         return irrigate;
     }
 
+
     @Override
     public String toString() {
         return "Box of color : " + color +
                 " and is " + special;
+    }
+
+    @Override
+    public int compareTo(HexagoneBox hexagoneBox) {
+        if (this.color == hexagoneBox.color && this.special == hexagoneBox.special){
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (object == this) {
+            return true;
+        }
+        if (!(object instanceof HexagoneBox)) {
+            return false;
+        }
+        HexagoneBox hexagoneBox = (HexagoneBox) object;
+
+        return (hexagoneBox.color == this.color && hexagoneBox.special == this.special);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color.getRank()*10 + special.getRank());
     }
 }

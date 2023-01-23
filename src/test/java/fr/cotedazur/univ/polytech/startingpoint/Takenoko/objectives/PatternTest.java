@@ -1,6 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +22,7 @@ class PatternTest {
     @BeforeAll
     public static void setUp(){
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters);
+        board = new Board(retrieveBoxIdWithParameters, 1);
         gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters);
         pattern1 = gestionnaire.PLANTER_SUR_SOURCE_EAU;
         pattern2 = gestionnaire.PLANTER_TROIS_JAUNES;

@@ -1,15 +1,14 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
-public class HexagoneBoxPlaced extends HexagoneBox  {
+public class HexagoneBoxPlaced extends HexagoneBox {
 
     private int[] coordinates ;
     /**
@@ -174,5 +173,26 @@ public class HexagoneBoxPlaced extends HexagoneBox  {
     public void launchIrrigationChecking(){
         initiateLacIrrigation();
         setAutoIrrigation();
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if (object == this) {
+            return true;
+        }
+        if (!(object instanceof HexagoneBoxPlaced)) {
+            return false;
+        }
+        HexagoneBoxPlaced hexagoneBoxPlaced = (HexagoneBoxPlaced) object;
+
+        return (this.id == hexagoneBoxPlaced.id &&
+                this.board == hexagoneBoxPlaced.board &&
+                super.color==hexagoneBoxPlaced.color &&
+                super.special == hexagoneBoxPlaced.special);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id + this.board.getIdOfTheBoard()*10000000);
     }
 }

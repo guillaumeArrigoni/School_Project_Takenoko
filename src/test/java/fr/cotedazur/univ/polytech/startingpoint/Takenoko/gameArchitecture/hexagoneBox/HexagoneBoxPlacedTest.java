@@ -11,6 +11,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxId
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,6 +36,7 @@ class HexagoneBoxPlacedTest {
     private static HexagoneBoxPlaced vert07;
     private static HexagoneBoxPlaced jaune03;
     private static HexagoneBoxPlaced jaune08;
+    private static HexagoneBoxPlaced rouge06Engrais;
     private static HexagoneBoxPlaced rouge09Protected;
     private static HexagoneBoxPlaced vert18Engrais;
     private static HexagoneBoxPlaced vert19;
@@ -64,6 +66,7 @@ class HexagoneBoxPlacedTest {
         vert07 = new HexagoneBoxPlaced(-1,2,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
         jaune03 = new HexagoneBoxPlaced(-1,0,1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
         jaune08 = new HexagoneBoxPlaced(-2,2,0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        rouge06Engrais = new HexagoneBoxPlaced(1,0,-1, Color.Rouge, Special.Engrais, retrieveBoxIdWithParameters,board);
         rouge09Protected = new HexagoneBoxPlaced(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters,board);
         vert18Engrais = new HexagoneBoxPlaced(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board);
         vert19 = new HexagoneBoxPlaced(-1,3,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
@@ -197,6 +200,16 @@ class HexagoneBoxPlacedTest {
         assertFalse(vertClassique13.isIrrigate());
         assertEquals(1,vertClassique04.getHeightBamboo());
         assertNotEquals(1,vertClassique13.getHeightBamboo());
+    }
+
+    @Test
+    void testGrowInBoxWithEngrais(){
+        rouge06Engrais.setHeightBamboo(0);
+        rouge06Engrais.growBamboo();
+        assertEquals(2,rouge06Engrais.getHeightBamboo());
+        rouge06Engrais.setHeightBamboo(3);
+        rouge06Engrais.growBamboo();
+        assertEquals(4,rouge06Engrais.getHeightBamboo());
     }
 
     @AfterAll

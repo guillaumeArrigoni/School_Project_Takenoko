@@ -71,8 +71,14 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     }
 
     public void growBamboo() {
+        int boucle = 1;
+        if (super.special==Special.Engrais){
+            boucle = 2;
+        }
         retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
-        if (this.heightBamboo < 4) this.heightBamboo++;
+        for (int i=0;i<boucle;i++){
+            if (this.heightBamboo < 4) this.heightBamboo++;
+        }
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
 

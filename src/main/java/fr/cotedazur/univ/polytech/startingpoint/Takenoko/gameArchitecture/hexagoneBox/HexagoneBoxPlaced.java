@@ -37,7 +37,11 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         this.board = board;
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
-        this.heightBamboo = 0;
+        if(super.irrigate){
+            this.heightBamboo = 1;
+        } else {
+            this.heightBamboo = 0;
+        }
         getAllAdjacenteBox();
         updateRetrieveBox();
         generateCrestAroundBox();
@@ -99,6 +103,10 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     public void setIrrigate(boolean irrigate) {
         super.irrigate = irrigate;
         retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,super.irrigate);
+        if (irrigate){
+            this.heightBamboo = 1;
+            retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
+        }
     }
 
     public void setHeightBamboo(int heightBamboo) {
@@ -155,9 +163,9 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     private void setAutoIrrigation(){
         if (board.getCrestGestionnaryAlreadyIrrigated().contains(this.id)){
             board.getCrestGestionnaryAlreadyIrrigated().removeAll(Arrays.asList(this.id));
-            super.irrigate = true;
+            this.setIrrigate(true);
         } else {
-            //TODO change below to false when add irrigation option to the game
+            //TODO change above to false when add irrigation option to the game
             super.irrigate = board.getAllIrrigated();
         }
     }

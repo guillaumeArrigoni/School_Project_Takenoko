@@ -195,6 +195,8 @@ class HexagoneBoxPlacedTest {
     void testIrrigationAutomatic(HexagoneBoxPlaced vertClassique04, HexagoneBoxPlaced vertClassique13){
         assertTrue(vertClassique04.isIrrigate());
         assertFalse(vertClassique13.isIrrigate());
+        assertEquals(1,vertClassique04.getHeightBamboo());
+        assertNotEquals(1,vertClassique13.getHeightBamboo());
     }
 
     @AfterAll

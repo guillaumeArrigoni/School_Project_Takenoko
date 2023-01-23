@@ -47,6 +47,10 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         generateCrestAroundBox();
     }
 
+    public HexagoneBoxPlaced (int x, int y, int z, Color color,Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
+        this(x,y,z,new HexagoneBox(color,special),retrieveBoxIdWithParameters,board);
+    }
+
     private void updateRetrieveBox() {
         retrieveBoxIdWithParameters.setBoxColor(this.id,this.color);
         retrieveBoxIdWithParameters.setBoxHeight(this.id, this.heightBamboo);

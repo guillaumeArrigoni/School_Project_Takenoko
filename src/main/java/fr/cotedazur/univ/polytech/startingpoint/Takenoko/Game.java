@@ -1,18 +1,10 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.*;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
-import javax.sound.midi.Soundbank;
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class Game {
@@ -34,15 +26,19 @@ public class Game {
 
     public static void printBoardState(Board board) {
         System.out.println("Voici l'état du board : ");
-        ArrayList<HexagoneBox> placedBox = board.getAllBoxPlaced();
-        for (HexagoneBox box : placedBox) {
+        ArrayList<HexagoneBoxPlaced> placedBox = board.getAllBoxPlaced();
+        for (HexagoneBoxPlaced box : placedBox) {
             System.out.println(Arrays.toString(box.getCoordinates()) + " : bamboo de hauteur " + box.getHeightBamboo());
         }
         System.out.println(" ");
     }
 
     public void play(GestionObjectives gestionnaire) {
-        gestionnaire.initialize();
+        gestionnaire.initialize(
+                gestionnaire.ListOfObjectiveParcelleByDefault(),
+                gestionnaire.ListOfObjectiveJardinierByDefault(),
+                gestionnaire.ListOfObjectivePandaByDefault()
+        );
         for (Bot bot : this.playerList) {
             gestionnaire.rollParcelleObjective(bot);
             gestionnaire.rollJardinierObjective(bot);

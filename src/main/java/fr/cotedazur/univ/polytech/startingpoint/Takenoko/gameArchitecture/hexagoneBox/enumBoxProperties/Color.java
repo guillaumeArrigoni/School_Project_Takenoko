@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties;
 
 public enum Color {
     /**

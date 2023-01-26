@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
@@ -19,6 +20,13 @@ public class CrestGestionnary {
     public HashMap<Crest, Integer> getRangeFromIrrigated() {
         return rangeFromIrrigated;
     }
+    public int getRangeFromIrrigatedOfCrest(Crest crest) throws CrestNotRegistered {
+        if (rangeFromIrrigated.containsKey(crest)){
+            return rangeFromIrrigated.get(crest);
+        }
+        throw new CrestNotRegistered(crest);
+    }
+
 
     public HashMap<Crest, ArrayList<Crest>> getLinkCrestChildrenToCrestParent() {
         return linkCrestChildrenToCrestParent;

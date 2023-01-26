@@ -69,6 +69,9 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     public int getHeightBamboo() {
         return heightBamboo;
     }
+    public Board getBoard(){
+        return board;
+    }
 
     public void growBamboo() {
         int boucle = 1;

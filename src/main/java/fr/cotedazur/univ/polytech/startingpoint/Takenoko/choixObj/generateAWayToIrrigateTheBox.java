@@ -13,6 +13,14 @@ public class generateAWayToIrrigateTheBox {
     private final HexagoneBoxPlaced box;
     private final CrestGestionnary crestGestionnary;
     private ArrayList<Crest> closestCrestToIrrigatedOfTheBox;
+    /**
+     * To have a path just take the first element for the different ArrayList :
+     * pathToIrrigation.get(0).get(0)
+     * pathToIrrigation.get(1).get(0)
+     * pathToIrrigation.get(2).get(0)
+     * pathToIrrigation.get(3).get(0)
+     * etc...
+     */
     private ArrayList<ArrayList<Crest>> pathToIrrigation;
 
     public generateAWayToIrrigateTheBox(HexagoneBoxPlaced box) throws CrestNotRegistered {
@@ -50,18 +58,7 @@ public class generateAWayToIrrigateTheBox {
     }
 
     private void setupPathWithOneCrest(Crest crest) throws CrestNotRegistered {
-        ArrayList<ArrayList<Crest>> intructions = new ArrayList<>();
-        intructions.add(new ArrayList<>(Arrays.asList(crest)));
-        int rangeFirstCrestInlist = tryGetRange(intructions.get(0).get(0));
-        while (rangeFirstCrestInlist != 1) {
-            ArrayList<Crest> listCrestToAdd = crestGestionnary.getLinkCrestChildrenToCrestParent().get(intructions.get(0).get(0));
-            for (Crest crestInList : intructions.get(0)){
-                listCrestToAdd.addAll(crestGestionnary.getLinkCrestChildrenToCrestParent().get(crestInList));
-            }
-            intructions.add(0,listCrestToAdd);
-            rangeFirstCrestInlist = tryGetRange(intructions.get(0).get(0));
-        }
-        this.pathToIrrigation = intructions;
+        setupPath(new ArrayList<>(Arrays.asList(crest)));
     }
 
     private void setupPath(ArrayList<Crest> crests) throws CrestNotRegistered {

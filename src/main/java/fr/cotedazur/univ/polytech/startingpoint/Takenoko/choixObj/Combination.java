@@ -36,7 +36,7 @@ public class Combination<T> implements Comparable<Combination>{
 
     @Override
     public int compareTo(Combination combination) {
-        if (new HashSet<T>(this.listOfElementInTheCombination) == new HashSet<T>(combination.listOfElementInTheCombination)){
+        if (new HashSet<T>(this.listOfElementInTheCombination).equals(new HashSet<T>(combination.listOfElementInTheCombination))){
             return 0;
         } else {
             return -1;
@@ -52,7 +52,7 @@ public class Combination<T> implements Comparable<Combination>{
             return false;
         }
         Combination secondCombination = (Combination) object;
-        return (new HashSet<T>(this.listOfElementInTheCombination) == new HashSet<T>(secondCombination.listOfElementInTheCombination));
+        return (new HashSet<T>(this.listOfElementInTheCombination).equals(new HashSet<T>(secondCombination.listOfElementInTheCombination)));
     }
 
     @Override

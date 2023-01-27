@@ -50,8 +50,13 @@ public class Combination<T> implements Comparable<Combination>{
             return false;
         }
         Combination secondCombination = (Combination) object;
-
-        return (secondCombination.listOfElementInTheCombination == this.listOfElementInTheCombination);
+        for (T t : this.listOfElementInTheCombination){
+            if(!secondCombination.listOfElementInTheCombination.contains(t)){
+                return false;
+            }
+        }
+        return true;
+        //return (secondCombination.listOfElementInTheCombination == this.listOfElementInTheCombination);
     }
 
     @Override
@@ -61,6 +66,6 @@ public class Combination<T> implements Comparable<Combination>{
 
     @Override
     public int hashCode() {
-        return Objects.hash(listOfElementInTheCombination);
+        return Objects.hash(this.listOfElementInTheCombination);
     }
 }

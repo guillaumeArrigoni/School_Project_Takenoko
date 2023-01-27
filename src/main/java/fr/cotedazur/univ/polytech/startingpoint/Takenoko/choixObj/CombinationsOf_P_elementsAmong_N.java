@@ -3,7 +3,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
 import java.util.ArrayList;
 
 public class CombinationsOf_P_elementsAmong_N<T> {
-    ArrayList<ArrayList<T>> listOfCombination;
+    ArrayList<Combination<T>> listOfCombination;
     int sizeOfCombination;
     ArrayList<T> listToGetCombination;
 
@@ -17,7 +17,7 @@ public class CombinationsOf_P_elementsAmong_N<T> {
         this(listToGetCombination,listToGetCombination.size());
     }
 
-    public ArrayList<ArrayList<T>> getListOfCombination() {
+    public ArrayList<Combination<T>> getListOfCombination() {
         interface_P_CombinationIn_N();
         return listOfCombination;
     }
@@ -41,9 +41,9 @@ public class CombinationsOf_P_elementsAmong_N<T> {
                                                           int i){
         // Current combination is ready, add it
         if (index == sizeOfCombination) {
-            ArrayList<T> newCombination = new ArrayList<>();
+            Combination<T> newCombination = new Combination<>();
             for (int j = 0; j < sizeOfCombination; j++)
-                newCombination.add(CurrentCombination.get(j));
+                newCombination.addNewElement(CurrentCombination.get(j));
             this.listOfCombination.add(newCombination);
             return;
         }

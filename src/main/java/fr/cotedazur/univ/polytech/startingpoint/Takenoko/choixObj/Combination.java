@@ -4,12 +4,16 @@ import java.util.ArrayList;
 
 public class Combination<T> {
 
-    private final ArrayList<T> listOfElementInTheCombination;
-    private final int size;
+    private ArrayList<T> listOfElementInTheCombination;
+    private int size;
 
     public Combination(ArrayList<T> listOfElementInTheCombination){
         this.listOfElementInTheCombination = listOfElementInTheCombination;
         this.size = this.listOfElementInTheCombination.size();
+    }
+
+    public Combination(){
+        this(new ArrayList<>());
     }
 
     public ArrayList<T> getListOfElementInTheCombination() {
@@ -18,5 +22,10 @@ public class Combination<T> {
 
     public int getSize() {
         return size;
+    }
+
+    public void addNewElement(T t){
+        this.listOfElementInTheCombination.add(t);
+        this.size = this.size +1;
     }
 }

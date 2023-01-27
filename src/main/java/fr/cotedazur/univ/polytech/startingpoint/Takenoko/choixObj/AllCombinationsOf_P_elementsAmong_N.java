@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class AllCombinationsOf_P_elementsAmong_N<T> extends CombinationsOf_P_elementsAmong_N<T> {
 
-    private HashMap<Integer,ArrayList<ArrayList<T>>> allCombination;
+    private HashMap<Integer,ArrayList<Combination<T>>> allCombination;
     private int minCombinationSize;
     private int maxCombinationSize;
 
@@ -33,7 +33,7 @@ public class AllCombinationsOf_P_elementsAmong_N<T> extends CombinationsOf_P_ele
         }
     }
 
-    public HashMap<Integer, ArrayList<ArrayList<T>>> getAllCombination() {
+    public HashMap<Integer, ArrayList<Combination<T>>> getAllCombination() {
         return allCombination;
     }
 

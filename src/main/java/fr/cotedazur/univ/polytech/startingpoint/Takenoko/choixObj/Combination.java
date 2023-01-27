@@ -3,7 +3,9 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Combination<T> implements Comparable<Combination>{
 
@@ -34,7 +36,7 @@ public class Combination<T> implements Comparable<Combination>{
 
     @Override
     public int compareTo(Combination combination) {
-        if (this.listOfElementInTheCombination == combination.listOfElementInTheCombination){
+        if (new HashSet<T>(this.listOfElementInTheCombination) == new HashSet<T>(combination.listOfElementInTheCombination)){
             return 0;
         } else {
             return -1;
@@ -50,13 +52,7 @@ public class Combination<T> implements Comparable<Combination>{
             return false;
         }
         Combination secondCombination = (Combination) object;
-        for (T t : this.listOfElementInTheCombination){
-            if(!secondCombination.listOfElementInTheCombination.contains(t)){
-                return false;
-            }
-        }
-        return true;
-        //return (secondCombination.listOfElementInTheCombination == this.listOfElementInTheCombination);
+        return (new HashSet<T>(this.listOfElementInTheCombination) == new HashSet<T>(secondCombination.listOfElementInTheCombination));
     }
 
     @Override
@@ -66,6 +62,7 @@ public class Combination<T> implements Comparable<Combination>{
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.listOfElementInTheCombination);
+        Set<T> set = new HashSet<>(this.listOfElementInTheCombination);
+        return Objects.hash(set);
     }
 }

@@ -16,6 +16,7 @@ public class irrigations {
     private final CrestGestionnary crestGestionnary;
     private allCombinationsOf_P_elementsAmong_N allCombinationsOf_P_elementsAmong_N;
     private HashMap<Integer,ArrayList<ArrayList<HexagoneBoxPlaced>>> allCombination;
+    private HashMap<HexagoneBoxPlaced,ArrayList<Crest>> pathForEachBox;
 
 
     public irrigations(ArrayList<HexagoneBoxPlaced> boxs){
@@ -23,6 +24,13 @@ public class irrigations {
         this.crestGestionnary = boxs.get(0).getBoard().getCrestGestionnary();
         this.allCombinationsOf_P_elementsAmong_N = new allCombinationsOf_P_elementsAmong_N<HexagoneBoxPlaced>(boxs,boxs.size());
         this.allCombination = allCombinationsOf_P_elementsAmong_N.getAllCombination();
+        setupPathForEachBox();
+    }
+
+    private void setupPathForEachBox(){
+        for(HexagoneBoxPlaced box : boxToIrrigate){
+            this.pathForEachBox.put(box,new ArrayList<>());
+        }
     }
 
     private void a(ArrayList<ArrayList<HexagoneBoxPlaced>> s) throws CrestNotRegistered {
@@ -58,29 +66,64 @@ public class irrigations {
 
     }
 
-    private void r(){
+    private void r(ArrayList<HexagoneBoxPlaced> previousBoxConcerned, int sizeCombination){
+        int rank = pathForEachBox.get(previousBoxConcerned.get(0)).size();
+        HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> t = getSelectedPathForASpecifiedSizeOfCombination();
+        if (t.isEmpty()){
+
+        } else {
+            int max = -1;
+            ArrayList<ArrayList<HexagoneBoxPlaced>> w = v(t,max);
+            if (w.size()>1){
+
+
+
+
+            } else {
+                ArrayList<HexagoneBoxPlaced> uniqueCombination = w.get(0);
+                for (HexagoneBoxPlaced box : uniqueCombination){
+                    ArrayList<Crest> gg = pathForEachBox.get(box);
+                    for (int i=0;i<max;i++){
+                        gg.add(t.get(uniqueCombination).get(rank+i));
+                    }
+                    pathForEachBox.put(box,gg);
+                }
+                ArrayList<HexagoneBoxPlaced> y = previousBoxConcerned;
+                y.removeAll(uniqueCombination);
+
+                r(uniqueCombination,sizeCombination-1);
+                r(y,sizeCombination-1);
+            }
+        }
 
     }
 
-    private Optional<ArrayList<HashMap<Integer,Crest>>> getSelectedPathForASpecifiedSizeOfCombination(int sizeOfCombination, int rank, Crest crestParent) throws CrestNotRegistered {
+    private ArrayList<ArrayList<HexagoneBoxPlaced>> v(HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> g, int maxToModify){
+        maxToModify = -1;
+        ArrayList<ArrayList<HexagoneBoxPlaced>> listOfMaxAdvancement = new ArrayList<>();
+        for (ArrayList<HexagoneBoxPlaced> combination : g.keySet()){
+            int sizeAssociated = g.get(combination).keySet().size();
+            if(sizeAssociated==maxToModify){
+                listOfMaxAdvancement.add(combination);
+            } else if (sizeAssociated>maxToModify){
+                listOfMaxAdvancement = new ArrayList<>(Arrays.asList(combination));
+                maxToModify = sizeAssociated;
+            }
+        }
+        return listOfMaxAdvancement;
+    }
+
+    private HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> getSelectedPathForASpecifiedSizeOfCombination(int sizeOfCombination, int rank, Crest crestParent,ArrayList<HexagoneBoxPlaced> boxSelected) throws CrestNotRegistered {
         ArrayList<ArrayList<HexagoneBoxPlaced>> allCombinationOfSpecifiedSize = allCombination.get(sizeOfCombination);
-        int maxSize = 0;
-        ArrayList<HashMap<Integer,Crest>> selectedPath = new ArrayList<>();
+        HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> selectedPath = new HashMap<>();
         for (ArrayList<HexagoneBoxPlaced> combination : allCombinationOfSpecifiedSize){
             Optional<HashMap<Integer,Crest>> u = getBestPathForACombinationAndARank(combination,rank,crestParent);
             if (u.isPresent()){
                 int sizeOfAdvancement = u.get().keySet().size();
-                if (sizeOfAdvancement==maxSize){
-                    selectedPath.add(u.get());
-                } else if(sizeOfAdvancement>maxSize){
-                    selectedPath = new ArrayList<>(Arrays.asList(u.get()));
-                }
+                selectedPath.put(combination,u.get());
             }
         }
-        if (maxSize > 0){
-            return Optional.of(selectedPath);
-        }
-        return Optional.empty();
+        return selectedPath;
     }
 
     private Optional<HashMap<Integer,Crest>> getBestPathForACombinationAndARank(ArrayList<HexagoneBoxPlaced> combination, int rankGiven, Crest crestParent) throws CrestNotRegistered {
@@ -88,6 +131,7 @@ public class irrigations {
         int size = pathForACombination.size();
         HashMap<Integer,Crest> crestSelected = new HashMap<>();
         if (size>0){
+            //On prends n'importe quel Crest au rang maximum car ils aboutissent tous à la même chose
             Crest crestChild = pathForACombination.get(size-1).keySet().stream().toList().get(0);
             crestSelected.put(rankGiven + size -1,crestChild);
             for (int i = size-2;i>-1;i--){

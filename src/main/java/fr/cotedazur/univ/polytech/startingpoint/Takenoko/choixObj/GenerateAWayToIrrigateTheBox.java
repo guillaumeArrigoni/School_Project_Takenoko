@@ -8,7 +8,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class generateAWayToIrrigateTheBox {
+public class GenerateAWayToIrrigateTheBox {
 
     private final HexagoneBoxPlaced box;
     private final CrestGestionnary crestGestionnary;
@@ -23,7 +23,7 @@ public class generateAWayToIrrigateTheBox {
      */
     private ArrayList<ArrayList<Crest>> pathToIrrigation;
 
-    public generateAWayToIrrigateTheBox(HexagoneBoxPlaced box) throws CrestNotRegistered {
+    public GenerateAWayToIrrigateTheBox(HexagoneBoxPlaced box) throws CrestNotRegistered {
         this.box = box;
         this.crestGestionnary = box.getBoard().getCrestGestionnary();
         setup();

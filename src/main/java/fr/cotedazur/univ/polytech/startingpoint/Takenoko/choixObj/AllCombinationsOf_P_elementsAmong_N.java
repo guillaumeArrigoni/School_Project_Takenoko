@@ -5,21 +5,21 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.IntegerNotPos
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class allCombinationsOf_P_elementsAmong_N<T> extends combinationsOf_P_elementsAmong_N<T> {
+public class AllCombinationsOf_P_elementsAmong_N<T> extends CombinationsOf_P_elementsAmong_N<T> {
 
     private HashMap<Integer,ArrayList<ArrayList<T>>> allCombination;
     private int minCombinationSize;
     private int maxCombinationSize;
 
-    public allCombinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination) {
+    public AllCombinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination) {
         this(listToGetCombination,listToGetCombination.size());
     }
 
-    public allCombinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination, int sizeOfCombination) {
+    public AllCombinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination, int sizeOfCombination) {
         this(listToGetCombination,sizeOfCombination,1,listToGetCombination.size());
     }
 
-    public allCombinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination, int sizeOfCombination, int minCombinationSize, int maxCombinationSize) {
+    public AllCombinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination, int sizeOfCombination, int minCombinationSize, int maxCombinationSize) {
         super(listToGetCombination, sizeOfCombination);
         this.allCombination = new HashMap<>();
         this.minCombinationSize = minCombinationSize;

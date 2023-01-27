@@ -2,18 +2,18 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
 
 import java.util.ArrayList;
 
-public class combinationsOf_P_elementsAmong_N<T> {
+public class CombinationsOf_P_elementsAmong_N<T> {
     ArrayList<ArrayList<T>> listOfCombination;
     int sizeOfCombination;
     ArrayList<T> listToGetCombination;
 
-    public combinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination, int sizeOfCombination){
+    public CombinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination, int sizeOfCombination){
         listOfCombination = new ArrayList<>();
         this.sizeOfCombination = sizeOfCombination;
         this.listToGetCombination = listToGetCombination;
     }
 
-    public combinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination){
+    public CombinationsOf_P_elementsAmong_N(ArrayList<T> listToGetCombination){
         this(listToGetCombination,listToGetCombination.size());
     }
 

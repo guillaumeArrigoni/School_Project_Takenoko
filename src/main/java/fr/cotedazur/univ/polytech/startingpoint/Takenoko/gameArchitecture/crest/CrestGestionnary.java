@@ -64,6 +64,11 @@ public class CrestGestionnary {
         this.updateCrestVariableWithNewBoxAdded(box);
     }
 
+    private void setRangeToIrrigate(Crest crest, int value){
+        this.rangeFromIrrigated.put(crest,value);
+        crest.setRange_to_irrigation(value);
+    }
+
     /**
      * Ne gère pas le cas où une des 2 tuiles n'est pas placé
      * @param crest
@@ -72,7 +77,7 @@ public class CrestGestionnary {
     public void placeIrrigation(Crest crest, HashMap<Integer, HexagoneBoxPlaced> placedBox) throws ImpossibleToPlaceIrrigationException {
         if (irrigationCanBePlace(crest, placedBox)){
             crest.setIrrigated(true);
-            this.rangeFromIrrigated.put(crest,0);
+            setRangeToIrrigate(crest, 0);
             this.listOfCrestOneRangeToIrrigated.remove(crest);
             rewriteRangeToIrrigatedAfterNewIrrigation(crest);
             for (int i = 0; i<2;i++) {
@@ -138,7 +143,7 @@ public class CrestGestionnary {
             if (rangeFromIrrigated.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
                 this.listOfCrestOneRangeToIrrigated.add(child);
             }
-            this.rangeFromIrrigated.put(child, candidateNewValue);
+            setRangeToIrrigate(child, candidateNewValue);
             this.linkCrestChildrenToCrestParent.put(child, new ArrayList<Crest>(Arrays.asList(parent)));
         }
     }
@@ -163,6 +168,9 @@ public class CrestGestionnary {
                 newParentChildless = createAndImplementTheChildCrestOfTheParent(allCrestImplemented, newParentChildless, i);
             }
             this.parentChildless = newParentChildless;
+        }
+        for (Crest crest : newCrestToImplement){
+            crest.setRange_to_irrigation(this.rangeFromIrrigated.get(crest));
         }
     }
 
@@ -203,7 +211,7 @@ public class CrestGestionnary {
         } else {
             this.linkCrestChildrenToCrestParent.put(child,new ArrayList<>(Arrays.asList(parent)));
             int rangeOfParent = this.rangeFromIrrigated.get(parent);
-            this.rangeFromIrrigated.put(child,rangeOfParent + 1);
+            setRangeToIrrigate(child, rangeOfParent + 1);
             this.linkCrestParentToCrestChildren.put(child,new ArrayList<>());
             newParentChildless.add(child);
         }
@@ -221,7 +229,7 @@ public class CrestGestionnary {
                 linkCrestParentToCrestChildren.put(crest, new ArrayList<>());
                 parentChildless.add(crest);
                 listOfCrestOneRangeToIrrigated.add(crest);
-                rangeFromIrrigated.put(crest,0);
+                setRangeToIrrigate(crest, 0);
             }
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             //actualizeCrestVariable(box.getListOfCrestAroundBox());

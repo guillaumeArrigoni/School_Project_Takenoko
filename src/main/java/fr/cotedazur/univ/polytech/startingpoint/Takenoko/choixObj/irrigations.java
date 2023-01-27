@@ -8,18 +8,21 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class irrigations {
 
     private ArrayList<HexagoneBoxPlaced> boxToIrrigate;
     private final CrestGestionnary crestGestionnary;
     private allCombinationsOf_P_elementsAmong_N allCombinationsOf_P_elementsAmong_N;
+    private HashMap<Integer,ArrayList<ArrayList<HexagoneBoxPlaced>>> allCombination;
 
 
     public irrigations(ArrayList<HexagoneBoxPlaced> boxs){
         this.boxToIrrigate = boxs;
         this.crestGestionnary = boxs.get(0).getBoard().getCrestGestionnary();
         this.allCombinationsOf_P_elementsAmong_N = new allCombinationsOf_P_elementsAmong_N<HexagoneBoxPlaced>(boxs,boxs.size());
+        this.allCombination = allCombinationsOf_P_elementsAmong_N.getAllCombination();
     }
 
     private void a(ArrayList<ArrayList<HexagoneBoxPlaced>> s) throws CrestNotRegistered {
@@ -55,45 +58,85 @@ public class irrigations {
 
     }
 
+    private void r(){
 
-    private void getBestPathForACombinationAndARank(ArrayList<HexagoneBoxPlaced> combination,int rankGiven, Crest crestParent) throws CrestNotRegistered {
+    }
+
+    private Optional<ArrayList<HashMap<Integer,Crest>>> getSelectedPathForASpecifiedSizeOfCombination(int sizeOfCombination, int rank, Crest crestParent) throws CrestNotRegistered {
+        ArrayList<ArrayList<HexagoneBoxPlaced>> allCombinationOfSpecifiedSize = allCombination.get(sizeOfCombination);
+        int maxSize = 0;
+        ArrayList<HashMap<Integer,Crest>> selectedPath = new ArrayList<>();
+        for (ArrayList<HexagoneBoxPlaced> combination : allCombinationOfSpecifiedSize){
+            Optional<HashMap<Integer,Crest>> u = getBestPathForACombinationAndARank(combination,rank,crestParent);
+            if (u.isPresent()){
+                int sizeOfAdvancement = u.get().keySet().size();
+                if (sizeOfAdvancement==maxSize){
+                    selectedPath.add(u.get());
+                } else if(sizeOfAdvancement>maxSize){
+                    selectedPath = new ArrayList<>(Arrays.asList(u.get()));
+                }
+            }
+        }
+        if (maxSize > 0){
+            return Optional.of(selectedPath);
+        }
+        return Optional.empty();
+    }
+
+    private Optional<HashMap<Integer,Crest>> getBestPathForACombinationAndARank(ArrayList<HexagoneBoxPlaced> combination, int rankGiven, Crest crestParent) throws CrestNotRegistered {
+        ArrayList<HashMap<Crest,Crest>> pathForACombination = generateAllPathGivenACombinationARankAndAParentCrest(combination,rankGiven,crestParent);
+        int size = pathForACombination.size();
+        HashMap<Integer,Crest> crestSelected = new HashMap<>();
+        if (size>0){
+            Crest crestChild = pathForACombination.get(size-1).keySet().stream().toList().get(0);
+            crestSelected.put(rankGiven + size -1,crestChild);
+            for (int i = size-2;i>-1;i--){
+                HashMap<Crest,Crest> allCrestOfARank = pathForACombination.get(i);
+                Crest crestChildBis = allCrestOfARank.get(crestChild);
+                crestSelected.put(rankGiven + i,crestChildBis);
+            }
+            return Optional.of(crestSelected);
+        }
+        return Optional.empty();
+    }
+
+
+    private ArrayList<HashMap<Crest, Crest>> generateAllPathGivenACombinationARankAndAParentCrest(ArrayList<HexagoneBoxPlaced> combination, int rankGiven, Crest crestParent) throws CrestNotRegistered {
         int rank = rankGiven;
-        //ArrayList<Crest> listOfPossibleParent = new ArrayList<>(Arrays.asList(crestParent));
-        //HashMap<Crest,ArrayList<Crest>> linkParent_Children = new HashMap<>();
         HashMap<Crest,Crest> linkChild_Parent = new HashMap<>();
         Crest fakeCrest = new Crest(99,99,1);
         linkChild_Parent.put(crestParent,fakeCrest);
         ArrayList<HashMap<Crest,Crest>> successiveHashMapOfCrestAvailable = new ArrayList<>();
         successiveHashMapOfCrestAvailable.add(linkChild_Parent);
         int index = 0;
-        while(true){
+        boolean noMore = false;
+        while(!noMore){
+            noMore = true;
             linkChild_Parent = new HashMap<>();
             for (Crest crest : successiveHashMapOfCrestAvailable.get(index).keySet()){
                 ArrayList<Crest> p = getListOfCommonCrest(crest,rank,combination);
                 if (p.size()!=0){
-                    //linkParent_Children.put(crest,p);
-                    //listOfPossibleParent.add(crest);
                     for (Crest childCrest : p){
                         linkChild_Parent.put(childCrest,crest);
                     }
                 }
             }
             if (!linkChild_Parent.isEmpty()){
+                noMore = false;
                 successiveHashMapOfCrestAvailable.add(linkChild_Parent);
             }
             rank = rank + 1;
             index = index+1;
-
         }
-
+        return successiveHashMapOfCrestAvailable;
     }
 
     private ArrayList<Crest> getListOfCommonCrest(Crest crestPArent, int rank, ArrayList<HexagoneBoxPlaced> currentCombination) throws CrestNotRegistered {
         ArrayList<Crest> crestAvailableForThisCombinationInThisRankForThisCrest = new ArrayList<>();
         for(HexagoneBoxPlaced box : currentCombination){
-            generateAWayToIrrigateTheBox y = new generateAWayToIrrigateTheBox(box);
-            ArrayList<Crest> q = y.getPathToIrrigation().get(rank);
-            crestAvailableForThisCombinationInThisRankForThisCrest.retainAll(q);
+            generateAWayToIrrigateTheBox generateAWayToIrrigateTheBox = new generateAWayToIrrigateTheBox(box);
+            ArrayList<Crest> crestOfRankToIrrigateTheBox = generateAWayToIrrigateTheBox.getPathToIrrigation().get(rank);
+            crestAvailableForThisCombinationInThisRankForThisCrest.retainAll(crestOfRankToIrrigateTheBox);
         }
         crestAvailableForThisCombinationInThisRankForThisCrest.retainAll(
                 crestGestionnary.getLinkCrestParentToCrestChildren().get(crestPArent));

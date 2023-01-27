@@ -27,13 +27,15 @@ public class AllCombinationsOf_P_elementsAmong_N<T> extends CombinationsOf_P_ele
     }
 
     private void generateAllCombinationWanted(){
-        for(int i=minCombinationSize;i<maxCombinationSize;i++){
+        for(int i=minCombinationSize;i<=maxCombinationSize;i++){
             this.setSizeOfCombination(i);
             this.allCombination.put(i,this.getListOfCombination());
         }
     }
 
     public HashMap<Integer, ArrayList<Combination<T>>> getAllCombination() {
+        allCombination = new HashMap<>();
+        generateAllCombinationWanted();
         return allCombination;
     }
 

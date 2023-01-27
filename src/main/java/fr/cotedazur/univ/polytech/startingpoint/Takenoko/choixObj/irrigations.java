@@ -66,19 +66,18 @@ public class irrigations {
 
     }
 
-    private void r(ArrayList<HexagoneBoxPlaced> previousBoxConcerned, int sizeCombination){
+    private void r(ArrayList<HexagoneBoxPlaced> previousBoxConcerned, int sizeCombination) throws CrestNotRegistered {
         int rank = pathForEachBox.get(previousBoxConcerned.get(0)).size();
-        HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> t = getSelectedPathForASpecifiedSizeOfCombination();
+        Crest lastCommonCrest = pathForEachBox.get(previousBoxConcerned.get(0)).get(rank-1);
+        HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> t = getSelectedPathForASpecifiedSizeOfCombination(sizeCombination,rank,lastCommonCrest,previousBoxConcerned);
         if (t.isEmpty()){
-
+            r(previousBoxConcerned,sizeCombination-1);
         } else {
             int max = -1;
             ArrayList<ArrayList<HexagoneBoxPlaced>> w = v(t,max);
             if (w.size()>1){
-
-
-
-
+                //Should not happen
+                //TODO try update it see commit
             } else {
                 ArrayList<HexagoneBoxPlaced> uniqueCombination = w.get(0);
                 for (HexagoneBoxPlaced box : uniqueCombination){
@@ -113,9 +112,9 @@ public class irrigations {
         return listOfMaxAdvancement;
     }
 
-    //TODO utilisé la liste de l'ancienne combinaison pour éviter de faire un retains all sur les enfants du crest choisi
-    private HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> getSelectedPathForASpecifiedSizeOfCombination(int sizeOfCombination, int rank, Crest crestParent,ArrayList<HexagoneBoxPlaced> boxSelected) throws CrestNotRegistered {
-        combinationsOf_P_elementsAmong_N combinationsOf_p_elementsAmong_n= new combinationsOf_P_elementsAmong_N<HexagoneBoxPlaced>(boxSelected,rank);
+    private HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> getSelectedPathForASpecifiedSizeOfCombination(int sizeOfCombination, int rank, Crest crestParent, ArrayList<HexagoneBoxPlaced> lastCombination) throws CrestNotRegistered {
+        combinationsOf_P_elementsAmong_N combinationsOf_p_elementsAmong_n = new combinationsOf_P_elementsAmong_N<>(lastCombination,sizeOfCombination);
+
 
         ArrayList<ArrayList<HexagoneBoxPlaced>> allCombinationOfSpecifiedSize = combinationsOf_p_elementsAmong_n.getListOfCombination();
         HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> selectedPath = new HashMap<>();

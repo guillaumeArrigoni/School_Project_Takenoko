@@ -113,8 +113,11 @@ public class irrigations {
         return listOfMaxAdvancement;
     }
 
+    //TODO utilisé la liste de l'ancienne combinaison pour éviter de faire un retains all sur les enfants du crest choisi
     private HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> getSelectedPathForASpecifiedSizeOfCombination(int sizeOfCombination, int rank, Crest crestParent,ArrayList<HexagoneBoxPlaced> boxSelected) throws CrestNotRegistered {
-        ArrayList<ArrayList<HexagoneBoxPlaced>> allCombinationOfSpecifiedSize = allCombination.get(sizeOfCombination);
+        combinationsOf_P_elementsAmong_N combinationsOf_p_elementsAmong_n= new combinationsOf_P_elementsAmong_N<HexagoneBoxPlaced>(boxSelected,rank);
+
+        ArrayList<ArrayList<HexagoneBoxPlaced>> allCombinationOfSpecifiedSize = combinationsOf_p_elementsAmong_n.getListOfCombination();
         HashMap<ArrayList<HexagoneBoxPlaced>,HashMap<Integer,Crest>> selectedPath = new HashMap<>();
         for (ArrayList<HexagoneBoxPlaced> combination : allCombinationOfSpecifiedSize){
             Optional<HashMap<Integer,Crest>> u = getBestPathForACombinationAndARank(combination,rank,crestParent);

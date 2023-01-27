@@ -43,15 +43,16 @@ public class GenerateAWayToIrrigateTheBox {
     }
 
     private void setupClosestCrest(){
-        ArrayList<Crest> listOfClosestToIrrigation = new ArrayList<>(Arrays.asList(box.getListOfCrestAroundBox().get(0)));
+        ArrayList<Crest> listOfClosestToIrrigation = new ArrayList<>();
         ArrayList<Crest> listAdjCrest = box.getListOfCrestAroundBox();
+        int rangeFirstCrestInList = 999;
         for(Crest crest : listAdjCrest){
             int rangeCrest = crest.getRange_to_irrigation();
-            int rangeFirstCrestInList = listOfClosestToIrrigation.get(0).getRange_to_irrigation();
             if (rangeCrest==rangeFirstCrestInList){
                 listOfClosestToIrrigation.add(crest);
             } else if (rangeCrest<rangeFirstCrestInList){
                 listOfClosestToIrrigation = new ArrayList<>(Arrays.asList(crest));
+                rangeFirstCrestInList = rangeCrest;
             }
         }
         this.closestCrestToIrrigatedOfTheBox = listOfClosestToIrrigation;

@@ -50,7 +50,8 @@ public class Node {
                 botSimulator.gestionObjectives.checkObjectives(botSimulator);
                 children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
             }
-        }
+        }if(profondeur > 1)
+            this.getBestChild().createChildren();
     }
 
     public List<ActionLog> createFirstInstruction(){

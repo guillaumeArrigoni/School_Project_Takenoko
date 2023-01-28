@@ -4,8 +4,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxId
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
 
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 public class HexagoneBox {
 
@@ -21,6 +20,8 @@ public class HexagoneBox {
     private int heightBamboo;
     private HashMap<Integer,int[]> AdjacentBox;
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private final Board board;
+    private ArrayList<Crest> listOfCrestAroundBox;
 
     /**
      *      1
@@ -33,23 +34,33 @@ public class HexagoneBox {
      * @param color : the color of the box
      * @param special : the particularity of the box
      */
-    public HexagoneBox (int x, int y, int z, Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+    public HexagoneBox (int x, int y, int z, Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        this.board = board;
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
         this.color = color;
         this.special = special;
-        this.irrigate = true;
         this.heightBamboo = 0;
         getAllAdjacenteBox();
         updateRetrieveBox();
+        generateCrestAroundBox();
     }
 
-    public HexagoneBox copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
-        HexagoneBox hexagoneBox = new HexagoneBox(this.coordinates[0],this.coordinates[1],this.coordinates[2],this.color,this.special,retrieveBoxIdWithParameters);
-        hexagoneBox.setIrrigate(this.irrigate);
-        hexagoneBox.setHeightBamboo(this.heightBamboo);
-        return hexagoneBox;
+    public HexagoneBox copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters,Board board){
+        if(this.coordinates == null){
+            HexagoneBox hexagoneBox = new HexagoneBox(this.color, this.special, retrieveBoxIdWithParameters, board);
+            hexagoneBox.setIrrigate(this.irrigate);
+            hexagoneBox.setHeightBamboo(this.heightBamboo);
+            return hexagoneBox;
+        }else {
+            HexagoneBox hexagoneBox = new HexagoneBox(this.coordinates[0], this.coordinates[1], this.coordinates[2], this.color, this.special, retrieveBoxIdWithParameters, board);
+            hexagoneBox.setIrrigate(this.irrigate);
+            hexagoneBox.setHeightBamboo(this.heightBamboo);
+            hexagoneBox.AdjacentBox = new HashMap<>(this.getAdjacentBox());
+            hexagoneBox.listOfCrestAroundBox = new ArrayList<>(this.listOfCrestAroundBox);
+            return hexagoneBox;
+        }
     }
 
     private void updateRetrieveBox() {
@@ -59,8 +70,9 @@ public class HexagoneBox {
         retrieveBoxIdWithParameters.setBoxSpeciality(this.id, this.special);
     }
 
-    public HexagoneBox (Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+    public HexagoneBox (Color color, Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        this.board = board;
         this.coordinates = null;
         this.color = color;
         this.special = special;
@@ -92,6 +104,8 @@ public class HexagoneBox {
         return heightBamboo;
     }
 
+
+
     public void growBamboo() {
         retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
         if (this.heightBamboo < 4) this.heightBamboo++;
@@ -122,6 +136,7 @@ public class HexagoneBox {
         this.id = generateID(this.coordinates);
         getAllAdjacenteBox();
         updateRetrieveBox();
+        generateCrestAroundBox();
     }
 
     public void setSpecial(Special special) {
@@ -152,6 +167,21 @@ public class HexagoneBox {
         int x = this.coordinates[0];
         int y = this.coordinates[1];
         int z = this.coordinates[2];
+        this.AdjacentBox.put(1,new int[]{x+1,y-1,z});
+        this.AdjacentBox.put(2,new int[] {x+1,y,z-1});
+        this.AdjacentBox.put(3,new int[] {x,y+1,z-1});
+        this.AdjacentBox.put(4,new int[] {x-1,y+1,z});
+        this.AdjacentBox.put(5,new int[] {x-1,y,z+1});
+        this.AdjacentBox.put(6,new int[] {x,y-1,z+1});
+    }
+
+    private void getAllAdjacenteBoxOfRange(int range){
+        this.AdjacentBox = new HashMap<Integer,int[]>();
+        int x = this.coordinates[0];
+        int y = this.coordinates[1];
+        int z = this.coordinates[2];
+        for (int i = 0;i<5;i++){
+        }
         this.AdjacentBox.put(1,new int[]{x+1,y-1,z});
         this.AdjacentBox.put(2,new int[] {x+1,y,z-1});
         this.AdjacentBox.put(3,new int[] {x,y+1,z-1});
@@ -200,5 +230,47 @@ public class HexagoneBox {
         return "Box of id : " + id +
                 ", color : " + color +
                 " and is " + special;
+    }
+
+
+
+    private void generateCrestAroundBox(){
+        ArrayList<Crest> listOfCoordiante = new ArrayList<>();
+        int x = this.coordinates[0]*10;
+        int y = this.coordinates[1]*10;
+        listOfCoordiante.add(new Crest(x+5,y-5,1));
+        listOfCoordiante.add(new Crest(x+5,y,2));
+        listOfCoordiante.add(new Crest(x,y+5,3));
+        listOfCoordiante.add(new Crest(x-5,y+5,1));
+        listOfCoordiante.add(new Crest(x-5,y,2));
+        listOfCoordiante.add(new Crest(x,y-5,3));
+        this.listOfCrestAroundBox =  listOfCoordiante;
+    }
+
+    public ArrayList<Crest> getListOfCrestAroundBox() {
+        return listOfCrestAroundBox;
+    }
+
+    private void setAutoIrrigation(){
+        if (board.getCrestGestionnaryAlreadyIrrigated().contains(this.id)){
+            board.getCrestGestionnaryAlreadyIrrigated().removeAll(Arrays.asList(this.id));
+            this.irrigate = true;
+        } else {
+            //TODO change below to false when add irrigation option to the game
+            this.irrigate = board.getAllIrrigated();
+        }
+    }
+
+    private void initiateLacIrrigation(){
+        if (this.color == Color.Lac){
+            for (int i=0; i<this.listOfCrestAroundBox.size();i++){
+                this.board.placeIrrigation(listOfCrestAroundBox.get(i));
+            }
+        }
+    }
+
+    public void launchIrrigationChecking(){
+        initiateLacIrrigation();
+        setAutoIrrigation();
     }
 }

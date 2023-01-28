@@ -64,7 +64,18 @@ public abstract class Bot {
         resetPossibleAction();
     }
 
-    public BotSimulator createBotSimulator(ActionLog... instructions){
+    public BotSimulator createBotSimulator(ActionLog instructions){
+        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
+        Board tmpBoard = this.board.copy(tmp);
+        return new BotSimulator(this.name,
+                tmpBoard,
+                this.gestionObjectives.copy(tmpBoard, tmp),
+                tmp,
+                new HashMap<>(this.getBambooEated()),
+                instructions);
+    }
+
+    public BotSimulator createBotSimulator(){
         RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
         Board tmpBoard = this.board.copy(tmp);
         return new BotSimulator(this.name,
@@ -125,9 +136,16 @@ public abstract class Bot {
 
     public void addScore(Objective objective){
         this.score += objective.getValue();
+        System.out.println(objective.toString() + ", a été réalisé");
     }
     public abstract void drawObjective();
 
+    public boolean isObjectiveLegal(PossibleActions actions){
+        return ((actions == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
+                (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5) ||
+                (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getCardDeck().size() < 3) ||
+                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
+    }
 
     public String getName() {
         return name;

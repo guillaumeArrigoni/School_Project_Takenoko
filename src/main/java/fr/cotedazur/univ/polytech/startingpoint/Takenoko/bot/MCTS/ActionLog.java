@@ -22,4 +22,12 @@ public class ActionLog {
     public int[] getParameters() {
         return parameters;
     }
+
+    public String toString(){
+        String s = action.toString();
+        for(int i = 0; i < parameters.length; i++){
+            s += " " + parameters[i];
+        }
+        return s;
+    }
 }

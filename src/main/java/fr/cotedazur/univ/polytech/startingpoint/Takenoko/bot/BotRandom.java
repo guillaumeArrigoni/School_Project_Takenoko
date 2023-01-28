@@ -77,8 +77,7 @@ public class BotRandom extends Bot {
     protected PossibleActions chooseAction(){
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
-        if ((acp == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
-                (acp == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5))
+        if (!isObjectiveLegal(acp))
             return chooseAction();
         possibleActions.remove(acp);
         return acp;
@@ -92,7 +91,7 @@ public class BotRandom extends Bot {
         List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(Action.drawTile(random, retrieveBoxIdWithParameters));
+            list.add(Action.drawTile(random, retrieveBoxIdWithParameters,board));
         //Choose a random tile from the tiles drawn
         HexagoneBox placedTile = list.get(random.nextInt(0, 3));
         //Choose a random available space
@@ -120,12 +119,20 @@ public class BotRandom extends Bot {
 
     public TypeObjective chooseTypeObjectiveToRoll(){
         int i = random.nextInt(0,3) ;
-        return switch (i){
-            case 0 -> TypeObjective.PARCELLE;
-            case 1 -> TypeObjective.JARDINIER;
-            case 2 -> TypeObjective.PANDA;
-            default -> TypeObjective.PARCELLE;
-        };
+        switch (i) {
+            case 1 -> {
+                System.out.println("Le bot a choisi : Piocher un objectif de jardinier");
+                return TypeObjective.JARDINIER;
+            }
+            case 2 -> {
+                System.out.println("Le bot a choisi : Piocher un objectif de panda");
+                return TypeObjective.PANDA;
+            }
+            default -> {
+                System.out.println("Le bot a choisi : Piocher un objectif de parcelle");
+                return TypeObjective.PARCELLE;
+            }
+        }
     }
 
 }

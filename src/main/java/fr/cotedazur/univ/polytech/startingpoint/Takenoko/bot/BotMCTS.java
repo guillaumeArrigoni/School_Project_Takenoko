@@ -24,7 +24,7 @@ public class BotMCTS extends Bot{
      * @param retrieveBoxIdWithParameters
      * @param bambooEated
      */
-    protected BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated) {
+    public BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated) {
         super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
     }
 
@@ -32,18 +32,20 @@ public class BotMCTS extends Bot{
     public void playTurn(MeteoDice.Meteo meteo) {
         node = new Node(this.createBotSimulator(), 2, meteo);
         instructions = node.getBestInstruction();
-
+        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
+        for(ActionLog instruction : instructions){
+            doAction();
+        }
     }
 
     @Override
     protected void doAction() {
-        for (ActionLog instruction : instructions){
-            switch (instruction.getAction()) {
-                case DRAW_AND_PUT_TILE -> placeTile();
-                case MOVE_GARDENER -> moveGardener();
-                case DRAW_OBJECTIVE -> drawObjective();
-            }
+        switch (instructions.get(0).getAction()) {
+            case DRAW_AND_PUT_TILE -> placeTile();
+            case MOVE_GARDENER -> moveGardener();
+            case DRAW_OBJECTIVE -> drawObjective();
         }
+        instructions.remove(0);
     }
 
 
@@ -55,7 +57,7 @@ public class BotMCTS extends Bot{
         List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(Action.drawTile(new Random(),retrieveBoxIdWithParameters));
+            list.add(board.drawTile());
         //Choose a random tile from the tiles drawn
         HexagoneBox placedTile = list.get(0);
         //Choose a random available space

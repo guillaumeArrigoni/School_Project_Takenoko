@@ -19,7 +19,7 @@ public class Game {
     private List<Bot> playerList;
     private Board board;
     int turn;
-    int nbTurn;
+    int turnNumber;
     boolean playing;
     MeteoDice meteoDice;
 
@@ -27,7 +27,7 @@ public class Game {
         this.playerList = playerList;
         this.board = board;
         this.turn = 0;
-        this.nbTurn = 0;
+        this.turnNumber = 1;
         this.playing = true;
         this.meteoDice = new MeteoDice();
     }
@@ -48,9 +48,11 @@ public class Game {
             gestionnaire.rollJardinierObjective(bot);
         }
         int numberPlayer = this.playerList.size();
-        MeteoDice.Meteo meteo;
+        MeteoDice.Meteo meteo = MeteoDice.Meteo.NO_METEO;
         while (playing) {
-            meteo = meteoDice.roll();
+            System.out.println("Tour n°" + turnNumber + " :");
+            if (turnNumber == 2) System.out.println("Deuxième tour, la météo entre en jeu !");
+            if (turnNumber != 1) meteo = meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);
             playingBot.playTurn(meteo);
             gestionnaire.checkObjectives(playingBot);
@@ -58,7 +60,7 @@ public class Game {
             if (board.getNumberBoxPlaced() > 20) {
                 playing = false;
                 for (int i = 0; i < numberPlayer; i++) {
-                    System.out.println("Scode du bot " + i + " : " + this.playerList.get(i).getScore());
+                    System.out.println("Score de " + this.playerList.get(i).getName() + " : " + this.playerList.get(i).getScore());
                 }
                 //A changer pour avoir un nombre indéfini de joueur
                 Bot bot1 = this.playerList.get(0);
@@ -67,6 +69,7 @@ public class Game {
             }
             System.out.println("------------------------------------------");
             turn = (turn + 1)%numberPlayer;
+            this.turnNumber++;
         }
     }
 }

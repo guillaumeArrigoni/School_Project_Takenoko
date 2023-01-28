@@ -13,14 +13,14 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 public class Action {
 
-    public static HexagoneBox drawTile(Random random, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters) {
+    public static HexagoneBox drawTile(Random random, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters,Board board) {
         Color color = switch (random.nextInt(0,3)) {
             case 1 -> Color.Vert;
             case 2 -> Color.Rouge;
             default -> Color.Jaune;
         };
         System.out.println("drawTile : " + color);
-        return new HexagoneBox(color, Special.Classique, retrieveBoxIdWithParameters);
+        return new HexagoneBox(color, Special.Classique, retrieveBoxIdWithParameters,board);
     }
 
     public static ArrayList<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {

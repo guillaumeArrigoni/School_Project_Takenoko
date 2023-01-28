@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
@@ -18,7 +19,7 @@ public class Main {
         Board board = new Board(retrieving);
         Random random = new Random();
         GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
-        Bot bot1 = new BotRandom("Bot1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
+        Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
         Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
         List<Bot> playerList = new ArrayList<>();
         playerList.add(bot1);

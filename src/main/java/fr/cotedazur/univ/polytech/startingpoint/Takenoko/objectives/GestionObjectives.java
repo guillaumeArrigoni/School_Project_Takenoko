@@ -82,31 +82,24 @@ public class GestionObjectives {
         Objective objective = getParcelleObjectifs().get(i);
         getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif.");
-        System.out.println(objective);
     }
     public void rollJardinierObjective(Bot bot){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = getJardinierObjectifs().get(i);
         getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-        System.out.println(objective);
     }
     public void rollPandaObjective(Bot bot){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = getPandaObjectifs().get(i);
         getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-        System.out.println(objective);
     }
     public void checkObjectives(Bot bot){
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
                 bot.addScore(objective);
-                System.out.println(objective.toString() + ", a été réalisé");
                 listOfObjectifDone.add(objective);
             }
         }
@@ -177,6 +170,7 @@ public class GestionObjectives {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+            if(box == null) return false;
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
             for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
                 if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
@@ -240,6 +234,7 @@ public class GestionObjectives {
      */
     private ArrayList<Integer> getAllAdjacentBoxThatCompleteTheCondition(ArrayList<Integer> listOfIdAvailable, int i) {
         HexagoneBox box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+        if(box == null) return new ArrayList<>();
         ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
         for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
             if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
@@ -269,9 +264,9 @@ public class GestionObjectives {
     public void printWinner(Bot bot1, Bot bot2){
          int i = bot1.getScore() - bot2.getScore();
          if(i > 0){
-             System.out.println("Bot1 a gagné avec " + bot1.getScore() + " points !");
+             System.out.println( bot1.getName() + " a gagné avec " + bot1.getScore() + " points !");
         } else if (i < 0) {
-             System.out.println("Bot2 a gagné avec " + bot2.getScore() + " points !");
+             System.out.println(bot2.getName() + " a gagné avec " + bot2.getScore() + " points !");
          } else {
              System.out.println("Egalité !");
          }
@@ -279,5 +274,40 @@ public class GestionObjectives {
 
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
         return bot.getObjectives().size() < 5;
+    }
+
+    /**
+     * int[] numberOfTypeObjectiveDone : - numberOfTypeObjectiveDone[0] -> PARCELLE
+     *                                   - numberOfTypeObjectiveDone[1] -> JARDINIER
+     *                                   - numberOfTypeObjectiveDone[2] -> PANDA
+     *
+     * This method checks all the drawable Objectives and counts the amount of Objectives currently done,
+     * and increments the array values associated to the TypeObjective of the objectives done.
+     * It returns the TypeObjective that is the most done when all the drawable Objectives are checked.
+     */
+    public TypeObjective chooseTypeObjectiveByCheckingUnknownObjectives(Bot bot){
+        int[] numberOfTypeObjectiveDone = new int[3];
+        ArrayList<Objective> listOfAllObjectivesDrawable = new ArrayList<>();
+        listOfAllObjectivesDrawable.addAll(this.getParcelleObjectifs());
+        listOfAllObjectivesDrawable.addAll(this.getJardinierObjectifs());
+        listOfAllObjectivesDrawable.addAll(this.getPandaObjectifs());
+        for(Objective objective : listOfAllObjectivesDrawable){
+            if(checkOneObjective(objective,bot)){
+                switch (objective.getType()){
+                    case PARCELLE -> numberOfTypeObjectiveDone[0]++;
+                    case JARDINIER -> numberOfTypeObjectiveDone[1]++;
+                    case PANDA ->  numberOfTypeObjectiveDone[2]++;
+                }
+            }
+        }
+        int max = numberOfTypeObjectiveDone[0];
+        TypeObjective res = TypeObjective.PARCELLE;
+        if(numberOfTypeObjectiveDone[1] > max){
+            max = numberOfTypeObjectiveDone[1];
+            res =TypeObjective.JARDINIER;
+        }if(numberOfTypeObjectiveDone[2] > max){
+            res =TypeObjective.PANDA;
+        }
+        return res;
     }
 }

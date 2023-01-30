@@ -15,7 +15,9 @@ public class CrestGestionnary {
     private HashMap<Crest, ArrayList<Crest>> linkCrestChildrenToCrestParent;
     private HashMap<Crest, ArrayList<Crest>> linkCrestParentToCrestChildren;
     private ArrayList<Crest> parentChildless; // parent with no children
-    private ArrayList<Integer> alreadyIrrigated; // for the hexagoneBox not place but that are
+    private ArrayList<Integer> alreadyIrrigated; // for the hexagoneBox not place but that are irrigated
+
+    private ArrayList<Crest> listOfCrestIrrigated;
 
     public HashMap<Crest, Integer> getRangeFromIrrigated() {
         return rangeFromIrrigated;
@@ -54,6 +56,7 @@ public class CrestGestionnary {
         this.parentChildless = new ArrayList<>();
         this.alreadyIrrigated = new ArrayList<>();
         this.listOfCrestOneRangeToIrrigated = new ArrayList<>();
+        this.listOfCrestIrrigated = new ArrayList<>();
     }
 
     public ArrayList<Integer> getAlreadyIrrigated() {
@@ -67,6 +70,13 @@ public class CrestGestionnary {
     private void setRangeToIrrigate(Crest crest, int value){
         this.rangeFromIrrigated.put(crest,value);
         crest.setRange_to_irrigation(value);
+        if (value == 0){
+            this.listOfCrestIrrigated.add(crest);
+        }
+    }
+
+    public ArrayList<Crest> getListOfCrestIrrigated() {
+        return listOfCrestIrrigated;
     }
 
     /**

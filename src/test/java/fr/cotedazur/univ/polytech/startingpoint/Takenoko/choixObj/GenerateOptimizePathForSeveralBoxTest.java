@@ -57,7 +57,7 @@ class GenerateOptimizePathForSeveralBoxTest {
         board.addBox(hexagoneBoxPlaced6);
         board.addBox(hexagoneBoxPlaced7);
         board.addBox(hexagoneBoxPlaced8);
-        boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced6));
+        boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced5));
         generateOptimizePathForSeveralBox = new GenerateOptimizePathForSeveralBox(boxToIrrigate);
     }
 
@@ -69,34 +69,34 @@ class GenerateOptimizePathForSeveralBoxTest {
                 Arguments.of(false,hexagoneBoxPlaced4),
                 Arguments.of(false,hexagoneBoxPlaced5),
                 Arguments.of(false,hexagoneBoxPlaced6),
-                Arguments.of(false,hexagoneBoxPlaced7)
+                Arguments.of(false,hexagoneBoxPlaced7),
+                Arguments.of(false,hexagoneBoxPlaced8)
                 );
     }
 
-    private static Stream<Arguments> provideCheckBoxIrrigatedAfter(){
-        System.out.println("rrrrrrrrr");
-        boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced6));
-        System.out.println(boxToIrrigate);
-        System.out.println(generateOptimizePathForSeveralBox.getPathForEachBox());
+    private static Stream<Arguments> provideCheckBoxIrrigatedAfter() throws CrestNotRegistered {
+        placeIrrigation();
+        return Stream.of(
+                Arguments.of(true,hexagoneBoxPlaced1),
+                Arguments.of(true,hexagoneBoxPlaced2),
+                Arguments.of(true,hexagoneBoxPlaced3),
+                Arguments.of(false,hexagoneBoxPlaced4),
+                Arguments.of(true,hexagoneBoxPlaced5),
+                Arguments.of(true,hexagoneBoxPlaced6),
+                Arguments.of(false,hexagoneBoxPlaced7),
+                Arguments.of(true,hexagoneBoxPlaced8)
+        );
+    }
+
+    private static void placeIrrigation() {
+        boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced5));
         for (HexagoneBoxPlaced box : boxToIrrigate){
-            System.out.println("zz");
-            System.out.println(generateOptimizePathForSeveralBox.getPathForEachBox().get(box));
-            System.out.println("zz");
             for (int i=0;i<generateOptimizePathForSeveralBox.getPathForEachBox().get(box).size();i++){
                 if (!generateOptimizePathForSeveralBox.getPathForEachBox().get(box).get(i).isIrrigated()){
                     board.placeIrrigation(generateOptimizePathForSeveralBox.getPathForEachBox().get(box).get(i));
                 }
             }
         }
-        return Stream.of(
-                Arguments.of(true,hexagoneBoxPlaced1),
-                Arguments.of(true,hexagoneBoxPlaced2),
-                Arguments.of(true,hexagoneBoxPlaced3),
-                Arguments.of(true,hexagoneBoxPlaced4),
-                Arguments.of(true,hexagoneBoxPlaced5),
-                Arguments.of(true,hexagoneBoxPlaced6),
-                Arguments.of(true,hexagoneBoxPlaced7)
-        );
     }
 
     @ParameterizedTest

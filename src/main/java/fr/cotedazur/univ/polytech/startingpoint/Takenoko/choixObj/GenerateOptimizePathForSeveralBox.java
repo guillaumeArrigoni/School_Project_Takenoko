@@ -65,7 +65,7 @@ public class GenerateOptimizePathForSeveralBox {
             listOfOtherBoxNotIncludeInTheCombinationSelected.removeAll(uniqueCombination.getListOfElementInTheCombination());
 
             generatePath(uniqueCombination.getListOfElementInTheCombination(),sizeCombination-1);
-            generatePath(listOfOtherBoxNotIncludeInTheCombinationSelected,sizeCombination-1);
+            generatePath(listOfOtherBoxNotIncludeInTheCombinationSelected,listOfOtherBoxNotIncludeInTheCombinationSelected.size());
         }
     }
 
@@ -154,7 +154,7 @@ public class GenerateOptimizePathForSeveralBox {
             linkChild_Parent = new HashMap<>();
             ArrayList<Crest> listOfCrestAvailable;
             if (rank ==0){
-                listOfCrestAvailable = crestGestionnary.getListOfCrestOneRangeToIrrigated();
+                listOfCrestAvailable = (ArrayList<Crest>) crestGestionnary.getListOfCrestOneRangeToIrrigated().clone();
                 ArrayList<Crest> p = get_ListOfCommonCrest_GivenACombinationAndARank(listOfCrestAvailable,rank,combination);
                 if (p.size()!=0){
                     for (Crest childCrest : p){
@@ -163,7 +163,7 @@ public class GenerateOptimizePathForSeveralBox {
                 }
             } else {
                 for(Crest crest : successiveHashMapOfCrestAvailable.get(index).keySet()){
-                    listOfCrestAvailable = crestGestionnary.getLinkCrestParentToCrestChildren().get(crest);
+                    listOfCrestAvailable = (ArrayList<Crest>) crestGestionnary.getLinkCrestParentToCrestChildren().get(crest).clone();
                     ArrayList<Crest> p = get_ListOfCommonCrest_GivenACombinationAndARank(listOfCrestAvailable,rank,combination);
                     if (p.size()!=0){
                         for (Crest childCrest : p){

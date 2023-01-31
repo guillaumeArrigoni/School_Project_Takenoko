@@ -141,7 +141,7 @@ public class CrestGestionnary {
      * @param child : the Crest child
      * @param candidateNewValue : the new range that may be added to the child if the condition are passed
      */
-    private void updateChildRangeIfLessOrEqualsThanBefore(Crest parent, Crest child, int candidateNewValue) {
+    private int updateChildRangeIfLessOrEqualsThanBefore(Crest parent, Crest child, int candidateNewValue) {
         if (candidateNewValue == this.rangeFromIrrigated.get(child)){
             ArrayList<Crest> listOfParent = this.linkCrestChildrenToCrestParent.get(child);
             listOfParent.add(parent);
@@ -149,12 +149,16 @@ public class CrestGestionnary {
             if (rangeFromIrrigated.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
                 this.listOfCrestOneRangeToIrrigated.add(child);
             }
+            return 0;
         } else if (candidateNewValue < this.rangeFromIrrigated.get(child)){
             if (rangeFromIrrigated.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
                 this.listOfCrestOneRangeToIrrigated.add(child);
             }
             setRangeToIrrigate(child, candidateNewValue);
             this.linkCrestChildrenToCrestParent.put(child, new ArrayList<Crest>(Arrays.asList(parent)));
+            return 1;
+        } else {
+            return -1;
         }
     }
 
@@ -216,8 +220,10 @@ public class CrestGestionnary {
     private ArrayList<Crest> makeImplementationNeededForChildCrest(Set<Crest> allCrestImplemented, ArrayList<Crest> newParentChildless, Crest parent, ArrayList<Crest> listOfChildrenForParent, Crest child) {
         if (allCrestImplemented.contains(child)){
             int candidateNewValue = this.rangeFromIrrigated.get(parent)+1;
-            updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewValue);
-            listOfChildrenForParent.remove(child);
+            int compareTo = updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewValue);
+            if (compareTo==-1){
+                listOfChildrenForParent.remove(child);
+            }
         } else {
             this.linkCrestChildrenToCrestParent.put(child,new ArrayList<>(Arrays.asList(parent)));
             int rangeOfParent = this.rangeFromIrrigated.get(parent);

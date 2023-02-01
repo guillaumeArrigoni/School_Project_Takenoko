@@ -46,6 +46,7 @@ public class Board implements Cloneable {
     protected int[] pandaCoords;
     protected RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     protected CrestGestionnary crestGestionnary;
+    protected ElementOfTheBoard elementOfTheBoard;
 
     /**
      * Must be >0.
@@ -82,6 +83,7 @@ public class Board implements Cloneable {
         this.idOfTheBoard = id;
         this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        this.elementOfTheBoard = new ElementOfTheBoard();
         this.placedBox = new HashMap<>();
         this.crestGestionnary = new CrestGestionnary();
         this.AvailableBox = new ArrayList<>();
@@ -127,7 +129,11 @@ public class Board implements Cloneable {
     public int getIdOfTheBoard(){
         return this.idOfTheBoard;
     }
-    
+
+    public ElementOfTheBoard getElementOfTheBoard() {
+        return elementOfTheBoard;
+    }
+
     public void setPandaCoords(int[] newCoords, Bot bot) {
         this.pandaCoords = newCoords;
         HexagoneBoxPlaced box = getBoxWithCoordinates(newCoords);

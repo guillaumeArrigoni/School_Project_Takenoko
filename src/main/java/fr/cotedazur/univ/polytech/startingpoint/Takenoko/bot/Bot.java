@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
@@ -168,12 +169,18 @@ public abstract class Bot {
 
     public void deleteBambooEaten(ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
         ArrayList<Color> errorImpossibleToDeleteTheseBamboo = new ArrayList<>();
-        for (int i=0;i<listBambooToDelete.size();i++){
-            int nbBambooOfOneColorAte = bambooEaten.get(listBambooToDelete.get(i));
+        for (Color color : listBambooToDelete){
+            int nbBambooOfOneColorAte = bambooEaten.get(color);
             if (nbBambooOfOneColorAte>0){
-                bambooEaten.put(listBambooToDelete.get(i),nbBambooOfOneColorAte-1);
+                bambooEaten.put(color,nbBambooOfOneColorAte-1);
+                try {
+                    board.getElementOfTheBoard().giveBackBamboo(color);
+                } catch (TakenokoException e) {
+                    System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+                    throw new RuntimeException();
+                }
             } else {
-                errorImpossibleToDeleteTheseBamboo.add(listBambooToDelete.get(i));
+                errorImpossibleToDeleteTheseBamboo.add(color);
             }
         }
         if (errorImpossibleToDeleteTheseBamboo.size()!=0){

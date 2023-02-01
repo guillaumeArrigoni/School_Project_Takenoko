@@ -7,7 +7,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.objective.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 

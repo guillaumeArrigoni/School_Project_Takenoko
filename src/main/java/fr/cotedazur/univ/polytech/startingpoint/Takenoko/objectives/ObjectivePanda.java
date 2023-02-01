@@ -1,8 +1,6 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.objective;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.pattern.Pattern;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.pattern;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 

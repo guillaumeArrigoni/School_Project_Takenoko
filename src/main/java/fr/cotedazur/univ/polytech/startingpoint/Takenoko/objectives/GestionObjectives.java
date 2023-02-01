@@ -6,13 +6,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.objective.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.objective.ObjectiveJardinier;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.objective.ObjectivePanda;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.objective.ObjectiveParcelle;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.pattern.PatternJardinier;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.pattern.PatternPanda;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.pattern.PatternParcelle;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 

@@ -14,15 +14,15 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxId
 import java.util.*;
 
 
-public class Board {
+public class Board implements Cloneable {
 
-    private final boolean allIrrigated;
+    protected final boolean allIrrigated;
 
     /**
      * Return the number of box placed in the board
      * WARNING : the lake is counted in the number of box placed
      */
-    int numberBoxPlaced ;
+    protected int numberBoxPlaced ;
     
     /**
      * PlacedBox is a Hashmap that contain in key all the box's id already place in the board
@@ -31,7 +31,7 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private HashMap<Integer, HexagoneBoxPlaced> placedBox;
+    protected HashMap<Integer, HexagoneBoxPlaced> placedBox;
     
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
@@ -41,17 +41,21 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private ArrayList<int[]> AvailableBox;
-    private int[] gardenerCoords;
-    private int[] pandaCoords;
-    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private final CrestGestionnary crestGestionnary;
+    protected ArrayList<int[]> AvailableBox;
+    protected int[] gardenerCoords;
+    protected int[] pandaCoords;
+    protected RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    protected CrestGestionnary crestGestionnary;
 
     /**
      * Must be >0.
      * Use to the hashcode if different board are used
      */
-    private final int idOfTheBoard;
+    protected final int idOfTheBoard;
+
+    public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
+        return retrieveBoxIdWithParameters;
+    }
 
     public CrestGestionnary getCrestGestionnary() {
         return crestGestionnary;
@@ -240,5 +244,10 @@ public class Board {
         placedBox.put(box.getId(),box);
         crestGestionnary.launchUpdatingCrestWithAddingNewBox(box);
         box.launchIrrigationChecking();
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

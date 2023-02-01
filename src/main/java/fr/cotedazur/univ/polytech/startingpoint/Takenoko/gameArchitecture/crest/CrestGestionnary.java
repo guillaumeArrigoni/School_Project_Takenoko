@@ -11,13 +11,14 @@ import java.util.*;
 
 public class CrestGestionnary {
 
-    private HashMap<Crest,Integer> rangeFromIrrigated;
-    private HashMap<Crest, ArrayList<Crest>> linkCrestChildrenToCrestParent;
-    private HashMap<Crest, ArrayList<Crest>> linkCrestParentToCrestChildren;
-    private ArrayList<Crest> parentChildless; // parent with no children
-    private ArrayList<Integer> alreadyIrrigated; // for the hexagoneBox not place but that are irrigated
-
-    private ArrayList<Crest> listOfCrestIrrigated;
+    protected HashMap<Crest,Integer> rangeFromIrrigated;
+    protected HashMap<Crest, ArrayList<Crest>> linkCrestChildrenToCrestParent;
+    protected HashMap<Crest, ArrayList<Crest>> linkCrestParentToCrestChildren;
+    protected ArrayList<Crest> parentChildless; // parent with no children
+    protected ArrayList<Integer> alreadyIrrigated; // for the hexagoneBox not place but that are irrigated
+    protected ArrayList<Crest> listOfCrestIrrigated;
+    // already irrigated if they were placed
+    protected ArrayList<Crest> listOfCrestOneRangeToIrrigated;
 
     public HashMap<Crest, Integer> getRangeFromIrrigated() {
         return rangeFromIrrigated;
@@ -28,16 +29,12 @@ public class CrestGestionnary {
         }
         throw new CrestNotRegistered(crest);
     }
-
-
     public HashMap<Crest, ArrayList<Crest>> getLinkCrestChildrenToCrestParent() {
         return linkCrestChildrenToCrestParent;
     }
-
     public HashMap<Crest, ArrayList<Crest>> getLinkCrestParentToCrestChildren() {
         return linkCrestParentToCrestChildren;
     }
-
     public ArrayList<Crest> getParentChildless() {
         return parentChildless;
     }
@@ -45,11 +42,26 @@ public class CrestGestionnary {
     public ArrayList<Crest> getListOfCrestOneRangeToIrrigated() {
         return listOfCrestOneRangeToIrrigated;
     }
+    public ArrayList<Crest> getListOfCrestIrrigated() {
+        return listOfCrestIrrigated;
+    }
+    public ArrayList<Integer> getAlreadyIrrigated() {
+        return alreadyIrrigated;
+    }
 
-    // already irrigated if they were placed
-    private ArrayList<Crest> listOfCrestOneRangeToIrrigated;
+
 
     public CrestGestionnary(){
+        this(true);
+    }
+
+    public CrestGestionnary(boolean bool){
+        if (bool){
+            setupGeneral();
+        }
+    }
+
+    private void setupGeneral(){
         this.linkCrestParentToCrestChildren = new HashMap<>();
         this.linkCrestChildrenToCrestParent = new HashMap<>();
         this.rangeFromIrrigated = new HashMap<>();
@@ -57,10 +69,6 @@ public class CrestGestionnary {
         this.alreadyIrrigated = new ArrayList<>();
         this.listOfCrestOneRangeToIrrigated = new ArrayList<>();
         this.listOfCrestIrrigated = new ArrayList<>();
-    }
-
-    public ArrayList<Integer> getAlreadyIrrigated() {
-        return alreadyIrrigated;
     }
 
     public void launchUpdatingCrestWithAddingNewBox(HexagoneBoxPlaced box){
@@ -75,9 +83,6 @@ public class CrestGestionnary {
         }
     }
 
-    public ArrayList<Crest> getListOfCrestIrrigated() {
-        return listOfCrestIrrigated;
-    }
 
     /**
      * Ne gère pas le cas où une des 2 tuiles n'est pas placé

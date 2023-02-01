@@ -44,6 +44,7 @@ public class BotMCTS extends Bot{
             case DRAW_AND_PUT_TILE -> placeTile();
             case MOVE_GARDENER -> moveGardener();
             case DRAW_OBJECTIVE -> drawObjective();
+            default -> movePanda();
         }
         instructions.remove(0);
     }
@@ -53,8 +54,6 @@ public class BotMCTS extends Bot{
     protected void placeTile() {
         //Init
         List<HexagoneBox> list = new ArrayList<>();
-        //Get all the available coords
-        List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
             list.add(board.drawTile());
@@ -66,6 +65,8 @@ public class BotMCTS extends Bot{
         placedTile.setCoordinates(placedTileCoords);
         //Add the tile to the board
         board.addBox(placedTile);
+        board.getCardDeck().add(list.get(1));
+        board.getCardDeck().add(list.get(2));
         System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
@@ -73,6 +74,12 @@ public class BotMCTS extends Bot{
     protected void moveGardener() {
         board.setGardenerCoords(instructions.get(0).getParameters());
         System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+    }
+
+    @Override
+    protected void movePanda() {
+        board.setPandaCoords(instructions.get(0).getParameters(),this);
+        System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
 
     @Override

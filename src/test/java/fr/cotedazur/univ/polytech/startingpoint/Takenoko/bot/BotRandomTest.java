@@ -93,6 +93,15 @@ class BotRandomTest {
     }
 
     @Test
+    void playTurnMovePandaImpossible(){
+        when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0);
+        when(r.nextInt(anyInt())).thenReturn(3,0);
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
+        verify(r, times(3)).nextInt(anyInt());
+        assertEquals(3, board.getAllBoxPlaced().size());
+    }
+
+    @Test
     void playTurnDrawParcelObjective(){
         when(r.nextInt(anyInt(), anyInt())).thenReturn(0);
         when(r.nextInt(anyInt())).thenReturn(2);
@@ -114,17 +123,17 @@ class BotRandomTest {
         assertEquals(TypeObjective.JARDINIER, botRandom.getObjectives().get(1).getType());
     }
 
-/*TODO : Panda not implmenented
     @Test
     void playTurnDrawPandaObjective(){
-        when(r.nextInt(anyInt(), anyInt())).thenReturn(0);
+        when(r.nextInt(anyInt(), anyInt())).thenReturn(2);
         when(r.nextInt(anyInt())).thenReturn(2);
-        when(meteoDice.roll()).thenReturn(MeteoDice.Meteo.VENT);
-        botRandom.playTurn();
+        botRandom.playTurn(MeteoDice.Meteo.VENT);
         verify(r, times(2)).nextInt(anyInt());
         assertEquals(2, botRandom.getObjectives().size());
+        assertEquals(TypeObjective.PANDA, botRandom.getObjectives().get(0).getType());
+        assertEquals(TypeObjective.PANDA, botRandom.getObjectives().get(1).getType());
     }
-*/
+
 
     @Test
     void playTurnDrawRandomObjectiveTwice(){

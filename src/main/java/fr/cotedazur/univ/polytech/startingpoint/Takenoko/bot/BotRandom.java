@@ -68,6 +68,10 @@ public class BotRandom extends Bot {
                 System.out.println("Le bot a choisi : PiocherObjectif");
                 drawObjective();
                 break;
+            case MOVE_PANDA:
+                System.out.println("Le bot a choisi : BougerPanda");
+                movePanda();
+                break;
         }
 
     }
@@ -77,7 +81,7 @@ public class BotRandom extends Bot {
     protected PossibleActions chooseAction(){
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
-        if (!isObjectiveLegal(acp))
+        if (isObjectiveIllegal(acp))
             return chooseAction();
         possibleActions.remove(acp);
         return acp;
@@ -93,13 +97,16 @@ public class BotRandom extends Bot {
         for(int i = 0; i < 3; i++)
             list.add(Action.drawTile(random, retrieveBoxIdWithParameters,board));
         //Choose a random tile from the tiles drawn
-        HexagoneBox placedTile = list.get(random.nextInt(0, 3));
+        int placedTileIndex = random.nextInt(0, 3);
+        HexagoneBox placedTile = list.get(placedTileIndex);
         //Choose a random available space
         int[] placedTileCoords = availableTilesList.get(random.nextInt(0, availableTilesList.size()));
         //Set the coords of the tile
         placedTile.setCoordinates(placedTileCoords);
         //Add the tile to the board
         board.addBox(placedTile);
+        board.getCardDeck().add(list.get((placedTileIndex + 1) % 3));
+        board.getCardDeck().add(list.get((placedTileIndex + 2) % 3));
         System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
@@ -113,6 +120,13 @@ public class BotRandom extends Bot {
     @Override
     public void drawObjective(){
         gestionObjectives.rollObjective(this);
+    }
+
+    @Override
+    public void movePanda(){
+        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
+        board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
+        System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
 
 

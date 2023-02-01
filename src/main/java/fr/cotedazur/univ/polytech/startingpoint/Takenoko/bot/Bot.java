@@ -121,6 +121,8 @@ public abstract class Bot {
      */
     protected abstract void moveGardener();
 
+    protected abstract void movePanda();
+
     //Score and objectives
     public int getScore() {
         return score;
@@ -140,8 +142,9 @@ public abstract class Bot {
     }
     public abstract void drawObjective();
 
-    public boolean isObjectiveLegal(PossibleActions actions){
+    public boolean isObjectiveIllegal(PossibleActions actions){
         return ((actions == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
+                (actions == PossibleActions.MOVE_PANDA && Action.possibleMoveForGardenerOrPanda(board,board.getPandaCoords()).isEmpty()) ||
                 (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5) ||
                 (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getCardDeck().size() < 3) ||
                 (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));

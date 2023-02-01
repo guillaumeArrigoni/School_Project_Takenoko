@@ -10,7 +10,8 @@ import java.util.List;
 public enum PossibleActions {
     DRAW_AND_PUT_TILE(0),
     MOVE_GARDENER(1),
-    DRAW_OBJECTIVE(2);
+    DRAW_OBJECTIVE(2),
+    MOVE_PANDA(3);
 
     /**
      * The value of the action

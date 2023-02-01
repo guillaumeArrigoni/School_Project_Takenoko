@@ -10,7 +10,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class BotSimulator extends Bot{
 
     @Override
     public void playTurn(MeteoDice.Meteo meteo) {
-        if (!isObjectiveLegal(instructions.getAction())){
+        if (isObjectiveIllegal(instructions.getAction())){
             legal = false;
             return;
         }
@@ -57,6 +56,8 @@ public class BotSimulator extends Bot{
             case DRAW_OBJECTIVE:
                 drawObjective();
                 break;
+            default://MOVE PANDA
+                movePanda();
         }
 
     }
@@ -82,6 +83,11 @@ public class BotSimulator extends Bot{
     @Override
     protected void moveGardener() {
         board.setGardenerCoords(instructions.getParameters());
+    }
+
+    @Override
+    protected void movePanda() {
+        board.setPandaCoords(instructions.getParameters(),this);
     }
 
     @Override

@@ -25,7 +25,10 @@ public class GameState {
     }
 
     private int calculateScore() {
-        return botSimulator.getScore();
+        if(botSimulator.isLegal())
+            return botSimulator.getScore();
+        else
+            return -999;
     }
 
     public BotSimulator getBotSimulator() {

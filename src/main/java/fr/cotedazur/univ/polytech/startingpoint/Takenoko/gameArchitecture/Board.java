@@ -73,6 +73,7 @@ public class Board {
         this.AvailableBox = new ArrayList<>();
         this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
+        this.pandaCoords = new int[]{0,0,0};
         this.cardDeck = new ArrayList<>();
         setCardDeck();
     }

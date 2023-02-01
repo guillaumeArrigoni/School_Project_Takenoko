@@ -163,6 +163,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         listOfCoordiante.add(new Crest(x-5,y,2));
         listOfCoordiante.add(new Crest(x,y-5,3));
         this.listOfCrestAroundBox =  listOfCoordiante;
+
     }
 
     public ArrayList<Crest> getListOfCrestAroundBox() {

@@ -158,6 +158,7 @@ class BoardTest {
                                            ArrayList<HexagoneBoxPlaced> listOfBox) {
         int[] coords = box.getCoordinates();
         board.setGardenerCoords(coords);
+        System.out.println(board.getElementOfTheBoard().getNbOfBambooForEachColorAvailable());
         for (int i =0;i<differentBambooHeightInTheBox1_2_3_7_8_9.size();i++){
             assertEquals(differentBambooHeightInTheBox1_2_3_7_8_9.get(i),listOfBox.get(i).getHeightBamboo());
         }

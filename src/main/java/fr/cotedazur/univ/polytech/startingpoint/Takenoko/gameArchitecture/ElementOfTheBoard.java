@@ -79,7 +79,7 @@ public class ElementOfTheBoard {
     public void placeBamboo(Color color) throws TakenokoException {
         if (!this.nbOfBambooForEachColorAvailable.containsKey(color)){
             throw new BambooOfColorNotExistingException(color);
-        } else if (this.nbOfBambooForEachColorAvailable.get(color)!=0){
+        } else if (this.nbOfBambooForEachColorAvailable.get(color)==0){
             throw new BambooNotAvailableException(color);
         } else {
             this.nbOfBambooForEachColorAvailable.put(color,this.nbOfBambooForEachColorAvailable.get(color)-1);

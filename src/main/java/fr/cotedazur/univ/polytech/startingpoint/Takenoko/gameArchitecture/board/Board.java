@@ -81,10 +81,14 @@ public class Board implements Cloneable {
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id){
+        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard());
+    }
+
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id,ElementOfTheBoard elementOfTheBoard){
         this.idOfTheBoard = id;
         this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
-        this.elementOfTheBoard = new ElementOfTheBoard();
+        this.elementOfTheBoard = elementOfTheBoard;
         this.placedBox = new HashMap<>();
         this.crestGestionnary = new CrestGestionnary();
         this.AvailableBox = new ArrayList<>();

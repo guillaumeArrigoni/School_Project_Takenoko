@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -99,6 +100,11 @@ public class Board implements Cloneable {
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
         //TODO set allIrrigated to false when irrigation add to the game
         this(retrieveBoxIdWithParameters,true,id);
+    }
+
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated){
+        //TODO set allIrrigated to false when irrigation add to the game
+        this(retrieveBoxIdWithParameters,true,id,elementOfTheBoardCheated);
     }
 
     private void generateLac(){

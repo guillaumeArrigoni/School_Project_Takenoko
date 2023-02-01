@@ -1,7 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.BambooNotAvailableException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.BambooOfColorNotExistingException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.elementOfTheBoard.BambooNotAvailableException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.elementOfTheBoard.BambooOfColorNotExistingException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;

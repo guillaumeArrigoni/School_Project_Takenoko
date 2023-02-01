@@ -1,9 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.CrestNotRegistered;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 
 import java.util.*;

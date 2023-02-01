@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.Combination;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

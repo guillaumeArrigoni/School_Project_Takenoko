@@ -1,8 +1,9 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.elementOfTheBoard;
 
+        import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
         import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 
-public class BambooOfColorNotExistingException extends TakenokoException{
+public class BambooOfColorNotExistingException extends TakenokoException {
 
     private Color color;
     private String text;

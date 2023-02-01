@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.IntegerNotPossible;
 

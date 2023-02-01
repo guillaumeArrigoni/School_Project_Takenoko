@@ -1,6 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
-
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination;
 
 import java.util.ArrayList;
 import java.util.HashSet;

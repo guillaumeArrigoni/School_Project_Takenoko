@@ -1,6 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
@@ -21,6 +23,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private final Board board;
     private ArrayList<Crest> listOfCrestAroundBox;
+    private ElementOfTheBoard elementOfTheBoard;
 
     /**
      *      1
@@ -37,6 +40,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         this.board = board;
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
+        this.elementOfTheBoard = board.getElementOfTheBoard();
         if(super.irrigate){
             this.heightBamboo = 1;
         } else {
@@ -80,7 +84,12 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         }
         retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
         for (int i=0;i<boucle;i++){
-            if (this.heightBamboo < 4) this.heightBamboo++;
+            if (this.heightBamboo < 4){
+                try{
+                    elementOfTheBoard.placeBamboo(this.color);
+                    this.heightBamboo++;
+                } catch (TakenokoException e) {}
+            }
         }
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }

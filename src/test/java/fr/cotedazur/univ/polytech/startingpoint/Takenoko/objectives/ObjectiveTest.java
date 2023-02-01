@@ -1,7 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,9 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 
-public class ImpossibleToPlaceIrrigationException extends TakenokoException{
+public class ImpossibleToPlaceIrrigationException extends TakenokoException {
 
     private Crest crest;
     private String text;

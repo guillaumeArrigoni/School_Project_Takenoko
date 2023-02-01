@@ -1,6 +1,8 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.hexagoneBox;
 
-public class AdjacenteException extends TakenokoException{
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
+
+public class AdjacenteException extends TakenokoException {
 
     private final String tab1;
     private final String tab2;

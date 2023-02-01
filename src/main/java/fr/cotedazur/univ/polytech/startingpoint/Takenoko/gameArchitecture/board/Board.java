@@ -1,12 +1,14 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -46,6 +48,7 @@ public class Board implements Cloneable {
     protected int[] pandaCoords;
     protected RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     protected CrestGestionnary crestGestionnary;
+    protected ElementOfTheBoard elementOfTheBoard;
 
     /**
      * Must be >0.
@@ -79,9 +82,14 @@ public class Board implements Cloneable {
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id){
+        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard());
+    }
+
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id,ElementOfTheBoard elementOfTheBoard){
         this.idOfTheBoard = id;
         this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        this.elementOfTheBoard = elementOfTheBoard;
         this.placedBox = new HashMap<>();
         this.crestGestionnary = new CrestGestionnary();
         this.AvailableBox = new ArrayList<>();
@@ -92,6 +100,11 @@ public class Board implements Cloneable {
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
         //TODO set allIrrigated to false when irrigation add to the game
         this(retrieveBoxIdWithParameters,true,id);
+    }
+
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated){
+        //TODO set allIrrigated to false when irrigation add to the game
+        this(retrieveBoxIdWithParameters,true,id,elementOfTheBoardCheated);
     }
 
     private void generateLac(){
@@ -127,7 +140,11 @@ public class Board implements Cloneable {
     public int getIdOfTheBoard(){
         return this.idOfTheBoard;
     }
-    
+
+    public ElementOfTheBoard getElementOfTheBoard() {
+        return elementOfTheBoard;
+    }
+
     public void setPandaCoords(int[] newCoords, Bot bot) {
         this.pandaCoords = newCoords;
         HexagoneBoxPlaced box = getBoxWithCoordinates(newCoords);

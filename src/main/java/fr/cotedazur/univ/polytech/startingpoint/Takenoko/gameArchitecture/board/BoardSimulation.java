@@ -1,6 +1,5 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnarySimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;

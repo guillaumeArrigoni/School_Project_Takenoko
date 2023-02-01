@@ -1,6 +1,8 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.CrestNotRegistered;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.Combination;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.CombinationsOf_P_elementsAmong_N;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;

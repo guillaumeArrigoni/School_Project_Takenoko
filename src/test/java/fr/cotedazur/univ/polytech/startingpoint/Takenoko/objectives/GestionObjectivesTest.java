@@ -1,11 +1,12 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
@@ -54,11 +55,13 @@ class GestionObjectivesTest {
     private static Random random;
     private static GestionObjectives gestionObjectives;
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private static ElementOfTheBoardCheated elementOfTheBoardCheated;
 
     @BeforeAll
     public static void setupBox() {
+        elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters, 1);
+        board = new Board(retrieveBoxIdWithParameters, 1,elementOfTheBoardCheated);
         meteoDice = new MeteoDice();
         random = new Random();
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);

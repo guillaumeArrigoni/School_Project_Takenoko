@@ -1,11 +1,14 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateOptimizePathForSeveralBox;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
@@ -23,40 +26,45 @@ class GenerateOptimizePathForSeveralBoxTest {
 
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Board board;
-    private static GenerateOptimizePathForSeveralBox generateOptimizePathForSeveralBox;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced1;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced2;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced3;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced4;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced5;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced6;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced7;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced8;
-    private static ArrayList<HexagoneBoxPlaced> boxToIrrigate;
+    private static GenerateOptimizePathForSeveralBoxSimulation generateOptimizePathForSeveralBox;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced1;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced2;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced3;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced4;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced5;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced6;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced7;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced8;
+    private static ArrayList<HexagoneBoxSimulation> boxToIrrigate;
+    private static BoardSimulation boardSimulation;
+    private static RetrieveSimulation retrieveSimulation;
 
     @BeforeAll
     @Order(1)
     public static void setup() throws CrestNotRegistered {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,false,1);
-        hexagoneBoxPlaced1 = new HexagoneBoxPlaced(-1,0,1, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced2 = new HexagoneBoxPlaced(0,1,-1, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced3 = new HexagoneBoxPlaced(-1,1,0, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-2,1,1, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-2,2,0, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced6 = new HexagoneBoxPlaced(-1,2,-1, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced7 = new HexagoneBoxPlaced(-3,2,1, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced8 = new HexagoneBoxPlaced(0,2,-2, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        board.addBox(hexagoneBoxPlaced1);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
-        board.addBox(hexagoneBoxPlaced4);
-        board.addBox(hexagoneBoxPlaced5);
-        board.addBox(hexagoneBoxPlaced6);
-        board.addBox(hexagoneBoxPlaced7);
-        board.addBox(hexagoneBoxPlaced8);
+        boardSimulation = new BoardSimulation(board);
+        retrieveSimulation = boardSimulation.getRetrieveBoxIdWithParameters();
+        hexagoneBoxPlaced1 = new HexagoneBoxSimulation(-1,0,1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced2 = new HexagoneBoxSimulation(0,1,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced3 = new HexagoneBoxSimulation(-1,1,0, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced4 = new HexagoneBoxSimulation(-2,1,1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced5 = new HexagoneBoxSimulation(-2,2,0, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced6 = new HexagoneBoxSimulation(-1,2,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced7 = new HexagoneBoxSimulation(-3,2,1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced8 = new HexagoneBoxSimulation(0,2,-2, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        boardSimulation.addBox(hexagoneBoxPlaced1);
+        boardSimulation.addBox(hexagoneBoxPlaced2);
+        boardSimulation.addBox(hexagoneBoxPlaced3);
+        boardSimulation.addBox(hexagoneBoxPlaced4);
+        boardSimulation.addBox(hexagoneBoxPlaced5);
+        boardSimulation.addBox(hexagoneBoxPlaced6);
+        boardSimulation.addBox(hexagoneBoxPlaced7);
+        boardSimulation.addBox(hexagoneBoxPlaced8);
         boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced5));
-        generateOptimizePathForSeveralBox = new GenerateOptimizePathForSeveralBox(boxToIrrigate);
+
+        generateOptimizePathForSeveralBox = new GenerateOptimizePathForSeveralBoxSimulation(boxToIrrigate);
     }
 
     private static Stream<Arguments> provideCheckBoxIrrigatedBefore(){

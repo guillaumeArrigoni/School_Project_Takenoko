@@ -1,12 +1,15 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
@@ -24,20 +27,24 @@ class GenerateAWayToIrrigateTheBoxTest {
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Board board;
     private static GenerateAWayToIrrigateTheBox generateAWayToIrrigateTheBox;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced1;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced2;
-    private static HexagoneBoxPlaced hexagoneBoxPlaced3;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced1;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced2;
+    private static HexagoneBoxSimulation hexagoneBoxPlaced3;
     private static Crest crest1;
     private static Crest crest2;
+    private static BoardSimulation boardSimulation;
+    private static RetrieveSimulation retrieveSimulation;
 
     @BeforeAll
     @Order(1)
     public static void setup() throws CrestNotRegistered {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,false,1);
-        hexagoneBoxPlaced1 = new HexagoneBoxPlaced(-1,1,0, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced2 = new HexagoneBoxPlaced(0,1,-1, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
-        hexagoneBoxPlaced3 = new HexagoneBoxPlaced(-1,2,-1, Color.Vert, Special.Classique,retrieveBoxIdWithParameters,board);
+        boardSimulation = new BoardSimulation(board);
+        retrieveSimulation = boardSimulation.getRetrieveBoxIdWithParameters();
+        hexagoneBoxPlaced1 = new HexagoneBoxSimulation(-1,1,0, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced2 = new HexagoneBoxSimulation(0,1,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced3 = new HexagoneBoxSimulation(-1,2,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
         board.addBox(hexagoneBoxPlaced1);
         board.addBox(hexagoneBoxPlaced2);
         board.addBox(hexagoneBoxPlaced3);

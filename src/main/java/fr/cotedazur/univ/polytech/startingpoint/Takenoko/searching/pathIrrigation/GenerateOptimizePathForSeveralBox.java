@@ -1,43 +1,51 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.Combination;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.CombinationsOf_P_elementsAmong_N;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+
 
 import java.util.*;
 
 public class GenerateOptimizePathForSeveralBox {
 
-    private ArrayList<HexagoneBoxPlaced> boxToIrrigate;
-    private final CrestGestionnary crestGestionnary;
+    protected ArrayList<HexagoneBoxPlaced> boxToIrrigate;
+    protected CrestGestionnary crestGestionnary;
     private HashMap<HexagoneBoxPlaced,ArrayList<Crest>> pathForEachBox;
 
     private HashMap<HexagoneBoxPlaced,GenerateAWayToIrrigateTheBox> generalHashMapOfPathForEachBox;
 
 
+    public GenerateOptimizePathForSeveralBox(ArrayList<HexagoneBoxPlaced> boxs, boolean bool) throws CrestNotRegistered {
+        if (bool){
+            this.boxToIrrigate = boxs;
+            this.crestGestionnary = boxs.get(0).getBoard().getCrestGestionnary();
+            setupPathForEachBox();
+            setupGeneralWayForEachBox();
+            generatePath(boxToIrrigate,boxToIrrigate.size());
+        }
+    }
+
     public GenerateOptimizePathForSeveralBox(ArrayList<HexagoneBoxPlaced> boxs) throws CrestNotRegistered {
-        this.boxToIrrigate = boxs;
-        this.crestGestionnary = boxs.get(0).getBoard().getCrestGestionnary();
-        setupPathForEachBox();
-        setupGeneralWayForEachBox();
-        generatePath(boxToIrrigate,boxToIrrigate.size());
+        this(boxs,true);
     }
 
     public HashMap<HexagoneBoxPlaced, ArrayList<Crest>> getPathForEachBox() {
         return pathForEachBox;
     }
 
-    private void setupPathForEachBox(){
+    protected void setupPathForEachBox(){
         pathForEachBox = new HashMap<>();
         for(HexagoneBoxPlaced box : boxToIrrigate){
             this.pathForEachBox.put(box,new ArrayList<>());
         }
     }
 
-    private void setupGeneralWayForEachBox() throws CrestNotRegistered {
+    protected void setupGeneralWayForEachBox() throws CrestNotRegistered {
         generalHashMapOfPathForEachBox = new HashMap<>();
         for (HexagoneBoxPlaced box : boxToIrrigate){
             generalHashMapOfPathForEachBox.put(box,new GenerateAWayToIrrigateTheBox(box));
@@ -45,7 +53,7 @@ public class GenerateOptimizePathForSeveralBox {
     }
 
 
-    private void generatePath(ArrayList<HexagoneBoxPlaced> previousBoxConcerned, int sizeCombination) throws CrestNotRegistered {
+    protected void generatePath(ArrayList<HexagoneBoxPlaced> previousBoxConcerned, int sizeCombination) throws CrestNotRegistered {
         if(sizeCombination ==0 || previousBoxConcerned.isEmpty()){
             return;
         }

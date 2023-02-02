@@ -118,6 +118,10 @@ public class Board implements Cloneable {
         lac.launchIrrigationChecking();
     }
 
+    public boolean isAllIrrigated() {
+        return allIrrigated;
+    }
+
     public int[] getGardenerCoords() {
         return this.gardenerCoords;
     }

@@ -1,9 +1,13 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +30,12 @@ public class GenerateAWayToIrrigateTheBox {
     public GenerateAWayToIrrigateTheBox(HexagoneBoxPlaced box) throws CrestNotRegistered {
         this.box = box;
         this.crestGestionnary = box.getBoard().getCrestGestionnary();
+        setup();
+    }
+
+    public GenerateAWayToIrrigateTheBox(HexagoneBoxPlaced box, BoardSimulation board) throws CrestNotRegistered {
+        this.box = box;
+        this.crestGestionnary = board.getCrestGestionnary();
         setup();
     }
 

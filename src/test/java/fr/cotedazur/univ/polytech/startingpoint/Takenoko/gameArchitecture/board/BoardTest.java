@@ -1,6 +1,7 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -39,7 +40,7 @@ class BoardTest {
     private static HexagoneBoxPlaced rouge09Protected;
     private static HexagoneBoxPlaced vert18Engrais;
     private static HexagoneBoxPlaced notPlacedInBoard;
-    private static  ElementOfTheBoardCheated elementOfTheBoardCheated;
+    private static ElementOfTheBoardCheated elementOfTheBoardCheated;
     /**
      *                  12     13      14
      *              11    4         5      15

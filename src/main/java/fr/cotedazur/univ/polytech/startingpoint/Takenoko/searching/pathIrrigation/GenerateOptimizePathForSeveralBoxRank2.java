@@ -1,7 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.Combination;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.CombinationsOf_P_elementsAmong_N;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
@@ -11,7 +10,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.
 
 import java.util.*;
 
-public class GenerateOptimizePathForSeveralBox {
+public class GenerateOptimizePathForSeveralBoxRank2 {
 
     protected ArrayList<HexagoneBoxPlaced> boxToIrrigate;
     protected CrestGestionnary crestGestionnary;
@@ -20,7 +19,7 @@ public class GenerateOptimizePathForSeveralBox {
     private HashMap<HexagoneBoxPlaced,GenerateAWayToIrrigateTheBox> generalHashMapOfPathForEachBox;
 
 
-    public GenerateOptimizePathForSeveralBox(ArrayList<HexagoneBoxPlaced> boxs, boolean bool) throws CrestNotRegistered {
+    public GenerateOptimizePathForSeveralBoxRank2(ArrayList<HexagoneBoxPlaced> boxs, boolean bool) throws CrestNotRegistered {
         if (bool){
             this.boxToIrrigate = boxs;
             this.crestGestionnary = boxs.get(0).getBoard().getCrestGestionnary();
@@ -30,7 +29,7 @@ public class GenerateOptimizePathForSeveralBox {
         }
     }
 
-    public GenerateOptimizePathForSeveralBox(ArrayList<HexagoneBoxPlaced> boxs) throws CrestNotRegistered {
+    public GenerateOptimizePathForSeveralBoxRank2(ArrayList<HexagoneBoxPlaced> boxs) throws CrestNotRegistered {
         this(boxs,true);
     }
 

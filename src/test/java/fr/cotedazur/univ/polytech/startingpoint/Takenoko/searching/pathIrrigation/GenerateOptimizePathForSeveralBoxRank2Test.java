@@ -9,7 +9,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateOptimizePathForSeveralBox;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,11 +21,11 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GenerateOptimizePathForSeveralBoxTest {
+class GenerateOptimizePathForSeveralBoxRank2Test {
 
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Board board;
-    private static GenerateOptimizePathForSeveralBoxSimulation generateOptimizePathForSeveralBox;
+    private static GenerateOptimizePathForSeveralBoxRank2Simulation generateOptimizePathForSeveralBox;
     private static HexagoneBoxSimulation hexagoneBoxPlaced1;
     private static HexagoneBoxSimulation hexagoneBoxPlaced2;
     private static HexagoneBoxSimulation hexagoneBoxPlaced3;
@@ -64,7 +63,7 @@ class GenerateOptimizePathForSeveralBoxTest {
         boardSimulation.addBox(hexagoneBoxPlaced8);
         boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced5));
 
-        generateOptimizePathForSeveralBox = new GenerateOptimizePathForSeveralBoxSimulation(boxToIrrigate);
+        generateOptimizePathForSeveralBox = new GenerateOptimizePathForSeveralBoxRank2Simulation(boxToIrrigate);
     }
 
     private static Stream<Arguments> provideCheckBoxIrrigatedBefore(){

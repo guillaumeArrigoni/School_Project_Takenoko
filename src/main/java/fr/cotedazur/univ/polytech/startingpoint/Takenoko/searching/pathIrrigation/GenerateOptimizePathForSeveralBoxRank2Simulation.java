@@ -6,9 +6,9 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 
 import java.util.ArrayList;
 
-public class GenerateOptimizePathForSeveralBoxSimulation extends GenerateOptimizePathForSeveralBox{
+public class GenerateOptimizePathForSeveralBoxRank2Simulation extends GenerateOptimizePathForSeveralBoxRank2 {
 
-    public GenerateOptimizePathForSeveralBoxSimulation(ArrayList<HexagoneBoxSimulation> boxs) throws CrestNotRegistered {
+    public GenerateOptimizePathForSeveralBoxRank2Simulation(ArrayList<HexagoneBoxSimulation> boxs) throws CrestNotRegistered {
         super(new ArrayList<HexagoneBoxPlaced>(),false);
         super.boxToIrrigate = convertListOfBoxSimulationToBoxPlaced(boxs);
         super.crestGestionnary = boxs.get(0).getBoard().getCrestGestionnary();

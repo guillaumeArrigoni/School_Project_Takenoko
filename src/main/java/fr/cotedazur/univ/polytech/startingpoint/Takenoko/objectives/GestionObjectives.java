@@ -360,8 +360,8 @@ public class GestionObjectives {
      */
     private boolean ParcelleObjectifCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
-            int adjIndice = (idOfAdjacentBoxCorrect.get(j)+ x)%7;
-            if (adjIndice == 0) adjIndice = 1;
+            int adjIndice = idOfAdjacentBoxCorrect.get(j)+ x;
+            if (adjIndice > 6) adjIndice = adjIndice - 6;
             if (idOfAdjacentBoxCorrect.contains(adjIndice)){
                 return true;
             }

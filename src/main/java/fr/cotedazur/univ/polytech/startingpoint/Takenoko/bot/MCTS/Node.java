@@ -127,6 +127,9 @@ public class Node {
     public List<ActionLog> getBestInstruction(){
         List<ActionLog> bestInstruction = new ArrayList<>();
         Node bestChild = getBestChild();
+        while(bestChild.profondeur > 1){
+            bestChild = bestChild.getBestChild();
+        }
         bestInstruction.add(bestChild.getInstruction());
         while(bestChild.getParent() != null){
             bestChild = bestChild.getParent();

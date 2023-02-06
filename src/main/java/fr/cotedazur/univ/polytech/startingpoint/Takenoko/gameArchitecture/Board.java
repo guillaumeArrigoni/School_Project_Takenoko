@@ -87,11 +87,11 @@ public class Board {
         Board newBoard = new Board(retrieveBoxIdWithParameters,this.allIrrigated);
         newBoard.numberBoxPlaced = this.numberBoxPlaced;
         newBoard.placedBox = new HashMap<>(this.placedBox);
+        newBoard.crestGestionnary.copy();
         newBoard.AvailableBox = new ArrayList<>(this.AvailableBox);
         newBoard.gardenerCoords = this.gardenerCoords;
         newBoard.pandaCoords = this.pandaCoords;
         newBoard.cardDeck = new ArrayList<>(this.cardDeck);
-        newBoard.crestGestionnary.copy();
         return newBoard;
     }
 

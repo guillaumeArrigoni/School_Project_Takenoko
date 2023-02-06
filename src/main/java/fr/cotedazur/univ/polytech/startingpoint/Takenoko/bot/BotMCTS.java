@@ -32,8 +32,8 @@ public class BotMCTS extends Bot{
     public void playTurn(MeteoDice.Meteo meteo) {
         node = new Node(this.createBotSimulator(), 2, meteo);
         instructions = node.getBestInstruction();
-        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
-        for(ActionLog instruction : instructions){
+//        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
+        for(int i = 0; i < instructions.size(); i++){
             doAction();
         }
     }

@@ -82,7 +82,11 @@ public class BotSimulator extends Bot{
 
     @Override
     protected void moveGardener() {
-        board.setGardenerCoords(instructions.getParameters());
+        if(Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).contains(instructions.getParameters()))
+            board.setGardenerCoords(instructions.getParameters());
+        else{
+            legal = false;
+        }
     }
 
     @Override

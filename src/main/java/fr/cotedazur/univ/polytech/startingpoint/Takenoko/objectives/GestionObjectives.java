@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
@@ -195,7 +196,7 @@ public class GestionObjectives {
         this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
 
-        if (arg.equals("demo")) {
+        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
             System.out.println(bot.getName() + " a pioché un nouvel objectif.");
             System.out.println(objective);
         }
@@ -205,7 +206,7 @@ public class GestionObjectives {
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        if (arg.equals("demo")) {
+        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
             System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
             System.out.println(objective);
         }
@@ -215,7 +216,7 @@ public class GestionObjectives {
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        if (arg.equals("demo")) {
+        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
             System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
             System.out.println(objective);
         }
@@ -225,7 +226,7 @@ public class GestionObjectives {
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
                 bot.addScore(objective, arg);
-                if (arg.equals("demo")) {
+                if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
                     System.out.println(objective.toString() + ", a été réalisé");
                 }
                 listOfObjectifDone.add(objective);

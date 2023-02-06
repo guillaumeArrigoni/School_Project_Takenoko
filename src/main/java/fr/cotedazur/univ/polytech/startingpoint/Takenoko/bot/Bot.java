@@ -144,7 +144,6 @@ public abstract class Bot {
 
     public void addScore(Objective objective, String arg){
         this.score += objective.getValue();
-        if (arg.equals("demo")) System.out.println(objective.toString() + ", a été réalisé");
     }
     public void addScorePanda(Objective objective){
         this.scorePanda += objective.getValue();

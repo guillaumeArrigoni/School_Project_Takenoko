@@ -27,7 +27,7 @@ public class Main {
                 .parse(args);
         if (main.twoThousands) {
             Log log = new Log();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 1000; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1);
                 MeteoDice meteoDice = new MeteoDice();

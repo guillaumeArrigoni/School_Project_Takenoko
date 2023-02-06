@@ -89,12 +89,12 @@ public abstract class Bot {
     /**
      * This method is called at the beginning of the turn
      */
-    public abstract void playTurn();
+    public abstract void playTurn(String arg);
 
     /**
      * This method is called to do an action
      */
-    protected abstract void doAction();
+    protected abstract void doAction(String arg);
 
     //Gestion Actions possibles
     /**
@@ -109,11 +109,11 @@ public abstract class Bot {
     /**
      * This method place a tile on the board
      */
-    protected abstract void placeTile();
+    protected abstract void placeTile(String arg);
     /**
      * This method move the gardener
      */
-    protected abstract void moveGardener();
+    protected abstract void moveGardener(String arg);
 
     //Score and objectives
     public int getScore() {
@@ -131,7 +131,7 @@ public abstract class Bot {
     public void addScore(Objective objective){
         this.score += objective.getValue();
     }
-    public abstract void drawObjective();
+    public abstract void drawObjective(String arg);
     public abstract TypeObjective chooseTypeObjectiveToRoll();
 
 

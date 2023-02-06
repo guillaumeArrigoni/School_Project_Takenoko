@@ -172,44 +172,50 @@ public class GestionObjectives {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    public void rollObjective(Bot bot){
+    public void rollObjective(Bot bot, String arg){
         TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll();
         switch (typeObjective){
-        case PARCELLE -> rollParcelleObjective(bot);
-        case JARDINIER -> rollJardinierObjective(bot);
-        case PANDA -> rollPandaObjective(bot);
+        case PARCELLE -> rollParcelleObjective(bot, arg);
+        case JARDINIER -> rollJardinierObjective(bot, arg);
+        case PANDA -> rollPandaObjective(bot, arg);
         }
     }
-    public void rollParcelleObjective(Bot bot){
+    public void rollParcelleObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getParcelleObjectifs().size());
         Objective objective = this.getParcelleObjectifs().get(i);
         this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif.");
-        System.out.println(objective);
+        if (arg.equals("demo")) {
+            System.out.println(bot.getName() + " a pioché un nouvel objectif.");
+            System.out.println(objective);
+        }
     }
-    public void rollJardinierObjective(Bot bot){
+    public void rollJardinierObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-        System.out.println(objective);
+        if (arg.equals("demo")) {
+            System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
+            System.out.println(objective);
+        }
     }
-    public void rollPandaObjective(Bot bot){
+    public void rollPandaObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-        System.out.println(objective);
+        if (arg.equals("demo")) {
+            System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
+            System.out.println(objective);
+        }
     }
-    public void checkObjectives(Bot bot){
+    public void checkObjectives(Bot bot, String arg){
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
                 bot.addScore(objective);
-                System.out.println(objective.toString() + ", a été réalisé");
+                if (arg.equals("demo")) System.out.println(objective.toString() + ", a été réalisé");
                 listOfObjectifDone.add(objective);
             }
         }

@@ -57,6 +57,8 @@ class GestionObjectivesTest {
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static ElementOfTheBoardCheated elementOfTheBoardCheated;
 
+    private final String arg = "demo";
+
     @BeforeAll
     public static void setupBox() {
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
@@ -225,7 +227,7 @@ class GestionObjectivesTest {
     void rollObjective() {
         Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
         for(int i = 0;i<5; i++){
-            gestionObjectives.rollObjective(botRoll);
+            gestionObjectives.rollObjective(botRoll, arg);
         }
         assertEquals(5, botRoll.getObjectives().size());
 
@@ -234,7 +236,7 @@ class GestionObjectivesTest {
     @Test
     void rollParcelleObjective() {
         Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
-        gestionObjectives.rollParcelleObjective(botRoll);
+        gestionObjectives.rollParcelleObjective(botRoll, arg);
         assertEquals(TypeObjective.PARCELLE, botRoll.getObjectives().get(0).getType());
 
     }
@@ -242,14 +244,14 @@ class GestionObjectivesTest {
     @Test
     void rollJardinierObjective() {
         Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
-        gestionObjectives.rollJardinierObjective(botRoll);
+        gestionObjectives.rollJardinierObjective(botRoll, arg);
         assertEquals(TypeObjective.JARDINIER,botRoll.getObjectives().get(0).getType());
     }
 
     @Test
     void rollPandaObjective() {
         Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
-        gestionObjectives.rollPandaObjective(botRoll);
+        gestionObjectives.rollPandaObjective(botRoll, arg);
         assertEquals(TypeObjective.PANDA,botRoll.getObjectives().get(0).getType());
     }
     @Test
@@ -265,7 +267,7 @@ class GestionObjectivesTest {
     @Test
     void checkObjectives() {
         assertEquals(5, bot.getObjectives().size());
-        gestionObjectives.checkObjectives(bot);
+        gestionObjectives.checkObjectives(bot, arg);
         assertEquals(1, bot.getObjectives().size());
     }
 

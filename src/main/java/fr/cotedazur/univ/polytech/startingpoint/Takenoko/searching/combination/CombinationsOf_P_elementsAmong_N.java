@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,7 @@ public class CombinationsOf_P_elementsAmong_N<T> {
     }
 
     public ArrayList<Combination<T>> getListOfCombination() {
+        this.listOfCombination = new ArrayList<>();
         interface_P_CombinationIn_N();
         return listOfCombination;
     }

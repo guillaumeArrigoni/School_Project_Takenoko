@@ -1,9 +1,13 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.choixObj;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.CrestNotRegistered;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +33,12 @@ public class GenerateAWayToIrrigateTheBox {
         setup();
     }
 
+    public GenerateAWayToIrrigateTheBox(HexagoneBoxPlaced box, BoardSimulation board) throws CrestNotRegistered {
+        this.box = box;
+        this.crestGestionnary = board.getCrestGestionnary();
+        setup();
+    }
+
     public ArrayList<Crest> getClosestCrestToIrrigatedOfTheBox() {
         return closestCrestToIrrigatedOfTheBox;
     }
@@ -43,15 +53,16 @@ public class GenerateAWayToIrrigateTheBox {
     }
 
     private void setupClosestCrest(){
-        ArrayList<Crest> listOfClosestToIrrigation = new ArrayList<>(Arrays.asList(box.getListOfCrestAroundBox().get(0)));
+        ArrayList<Crest> listOfClosestToIrrigation = new ArrayList<>();
         ArrayList<Crest> listAdjCrest = box.getListOfCrestAroundBox();
+        int rangeFirstCrestInList = 999;
         for(Crest crest : listAdjCrest){
             int rangeCrest = crest.getRange_to_irrigation();
-            int rangeFirstCrestInList = listOfClosestToIrrigation.get(0).getRange_to_irrigation();
             if (rangeCrest==rangeFirstCrestInList){
                 listOfClosestToIrrigation.add(crest);
             } else if (rangeCrest<rangeFirstCrestInList){
                 listOfClosestToIrrigation = new ArrayList<>(Arrays.asList(crest));
+                rangeFirstCrestInList = rangeCrest;
             }
         }
         this.closestCrestToIrrigatedOfTheBox = listOfClosestToIrrigation;

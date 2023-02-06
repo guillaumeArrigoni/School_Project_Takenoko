@@ -1,6 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
@@ -39,12 +39,13 @@ public class Game {
             gestionnaire.rollJardinierObjective(bot);
         }
         int numberPlayer = this.playerList.size();
+        MeteoDice.Meteo meteo = MeteoDice.Meteo.NO_METEO;
         while (playing) {
             System.out.println("Tour n°" + turnNumber + " :");
             if (turnNumber == 2) System.out.println("Deuxième tour, la météo entre en jeu !");
-            if (turnNumber != 1) meteoDice.roll();
+            if (turnNumber != 1) meteo = meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);
-            playingBot.playTurn();
+            playingBot.playTurn(meteo);
             gestionnaire.checkObjectives(playingBot);
             printBoardState(board);
             if (board.getNumberBoxPlaced() > 20) {

@@ -1,12 +1,14 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -16,13 +18,13 @@ import java.util.*;
 
 public class Board {
 
-    private final boolean allIrrigated;
+    protected final boolean allIrrigated;
 
     /**
      * Return the number of box placed in the board
      * WARNING : the lake is counted in the number of box placed
      */
-    int numberBoxPlaced ;
+    protected int numberBoxPlaced ;
     
     /**
      * PlacedBox is a Hashmap that contain in key all the box's id already place in the board
@@ -31,7 +33,7 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private HashMap<Integer, HexagoneBoxPlaced> placedBox;
+    protected HashMap<Integer, HexagoneBoxPlaced> placedBox;
     
     /**
      * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
@@ -41,17 +43,22 @@ public class Board {
      *      - int[] : coordinates of the placed box
      *      - Integer : range to the lake
      */
-    private ArrayList<int[]> AvailableBox;
-    private int[] gardenerCoords;
-    private int[] pandaCoords;
-    private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private final CrestGestionnary crestGestionnary;
+    protected ArrayList<int[]> AvailableBox;
+    protected int[] gardenerCoords;
+    protected int[] pandaCoords;
+    protected RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    protected CrestGestionnary crestGestionnary;
+    protected ElementOfTheBoard elementOfTheBoard;
 
     /**
      * Must be >0.
      * Use to the hashcode if different board are used
      */
-    private final int idOfTheBoard;
+    protected final int idOfTheBoard;
+
+    public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
+        return retrieveBoxIdWithParameters;
+    }
 
     public CrestGestionnary getCrestGestionnary() {
         return crestGestionnary;
@@ -75,19 +82,42 @@ public class Board {
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id){
+        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard());
+    }
+
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id,ElementOfTheBoard elementOfTheBoard){
         this.idOfTheBoard = id;
         this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
+        this.elementOfTheBoard = elementOfTheBoard;
         this.placedBox = new HashMap<>();
         this.crestGestionnary = new CrestGestionnary();
         this.AvailableBox = new ArrayList<>();
         this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
+        this.pandaCoords = new int[]{0,0,0};
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
         //TODO set allIrrigated to false when irrigation add to the game
         this(retrieveBoxIdWithParameters,true,id);
+    }
+
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated){
+        //TODO set allIrrigated to false when irrigation add to the game
+        this(retrieveBoxIdWithParameters,true,id,elementOfTheBoardCheated);
+    }
+
+    public Board copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        Board newBoard = new Board(retrieveBoxIdWithParameters,this.allIrrigated,this.idOfTheBoard);
+        newBoard.numberBoxPlaced = this.numberBoxPlaced;
+        newBoard.placedBox = new HashMap<>(this.placedBox);
+        newBoard.crestGestionnary.copy();
+        newBoard.AvailableBox = new ArrayList<>(this.AvailableBox);
+        newBoard.gardenerCoords = this.gardenerCoords;
+        newBoard.pandaCoords = this.pandaCoords;
+        newBoard.elementOfTheBoard = this.elementOfTheBoard.copy();
+        return newBoard;
     }
 
     private void generateLac(){
@@ -100,6 +130,11 @@ public class Board {
         crestGestionnary.launchUpdatingCrestWithAddingNewBox(lac);
         lac.launchIrrigationChecking();
     }
+
+    public boolean isAllIrrigated() {
+        return allIrrigated;
+    }
+
 
     public int[] getGardenerCoords() {
         return this.gardenerCoords;
@@ -117,13 +152,18 @@ public class Board {
     public ArrayList<HexagoneBoxPlaced> getAllBoxPlaced() {
         return new ArrayList<>(this.placedBox.values());
     }
+
     public ArrayList<int[]> getAvailableBox(){
         return this.AvailableBox;
     }
     public int getIdOfTheBoard(){
         return this.idOfTheBoard;
     }
-    
+
+    public ElementOfTheBoard getElementOfTheBoard() {
+        return elementOfTheBoard;
+    }
+
     public void setPandaCoords(int[] newCoords, Bot bot) {
         this.pandaCoords = newCoords;
         HexagoneBoxPlaced box = getBoxWithCoordinates(newCoords);
@@ -241,4 +281,5 @@ public class Board {
         crestGestionnary.launchUpdatingCrestWithAddingNewBox(box);
         box.launchIrrigationChecking();
     }
+
 }

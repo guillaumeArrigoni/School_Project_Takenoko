@@ -1,8 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
@@ -147,6 +148,14 @@ public class GestionObjectives {
         ));
     }
 
+    public GestionObjectives copy(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        GestionObjectives gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        gestionObjectives.ParcelleObjectifs = new ArrayList<>(this.ParcelleObjectifs);
+        gestionObjectives.JardinierObjectifs = new ArrayList<>(this.JardinierObjectifs);
+        gestionObjectives.PandaObjectifs = new ArrayList<>(this.PandaObjectifs);
+        return gestionObjectives;
+    }
+
     /**
      * Remplit les hashmap avec tous les objectifs du jeu.
      */
@@ -172,7 +181,7 @@ public class GestionObjectives {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    public void rollObjective(Bot bot){
+    public void rollObjective(BotRandom bot){
         TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll();
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot);
@@ -185,24 +194,18 @@ public class GestionObjectives {
         Objective objective = this.getParcelleObjectifs().get(i);
         this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif.");
-        System.out.println(objective);
     }
     public void rollJardinierObjective(Bot bot){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-        System.out.println(objective);
     }
     public void rollPandaObjective(Bot bot){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-        System.out.println(objective);
     }
     public void checkObjectives(Bot bot){
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
@@ -283,6 +286,7 @@ public class GestionObjectives {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             HexagoneBoxPlaced box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+            if(box == null) return false;
             ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
             for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
                 if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){
@@ -346,6 +350,7 @@ public class GestionObjectives {
      */
     private ArrayList<Integer> getAllAdjacentBoxThatCompleteTheCondition(ArrayList<Integer> listOfIdAvailable, int i) {
         HexagoneBoxPlaced box = board.getPlacedBox().get(listOfIdAvailable.get(i));
+        if(box == null) return new ArrayList<>();
         ArrayList<Integer> idOfAdjacentBoxCorrect = new ArrayList<>();
         for (int j=1;j<box.getAdjacentBox().keySet().size()+1;j++){
             if (listOfIdAvailable.contains(HexagoneBox.generateID(box.getAdjacentBox().get(j)))){

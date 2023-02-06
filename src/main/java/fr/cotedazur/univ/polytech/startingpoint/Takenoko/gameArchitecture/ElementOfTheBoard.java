@@ -1,5 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.elementOfTheBoard.BambooNotAvailableException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.elementOfTheBoard.BambooOfColorNotExistingException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ListOfDifferentSize;
@@ -64,6 +67,13 @@ public class ElementOfTheBoard {
         this(listOfBambooAvailable,listOfColor,false,listOfBoxAvailable,listOfBox,false);
     }
 
+    public ElementOfTheBoard copy(){
+        ElementOfTheBoard res = new ElementOfTheBoard();
+        res.stackOfBox = this.stackOfBox.copy();
+        res.nbOfBambooForEachColorAvailable = new HashMap<>(this.nbOfBambooForEachColorAvailable);
+        return res;
+    }
+
 
     public StackOfBox getStackOfBox(){
         return stackOfBox;
@@ -73,6 +83,23 @@ public class ElementOfTheBoard {
         return nbOfBambooForEachColorAvailable;
     }
 
+    public void placeBamboo(Color color) throws TakenokoException {
+        if (!this.nbOfBambooForEachColorAvailable.containsKey(color)){
+            throw new BambooOfColorNotExistingException(color);
+        } else if (this.nbOfBambooForEachColorAvailable.get(color)==0){
+            throw new BambooNotAvailableException(color);
+        } else {
+            this.nbOfBambooForEachColorAvailable.put(color,this.nbOfBambooForEachColorAvailable.get(color)-1);
+        }
+    }
+
+    public void giveBackBamboo(Color color) throws TakenokoException {
+        if (!this.nbOfBambooForEachColorAvailable.containsKey(color)) {
+            throw new BambooOfColorNotExistingException(color);
+        } else {
+            this.nbOfBambooForEachColorAvailable.put(color,this.nbOfBambooForEachColorAvailable.get(color)+1);
+        }
+    }
 
 
     /**

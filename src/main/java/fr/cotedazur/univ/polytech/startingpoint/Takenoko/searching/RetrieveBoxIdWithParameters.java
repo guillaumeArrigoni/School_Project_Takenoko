@@ -7,15 +7,25 @@ import java.util.*;
 
 public class RetrieveBoxIdWithParameters {
 
-    private HashMap<Color, ArrayList<Integer>> BoxColor = new HashMap<>();
-    private HashMap<Boolean, ArrayList<Integer>> BoxIsIrrigated = new HashMap<>();
-    private HashMap<Integer, ArrayList<Integer>> BoxHeight = new HashMap<>();
-    private HashMap<Special, ArrayList<Integer>> BoxSpeciality = new HashMap<>();
+    protected HashMap<Color, ArrayList<Integer>> BoxColor = new HashMap<>();
+    protected HashMap<Boolean, ArrayList<Integer>> BoxIsIrrigated = new HashMap<>();
+    protected HashMap<Integer, ArrayList<Integer>> BoxHeight = new HashMap<>();
+    protected HashMap<Special, ArrayList<Integer>> BoxSpeciality = new HashMap<>();
 
     /**
      * Initiate all the value for the Hashmap in order to avoid checking if a key exist
      */
     public RetrieveBoxIdWithParameters(){
+        this(true);
+    }
+
+    public RetrieveBoxIdWithParameters(boolean bool){
+        if (bool){
+            setupGeneral();
+        }
+    }
+
+    private void setupGeneral(){
         this.BoxIsIrrigated.put(true,new ArrayList<>());
         this.BoxIsIrrigated.put(false,new ArrayList<>());
         for (int i=0;i<Color.values().length;i++){
@@ -27,6 +37,15 @@ public class RetrieveBoxIdWithParameters {
         for (int i=0;i<5;i++){
             this.BoxHeight.put(i,new ArrayList<>());
         }
+    }
+
+    public RetrieveBoxIdWithParameters copy(){
+        RetrieveBoxIdWithParameters copy = new RetrieveBoxIdWithParameters();
+        copy.BoxColor = new HashMap<>(this.BoxColor);
+        copy.BoxIsIrrigated = new HashMap<>(this.BoxIsIrrigated);
+        copy.BoxHeight = new HashMap<>(this.BoxHeight);
+        copy.BoxSpeciality = new HashMap<>(this.BoxSpeciality);
+        return copy;
     }
 
     public void setBoxColor(int id, Color color) {
@@ -69,6 +88,18 @@ public class RetrieveBoxIdWithParameters {
 
     public HashMap<Color, ArrayList<Integer>> getBoxColor() {
         return BoxColor;
+    }
+
+    public HashMap<Boolean, ArrayList<Integer>> getBoxIsIrrigated() {
+        return BoxIsIrrigated;
+    }
+
+    public HashMap<Integer, ArrayList<Integer>> getBoxHeight() {
+        return BoxHeight;
+    }
+
+    public HashMap<Special, ArrayList<Integer>> getBoxSpeciality() {
+        return BoxSpeciality;
     }
 
     /**

@@ -1,13 +1,14 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
@@ -58,24 +59,43 @@ public abstract class Bot {
      * Constructor of the bot
      * @param name the name of the bot
      * @param board the board of the game
-     * @param random the random generator
-     * @param meteoDice the meteo dice
      */
-    protected Bot(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
+    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEaten) {
         this.name = name;
         this.board = board;
-        this.random = random;
-        this.meteoDice = meteoDice;
         this.score = 0;
         this.scorePanda = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
-        this.bambooEaten = bambooEated;
+        this.bambooEaten = bambooEaten;
         this.bambooEaten.put(Color.Rouge,0);
         this.bambooEaten.put(Color.Jaune,0);
         this.bambooEaten.put(Color.Vert,0);
+        this.bambooEaten.put(Color.Lac,0);
         resetPossibleAction();
+    }
+
+    public BotSimulator createBotSimulator(ActionLog instructions){
+        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
+        Board tmpBoard = this.board.copy(tmp);
+        return new BotSimulator(this.name,
+                tmpBoard,
+                this.gestionObjectives.copy(tmpBoard, tmp),
+                tmp,
+                new HashMap<>(this.getBambooEaten()),
+                instructions);
+    }
+
+    public BotSimulator createBotSimulator(){
+        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
+        Board tmpBoard = this.board.copy(tmp);
+        return new BotSimulator(this.name,
+                tmpBoard,
+                this.gestionObjectives.copy(tmpBoard, tmp),
+                tmp,
+                new HashMap<>(this.getBambooEaten()),
+                null);
     }
 
     //METHODS
@@ -91,7 +111,7 @@ public abstract class Bot {
     /**
      * This method is called at the beginning of the turn
      */
-    public abstract void playTurn();
+    public abstract void playTurn(MeteoDice.Meteo meteo);
 
     /**
      * This method is called to do an action
@@ -99,15 +119,11 @@ public abstract class Bot {
     protected abstract void doAction();
 
     //Gestion Actions possibles
-    /**
-     * This method choose an action
-     */
-    protected abstract PossibleActions chooseAction();
 
-    /**
-     * This method reset the list of possible actions
-     */
-    protected abstract void resetPossibleAction();
+
+    protected void resetPossibleAction(){
+        possibleActions = PossibleActions.getAllActions();
+    }
     /**
      * This method place a tile on the board
      */
@@ -116,6 +132,8 @@ public abstract class Bot {
      * This method move the gardener
      */
     protected abstract void moveGardener();
+
+    protected abstract void movePanda();
 
     //Score and objectives
     public int getScore() {
@@ -132,13 +150,20 @@ public abstract class Bot {
 
     public void addScore(Objective objective){
         this.score += objective.getValue();
+        System.out.println(objective.toString() + ", a été réalisé");
     }
     public void addScorePanda(Objective objective){
         this.scorePanda += objective.getValue();
     }
     public abstract void drawObjective();
-    public abstract TypeObjective chooseTypeObjectiveToRoll();
 
+    public boolean isObjectiveIllegal(PossibleActions actions){
+        return ((actions == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
+                (actions == PossibleActions.MOVE_PANDA && Action.possibleMoveForGardenerOrPanda(board,board.getPandaCoords()).isEmpty()) ||
+                (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5) ||
+                (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getElementOfTheBoard().getStackOfBox().size() < 3) ||
+                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
+    }
 
     public String getName() {
         return name;
@@ -186,12 +211,18 @@ public abstract class Bot {
 
     public void deleteBambooEaten(ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
         ArrayList<Color> errorImpossibleToDeleteTheseBamboo = new ArrayList<>();
-        for (int i=0;i<listBambooToDelete.size();i++){
-            int nbBambooOfOneColorAte = bambooEaten.get(listBambooToDelete.get(i));
+        for (Color color : listBambooToDelete){
+            int nbBambooOfOneColorAte = bambooEaten.get(color);
             if (nbBambooOfOneColorAte>0){
-                bambooEaten.put(listBambooToDelete.get(i),nbBambooOfOneColorAte-1);
+                bambooEaten.put(color,nbBambooOfOneColorAte-1);
+                try {
+                    board.getElementOfTheBoard().giveBackBamboo(color);
+                } catch (TakenokoException e) {
+                    System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+                    throw new RuntimeException();
+                }
             } else {
-                errorImpossibleToDeleteTheseBamboo.add(listBambooToDelete.get(i));
+                errorImpossibleToDeleteTheseBamboo.add(color);
             }
         }
         if (errorImpossibleToDeleteTheseBamboo.size()!=0){
@@ -200,8 +231,25 @@ public abstract class Bot {
 
     }
 
-    public AbstractMap<Color,Integer> getBambooEaten(){
+    public Map<Color,Integer> getBambooEaten(){
         return this.bambooEaten;
     }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public List<PossibleActions> getPossibleActions() {
+        return possibleActions;
+    }
+
+    public GestionObjectives getGestionObjectives() {
+        return gestionObjectives;
+    }
+
+    public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
+        return retrieveBoxIdWithParameters;
+    }
+
 
 }

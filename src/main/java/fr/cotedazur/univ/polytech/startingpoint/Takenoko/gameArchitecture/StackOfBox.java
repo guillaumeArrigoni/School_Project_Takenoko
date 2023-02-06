@@ -18,6 +18,13 @@ public class StackOfBox {
         setupStackOfBox(generationInstruction);
     }
 
+    public StackOfBox(){}
+
+    public StackOfBox copy() {
+        StackOfBox res = new StackOfBox();
+        res.stackOfBox = new ArrayList<>(this.stackOfBox);
+        return res;
+    }
     /**
      * Method use to add a new element in the stack of HexagoneBox
      * @param box
@@ -36,6 +43,10 @@ public class StackOfBox {
         return box;
     }
 
+    public int size(){
+        return this.stackOfBox.size();
+    }
+
     /**
      * Method use to generate the stack of HexagoneBox with a Hashmap
      * @param generationInstruction
@@ -50,4 +61,6 @@ public class StackOfBox {
         }
         Collections.shuffle(this.stackOfBox);
     }
+
+
 }

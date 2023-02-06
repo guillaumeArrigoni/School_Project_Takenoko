@@ -1,6 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -12,15 +12,6 @@ import java.util.Random;
 
 public class Action {
 
-    public static HexagoneBox drawTile(Random random, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board) {
-        Color color = switch (random.nextInt(0,3)) {
-            case 1 -> Color.Vert;
-            case 2 -> Color.Rouge;
-            default -> Color.Jaune;
-        };
-        System.out.println("drawTile : " + color);
-        return new HexagoneBox(color, Special.Classique);
-    }
 
     public static ArrayList<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {
         int x = coord[0];

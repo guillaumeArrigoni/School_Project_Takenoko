@@ -1,9 +1,10 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 
-public class CrestNotRegistered extends TakenokoException{
+public class CrestNotRegistered extends TakenokoException {
 
     private final Crest crest;
     private String text;

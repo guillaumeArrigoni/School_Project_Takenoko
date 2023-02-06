@@ -1,20 +1,16 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ImpossibleToPlaceIrrigationException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,11 +19,6 @@ import static org.mockito.Mockito.mock;
 class CrestGestionnaryTest {
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Board board;
-    private static BotRandom botRandom;
-    private static Random random;
-    private static MeteoDice meteoDice;
-    private static GestionObjectives gestionObjectives;
-    private static CrestGestionnary crestGestionnary;
     private static HexagoneBoxPlaced boxIn4 ;
     private static HexagoneBoxPlaced boxIn5 ;
     private static HexagoneBoxPlaced boxIn13 ;
@@ -72,9 +63,6 @@ class CrestGestionnaryTest {
     public void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,false, 1);
-        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
-        random = mock(Random.class);
-        meteoDice = mock(MeteoDice.class);
         boxIn5 = new HexagoneBoxPlaced(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         boxIn4 = new HexagoneBoxPlaced(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         boxIn13 = new HexagoneBoxPlaced(1,-2,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);

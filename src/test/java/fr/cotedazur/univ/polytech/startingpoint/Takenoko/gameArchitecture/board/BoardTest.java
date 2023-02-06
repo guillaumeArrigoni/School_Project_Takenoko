@@ -1,7 +1,8 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
@@ -39,8 +40,7 @@ class BoardTest {
     private static HexagoneBoxPlaced rouge09Protected;
     private static HexagoneBoxPlaced vert18Engrais;
     private static HexagoneBoxPlaced notPlacedInBoard;
-    private static Crest crest1;
-    private static Crest crest2;
+    private static ElementOfTheBoardCheated elementOfTheBoardCheated;
     /**
      *                  12     13      14
      *              11    4         5      15
@@ -53,8 +53,9 @@ class BoardTest {
     @BeforeAll
     @Order(1)
     public static void setUpGeneral() {
+        elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters,true, 1);
+        board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated);
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
@@ -84,14 +85,7 @@ class BoardTest {
     }
 
     private static void setupBambooAte(){
-        botRandom = new BotRandom("testBot", board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
-    }
-
-    @BeforeEach
-    @Order(2)
-    public void setUpGeneral2() {
-        crest1 = new Crest(-5,10,2);
-        crest2 = new Crest(-5,15,3);
+        botRandom = new BotRandom("testBot", board, random, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
     }
 
     /**
@@ -157,6 +151,7 @@ class BoardTest {
                                            ArrayList<HexagoneBoxPlaced> listOfBox) {
         int[] coords = box.getCoordinates();
         board.setGardenerCoords(coords);
+        System.out.println(board.getElementOfTheBoard().getNbOfBambooForEachColorAvailable());
         for (int i =0;i<differentBambooHeightInTheBox1_2_3_7_8_9.size();i++){
             assertEquals(differentBambooHeightInTheBox1_2_3_7_8_9.get(i),listOfBox.get(i).getHeightBamboo());
         }

@@ -1,6 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
@@ -21,6 +23,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private final Board board;
     private ArrayList<Crest> listOfCrestAroundBox;
+    private ElementOfTheBoard elementOfTheBoard;
 
     /**
      *      1
@@ -37,6 +40,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         this.board = board;
         this.coordinates = new int[]{x,y,z};
         this.id = generateID(this.coordinates);
+        this.elementOfTheBoard = board.getElementOfTheBoard();
         if(super.irrigate){
             this.heightBamboo = 1;
         } else {
@@ -46,6 +50,16 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         updateRetrieveBox();
         generateCrestAroundBox();
     }
+
+    public HexagoneBoxPlaced copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters,Board board){
+        HexagoneBoxPlaced hexagoneBox = new HexagoneBoxPlaced(this.coordinates[0], this.coordinates[1], this.coordinates[2], this.color, this.special, retrieveBoxIdWithParameters, board);
+        hexagoneBox.irrigate = this.irrigate;
+        hexagoneBox.setHeightBamboo(this.heightBamboo);
+        hexagoneBox.AdjacentBox = new HashMap<>(this.getAdjacentBox());
+        hexagoneBox.listOfCrestAroundBox = new ArrayList<>(this.listOfCrestAroundBox);
+        return hexagoneBox;
+    }
+
 
     public HexagoneBoxPlaced (int x, int y, int z, Color color,Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
         this(x,y,z,new HexagoneBox(color,special),retrieveBoxIdWithParameters,board);
@@ -73,6 +87,10 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         return board;
     }
 
+
+
+
+
     public void growBamboo() {
         int boucle = 1;
         if (super.special==Special.Engrais){
@@ -80,7 +98,12 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         }
         retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
         for (int i=0;i<boucle;i++){
-            if (this.heightBamboo < 4) this.heightBamboo++;
+            if (this.heightBamboo < 4){
+                try{
+                    elementOfTheBoard.placeBamboo(this.color);
+                    this.heightBamboo++;
+                } catch (TakenokoException e) {}
+            }
         }
         retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
     }
@@ -163,6 +186,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         listOfCoordiante.add(new Crest(x-5,y,2));
         listOfCoordiante.add(new Crest(x,y-5,3));
         this.listOfCrestAroundBox =  listOfCoordiante;
+
     }
 
     public ArrayList<Crest> getListOfCrestAroundBox() {

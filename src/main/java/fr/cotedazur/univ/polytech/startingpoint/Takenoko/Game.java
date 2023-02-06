@@ -34,11 +34,6 @@ public class Game {
     }
 
     public void play(GestionObjectives gestionnaire) {
-        gestionnaire.initialize(
-                gestionnaire.ListOfObjectiveParcelleByDefault(),
-                gestionnaire.ListOfObjectiveJardinierByDefault(),
-                gestionnaire.ListOfObjectivePandaByDefault()
-        );
         for (Bot bot : this.playerList) {
             gestionnaire.rollParcelleObjective(bot);
             gestionnaire.rollJardinierObjective(bot);
@@ -57,10 +52,7 @@ public class Game {
                 for (int i = 0; i < numberPlayer; i++) {
                     System.out.println("Score de " + this.playerList.get(i).getName() + " : " + this.playerList.get(i).getScore());
                 }
-                //A changer pour avoir un nombre indéfini de joueur
-                Bot bot1 = this.playerList.get(0);
-                Bot bot2 = this.playerList.get(1);
-                gestionnaire.printWinner(bot1,bot2);
+                gestionnaire.printWinner(gestionnaire.getWinner(playerList));
             }
             System.out.println("------------------------------------------");
             turn = (turn + 1)%numberPlayer;

@@ -26,6 +26,8 @@ public abstract class Bot {
      * The score of the bot
      */
     protected int score;
+
+    protected int scorePanda;
     /**
      * The random generator
      */
@@ -65,6 +67,7 @@ public abstract class Bot {
         this.random = random;
         this.meteoDice = meteoDice;
         this.score = 0;
+        this.scorePanda = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -130,12 +133,27 @@ public abstract class Bot {
     public void addScore(Objective objective){
         this.score += objective.getValue();
     }
+    public void addScorePanda(Objective objective){
+        this.scorePanda += objective.getValue();
+    }
     public abstract void drawObjective();
     public abstract TypeObjective chooseTypeObjectiveToRoll();
 
 
     public String getName() {
         return name;
+    }
+
+    public int getScorePanda() {
+        return this.scorePanda;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setScorePanda(int scorePanda) {
+        this.scorePanda = scorePanda;
     }
 
     /**

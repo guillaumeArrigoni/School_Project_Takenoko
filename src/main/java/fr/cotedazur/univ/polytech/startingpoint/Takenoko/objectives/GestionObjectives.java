@@ -209,6 +209,9 @@ public class GestionObjectives {
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
                 bot.addScore(objective);
+                if(objective.getType() == TypeObjective.PANDA){
+                    bot.addScorePanda(objective);
+                }
                 System.out.println(objective.toString() + ", a été réalisé");
                 listOfObjectifDone.add(objective);
             }
@@ -369,15 +372,42 @@ public class GestionObjectives {
         return false;
     }
 
-    public void printWinner(Bot bot1, Bot bot2){
-         int i = bot1.getScore() - bot2.getScore();
-         if(i > 0){
-             System.out.println( bot1.getName() + " a gagné avec " + bot1.getScore() + " points !");
-        } else if (i < 0) {
-             System.out.println(bot2.getName() + " a gagné avec " + bot2.getScore() + " points !");
-         } else {
-             System.out.println("Egalité !");
-         }
+    public List<Bot> getWinner(List<Bot> bots){
+        int[] scores = new int[bots.size()];
+        for(int i=0; i<bots.size(); i++){
+            scores[i] = bots.get(i).getScore();
+        }
+        ArrayList<Integer> indicesBestScore = indiceMax(scores);
+        List<Bot> botWinnerList = new ArrayList<>();
+        if(indicesBestScore.size() == 1){
+            botWinnerList.add(bots.get(indicesBestScore.get(0)));
+        }
+        else{
+            if(indicesBestScore.size() > 1){
+                int[] scoresPanda = new int[indicesBestScore.size()];
+                for(int i=0; i<indicesBestScore.size();i++){
+                    scoresPanda[i] = bots.get(indicesBestScore.get(i)).getScorePanda();
+                }
+                ArrayList<Integer> indicesBestScorePanda = indiceMax(scoresPanda);
+                for(int j=0;j<indicesBestScorePanda.size();j++){
+                    botWinnerList.add(bots.get(indicesBestScore.get(indicesBestScorePanda.get(j))));
+                }
+            }
+        }
+        return botWinnerList;
+    }
+
+    public void printWinner(List<Bot> botWinnerList){
+        String str = botWinnerList.get(0).getName();
+        if(botWinnerList.size() >1){
+            for(int i=1; i<botWinnerList.size(); i++){
+                str += " et " + botWinnerList.get(i).getName();
+            }
+        }
+        switch (botWinnerList.size()){
+            case 1 -> System.out.println(str + " a gagné avec " + botWinnerList.get(0).getScore() + " points !");
+            default -> System.out.println(str + " sont à égalité avec " + botWinnerList.get(0).getScore() + " points !");
+        }
     }
 
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
@@ -450,17 +480,18 @@ public class GestionObjectives {
     }
 
     public ArrayList<Integer> indiceMax(int[] array){
-        int max=0;
+        int max = array[0];
         ArrayList<Integer> res = new ArrayList<>();
-        res.add(max);
         for(int i=0;i< array.length;i++){
             if(array[i]>max){
                 max = array[i];
-                res.removeAll(res);
+                res.clear();
                 res.add(i);
             }
-            if(array[i] == max){
-                res.add(i);
+            else {
+                if (array[i] == max) {
+                    res.add(i);
+                }
             }
         }
         return res;

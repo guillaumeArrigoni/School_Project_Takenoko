@@ -17,6 +17,7 @@ public class BoardSimulation extends Board {
     protected RetrieveSimulation retrieveSimulation;
     protected CrestGestionnarySimulation crestGestionnarySimulation;
     protected ElementOfTheBoardCheated elementOfTheBoardCheated;
+
     public BoardSimulation(Board board) {
         this(board, new ElementOfTheBoardCheated());
     }
@@ -27,28 +28,14 @@ public class BoardSimulation extends Board {
         setupSimulation2(board);
     }
 
-
-
-    private void setupSimulation(Board board){
-        this.crestGestionnarySimulation = new CrestGestionnarySimulation(board.getCrestGestionnary());
-        this.retrieveSimulation = new RetrieveSimulation(board.getRetrieveBoxIdWithParameters());
-        super.retrieveBoxIdWithParameters = this.retrieveSimulation;
-        super.crestGestionnary = this.crestGestionnarySimulation;
-        super.numberBoxPlaced = board.getNumberBoxPlaced();
-        super.AvailableBox = (ArrayList<int[]>) board.getAvailableBox().clone();
-        super.gardenerCoords = board.getGardenerCoords().clone();
-        super.pandaCoords = board.getPandaCoords().clone();
-        super.placedBox = (HashMap<Integer, HexagoneBoxPlaced>) board.getPlacedBox().clone();
-    }
-
-    private void setupSimulation2(Board board){
+    private void setupSimulation2(Board board) {
         this.crestGestionnarySimulation = new CrestGestionnarySimulation(board.getCrestGestionnary());
         this.retrieveSimulation = new RetrieveSimulation(board.getRetrieveBoxIdWithParameters());
         super.retrieveBoxIdWithParameters = this.retrieveSimulation;
         super.crestGestionnary = this.crestGestionnarySimulation;
         super.gardenerCoords = board.getGardenerCoords().clone();
         super.pandaCoords = board.getPandaCoords().clone();
-        for (HexagoneBoxPlaced box : board.placedBox.values()){
+        for (HexagoneBoxPlaced box : board.placedBox.values()) {
             super.addBox(new HexagoneBoxSimulation(
                     box.getCoordinates()[0],
                     box.getCoordinates()[1],
@@ -64,28 +51,14 @@ public class BoardSimulation extends Board {
     public RetrieveSimulation getRetrieveBoxIdWithParameters() {
         return this.retrieveSimulation;
     }
+
     @Override
     public CrestGestionnarySimulation getCrestGestionnary() {
         return this.crestGestionnarySimulation;
     }
+
     @Override
     public ElementOfTheBoardCheated getElementOfTheBoard() {
         return this.elementOfTheBoardCheated;
     }
-
 }
-/*
-Board clone = new BoardSimulation(new RetrieveSimulation(this.retrieveBoxIdWithParameters),this.isAllIrrigated(),this.idOfTheBoard,new ElementOfTheBoardCheated());
-        for (HexagoneBoxPlaced box : this.placedBox.values()){
-            clone.addBox(new HexagoneBoxSimulation(
-                    box.getCoordinates()[0],
-                    box.getCoordinates()[1],
-                    box.getCoordinates()[2],
-                    box.getColor(),
-                    box.getSpecial(),
-                    (RetrieveSimulation) clone.retrieveBoxIdWithParameters,
-                    (BoardSimulation) clone));
-        }
-        return clone;
-    }
- */

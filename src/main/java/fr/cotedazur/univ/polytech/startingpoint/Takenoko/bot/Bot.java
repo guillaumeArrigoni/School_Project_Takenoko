@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
@@ -11,6 +12,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjec
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
 import java.util.*;
 
@@ -70,9 +72,9 @@ public abstract class Bot {
         resetPossibleAction();
     }
 
-    public BotSimulator createBotSimulator(ActionLog instructions){
-        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
-        Board tmpBoard = this.board.copy(tmp);
+    public BotSimulator createBotSimulator(ActionLog instructions) throws CloneNotSupportedException {
+        Board tmpBoard = new BoardSimulation(this.board);
+        RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
@@ -81,9 +83,9 @@ public abstract class Bot {
                 instructions);
     }
 
-    public BotSimulator createBotSimulator(){
-        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
-        Board tmpBoard = this.board.copy(tmp);
+    public BotSimulator createBotSimulator() throws CloneNotSupportedException {
+        Board tmpBoard = new BoardSimulation(this.board);
+        RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
@@ -105,7 +107,7 @@ public abstract class Bot {
     /**
      * This method is called at the beginning of the turn
      */
-    public abstract void playTurn(MeteoDice.Meteo meteo, String arg);
+    public abstract void playTurn(MeteoDice.Meteo meteo, String arg) throws CloneNotSupportedException;
 
     /**
      * This method is called to do an action

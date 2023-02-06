@@ -1,19 +1,20 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.text.DecimalFormat;
-import java.util.*;
-
-import com.beust.jcommander.JCommander;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 //https://www.redblobgames.com/grids/hexagons/#coordinates
 
 public class Main {
@@ -21,7 +22,7 @@ public class Main {
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;
-    public static void main(String... args) {
+    public static void main(String... args) throws CloneNotSupportedException {
         Main main = new Main();
         JCommander.newBuilder()
                 .addObject(main)

@@ -29,6 +29,8 @@ public abstract class Bot {
      */
     protected int score;
 
+    protected int scorePanda;
+
     /**
      * The list of possible actions
      */
@@ -56,6 +58,7 @@ public abstract class Bot {
         this.name = name;
         this.board = board;
         this.score = 0;
+        this.scorePanda = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -143,6 +146,9 @@ public abstract class Bot {
         this.score += objective.getValue();
         if (arg.equals("demo")) System.out.println(objective.toString() + ", a été réalisé");
     }
+    public void addScorePanda(Objective objective){
+        this.scorePanda += objective.getValue();
+    }
     public abstract void drawObjective(String arg);
 
     public boolean isObjectiveIllegal(PossibleActions actions){
@@ -155,6 +161,17 @@ public abstract class Bot {
 
     public String getName() {
         return name;
+    }
+    public int getScorePanda() {
+        return this.scorePanda;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setScorePanda(int scorePanda) {
+        this.scorePanda = scorePanda;
     }
 
     public void addBambooEaten(Color colorAte){

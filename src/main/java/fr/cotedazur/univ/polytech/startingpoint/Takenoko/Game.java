@@ -65,7 +65,7 @@ public class Game {
                 //A changer pour avoir un nombre indéfini de joueur
                 Bot bot1 = this.playerList.get(0);
                 Bot bot2 = this.playerList.get(1);
-                if (arg.equals("demo")) gestionnaire.printWinner(bot1,bot2);
+                if (arg.equals("demo")) gestionnaire.printWinner(gestionnaire.getWinner(playerList));
             }
             if (arg.equals("demo")) System.out.println("------------------------------------------");
             turn = (turn + 1)%numberPlayer;

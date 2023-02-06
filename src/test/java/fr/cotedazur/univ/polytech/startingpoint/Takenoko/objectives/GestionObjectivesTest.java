@@ -15,8 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -300,5 +299,47 @@ class GestionObjectivesTest {
     void chooseTypeObjectiveByCheckingUnknownObjectives() {
         TypeObjective res = gestionObjectives.chooseTypeObjectiveByCheckingUnknownObjectives(bot);
         assertTrue(res == TypeObjective.JARDINIER);
+    }
+
+    @Test
+    void indiceMax() {
+        int[] array1 = {1,3,4,2,4};
+        int[] array2 = {2,0,3,4};
+        ArrayList<Integer> liste1 = new ArrayList<>(Arrays.asList(2,4));
+        ArrayList<Integer> liste2 = new ArrayList<>(Arrays.asList(3));
+        assertEquals(liste1,gestionObjectives.indiceMax(array1));
+        assertEquals(liste2,gestionObjectives.indiceMax(array2));
+    }
+
+    @Test
+    void getWinner(){
+        Bot b1 = new BotRandom("Bot1",board,random,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        Bot b2 = new BotRandom("Bot2",board,random,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        Bot b3 = new BotRandom("Bot3",board,random,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        Bot b4 = new BotRandom("Bot4",board,random,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        Bot b5 = new BotRandom("Bot5",board,random,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        b1.setScore(15);
+        b1.setScorePanda(10);
+        b2.setScore(9);
+        b2.setScorePanda(3);
+        b3.setScore(11);
+        b3.setScorePanda(10);
+        b4.setScore(15);
+        b4.setScorePanda(8);
+        b5.setScore(15);
+        b5.setScorePanda(10);
+        List<Bot> game1 = new ArrayList<>(Arrays.asList(b3,b1,b2));
+        List<Bot> game2 = new ArrayList<>(Arrays.asList(b4,b3,b5));
+        List<Bot> game3 = new ArrayList<>(Arrays.asList(b1,b2,b3,b5));
+        List<Bot> game4 = new ArrayList<>(Arrays.asList(b1,b2,b3,b4));
+        List<Bot> winnerGame1 = new ArrayList<>(Arrays.asList(b1));
+        List<Bot> winnerGame2 = new ArrayList<>(Arrays.asList(b5));
+        List<Bot> winnerGame3 = new ArrayList<>(Arrays.asList(b1,b5));
+        List<Bot> winnerGame4 = new ArrayList<>(Arrays.asList(b1));
+        assertEquals(winnerGame1,gestionObjectives.getWinner(game1));
+        assertEquals(winnerGame2,gestionObjectives.getWinner(game2));
+        assertEquals(winnerGame3,gestionObjectives.getWinner(game3));
+        assertEquals(winnerGame4,gestionObjectives.getWinner(game4));
+
     }
 }

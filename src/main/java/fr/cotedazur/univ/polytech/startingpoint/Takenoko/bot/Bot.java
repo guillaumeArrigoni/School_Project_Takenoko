@@ -5,7 +5,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
@@ -157,7 +156,7 @@ public abstract class Bot {
         return name;
     }
 
-    public void addBambooAte(Color colorAte){
+    public void addBambooEaten(Color colorAte){
         int nbAte = bambooEaten.get(colorAte) + 1;
         bambooEaten.put(colorAte,nbAte);
     }

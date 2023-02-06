@@ -99,7 +99,6 @@ public class BotMCTS extends Bot{
                 System.out.println(this.name + " a pioché un objectif de jardinier");
             }
         }
-
     }
 
 

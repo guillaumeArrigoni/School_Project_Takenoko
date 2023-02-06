@@ -80,45 +80,81 @@ public class Node {
     private List<ActionLog> createInstruction(PossibleActions action) {
         List<ActionLog> tmp = new ArrayList<>();
         switch (action) {
-            case DRAW_AND_PUT_TILE -> {
-                for (int[] coords : value.getBoard().getAvailableBox()) {
-                    tmp.add(new ActionLog(action, coords));
-                }
-            }
             case MOVE_GARDENER -> {
                 for (int[] coords : Action.possibleMoveForGardenerOrPanda(value.getBoard(), value.getBoard().getGardenerCoords())) {
                     tmp.add(new ActionLog(action, coords));
                 }
             }
-            case DRAW_OBJECTIVE -> {
-                List<Objective> objectives = value.getBotSimulator().getObjectives();
-                int parcelObjective = 0;
-                int pandaObjective = 0;
-                int gardenerObjective = 0;
-                for (Objective objective : objectives) {
-                    switch (objective.getType()) {
-                        case PARCELLE -> parcelObjective++;
-                        case PANDA -> pandaObjective++;
-                        case JARDINIER -> gardenerObjective++;
-                    }
-                }
-                if (parcelObjective <= pandaObjective && parcelObjective <= gardenerObjective) {
-                    tmp.add(new ActionLog(action, 0));
-                } else if (pandaObjective <= parcelObjective && pandaObjective <= gardenerObjective) {
-                    tmp.add(new ActionLog(action, 1));
-                } else {
-                    tmp.add(new ActionLog(action, 2));
+            case MOVE_PANDA -> {
+                for (int[] coords : Action.possibleMoveForGardenerOrPanda(value.getBoard(), value.getBoard().getPandaCoords())) {
+                    tmp.add(new ActionLog(action, coords));
                 }
             }
         }
         return tmp;
     }
 
+    private void simulateObjectivePicking(){
+        List<Objective> objectives = value.getBotSimulator().getObjectives();
+        int parcelObjective = 0;
+        int pandaObjective = 0;
+        int gardenerObjective = 0;
+        ActionLog actionlog ;
+        for (Objective objective : objectives) {
+            switch (objective.getType()) {
+                case PARCELLE -> parcelObjective++;
+                case PANDA -> pandaObjective++;
+                case JARDINIER -> gardenerObjective++;
+            }
+        }
+        if (parcelObjective <= pandaObjective && parcelObjective <= gardenerObjective) {
+            actionlog = new ActionLog(PossibleActions.DRAW_OBJECTIVE, 0);
+        } else if (pandaObjective <= parcelObjective && pandaObjective <= gardenerObjective) {
+            actionlog = new ActionLog(PossibleActions.DRAW_OBJECTIVE, 1);
+        } else {
+            actionlog = new ActionLog(PossibleActions.DRAW_OBJECTIVE, 2);
+        }
+        BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionlog);
+        botSimulator.playTurn(value.getMeteo());
+        botSimulator.getGestionObjectives().checkObjectives(botSimulator);
+        children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+    }
+
+    private void simulateDrawAndPutTile(){
+        ActionLog actionlog;
+        actionlog = new ActionLog(PossibleActions.DRAW_AND_PUT_TILE, value.getBoard().getAvailableBox().get(0));
+        BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionlog);
+        botSimulator.playTurn(value.getMeteo());
+        botSimulator.getGestionObjectives().checkObjectives(botSimulator);
+        children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+    }
+
+
+
     public Node getBestChild(){
-        Node bestChild = children.get(0);
-        for (Node child : children) {
-            if(child.getValue().getScore() > bestChild.getValue().getScore()){
-                bestChild = child;
+        Node bestChild = null;
+        boolean goodChild = false;
+        if(!children.isEmpty()) {
+            bestChild = children.get(0);
+            for (Node child : children) {
+                if (child.getValue().getScore() > bestChild.getValue().getScore()) {
+                    bestChild = child;
+                }
+            }
+            if(bestChild.getValue().getScore() > this.value.getScore()){
+                goodChild = true;
+            }
+        }
+        if(!goodChild && this.getValue().getBotSimulator().getObjectives().size() < 5){
+            simulateObjectivePicking();
+            if(children.get(children.size()-1).getValue().getScore() >= 0){
+                bestChild = children.get(children.size()-1);
+                goodChild = true;
+            }
+        }if(!goodChild){
+            simulateDrawAndPutTile();
+            if(children.get(children.size()-1).getValue().getScore() >= 0) {
+                bestChild = children.get(children.size() - 1);
             }
         }
         return bestChild;

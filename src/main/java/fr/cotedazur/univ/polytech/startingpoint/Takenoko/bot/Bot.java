@@ -125,7 +125,6 @@ public abstract class Bot {
 
     protected abstract void movePanda();
 
-    protected abstract void movePandaStorm();
 
 
     //Score and objectives

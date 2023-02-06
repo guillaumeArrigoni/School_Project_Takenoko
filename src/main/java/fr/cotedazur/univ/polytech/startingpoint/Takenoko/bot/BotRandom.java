@@ -148,7 +148,6 @@ public class BotRandom extends Bot {
         System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
 
-    @Override
     public void movePandaStorm(){
         List<int[]> possibleMoves = new ArrayList<>();
         for(HexagoneBoxPlaced box : board.getPlacedBox().values()){

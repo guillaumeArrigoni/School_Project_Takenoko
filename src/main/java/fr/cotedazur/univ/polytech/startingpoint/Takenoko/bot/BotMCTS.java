@@ -30,29 +30,29 @@ public class BotMCTS extends Bot{
     }
 
     @Override
-    public void playTurn(MeteoDice.Meteo meteo) {
-        node = new Node(this.createBotSimulator(), 2, meteo);
+    public void playTurn(MeteoDice.Meteo meteo, String arg) {
+        node = new Node(this.createBotSimulator(), 2, meteo, arg);
         instructions = node.getBestInstruction();
 //        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
         for(int i = 0; i < instructions.size(); i++){
-            doAction();
+            doAction(arg);
         }
     }
 
     @Override
-    protected void doAction() {
+    protected void doAction(String arg) {
         switch (instructions.get(0).getAction()) {
-            case DRAW_AND_PUT_TILE -> placeTile();
-            case MOVE_GARDENER -> moveGardener();
-            case DRAW_OBJECTIVE -> drawObjective();
-            default -> movePanda();
+            case DRAW_AND_PUT_TILE -> placeTile(arg);
+            case MOVE_GARDENER -> moveGardener(arg);
+            case DRAW_OBJECTIVE -> drawObjective(arg);
+            default -> movePanda(arg);
         }
         instructions.remove(0);
     }
 
 
     @Override
-    protected void placeTile(){
+    protected void placeTile(String arg){
         //Init
         List<HexagoneBox> list = new ArrayList<>();
         //Draw three tiles
@@ -69,37 +69,36 @@ public class BotMCTS extends Bot{
         board.addBox(placedTile);
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(1));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(2));
-        System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+        if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
     @Override
-    protected void moveGardener() {
+    protected void moveGardener(String arg) {
         board.setGardenerCoords(instructions.get(0).getParameters());
-        System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
 
     @Override
-    protected void movePanda() {
+    protected void movePanda(String arg) {
         board.setPandaCoords(instructions.get(0).getParameters(),this);
-        System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
+        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
 
     @Override
-    public void drawObjective() {
+    public void drawObjective(String arg) {
         switch(instructions.get(0).getParameters()[0]){
             case 0 -> {
-                gestionObjectives.rollParcelleObjective(this);
-                System.out.println(this.name + " a pioché un objectif de parcelle");
+                gestionObjectives.rollParcelleObjective(this, arg);
+                if (arg.equals("demo")) System.out.println(this.name + " a pioché un objectif de parcelle");
             }
             case 1 -> {
-                gestionObjectives.rollPandaObjective(this);
-                System.out.println(this.name + " a pioché un objectif de panda");
+                gestionObjectives.rollPandaObjective(this, arg);
+                if (arg.equals("demo"))System.out.println(this.name + " a pioché un objectif de panda");
             }case 2 -> {
-                gestionObjectives.rollJardinierObjective(this);
-                System.out.println(this.name + " a pioché un objectif de jardinier");
+                gestionObjectives.rollJardinierObjective(this, arg);
+                if (arg.equals("demo")) System.out.println(this.name + " a pioché un objectif de jardinier");
             }
         }
-
     }
 
 

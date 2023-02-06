@@ -16,13 +16,13 @@ public class Node {
     private ActionLog instruction;
     private List<Node> children;
 
-    public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo) {
+    public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg) {
         this.profondeur = profondeur*2;
         this.value = new GameState(bot, meteo);
         this.children = new ArrayList<>();
         this.parent = null;
         this.instruction = null;
-        createChildren();
+        createChildren(arg);
     }
 
     protected Node(BotSimulator bot, int profondeur, Node parent, MeteoDice.Meteo meteo) {
@@ -33,25 +33,25 @@ public class Node {
         this.instruction = bot.getInstructions();
     }
 
-    public void createChildren() {
+    public void createChildren(String arg) {
         if(profondeur > 0 && profondeur % 2 == 0) {
             List<ActionLog> firstIntruction = createFirstInstruction();
             for (ActionLog actionLog : firstIntruction) {
                 BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
-                botSimulator.playTurn(value.getMeteo());
-                botSimulator.gestionObjectives.checkObjectives(botSimulator);
+                botSimulator.playTurn(value.getMeteo(), arg);
+                botSimulator.gestionObjectives.checkObjectives(botSimulator, arg);
                 children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
             }
         } else if (profondeur > 0) {
             List<ActionLog> secondIntruction = createSecondInstruction(instruction.getAction());
             for (ActionLog actionLog : secondIntruction) {
                 BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
-                botSimulator.playTurn(value.getMeteo());
-                botSimulator.gestionObjectives.checkObjectives(botSimulator);
+                botSimulator.playTurn(value.getMeteo(), arg);
+                botSimulator.gestionObjectives.checkObjectives(botSimulator, arg);
                 children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
             }
         }if(profondeur > 1)
-            this.getBestChild().createChildren();
+            this.getBestChild().createChildren(arg);
     }
 
     public List<ActionLog> createFirstInstruction(){

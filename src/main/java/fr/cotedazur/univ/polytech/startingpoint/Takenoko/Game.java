@@ -35,29 +35,42 @@ public class Game {
 
     public void play(GestionObjectives gestionnaire) {
         for (Bot bot : this.playerList) {
-            gestionnaire.rollParcelleObjective(bot);
-            gestionnaire.rollJardinierObjective(bot);
+            gestionnaire.rollParcelleObjective(bot, arg);
+            gestionnaire.rollJardinierObjective(bot, arg);
         }
         int numberPlayer = this.playerList.size();
         MeteoDice.Meteo meteo = MeteoDice.Meteo.NO_METEO;
         while (playing) {
-            System.out.println("Tour n°" + turnNumber + " :");
-            if (turnNumber == 2) System.out.println("Deuxième tour, la météo entre en jeu !");
+            if (arg.equals("demo")) {
+                System.out.println("Tour n°" + turnNumber + " :");
+                if (turnNumber == 2) System.out.println("Deuxième tour, la météo entre en jeu !");
+            }
             if (turnNumber != 1) meteo = meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);
-            playingBot.playTurn(meteo);
-            gestionnaire.checkObjectives(playingBot);
-            printBoardState(board);
+            playingBot.playTurn(meteo, arg);
+            gestionnaire.checkObjectives(playingBot, arg);
+            if (arg.equals("demo")) printBoardState(board);
             if (board.getNumberBoxPlaced() > 20) {
                 playing = false;
-                for (int i = 0; i < numberPlayer; i++) {
-                    System.out.println("Score de " + this.playerList.get(i).getName() + " : " + this.playerList.get(i).getScore());
+                if (arg.equals("demo")) {
+                    for (int i = 0; i < numberPlayer; i++) {
+                        System.out.println("Score de " + this.playerList.get(i).getName() + " : " + this.playerList.get(i).getScore());
+                    }
                 }
                 gestionnaire.printWinner(gestionnaire.getWinner(playerList));
             }
-            System.out.println("------------------------------------------");
+            if (arg.equals("demo")) System.out.println("------------------------------------------");
             turn = (turn + 1)%numberPlayer;
             this.turnNumber++;
+        }
+        if (this.playerList.get(0).getScore() > this.playerList.get(1).getScore()) {
+            return 1;
+        }
+        else if (this.playerList.get(0).getScore() < this.playerList.get(1).getScore()){
+            return 2;
+        }
+        else {
+            return 0;
         }
     }
 }

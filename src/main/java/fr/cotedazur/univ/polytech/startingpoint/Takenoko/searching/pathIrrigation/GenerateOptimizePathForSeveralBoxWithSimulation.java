@@ -56,7 +56,7 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
                     if (!boardSimulation.getCrestGestionnary().getListOfCrestIrrigated().contains(crest)){
                         boardSimulation.placeIrrigation(crest);
                         count = count + 1;
-                        listCrestCandidate.addAll((Collection<? extends Crest>) pathToIrrigateTheBox.get(0).clone());
+                        listCrestCandidate.add(pathToIrrigateTheBox.get(i).get(0));
                         LinkedHashSet<Crest> set = new LinkedHashSet<>(listCrestCandidate);
                         listCrestCandidate.clear();
                         listCrestCandidate.addAll(set);
@@ -66,7 +66,7 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
             if (nbTour == -1 || nbTour>count){
                 nbTour = count;
                 chosenCombination = combination.clone();
-                chosenPath = (ArrayList<Crest>) listCrestCandidate.clone();
+                chosenPath.addAll((ArrayList<Crest>) listCrestCandidate.clone());
             }
         }
         this.chosenPath = chosenPath;

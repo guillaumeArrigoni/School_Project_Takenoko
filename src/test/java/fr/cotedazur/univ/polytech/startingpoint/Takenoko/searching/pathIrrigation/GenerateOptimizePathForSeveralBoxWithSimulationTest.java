@@ -99,8 +99,6 @@ class GenerateOptimizePathForSeveralBoxWithSimulationTest {
     private static void placeIrrigation() {
         boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced5));
         ArrayList<Crest> listCrest = generateOptimizePathForSeveralBoxWithSimulation.getChosenPath();
-        System.out.println(board.getCrestGestionnary().getListOfCrestIrrigated());
-        System.out.println(listCrest);
         for(int i=0;i<listCrest.size();i++){
             if (!board.getCrestGestionnary().getListOfCrestIrrigated().contains(listCrest.get(i))){
                 board.placeIrrigation(listCrest.get(i));

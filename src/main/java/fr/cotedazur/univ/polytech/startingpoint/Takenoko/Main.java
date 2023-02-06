@@ -35,6 +35,11 @@ public class Main {
                 MeteoDice meteoDice = new MeteoDice();
                 Random random = new Random();
                 GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
+                gestionnaire.initialize(
+                        gestionnaire.ListOfObjectiveParcelleByDefault(),
+                        gestionnaire.ListOfObjectiveJardinierByDefault(),
+                        gestionnaire.ListOfObjectivePandaByDefault()
+                );
                 Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
                 Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
                 List<Bot> playerList = new ArrayList<>();

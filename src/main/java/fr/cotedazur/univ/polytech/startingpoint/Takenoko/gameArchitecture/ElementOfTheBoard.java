@@ -19,7 +19,6 @@ public class ElementOfTheBoard {
         put(Color.Rouge, 24);
     }};
     protected final HashMap<HexagoneBox,Integer> defaultInstructionBox = new HashMap<HexagoneBox,Integer>() {{
-        put(new HexagoneBox(Color.Lac,Special.Classique),1);
         put(new HexagoneBox(Color.Vert,Special.Classique),6);
         put(new HexagoneBox(Color.Vert,Special.Engrais),1);
         put(new HexagoneBox(Color.Vert,Special.Protéger),2);

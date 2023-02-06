@@ -32,7 +32,7 @@ public class CombinationSortedOf_P_ElementAmong_N<T> {
         }
 
         for (int i = start; i < n; i++) {
-            combination.add(index,listOfElement.get(i+1));
+            combination.add(index,listOfElement.get(i));
             backtrack(combination, n, p, index + 1, i + 1, listOfElement);
         }
     }

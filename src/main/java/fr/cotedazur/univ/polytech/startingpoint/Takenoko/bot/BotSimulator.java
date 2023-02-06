@@ -1,15 +1,17 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,22 +65,21 @@ public class BotSimulator extends Bot{
     }
 
     @Override
-    protected void placeTile() {
+    protected void placeTile(){
         //Init
         List<HexagoneBox> list = new ArrayList<>();
-        //Get all the available coords
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(board.drawTile());
+            list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
         //Choose a random tile from the tiles drawn
-        HexagoneBox placedTile = list.get(0);
+        HexagoneBox tileToPlace = list.get(0);
         //Choose a random available space
         int[] placedTileCoords = instructions.getParameters();
         //Set the coords of the tile
-        placedTile.setCoordinates(placedTileCoords);
+        HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-   }
+    }
 
     @Override
     protected void moveGardener() {

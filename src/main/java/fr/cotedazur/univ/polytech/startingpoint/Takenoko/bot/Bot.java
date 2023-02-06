@@ -1,11 +1,13 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -40,7 +42,7 @@ public abstract class Bot {
      */
     public GestionObjectives gestionObjectives;
     public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private AbstractMap <Color,Integer> bambooEated;
+    private AbstractMap <Color,Integer> bambooEaten;
 
 
     //CONSTRUCTOR
@@ -50,17 +52,18 @@ public abstract class Bot {
      * @param name the name of the bot
      * @param board the board of the game
      */
-    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
+    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEaten) {
         this.name = name;
         this.board = board;
         this.score = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
-        this.bambooEated = bambooEated;
-        this.bambooEated.put(Color.Rouge,0);
-        this.bambooEated.put(Color.Jaune,0);
-        this.bambooEated.put(Color.Vert,0);
+        this.bambooEaten = bambooEaten;
+        this.bambooEaten.put(Color.Rouge,0);
+        this.bambooEaten.put(Color.Jaune,0);
+        this.bambooEaten.put(Color.Vert,0);
+        this.bambooEaten.put(Color.Lac,0);
         resetPossibleAction();
     }
 
@@ -71,7 +74,7 @@ public abstract class Bot {
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
                 tmp,
-                new HashMap<>(this.getBambooEated()),
+                new HashMap<>(this.getBambooEaten()),
                 instructions);
     }
 
@@ -82,7 +85,7 @@ public abstract class Bot {
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
                 tmp,
-                new HashMap<>(this.getBambooEated()),
+                new HashMap<>(this.getBambooEaten()),
                 null);
     }
 
@@ -146,7 +149,7 @@ public abstract class Bot {
         return ((actions == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
                 (actions == PossibleActions.MOVE_PANDA && Action.possibleMoveForGardenerOrPanda(board,board.getPandaCoords()).isEmpty()) ||
                 (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5) ||
-                (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getCardDeck().size() < 3) ||
+                (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getElementOfTheBoard().getStackOfBox().size() < 3) ||
                 (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
     }
 
@@ -155,18 +158,24 @@ public abstract class Bot {
     }
 
     public void addBambooAte(Color colorAte){
-        int nbAte = bambooEated.get(colorAte) + 1;
-        bambooEated.put(colorAte,nbAte);
+        int nbAte = bambooEaten.get(colorAte) + 1;
+        bambooEaten.put(colorAte,nbAte);
     }
 
-    public void deleteBambooAte (ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
+    public void deleteBambooEaten(ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
         ArrayList<Color> errorImpossibleToDeleteTheseBamboo = new ArrayList<>();
-        for (int i=0;i<listBambooToDelete.size();i++){
-            int nbBambooOfOneColorAte = bambooEated.get(listBambooToDelete.get(i));
+        for (Color color : listBambooToDelete){
+            int nbBambooOfOneColorAte = bambooEaten.get(color);
             if (nbBambooOfOneColorAte>0){
-                bambooEated.put(listBambooToDelete.get(i),nbBambooOfOneColorAte-1);
+                bambooEaten.put(color,nbBambooOfOneColorAte-1);
+                try {
+                    board.getElementOfTheBoard().giveBackBamboo(color);
+                } catch (TakenokoException e) {
+                    System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+                    throw new RuntimeException();
+                }
             } else {
-                errorImpossibleToDeleteTheseBamboo.add(listBambooToDelete.get(i));
+                errorImpossibleToDeleteTheseBamboo.add(color);
             }
         }
         if (errorImpossibleToDeleteTheseBamboo.size()!=0){
@@ -175,8 +184,8 @@ public abstract class Bot {
 
     }
 
-    public AbstractMap<Color,Integer> getBambooEated(){
-        return this.bambooEated;
+    public Map<Color,Integer> getBambooEaten(){
+        return this.bambooEaten;
     }
 
     public Board getBoard() {
@@ -194,4 +203,6 @@ public abstract class Bot {
     public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
         return retrieveBoxIdWithParameters;
     }
+
+
 }

@@ -12,3 +12,14 @@ public class TakenokoException extends Exception {
         return this.errorTitle;
     }
 }
+
+/*
+System.err.println("\n  -> An error has occurred : "
+                    + e.getErrorTitle()
+                    + "\n"
+                    + "In line :\n"
+                    + e.getStackTrace()
+                    + "\n\n"
+                    + "Fatal error.");
+            throw new RuntimeException();
+ */

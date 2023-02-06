@@ -1,8 +1,12 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -14,8 +18,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -23,23 +25,25 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class HexagoneBoxTest {
+class HexagoneBoxPlacedTest {
 
+    private static ElementOfTheBoardCheated elementOfTheBoardCheated;
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Board board;
     private static BotRandom botRandom;
     private static Random random;
     private static MeteoDice meteoDice;
     private static GestionObjectives gestionObjectives;
-    private static HexagoneBox vert01;
-    private static HexagoneBox vert02;
-    private static HexagoneBox vert07;
-    private static HexagoneBox jaune03;
-    private static HexagoneBox jaune08;
-    private static HexagoneBox rouge09Protected;
-    private static HexagoneBox vert18Engrais;
-    private static HexagoneBox vert19;
-    private static HexagoneBox vert20;
+    private static HexagoneBoxPlaced vert01;
+    private static HexagoneBoxPlaced vert02;
+    private static HexagoneBoxPlaced vert07;
+    private static HexagoneBoxPlaced jaune03;
+    private static HexagoneBoxPlaced jaune08;
+    private static HexagoneBoxPlaced rouge06Engrais;
+    private static HexagoneBoxPlaced rouge09Protected;
+    private static HexagoneBoxPlaced vert18Engrais;
+    private static HexagoneBoxPlaced vert19;
+    private static HexagoneBoxPlaced vert20;
 
     /**
      *                  12     13      14
@@ -54,21 +58,23 @@ class HexagoneBoxTest {
     @BeforeAll
     @Order(1)
     public static void setUpGeneral() {
+        elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters,true);
+        board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated);
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
-        botRandom = new BotRandom("testBot", board, random, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
-        vert01 = new HexagoneBox(0,1,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        vert02 = new HexagoneBox(-1,1,0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        vert07 = new HexagoneBox(-1,2,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        jaune03 = new HexagoneBox(-1,0,1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        jaune08 = new HexagoneBox(-2,2,0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        rouge09Protected = new HexagoneBox(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters,board);
-        vert18Engrais = new HexagoneBox(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board);
-        vert19 = new HexagoneBox(-1,3,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        vert20 = new HexagoneBox(-2,3,-1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        botRandom = new BotRandom("testBot", board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        vert01 = new HexagoneBoxPlaced(0,1,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        vert02 = new HexagoneBoxPlaced(-1,1,0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        vert07 = new HexagoneBoxPlaced(-1,2,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
+        jaune03 = new HexagoneBoxPlaced(-1,0,1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        jaune08 = new HexagoneBoxPlaced(-2,2,0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        rouge06Engrais = new HexagoneBoxPlaced(1,0,-1, Color.Rouge, Special.Engrais, retrieveBoxIdWithParameters,board);
+        rouge09Protected = new HexagoneBoxPlaced(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters,board);
+        vert18Engrais = new HexagoneBoxPlaced(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board);
+        vert19 = new HexagoneBoxPlaced(-1,3,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        vert20 = new HexagoneBoxPlaced(-2,3,-1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         board.addBox(vert01);
         board.addBox(vert02);
         board.addBox(vert07);
@@ -128,11 +134,11 @@ class HexagoneBoxTest {
 
     private static Stream<Arguments> provideIrrigationAutomatic(){
         RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        Board board = new Board(retrieveBoxIdWithParameters,false);
-        HexagoneBox vertClassique04 = new HexagoneBox(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        Board board = new Board(retrieveBoxIdWithParameters,false, 1);
+        HexagoneBoxPlaced vertClassique04 = new HexagoneBoxPlaced(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         board.addBox(vertClassique04);
-        HexagoneBox vertClassique05 = new HexagoneBox(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        HexagoneBox vertClassique13 = new HexagoneBox(1,-2,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced vertClassique05 = new HexagoneBoxPlaced(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced vertClassique13 = new HexagoneBoxPlaced(1,-2,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         board.addBox(vertClassique05);
         board.addBox(vertClassique13);
         return Stream.of(Arguments.of(vertClassique04,vertClassique13));
@@ -147,14 +153,14 @@ class HexagoneBoxTest {
 
     @ParameterizedTest
     @MethodSource("provide_Grow_Eat_Bamboo")
-    void testGrowBamboo(HexagoneBox box, int x) {
+    void testGrowBamboo(HexagoneBoxPlaced box, int x) {
         box.growBamboo();
         assertEquals(x,box.getHeightBamboo());
     }
 
     @ParameterizedTest
     @MethodSource("provide_Grow_Eat_Bamboo")
-    void testEatBamboo(HexagoneBox box, int useless, int x) {
+    void testEatBamboo(HexagoneBoxPlaced box, int useless, int x) {
         box.eatBamboo();
         assertEquals(x,box.getHeightBamboo());
     }
@@ -168,18 +174,18 @@ class HexagoneBoxTest {
     @ParameterizedTest
     @MethodSource("provideGenerateAndSeparateId")
     void testGenerateID(int[] coords, int id) {
-        assertEquals(id,HexagoneBox.generateID(coords));
+        assertEquals(id, HexagoneBox.generateID(coords));
     }
 
     @ParameterizedTest
     @MethodSource("provideGenerateAndSeparateId")
     void testSeparateID(int[] coords, int id) {
-        assertTrue(equals(coords,HexagoneBox.separateID(id)));
+        assertTrue(equals(coords, HexagoneBox.separateID(id)));
     }
 
     @ParameterizedTest
     @MethodSource("provideCrest")
-    void testCrestAroundBox(HexagoneBox box, Crest c1, Crest c2, Crest c3, Crest c4, Crest c5, Crest c6){
+    void testCrestAroundBox(HexagoneBoxPlaced box, Crest c1, Crest c2, Crest c3, Crest c4, Crest c5, Crest c6){
         assertEquals(box.getListOfCrestAroundBox().get(0).getId(),c1.getId());
         assertEquals(box.getListOfCrestAroundBox().get(1).getId(),c2.getId());
         assertEquals(box.getListOfCrestAroundBox().get(2).getId(),c3.getId());
@@ -193,9 +199,21 @@ class HexagoneBoxTest {
      */
     @ParameterizedTest
     @MethodSource("provideIrrigationAutomatic")
-    void testIrrigationAutomatic(HexagoneBox vertClassique04, HexagoneBox vertClassique13){
+    void testIrrigationAutomatic(HexagoneBoxPlaced vertClassique04, HexagoneBoxPlaced vertClassique13){
         assertTrue(vertClassique04.isIrrigate());
         assertFalse(vertClassique13.isIrrigate());
+        assertEquals(1,vertClassique04.getHeightBamboo());
+        assertNotEquals(1,vertClassique13.getHeightBamboo());
+    }
+
+    @Test
+    void testGrowInBoxWithEngrais(){
+        rouge06Engrais.setHeightBamboo(0);
+        rouge06Engrais.growBamboo();
+        assertEquals(2,rouge06Engrais.getHeightBamboo());
+        rouge06Engrais.setHeightBamboo(3);
+        rouge06Engrais.growBamboo();
+        assertEquals(4,rouge06Engrais.getHeightBamboo());
     }
 
     @AfterAll

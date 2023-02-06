@@ -1,13 +1,17 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PatternTest {
-
+    private static GestionObjectives gestionnaire;
+    private static Board board;
+    private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Pattern pattern1;
     private static Pattern pattern2;
     private static Pattern pattern3;
@@ -17,12 +21,15 @@ class PatternTest {
 
     @BeforeAll
     public static void setUp(){
-        pattern1 = Pattern.PLANTER_SUR_SOURCE_EAU;
-        pattern2 = Pattern.PLANTER_TROIS_JAUNES;
-        pattern3 = Pattern.POSER_TRIANGLE;
-        pattern4 = Pattern.POSER_LIGNE;
-        pattern5 = Pattern.MANGER_DEUX_BAMBOUS;
-        pattern6 = Pattern.MANGER_TROIS_BAMBOUS;
+        retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
+        board = new Board(retrieveBoxIdWithParameters, 1);
+        gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        pattern1 = gestionnaire.PLANTER_SUR_SOURCE_EAU;
+        pattern2 = gestionnaire.PLANTER_TROIS_JAUNES;
+        pattern3 = gestionnaire.POSER_TRIANGLE;
+        pattern4 = gestionnaire.POSER_LIGNE;
+        pattern5 = gestionnaire.MANGER_DEUX_BAMBOUS;
+        pattern6 = gestionnaire.MANGER_TROIS_BAMBOUS;
     }
 
     @Test

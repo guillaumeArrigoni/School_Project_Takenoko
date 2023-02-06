@@ -1,11 +1,12 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.Node;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -51,22 +52,23 @@ public class BotMCTS extends Bot{
 
 
     @Override
-    protected void placeTile() {
+    protected void placeTile(){
         //Init
         List<HexagoneBox> list = new ArrayList<>();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(board.drawTile());
+            list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
         //Choose a random tile from the tiles drawn
-        HexagoneBox placedTile = list.get(0);
+        int placedTileIndex = 0;
+        HexagoneBox tileToPlace = list.get(placedTileIndex);
         //Choose a random available space
         int[] placedTileCoords = instructions.get(0).getParameters();
         //Set the coords of the tile
-        placedTile.setCoordinates(placedTileCoords);
+        HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-        board.getCardDeck().add(list.get(1));
-        board.getCardDeck().add(list.get(2));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(1));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(2));
         System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 

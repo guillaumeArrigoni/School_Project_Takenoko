@@ -1,9 +1,10 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.allInterface.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -95,18 +96,18 @@ public class BotRandom extends Bot {
         List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(Action.drawTile(random, retrieveBoxIdWithParameters,board));
+            list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
         //Choose a random tile from the tiles drawn
         int placedTileIndex = random.nextInt(0, 3);
-        HexagoneBox placedTile = list.get(placedTileIndex);
+        HexagoneBox tileToPlace = list.get(placedTileIndex);
         //Choose a random available space
         int[] placedTileCoords = availableTilesList.get(random.nextInt(0, availableTilesList.size()));
         //Set the coords of the tile
-        placedTile.setCoordinates(placedTileCoords);
+        HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-        board.getCardDeck().add(list.get((placedTileIndex + 1) % 3));
-        board.getCardDeck().add(list.get((placedTileIndex + 2) % 3));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
         System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 

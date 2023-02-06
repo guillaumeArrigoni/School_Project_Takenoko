@@ -72,7 +72,7 @@ class GestionObjectivesTest {
                 gestionObjectives.ListOfObjectiveJardinierByDefault(),
                 gestionObjectives.ListOfObjectivePandaByDefault()
         );
-        bot = new BotRandom("Bot",board,random, meteoDice,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        bot = new BotRandom("Bot",board,random, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
         Greenbox1 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
         Greenbox2 = new HexagoneBoxPlaced(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
         Greenbox3 = new HexagoneBoxPlaced(-1, 2, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
@@ -225,7 +225,7 @@ class GestionObjectivesTest {
 
     @Test
     void rollObjective() {
-        Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
+        BotRandom botRoll = new BotRandom("botRoll", board,random,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
         for(int i = 0;i<5; i++){
             gestionObjectives.rollObjective(botRoll, arg);
         }
@@ -235,7 +235,7 @@ class GestionObjectivesTest {
 
     @Test
     void rollParcelleObjective() {
-        Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
+        BotRandom botRoll = new BotRandom("botRoll", board,random,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
         gestionObjectives.rollParcelleObjective(botRoll, arg);
         assertEquals(TypeObjective.PARCELLE, botRoll.getObjectives().get(0).getType());
 
@@ -243,14 +243,14 @@ class GestionObjectivesTest {
 
     @Test
     void rollJardinierObjective() {
-        Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
+        BotRandom botRoll = new BotRandom("botRoll", board,random,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
         gestionObjectives.rollJardinierObjective(botRoll, arg);
         assertEquals(TypeObjective.JARDINIER,botRoll.getObjectives().get(0).getType());
     }
 
     @Test
     void rollPandaObjective() {
-        Bot botRoll = new BotRandom("botRoll", board,random,meteoDice,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
+        BotRandom botRoll = new BotRandom("botRoll", board,random,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>());
         gestionObjectives.rollPandaObjective(botRoll, arg);
         assertEquals(TypeObjective.PANDA,botRoll.getObjectives().get(0).getType());
     }

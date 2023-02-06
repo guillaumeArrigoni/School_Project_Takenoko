@@ -71,6 +71,17 @@ public class CrestGestionnary {
         this.listOfCrestIrrigated = new ArrayList<>();
     }
 
+    public CrestGestionnary copy(){
+        CrestGestionnary copy = new CrestGestionnary();
+        copy.linkCrestParentToCrestChildren = new HashMap<>(this.linkCrestParentToCrestChildren);
+        copy.linkCrestChildrenToCrestParent = new HashMap<>(this.linkCrestChildrenToCrestParent);
+        copy.rangeFromIrrigated = new HashMap<>(this.rangeFromIrrigated);
+        copy.parentChildless = new ArrayList<>(this.parentChildless);
+        copy.alreadyIrrigated = new ArrayList<>(this.alreadyIrrigated);
+        copy.listOfCrestOneRangeToIrrigated = new ArrayList<>(this.listOfCrestOneRangeToIrrigated);
+        return copy;
+    }
+
     public void launchUpdatingCrestWithAddingNewBox(HexagoneBoxPlaced box){
         this.updateCrestVariableWithNewBoxAdded(box);
     }

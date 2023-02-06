@@ -67,6 +67,13 @@ public class ElementOfTheBoard {
         this(listOfBambooAvailable,listOfColor,false,listOfBoxAvailable,listOfBox,false);
     }
 
+    public ElementOfTheBoard copy(){
+        ElementOfTheBoard res = new ElementOfTheBoard();
+        res.stackOfBox = this.stackOfBox.copy();
+        res.nbOfBambooForEachColorAvailable = new HashMap<>(this.nbOfBambooForEachColorAvailable);
+        return res;
+    }
+
 
     public StackOfBox getStackOfBox(){
         return stackOfBox;

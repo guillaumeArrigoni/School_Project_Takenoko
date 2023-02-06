@@ -44,15 +44,15 @@ public class Game {
             gestionnaire.rollJardinierObjective(bot, arg);
         }
         int numberPlayer = this.playerList.size();
+        MeteoDice.Meteo meteo = MeteoDice.Meteo.NO_METEO;
         while (playing) {
             if (arg.equals("demo")) {
                 System.out.println("Tour n°" + turnNumber + " :");
                 if (turnNumber == 2) System.out.println("Deuxième tour, la météo entre en jeu !");
             }
-
-            if (turnNumber != 1) meteoDice.roll();
+            if (turnNumber != 1) meteo = meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);
-            playingBot.playTurn(arg);
+            playingBot.playTurn(meteo, arg);
             gestionnaire.checkObjectives(playingBot, arg);
             if (arg.equals("demo")) printBoardState(board);
             if (board.getNumberBoxPlaced() > 20) {

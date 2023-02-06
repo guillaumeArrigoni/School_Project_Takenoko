@@ -16,7 +16,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxId
 import java.util.*;
 
 
-public class Board implements Cloneable {
+public class Board {
 
     protected final boolean allIrrigated;
 
@@ -95,6 +95,7 @@ public class Board implements Cloneable {
         this.AvailableBox = new ArrayList<>();
         this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
+        this.pandaCoords = new int[]{0,0,0};
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
@@ -105,6 +106,18 @@ public class Board implements Cloneable {
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated){
         //TODO set allIrrigated to false when irrigation add to the game
         this(retrieveBoxIdWithParameters,true,id,elementOfTheBoardCheated);
+    }
+
+    public Board copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        Board newBoard = new Board(retrieveBoxIdWithParameters,this.allIrrigated,this.idOfTheBoard);
+        newBoard.numberBoxPlaced = this.numberBoxPlaced;
+        newBoard.placedBox = new HashMap<>(this.placedBox);
+        newBoard.crestGestionnary.copy();
+        newBoard.AvailableBox = new ArrayList<>(this.AvailableBox);
+        newBoard.gardenerCoords = this.gardenerCoords;
+        newBoard.pandaCoords = this.pandaCoords;
+        newBoard.elementOfTheBoard = this.elementOfTheBoard.copy();
+        return newBoard;
     }
 
     private void generateLac(){
@@ -122,6 +135,7 @@ public class Board implements Cloneable {
         return allIrrigated;
     }
 
+
     public int[] getGardenerCoords() {
         return this.gardenerCoords;
     }
@@ -138,6 +152,7 @@ public class Board implements Cloneable {
     public ArrayList<HexagoneBoxPlaced> getAllBoxPlaced() {
         return new ArrayList<>(this.placedBox.values());
     }
+
     public ArrayList<int[]> getAvailableBox(){
         return this.AvailableBox;
     }
@@ -267,8 +282,4 @@ public class Board implements Cloneable {
         box.launchIrrigationChecking();
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

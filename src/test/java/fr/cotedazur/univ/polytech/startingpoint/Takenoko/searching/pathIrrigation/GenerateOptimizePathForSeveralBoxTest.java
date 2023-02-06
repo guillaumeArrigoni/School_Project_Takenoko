@@ -41,7 +41,7 @@ class GenerateOptimizePathForSeveralBoxTest {
 
     @BeforeAll
     @Order(1)
-    public static void setup() throws CrestNotRegistered {
+    public static void setup() throws CrestNotRegistered, CloneNotSupportedException {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,false,1);
         boardSimulation = new BoardSimulation(board);

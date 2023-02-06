@@ -1,7 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnarySimulation;
@@ -47,9 +46,6 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
         for (Combination<HexagoneBoxPlaced> combination :  this.listCombination){
             int count = 0;
             setupNewSimulation(combination.getListOfElementInTheCombination().get(0));
-            for(HexagoneBoxPlaced box : boardSimulation.getPlacedBox().values()){
-                System.out.println(box);
-            }
             ArrayList<Crest> listCrestCandidate = new ArrayList<>();
             for (HexagoneBoxPlaced box : combination.getListOfElementInTheCombination()){
                 GenerateAWayToIrrigateTheBox generateAWayToIrrigateTheBox = new GenerateAWayToIrrigateTheBox(box, this.boardSimulation);

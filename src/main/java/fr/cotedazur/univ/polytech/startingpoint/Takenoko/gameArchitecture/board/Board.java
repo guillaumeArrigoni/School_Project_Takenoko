@@ -5,6 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Elemen
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
@@ -12,6 +13,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.Impossi
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
 import java.util.*;
 
@@ -93,8 +95,9 @@ public class Board implements Cloneable {
         this.placedBox = new HashMap<>();
         this.crestGestionnary = new CrestGestionnary();
         this.AvailableBox = new ArrayList<>();
-        this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
+        this.pandaCoords = new int[]{0,0,0};
+        this.generateLac();
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
@@ -272,7 +275,8 @@ public class Board implements Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

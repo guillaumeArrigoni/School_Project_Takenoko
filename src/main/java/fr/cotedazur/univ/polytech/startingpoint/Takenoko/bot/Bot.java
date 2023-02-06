@@ -39,9 +39,9 @@ public abstract class Bot {
     /**
      *
      */
-    public GestionObjectives gestionObjectives;
-    public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private AbstractMap <Color,Integer> bambooEaten;
+    protected final GestionObjectives gestionObjectives;
+    protected final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    protected final Map <Color,Integer> bambooEaten;
 
 
     //CONSTRUCTOR
@@ -51,7 +51,7 @@ public abstract class Bot {
      * @param name the name of the bot
      * @param board the board of the game
      */
-    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEaten) {
+    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color,Integer> bambooEaten) {
         this.name = name;
         this.board = board;
         this.score = 0;
@@ -124,6 +124,9 @@ public abstract class Bot {
     protected abstract void moveGardener();
 
     protected abstract void movePanda();
+
+    protected abstract void movePandaStorm();
+
 
     //Score and objectives
     public int getScore() {
@@ -202,6 +205,8 @@ public abstract class Bot {
     public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
         return retrieveBoxIdWithParameters;
     }
+
+
 
 
 }

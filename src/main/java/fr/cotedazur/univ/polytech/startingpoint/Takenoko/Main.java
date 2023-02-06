@@ -24,6 +24,8 @@ public class Main {
         playerList.add(bot1);
         playerList.add(bot2);
         Game game = new Game(playerList,board);
+        System.out.println(bot1.getBoard().getElementOfTheBoard().getStackOfBox());
         game.play(gestionnaire);
+
     }
 }

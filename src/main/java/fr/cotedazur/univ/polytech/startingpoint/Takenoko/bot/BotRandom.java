@@ -22,7 +22,7 @@ public class BotRandom extends Bot {
      */
     private final Random random;
 
-    public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
+    public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color,Integer> bambooEated) {
         super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
         this.random = random;
     }
@@ -48,6 +48,24 @@ public class BotRandom extends Bot {
                 doAction();
                 doAction();
             }
+            case NUAGES -> {
+                System.out.println("Le dé a choisi : NUAGES");
+                //TODO 
+                doAction();
+                doAction();
+            }
+            case ORAGE -> {
+                System.out.println("Le dé a choisi : ORAGE");
+                movePandaStorm();
+                doAction();
+                doAction();
+            }
+            default/*SOLEIL*/ -> {
+                System.out.println("Le dé a choisi : SOLEIL");
+                doAction();
+                doAction();
+                doAction();
+            }
 
 
         }
@@ -56,23 +74,23 @@ public class BotRandom extends Bot {
     @Override
     protected void doAction(){
         PossibleActions action = chooseAction();
-        switch (action){
-            case DRAW_AND_PUT_TILE:
+        switch (action) {
+            case DRAW_AND_PUT_TILE -> {
                 System.out.println("Le bot a choisi : PiocherPoserTuile");
                 placeTile();
-                break;
-            case MOVE_GARDENER:
+            }
+            case MOVE_GARDENER -> {
                 System.out.println("Le bot a choisi : BougerJardinier");
                 moveGardener();
-                break;
-            case DRAW_OBJECTIVE:
+            }
+            case DRAW_OBJECTIVE -> {
                 System.out.println("Le bot a choisi : PiocherObjectif");
                 drawObjective();
-                break;
-            case MOVE_PANDA:
+            }
+            case MOVE_PANDA -> {
                 System.out.println("Le bot a choisi : BougerPanda");
                 movePanda();
-                break;
+            }
         }
 
     }
@@ -128,6 +146,16 @@ public class BotRandom extends Bot {
         List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
         board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
+    }
+
+    @Override
+    public void movePandaStorm(){
+        List<int[]> possibleMoves = new ArrayList<>();
+        for(HexagoneBoxPlaced box : board.getPlacedBox().values()){
+            possibleMoves.add(box.getCoordinates());
+        }
+        board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
+        System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()) + " grâce à l'orage");
     }
 
 

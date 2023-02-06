@@ -17,15 +17,23 @@ import java.util.*;
  */
 public class BotRandom extends Bot {
 
-    public BotRandom(String name, Board board, Random random, MeteoDice meteoDice, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
-        super(name, board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+    /**
+     * The random generator
+     */
+    private final Random random;
+
+    public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
+        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+        this.random = random;
     }
 
 
+
+
     @Override
-    public void playTurn(){
+    public void playTurn(MeteoDice.Meteo meteo){
         possibleActions = PossibleActions.getAllActions();
-        switch (meteoDice.roll()){
+        switch (meteo){
             case VENT -> {
                 //Deux fois la même action autorisé
                 System.out.println("Le dé a choisi : VENT");
@@ -61,23 +69,23 @@ public class BotRandom extends Bot {
                 System.out.println("Le bot a choisi : PiocherObjectif");
                 drawObjective();
                 break;
+            case MOVE_PANDA:
+                System.out.println("Le bot a choisi : BougerPanda");
+                movePanda();
+                break;
         }
 
     }
 
-    @Override
+
+
     protected PossibleActions chooseAction(){
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
-        if ((acp == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
-                (acp == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5))
+        if (isObjectiveIllegal(acp))
             return chooseAction();
         possibleActions.remove(acp);
         return acp;
-    }
-    @Override
-    protected void resetPossibleAction(){
-        possibleActions = PossibleActions.getAllActions();
     }
 
     @Override
@@ -88,16 +96,19 @@ public class BotRandom extends Bot {
         List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
         //Draw three tiles
         for(int i = 0; i < 3; i++)
-            list.add(Action.drawTile(random, retrieveBoxIdWithParameters,board));
+            list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
         //Choose a random tile from the tiles drawn
-        HexagoneBox tileToPlace = list.get(random.nextInt(0, 3));
+        int placedTileIndex = random.nextInt(0, 3);
+        HexagoneBox tileToPlace = list.get(placedTileIndex);
         //Choose a random available space
         int[] placedTileCoords = availableTilesList.get(random.nextInt(0, availableTilesList.size()));
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-        System.out.println(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
+        System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
     @Override
@@ -113,16 +124,31 @@ public class BotRandom extends Bot {
     }
 
     @Override
-    public TypeObjective chooseTypeObjectiveToRoll(){
-        int i = random.nextInt(0,3) ;
-        return switch (i){
-            case 0 -> TypeObjective.PARCELLE;
-            case 1 -> TypeObjective.JARDINIER;
-            case 2 -> TypeObjective.PANDA;
-            default -> TypeObjective.PARCELLE;
-        };
+    public void movePanda(){
+        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
+        board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
+        System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
 
+
+
+    public TypeObjective chooseTypeObjectiveToRoll(){
+        int i = random.nextInt(0,3) ;
+        switch (i) {
+            case 1 -> {
+                System.out.println("Le bot a choisi : Piocher un objectif de jardinier");
+                return TypeObjective.JARDINIER;
+            }
+            case 2 -> {
+                System.out.println("Le bot a choisi : Piocher un objectif de panda");
+                return TypeObjective.PANDA;
+            }
+            default -> {
+                System.out.println("Le bot a choisi : Piocher un objectif de parcelle");
+                return TypeObjective.PARCELLE;
+            }
+        }
+    }
 
 }
 

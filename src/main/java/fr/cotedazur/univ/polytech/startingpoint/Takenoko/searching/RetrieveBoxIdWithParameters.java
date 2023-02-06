@@ -39,6 +39,15 @@ public class RetrieveBoxIdWithParameters {
         }
     }
 
+    public RetrieveBoxIdWithParameters copy(){
+        RetrieveBoxIdWithParameters copy = new RetrieveBoxIdWithParameters();
+        copy.BoxColor = new HashMap<>(this.BoxColor);
+        copy.BoxIsIrrigated = new HashMap<>(this.BoxIsIrrigated);
+        copy.BoxHeight = new HashMap<>(this.BoxHeight);
+        copy.BoxSpeciality = new HashMap<>(this.BoxSpeciality);
+        return copy;
+    }
+
     public void setBoxColor(int id, Color color) {
         ArrayList<Integer> listId = BoxColor.get(color);
         listId.add(id);

@@ -1,8 +1,12 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -16,6 +20,11 @@ public class HexagoneBox implements Comparable<HexagoneBox> {
         this.color = color;
         this.special = special;
         this.irrigate = special==Special.SourceEau;
+    }
+
+    public HexagoneBox copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
+        HexagoneBox hexagoneBox = new HexagoneBox(this.color, this.special);
+        return hexagoneBox;
     }
 
     public HexagoneBox (HexagoneBox box){

@@ -85,7 +85,7 @@ class BoardTest {
     }
 
     private static void setupBambooAte(){
-        botRandom = new BotRandom("testBot", board, random, meteoDice, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        botRandom = new BotRandom("testBot", board, random, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
     }
 
     /**

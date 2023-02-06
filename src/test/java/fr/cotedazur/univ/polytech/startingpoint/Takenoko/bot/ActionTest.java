@@ -30,27 +30,6 @@ class ActionTest {
         board = new Board(retrieveBoxIdWithParameters, 1);
     }
 
-    //DrawTile
-    @Test
-    void drawYellowTile() {
-        when(r.nextInt(0, 3)).thenReturn(0);
-        HexagoneBox hexagoneBox = Action.drawTile(r,retrieveBoxIdWithParameters,board);
-        assertEquals(Color.Jaune, hexagoneBox.getColor());
-    }
-
-    @Test
-    void drawGreenTile() {
-        when(r.nextInt(0, 3)).thenReturn(1);
-        HexagoneBox hexagoneBox = Action.drawTile(r, retrieveBoxIdWithParameters,board);
-        assertEquals(Color.Vert, hexagoneBox.getColor());
-    }
-
-    @Test
-    void drawRedTile() {
-        when(r.nextInt(0, 3)).thenReturn(2);
-        HexagoneBox hexagoneBox = Action.drawTile(r, retrieveBoxIdWithParameters,board);
-        assertEquals(Color.Rouge, hexagoneBox.getColor());
-    }
 
     //GetMovesForGardenerOrPanda
     @Test

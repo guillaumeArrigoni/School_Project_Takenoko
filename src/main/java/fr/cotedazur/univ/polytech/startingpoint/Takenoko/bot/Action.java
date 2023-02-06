@@ -18,7 +18,7 @@ public class Action {
             case 2 -> Color.Rouge;
             default -> Color.Jaune;
         };
-        System.out.println("drawTile : " + color);
+        //System.out.println("drawTile : " + color);
         return new HexagoneBox(color, Special.Classique);
     }
 

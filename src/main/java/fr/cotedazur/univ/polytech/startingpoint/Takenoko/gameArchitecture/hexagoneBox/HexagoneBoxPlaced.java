@@ -51,6 +51,16 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         generateCrestAroundBox();
     }
 
+    public HexagoneBoxPlaced copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters,Board board){
+        HexagoneBoxPlaced hexagoneBox = new HexagoneBoxPlaced(this.coordinates[0], this.coordinates[1], this.coordinates[2], this.color, this.special, retrieveBoxIdWithParameters, board);
+        hexagoneBox.irrigate = this.irrigate;
+        hexagoneBox.setHeightBamboo(this.heightBamboo);
+        hexagoneBox.AdjacentBox = new HashMap<>(this.getAdjacentBox());
+        hexagoneBox.listOfCrestAroundBox = new ArrayList<>(this.listOfCrestAroundBox);
+        return hexagoneBox;
+    }
+
+
     public HexagoneBoxPlaced (int x, int y, int z, Color color,Special special,RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
         this(x,y,z,new HexagoneBox(color,special),retrieveBoxIdWithParameters,board);
     }
@@ -76,6 +86,10 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     public Board getBoard(){
         return board;
     }
+
+
+
+
 
     public void growBamboo() {
         int boucle = 1;

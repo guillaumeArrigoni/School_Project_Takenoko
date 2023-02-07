@@ -53,7 +53,7 @@ public class Game {
             if (turnNumber != 1) meteo = meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);
             playingBot.playTurn(meteo, arg);
-            gestionnaire.checkObjectives(playingBot, arg);
+            gestionnaire.checkObjectives(playingBot, arg, numberPlayer);
             if (arg.equals("demo")) printBoardState(board);
             if (board.getNumberBoxPlaced() > 20) {
                 playing = false;

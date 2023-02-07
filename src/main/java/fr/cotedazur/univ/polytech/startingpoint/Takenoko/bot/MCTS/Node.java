@@ -39,7 +39,7 @@ public class Node {
             for (ActionLog actionLog : firstIntruction) {
                 BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
                 botSimulator.playTurn(value.getMeteo(), arg);
-                botSimulator.gestionObjectives.checkObjectives(botSimulator, arg);
+                botSimulator.gestionObjectives.checkObjectives(botSimulator, arg,2);
                 children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
             }
         } else if (profondeur > 0) {
@@ -47,7 +47,7 @@ public class Node {
             for (ActionLog actionLog : secondIntruction) {
                 BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
                 botSimulator.playTurn(value.getMeteo(), arg);
-                botSimulator.gestionObjectives.checkObjectives(botSimulator, arg);
+                botSimulator.gestionObjectives.checkObjectives(botSimulator, arg,2);
                 children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
             }
         }if(profondeur > 1)

@@ -30,42 +30,41 @@ public class BotSimulator extends Bot{
      * @param bambooEated
      */
     public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+        super(name + 's', board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
         this.instructions = instructions;
         legal = true;
 
     }
 
-
     @Override
-    public void playTurn(MeteoDice.Meteo meteo) {
+    public void playTurn(MeteoDice.Meteo meteo, String arg) {
         if (isObjectiveIllegal(instructions.getAction())){
             legal = false;
             return;
         }
-        doAction();
+        doAction(arg);
     }
 
     @Override
-    protected void doAction() {
+    protected void doAction(String arg) {
         switch (instructions.getAction()){
             case DRAW_AND_PUT_TILE:
-                placeTile();
+                placeTile(arg);
                 break;
             case MOVE_GARDENER:
-                moveGardener();
+                moveGardener(arg);
                 break;
             case DRAW_OBJECTIVE:
-                drawObjective();
+                drawObjective(arg);
                 break;
             default://MOVE PANDA
-                movePanda();
+                movePanda(arg);
         }
 
     }
 
     @Override
-    protected void placeTile(){
+    protected void placeTile(String arg){
         //Init
         List<HexagoneBox> list = new ArrayList<>();
         //Draw three tiles
@@ -82,7 +81,7 @@ public class BotSimulator extends Bot{
     }
 
     @Override
-    protected void moveGardener() {
+    protected void moveGardener(String arg) {
         if(Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).contains(instructions.getParameters()))
             board.setGardenerCoords(instructions.getParameters());
         else{
@@ -91,21 +90,21 @@ public class BotSimulator extends Bot{
     }
 
     @Override
-    protected void movePanda() {
+    protected void movePanda(String arg) {
         board.setPandaCoords(instructions.getParameters(),this);
     }
 
     @Override
-    public void drawObjective() {
+    public void drawObjective(String arg) {
         switch(instructions.getParameters()[0]){
-            case 0 -> gestionObjectives.rollParcelleObjective(this);
-            case 1 -> gestionObjectives.rollPandaObjective(this);
-            case 2 -> gestionObjectives.rollJardinierObjective(this);
+            case 0 -> gestionObjectives.rollParcelleObjective(this, arg);
+            case 1 -> gestionObjectives.rollPandaObjective(this, arg);
+            case 2 -> gestionObjectives.rollJardinierObjective(this, arg);
         }
     }
 
     @Override
-    public void addScore(Objective objective){
+    public void addScore(Objective objective, String arg){
         this.score += objective.getValue();
     }
 

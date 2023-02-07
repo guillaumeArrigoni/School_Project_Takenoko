@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
@@ -181,37 +182,53 @@ public class GestionObjectives {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    public void rollObjective(BotRandom bot){
-        TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll();
+    public void rollObjective(BotRandom bot, String arg){
+        TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll(arg);
         switch (typeObjective){
-        case PARCELLE -> rollParcelleObjective(bot);
-        case JARDINIER -> rollJardinierObjective(bot);
-        case PANDA -> rollPandaObjective(bot);
+        case PARCELLE -> rollParcelleObjective(bot, arg);
+        case JARDINIER -> rollJardinierObjective(bot, arg);
+        case PANDA -> rollPandaObjective(bot, arg);
         }
     }
-    public void rollParcelleObjective(Bot bot){
+    public void rollParcelleObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getParcelleObjectifs().size());
         Objective objective = this.getParcelleObjectifs().get(i);
         this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
+
+        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
+            System.out.println(bot.getName() + " a pioché un nouvel objectif.");
+            System.out.println(objective);
+        }
     }
-    public void rollJardinierObjective(Bot bot){
+    public void rollJardinierObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
+        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
+            System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
+            System.out.println(objective);
+        }
     }
-    public void rollPandaObjective(Bot bot){
+    public void rollPandaObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
+        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
+            System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
+            System.out.println(objective);
+        }
     }
-    public void checkObjectives(Bot bot){
+    public void checkObjectives(Bot bot, String arg){
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
-                bot.addScore(objective);
+                bot.addScore(objective, arg);
+                if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
+                    System.out.println(objective.toString() + ", a été réalisé");
+                }
                 listOfObjectifDone.add(objective);
             }
         }
@@ -373,15 +390,42 @@ public class GestionObjectives {
         return false;
     }
 
-    public void printWinner(Bot bot1, Bot bot2){
-         int i = bot1.getScore() - bot2.getScore();
-         if(i > 0){
-             System.out.println( bot1.getName() + " a gagné avec " + bot1.getScore() + " points !");
-        } else if (i < 0) {
-             System.out.println(bot2.getName() + " a gagné avec " + bot2.getScore() + " points !");
-         } else {
-             System.out.println("Egalité !");
-         }
+    public List<Bot> getWinner(List<Bot> bots){
+        int[] scores = new int[bots.size()];
+        for(int i=0; i<bots.size(); i++){
+            scores[i] = bots.get(i).getScore();
+        }
+        ArrayList<Integer> indicesBestScore = indiceMax(scores);
+        List<Bot> botWinnerList = new ArrayList<>();
+        if(indicesBestScore.size() == 1){
+            botWinnerList.add(bots.get(indicesBestScore.get(0)));
+        }
+        else{
+            if(indicesBestScore.size() > 1){
+                int[] scoresPanda = new int[indicesBestScore.size()];
+                for(int i=0; i<indicesBestScore.size();i++){
+                    scoresPanda[i] = bots.get(indicesBestScore.get(i)).getScorePanda();
+                }
+                ArrayList<Integer> indicesBestScorePanda = indiceMax(scoresPanda);
+                for(int j=0;j<indicesBestScorePanda.size();j++){
+                    botWinnerList.add(bots.get(indicesBestScore.get(indicesBestScorePanda.get(j))));
+                }
+            }
+        }
+        return botWinnerList;
+    }
+
+    public void printWinner(List<Bot> botWinnerList){
+        String str = botWinnerList.get(0).getName();
+        if(botWinnerList.size() >1){
+            for(int i=1; i<botWinnerList.size(); i++){
+                str += " et " + botWinnerList.get(i).getName();
+            }
+        }
+        switch (botWinnerList.size()){
+            case 1 -> System.out.println(str + " a gagné avec " + botWinnerList.get(0).getScore() + " points !");
+            default -> System.out.println(str + " sont à égalité avec " + botWinnerList.get(0).getScore() + " points !");
+        }
     }
 
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
@@ -454,17 +498,18 @@ public class GestionObjectives {
     }
 
     public ArrayList<Integer> indiceMax(int[] array){
-        int max=0;
+        int max = array[0];
         ArrayList<Integer> res = new ArrayList<>();
-        res.add(max);
         for(int i=0;i< array.length;i++){
             if(array[i]>max){
                 max = array[i];
-                res.removeAll(res);
+                res.clear();
                 res.add(i);
             }
-            if(array[i] == max){
-                res.add(i);
+            else {
+                if (array[i] == max) {
+                    res.add(i);
+                }
             }
         }
         return res;

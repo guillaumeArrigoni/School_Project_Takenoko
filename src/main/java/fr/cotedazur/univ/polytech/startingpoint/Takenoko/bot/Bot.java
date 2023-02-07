@@ -9,6 +9,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBa
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
@@ -27,6 +28,8 @@ public abstract class Bot {
      * The score of the bot
      */
     protected int score;
+
+    protected int scorePanda;
 
     /**
      * The list of possible actions
@@ -55,6 +58,7 @@ public abstract class Bot {
         this.name = name;
         this.board = board;
         this.score = 0;
+        this.scorePanda = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -101,12 +105,12 @@ public abstract class Bot {
     /**
      * This method is called at the beginning of the turn
      */
-    public abstract void playTurn(MeteoDice.Meteo meteo);
+    public abstract void playTurn(MeteoDice.Meteo meteo, String arg);
 
     /**
      * This method is called to do an action
      */
-    protected abstract void doAction();
+    protected abstract void doAction(String arg);
 
     //Gestion Actions possibles
 
@@ -117,13 +121,13 @@ public abstract class Bot {
     /**
      * This method place a tile on the board
      */
-    protected abstract void placeTile();
+    protected abstract void placeTile(String arg);
     /**
      * This method move the gardener
      */
-    protected abstract void moveGardener();
+    protected abstract void moveGardener(String arg);
 
-    protected abstract void movePanda();
+    protected abstract void movePanda(String arg);
 
 
 
@@ -140,11 +144,13 @@ public abstract class Bot {
         this.objectives = objectives;
     }
 
-    public void addScore(Objective objective){
+    public void addScore(Objective objective, String arg){
         this.score += objective.getValue();
-        System.out.println(objective.toString() + ", a été réalisé");
     }
-    public abstract void drawObjective();
+    public void addScorePanda(Objective objective){
+        this.scorePanda += objective.getValue();
+    }
+    public abstract void drawObjective(String arg);
 
     public boolean isObjectiveIllegal(PossibleActions actions){
         return ((actions == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
@@ -156,6 +162,17 @@ public abstract class Bot {
 
     public String getName() {
         return name;
+    }
+    public int getScorePanda() {
+        return this.scorePanda;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setScorePanda(int scorePanda) {
+        this.scorePanda = scorePanda;
     }
 
     public void addBambooEaten(Color colorAte){

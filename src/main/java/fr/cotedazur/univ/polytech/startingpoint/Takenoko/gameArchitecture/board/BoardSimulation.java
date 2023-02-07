@@ -1,34 +1,35 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnarySimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class BoardSimulation extends Board {
 
     protected RetrieveSimulation retrieveSimulation;
     protected CrestGestionnarySimulation crestGestionnarySimulation;
     protected ElementOfTheBoardCheated elementOfTheBoardCheated;
-
     public BoardSimulation(Board board) {
         this(board, new ElementOfTheBoardCheated());
     }
 
+
+
     public BoardSimulation(Board board, ElementOfTheBoardCheated elementOfTheBoard) {
         super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoard);
         this.elementOfTheBoardCheated = elementOfTheBoard;
-        setupSimulation2(board);
+        setupSimulation(board);
     }
 
-    private void setupSimulation2(Board board) {
+
+    /**
+     * Method use to copy the board and place in the new board generated
+     * the HexagoneBoxSimulation corresponding to the box already place in the true board
+     * @param board : the true box use to to generate this simulation
+     */
+    private void setupSimulation(Board board) {
         this.crestGestionnarySimulation = new CrestGestionnarySimulation(board.getCrestGestionnary());
         this.retrieveSimulation = new RetrieveSimulation(board.getRetrieveBoxIdWithParameters());
         super.retrieveBoxIdWithParameters = this.retrieveSimulation;
@@ -46,6 +47,8 @@ public class BoardSimulation extends Board {
                     this));
         }
     }
+
+
 
     @Override
     public RetrieveSimulation getRetrieveBoxIdWithParameters() {

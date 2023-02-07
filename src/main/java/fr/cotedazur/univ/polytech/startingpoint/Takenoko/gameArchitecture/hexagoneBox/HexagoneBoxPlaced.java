@@ -198,7 +198,6 @@ public class HexagoneBoxPlaced extends HexagoneBox {
             board.getCrestGestionnaryAlreadyIrrigated().removeAll(Arrays.asList(this.id));
             this.setIrrigate(true);
         } else {
-            //TODO change above to false when add irrigation option to the game
             super.irrigate = board.getAllIrrigated();
         }
     }

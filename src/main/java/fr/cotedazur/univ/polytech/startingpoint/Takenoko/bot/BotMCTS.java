@@ -31,9 +31,15 @@ public class BotMCTS extends Bot{
 
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg) {
-        node = new Node(this.createBotSimulator(), 2, meteo, arg);
+        if (MeteoDice.Meteo.VENT == meteo || meteo == MeteoDice.Meteo.NO_METEO) {
+            node = new Node(this.createBotSimulator(), 2, meteo, arg);
+        } else {
+            node = new Node(this.createBotSimulator(), 3, meteo, arg);
+        }
         instructions = node.getBestInstruction();
-        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
+        /*for (ActionLog instruction : instructions) {
+            System.out.println(instruction.getAction() + " " + Arrays.toString(instruction.getParameters()));
+        }*/
         for(int i = 0; i < instructions.size(); i++){
             doAction(arg);
         }

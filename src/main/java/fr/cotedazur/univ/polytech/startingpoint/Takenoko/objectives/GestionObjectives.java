@@ -226,6 +226,9 @@ public class GestionObjectives {
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
                 bot.addScore(objective, arg);
+                if(objective.getType() == TypeObjective.PANDA){
+                    bot.addScorePanda(objective);
+                }
                 if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
                     System.out.println(objective.toString() + ", a été réalisé");
                 }

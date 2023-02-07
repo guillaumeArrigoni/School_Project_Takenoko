@@ -26,7 +26,6 @@ import com.beust.jcommander.JCommander;
 
 public class Main {
 
-
     @Parameter(names={"--2thousands"}, arity=0)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
@@ -48,7 +47,9 @@ public class Main {
                 .parse(args);
 
         if (main.twoThousands || main.csv) {
+            int numberOfPlayer = 2;
             Log log = new Log();
+            log.logInit(numberOfPlayer);
             for (int i = 0; i < 10; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1);
@@ -63,30 +64,22 @@ public class Main {
                 Game game = new Game(playerList,board);
                 int winner = game.play(gestionnaire, "twoThousands");
 
-                log.logResult(winner, bot1.getScore(), bot2.getScore());
+                int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore()};
+                log.logResult(winner, scoreForBots);
             }
 
-            float winPercentageForBot1 = log.getWinPercentageForBot1();
-            float winPercentageForBot2 = log.getWinPercentageForBot2();
+            ArrayList<Float> winPercentageForBots = new ArrayList<>();
+            ArrayList<Float> meanScoreForBots = new ArrayList<>();
 
-            float meanScoreForBot1 = log.getMeanScoreForBot1();
-            float meanScoreForBot2 = log.getMeanScoreForBot2();
+            for (int i = 0; i < numberOfPlayer; i++) {
+                winPercentageForBots.add(log.getWinPercentageForIndex(i));
+                meanScoreForBots.add(log.getMeanScoreForIndex(i));
+            }
 
-            DecimalFormat df = new DecimalFormat("0.0");
+            log.printLog(numberOfPlayer, winPercentageForBots, meanScoreForBots);
+            //String[] gameStats = {df.format(winPercentageForBot1), df.format(winPercentageForBot2), df.format(meanScoreForBot1), df.format(meanScoreForBot2)};
 
-            System.out.println("------------------------------------------------");
-            System.out.println("Bot1:");
-            System.out.println(" -Pourcentage de victoire : " + df.format(winPercentageForBot1) + "%");
-            System.out.println(" -Score moyen : " + df.format(meanScoreForBot1));
-            System.out.println("------------------------------------------------");
-            System.out.println("Bot2:");
-            System.out.println(" -Pourcentage de victoire : " + df.format(winPercentageForBot2) + "%");
-            System.out.println(" -Score moyen : " + df.format(meanScoreForBot2));
-            System.out.println("------------------------------------------------");
-
-            String[] gameStats = {df.format(winPercentageForBot1), df.format(winPercentageForBot2), df.format(meanScoreForBot1), df.format(meanScoreForBot2)};
-
-            writer.writeNext(gameStats);
+            //writer.writeNext(gameStats);
 
         }
         else if (main.demo || (!main.twoThousands && !main.csv)) {

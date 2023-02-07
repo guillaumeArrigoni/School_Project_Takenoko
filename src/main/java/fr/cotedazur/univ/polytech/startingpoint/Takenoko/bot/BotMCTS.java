@@ -30,7 +30,7 @@ public class BotMCTS extends Bot{
     }
 
     @Override
-    public void playTurn(MeteoDice.Meteo meteo, String arg) {
+    public void playTurn(MeteoDice.Meteo meteo, String arg) throws CloneNotSupportedException {
         node = new Node(this.createBotSimulator(), 2, meteo, arg);
         instructions = node.getBestInstruction();
 //        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
@@ -61,6 +61,8 @@ public class BotMCTS extends Bot{
         //Choose a random tile from the tiles drawn
         int placedTileIndex = 0;
         HexagoneBox tileToPlace = list.get(placedTileIndex);
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(1));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(2));
         //Choose a random available space
         int[] placedTileCoords = instructions.get(0).getParameters();
         //Set the coords of the tile

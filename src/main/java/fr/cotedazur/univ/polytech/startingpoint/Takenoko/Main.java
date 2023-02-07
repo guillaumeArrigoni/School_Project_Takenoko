@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.opencsv.CSVWriter;
 
@@ -9,22 +10,19 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 import com.opencsv.ICSVWriter;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.text.DecimalFormat;
 import java.util.*;
-
-import com.beust.jcommander.JCommander;
 //https://www.redblobgames.com/grids/hexagons/#coordinates
 
 public class Main {
-
     //parameters for JCommander
     @Parameter(names={"--2thousands"}, arity=0)
     boolean twoThousands;
@@ -32,9 +30,7 @@ public class Main {
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
     boolean csv;
-
-    public static void main(String... args) throws IOException {
-
+    public static void main(String... args) throws IOException,CloneNotSupportedException {
         //detection of arg for JCommander
         Main main = new Main();
         JCommander.newBuilder()
@@ -51,6 +47,11 @@ public class Main {
                 Board board = new Board(retrieving, 1);
                 Random random = new Random();
                 GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
+                gestionnaire.initialize(
+                        gestionnaire.ListOfObjectiveParcelleByDefault(),
+                        gestionnaire.ListOfObjectiveJardinierByDefault(),
+                        gestionnaire.ListOfObjectivePandaByDefault()
+                );
                 Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
                 Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
                 List<Bot> playerList = new ArrayList<>();

@@ -340,6 +340,5 @@ class GestionObjectivesTest {
         assertEquals(winnerGame2,gestionObjectives.getWinner(game2));
         assertEquals(winnerGame3,gestionObjectives.getWinner(game3));
         assertEquals(winnerGame4,gestionObjectives.getWinner(game4));
-
     }
 }

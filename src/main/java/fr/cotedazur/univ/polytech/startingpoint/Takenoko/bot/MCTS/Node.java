@@ -16,7 +16,7 @@ public class Node {
     private ActionLog instruction;
     private List<Node> children;
 
-    public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg) {
+    public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg) throws CloneNotSupportedException {
         this.profondeur = profondeur*2;
         this.value = new GameState(bot, meteo);
         this.children = new ArrayList<>();
@@ -33,7 +33,7 @@ public class Node {
         this.instruction = bot.getInstructions();
     }
 
-    public void createChildren(String arg) {
+    public void createChildren(String arg) throws CloneNotSupportedException {
         if(profondeur > 0 && profondeur % 2 == 0) {
             List<ActionLog> firstIntruction = createFirstInstruction();
             for (ActionLog actionLog : firstIntruction) {

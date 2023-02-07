@@ -107,7 +107,7 @@ public class GenerateAWayToIrrigateTheBox {
 
     private int tryGetRange(Crest crest){
         try {
-            return crestGestionnary.getRangeFromIrrigatedOfCrest(crest);
+            return crestGestionnarySimulation.getRangeFromIrrigatedOfCrest(crest);
         } catch (CrestNotRegistered e) {
             System.err.println("\n  -> An error has occurred : "
                     + e.getErrorTitle()

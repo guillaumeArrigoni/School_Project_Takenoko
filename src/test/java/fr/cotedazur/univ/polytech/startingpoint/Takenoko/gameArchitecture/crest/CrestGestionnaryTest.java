@@ -121,6 +121,7 @@ class CrestGestionnaryTest {
     void testIf_CrestAreGenerated_And_PlacedInHashMapParentToChildren(Crest crest, boolean bool) {
         setup_placeBox_5_4_13();
         assertEquals(bool, board.getCrestGestionnary().getLinkCrestParentToCrestChildren().containsKey(crest));
+        System.out.println();
     }
 
     @ParameterizedTest

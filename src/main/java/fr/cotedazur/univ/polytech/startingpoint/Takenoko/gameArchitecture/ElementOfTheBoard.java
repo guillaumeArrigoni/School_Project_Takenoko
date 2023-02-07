@@ -12,7 +12,7 @@ import java.util.*;
 
 public class ElementOfTheBoard {
 
-    private HashMap<Color,Integer> nbOfBambooForEachColorAvailable = new HashMap<>();
+    protected HashMap<Color,Integer> nbOfBambooForEachColorAvailable = new HashMap<>();
     protected final HashMap<Color,Integer> defaultInstructionBamboo = new HashMap<Color,Integer>() {{
         put(Color.Vert, 36);
         put(Color.Jaune, 30);
@@ -32,7 +32,7 @@ public class ElementOfTheBoard {
         put(new HexagoneBox(Color.Rouge,Special.Protéger),1);
         put(new HexagoneBox(Color.Rouge,Special.SourceEau),1);
     }};
-    private StackOfBox stackOfBox;
+    protected StackOfBox stackOfBox;
 
 
     public ElementOfTheBoard(HashMap<Color,Integer> instructionBamboo, HashMap<HexagoneBox,Integer> instructionBox){
@@ -64,13 +64,6 @@ public class ElementOfTheBoard {
     public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor,
                              ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox){
         this(listOfBambooAvailable,listOfColor,false,listOfBoxAvailable,listOfBox,false);
-    }
-
-    public ElementOfTheBoard copy(){
-        ElementOfTheBoard res = new ElementOfTheBoard();
-        res.stackOfBox = this.stackOfBox.copy();
-        res.nbOfBambooForEachColorAvailable = new HashMap<>(this.nbOfBambooForEachColorAvailable);
-        return res;
     }
 
 

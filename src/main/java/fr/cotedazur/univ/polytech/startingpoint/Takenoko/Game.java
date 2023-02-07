@@ -33,7 +33,7 @@ public class Game {
         System.out.println(" ");
     }
 
-    public int play(GestionObjectives gestionnaire, String arg) {
+    public int play(GestionObjectives gestionnaire, String arg) throws CloneNotSupportedException {
         gestionnaire.initialize(
                 gestionnaire.ListOfObjectiveParcelleByDefault(),
                 gestionnaire.ListOfObjectiveJardinierByDefault(),

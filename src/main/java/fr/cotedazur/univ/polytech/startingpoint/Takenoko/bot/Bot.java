@@ -73,7 +73,7 @@ public abstract class Bot {
     }
 
     public BotSimulator createBotSimulator(ActionLog instructions) throws CloneNotSupportedException {
-        Board tmpBoard = new BoardSimulation(this.board);
+        Board tmpBoard = new BoardSimulation(this.board,this.board.getElementOfTheBoard());
         RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         return new BotSimulator(this.name,
                 tmpBoard,
@@ -84,7 +84,7 @@ public abstract class Bot {
     }
 
     public BotSimulator createBotSimulator() throws CloneNotSupportedException {
-        Board tmpBoard = new BoardSimulation(this.board);
+        Board tmpBoard = new BoardSimulation(this.board,this.board.getElementOfTheBoard());
         RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         return new BotSimulator(this.name,
                 tmpBoard,

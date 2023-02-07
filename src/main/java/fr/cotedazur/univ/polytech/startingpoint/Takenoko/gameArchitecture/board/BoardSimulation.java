@@ -1,25 +1,31 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnarySimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
 public class BoardSimulation extends Board {
 
     protected RetrieveSimulation retrieveSimulation;
     protected CrestGestionnarySimulation crestGestionnarySimulation;
-    protected ElementOfTheBoardCheated elementOfTheBoardCheated;
     public BoardSimulation(Board board) {
         this(board, new ElementOfTheBoardCheated());
     }
 
-
-
-    public BoardSimulation(Board board, ElementOfTheBoardCheated elementOfTheBoard) {
+    public BoardSimulation(Board board, ElementOfTheBoard elementOfTheBoard){
         super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoard);
-        this.elementOfTheBoardCheated = elementOfTheBoard;
+        super.elementOfTheBoard = new ElementOfTheBoardSimulation(elementOfTheBoard);
+        setupSimulation(board);
+    }
+
+    public BoardSimulation(Board board, ElementOfTheBoardCheated elementOfTheBoardCheated) {
+        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoardCheated);
+        super.elementOfTheBoard = elementOfTheBoardCheated;
         setupSimulation(board);
     }
 
@@ -37,6 +43,9 @@ public class BoardSimulation extends Board {
         super.gardenerCoords = board.getGardenerCoords().clone();
         super.pandaCoords = board.getPandaCoords().clone();
         for (HexagoneBoxPlaced box : board.placedBox.values()) {
+            if (box.getColor()== Color.Lac){
+                continue;
+            }
             super.addBox(new HexagoneBoxSimulation(
                     box.getCoordinates()[0],
                     box.getCoordinates()[1],
@@ -58,10 +67,5 @@ public class BoardSimulation extends Board {
     @Override
     public CrestGestionnarySimulation getCrestGestionnary() {
         return this.crestGestionnarySimulation;
-    }
-
-    @Override
-    public ElementOfTheBoardCheated getElementOfTheBoard() {
-        return this.elementOfTheBoardCheated;
     }
 }

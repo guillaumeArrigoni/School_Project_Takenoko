@@ -229,6 +229,8 @@ public class Board {
             newCoord1 = new int[]{Math.min(x,x1),Math.min(y,y1),z+1};
             newCoord2 = new int[]{Math.max(x,x1),Math.max(y,y1),z-1};
         }
+
+
         addNewBoxInAvailableBox(newCoord1);
         addNewBoxInAvailableBox(newCoord2);
     }

@@ -20,8 +20,8 @@ public class GestionObjectives {
     private ArrayList<ObjectiveParcelle> ParcelleObjectifs;
     private ArrayList<ObjectiveJardinier> JardinierObjectifs;
     private ArrayList<ObjectivePanda> PandaObjectifs;
-
     private final int NB_LISTES_OBJECTIVES = 3;
+    private boolean ABotHasEnoughObjectivesDone;
 
     PatternParcelle POSER_TRIANGLE = new PatternParcelle("TRIANGLE");
     PatternParcelle POSER_LIGNE = new PatternParcelle("LIGNE");
@@ -91,6 +91,7 @@ public class GestionObjectives {
         this.ParcelleObjectifs = new ArrayList<>();
         this.JardinierObjectifs = new ArrayList<>();
         this.PandaObjectifs = new ArrayList<>();
+        this.ABotHasEnoughObjectivesDone = false;
 
     }
     public ArrayList<ObjectiveParcelle> ListOfObjectiveParcelleByDefault(){
@@ -221,11 +222,16 @@ public class GestionObjectives {
             System.out.println(objective);
         }
     }
-    public void checkObjectives(Bot bot, String arg){
+    public void checkObjectives(Bot bot, String arg,int sizePlayerList){
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
                 bot.addScore(objective, arg);
+                bot.IncrementNumberObjectiveDone();
+                addPointsIfEnoughObjectivesDone(bot, sizePlayerList);
+                if(objective.getType() == TypeObjective.PANDA){
+                    bot.addScorePanda(objective);
+                }
                 if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
                     System.out.println(objective.toString() + ", a été réalisé");
                 }
@@ -235,6 +241,21 @@ public class GestionObjectives {
         ArrayList<Objective> listOfAllObjectivesFromABot = bot.getObjectives();
         listOfAllObjectivesFromABot.removeAll(listOfObjectifDone);
         bot.setObjectives(listOfAllObjectivesFromABot);
+    }
+
+    public int getNumberOfObjectivesDoneToStartLastTurn(int sizePlayerList) {
+        return switch (sizePlayerList){
+            case 2 -> 9;
+            case 3 -> 8;
+            default -> 7;
+        };
+    }
+
+    public void addPointsIfEnoughObjectivesDone(Bot bot, int sizePlayerlist){
+        if(bot.getNumberObjectiveDone() >= this.getNumberOfObjectivesDoneToStartLastTurn(sizePlayerlist) && !this.ABotHasEnoughObjectivesDone){
+            bot.setScore(bot.getScore() + 2);
+            this.ABotHasEnoughObjectivesDone = true;
+        }
     }
 
 

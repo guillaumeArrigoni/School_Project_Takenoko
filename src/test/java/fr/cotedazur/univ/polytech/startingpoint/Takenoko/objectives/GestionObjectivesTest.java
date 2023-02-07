@@ -266,7 +266,7 @@ class GestionObjectivesTest {
     @Test
     void checkObjectives() {
         assertEquals(5, bot.getObjectives().size());
-        gestionObjectives.checkObjectives(bot, arg);
+        gestionObjectives.checkObjectives(bot, arg,2);
         assertEquals(1, bot.getObjectives().size());
     }
 

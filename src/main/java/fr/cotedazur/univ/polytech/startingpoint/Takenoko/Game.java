@@ -53,32 +53,31 @@ public class Game {
             if (turnNumber != 1) meteo = meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);
             playingBot.playTurn(meteo, arg);
-            gestionnaire.checkObjectives(playingBot, arg);
+            gestionnaire.checkObjectives(playingBot, arg, numberPlayer);
             if (arg.equals("demo")) printBoardState(board);
             if (board.getNumberBoxPlaced() > 20) {
                 playing = false;
                 if (arg.equals("demo")) {
-                    for (int i = 0; i < numberPlayer; i++) {
-                        System.out.println("Score de " + this.playerList.get(i).getName() + " : " + this.playerList.get(i).getScore());
+                    for (Bot bot : playerList) {
+                        System.out.println("Score de " + bot.getName() + " : " + bot.getScore());
                     }
                 }
-                //A changer pour avoir un nombre indéfini de joueur
-                Bot bot1 = this.playerList.get(0);
-                Bot bot2 = this.playerList.get(1);
                 if (arg.equals("demo")) gestionnaire.printWinner(gestionnaire.getWinner(playerList));
             }
             if (arg.equals("demo")) System.out.println("------------------------------------------");
             turn = (turn + 1)%numberPlayer;
             this.turnNumber++;
         }
-        if (this.playerList.get(0).getScore() > this.playerList.get(1).getScore()) {
-            return 1;
-        }
-        else if (this.playerList.get(0).getScore() < this.playerList.get(1).getScore()){
-            return 2;
-        }
-        else {
+        if(gestionnaire.getWinner(playerList).size()>1){
             return 0;
         }
+        else {
+            for (int i = 0; i < numberPlayer; i++) {
+                if (gestionnaire.getWinner(playerList).contains(playerList.get(i))) {
+                    return i + 1;
+                }
+            }
+        }
+        return 0;
     }
 }

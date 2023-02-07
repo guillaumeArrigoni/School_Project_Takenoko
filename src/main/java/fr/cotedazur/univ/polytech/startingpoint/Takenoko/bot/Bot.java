@@ -33,6 +33,8 @@ public abstract class Bot {
 
     protected int scorePanda;
 
+    protected int numberObjectiveDone;
+
     /**
      * The list of possible actions
      */
@@ -61,6 +63,7 @@ public abstract class Bot {
         this.board = board;
         this.score = 0;
         this.scorePanda = 0;
+        this.numberObjectiveDone = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -167,6 +170,10 @@ public abstract class Bot {
         return this.scorePanda;
     }
 
+    public int getNumberObjectiveDone() {
+        return numberObjectiveDone;
+    }
+
     public void setScore(int score) {
         this.score = score;
     }
@@ -223,4 +230,7 @@ public abstract class Bot {
     }
 
 
+    public void IncrementNumberObjectiveDone() {
+        this.numberObjectiveDone++;
+    }
 }

@@ -3,13 +3,12 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 import com.beust.jcommander.Parameter;
 import com.opencsv.CSVWriter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URL;
+import java.io.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
-import java.nio.file.*;
-
+import com.opencsv.ICSVWriter;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
@@ -26,6 +25,7 @@ import com.beust.jcommander.JCommander;
 
 public class Main {
 
+    //parameters for JCommander
     @Parameter(names={"--2thousands"}, arity=0)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
@@ -34,12 +34,8 @@ public class Main {
     boolean csv;
 
     public static void main(String... args) throws IOException {
-        FileSystem fs = FileSystems.getDefault();
-        Path path = fs.getPath("./stats/", "stats.csv");
-        System.out.println(path.toString());
-        File file = new File(path.toString());
-        CSVWriter writer = new CSVWriter(new FileWriter(file));
 
+        //detection of arg for JCommander
         Main main = new Main();
         JCommander.newBuilder()
                 .addObject(main)
@@ -53,7 +49,6 @@ public class Main {
             for (int i = 0; i < 10; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1);
-                MeteoDice meteoDice = new MeteoDice();
                 Random random = new Random();
                 GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
                 Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
@@ -77,15 +72,72 @@ public class Main {
             }
 
             log.printLog(numberOfPlayer, winPercentageForBots, meanScoreForBots);
-            //String[] gameStats = {df.format(winPercentageForBot1), df.format(winPercentageForBot2), df.format(meanScoreForBot1), df.format(meanScoreForBot2)};
 
-            //writer.writeNext(gameStats);
+            if (main.csv) {
+                //creation of a writer for csv
+                FileSystem fs = FileSystems.getDefault();
+                Path path = fs.getPath("./stats/", "stats.csv");
+                File file = new File(path.toString());
+                CSVWriter writer = new CSVWriter(new FileWriter(file, true),
+                        ' ',
+                        ICSVWriter.NO_QUOTE_CHARACTER,
+                        ICSVWriter.NO_ESCAPE_CHARACTER,
+                        ICSVWriter.DEFAULT_LINE_END);
 
+
+                int lineCount = 0;
+                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                    while (reader.readLine() != null) {
+                        lineCount++;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String[] separator = new String[20];
+                Arrays.fill(separator, "-");
+                String[] winPercentage = winPercentageForBots.stream().map(String::valueOf).toArray(String[]::new);
+                String[] meanScore = meanScoreForBots.stream().map(String::valueOf).toArray(String[]::new);
+                String[] header = new String[numberOfPlayer+1];
+                String[] firstLine = new String[numberOfPlayer+1];
+                String[] secondLine = new String[numberOfPlayer+1];
+
+                header[0] = "          ";
+                firstLine[0] = "Winrate   ";
+                secondLine[0] = "Score     ";
+                String space;
+
+                for (int i = 1; i < numberOfPlayer+1; i++) {
+                    header[i] = "Bot" + i + "   ";
+                    if (winPercentage[i-1].length() > 4) {
+                        space = " ";
+                    }
+                    else if (winPercentage[i-1].length() == 4) {
+                        space = "  ";
+                    }
+                    else {
+                        space = "   ";
+                    }
+                    firstLine[i] = winPercentage[i-1] + "%" + space;
+                    if (meanScore[i-1].length() > 3) {
+                        space = "   ";
+                    }
+                    else {
+                        space = "    ";
+                    }
+                    secondLine[i] = meanScore[i-1] + space;
+                }
+                writer.writeNext(new String[]{"Simulation " + (lineCount/5 + 1) + " :"});
+                writer.writeNext(header);
+                writer.writeNext(firstLine);
+                writer.writeNext(secondLine);
+                writer.writeNext(separator);
+                writer.close();
+            }
         }
         else if (main.demo || (!main.twoThousands && !main.csv)) {
             RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
             Board board = new Board(retrieving, 1);
-            MeteoDice meteoDice = new MeteoDice();
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
             Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
@@ -98,7 +150,6 @@ public class Main {
             game.play(gestionnaire, "demo");
         }
 
-        writer.close();
 
     }
 }

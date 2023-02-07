@@ -32,8 +32,8 @@ public class BotMCTS extends Bot{
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg) {
         node = new Node(this.createBotSimulator(), 2, meteo, arg);
-        instructions = node.getBestInstruction(arg);
-//        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
+        instructions = node.getBestInstruction();
+        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
         for(int i = 0; i < instructions.size(); i++){
             doAction(arg);
         }
@@ -59,16 +59,16 @@ public class BotMCTS extends Bot{
         for(int i = 0; i < 3; i++)
             list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
         //Choose a random tile from the tiles drawn
-        int placedTileIndex = 0;
+        int placedTileIndex = instructions.get(0).getParameters()[3];
         HexagoneBox tileToPlace = list.get(placedTileIndex);
         //Choose a random available space
-        int[] placedTileCoords = instructions.get(0).getParameters();
+        int[] placedTileCoords = new int[]{instructions.get(0).getParameters()[0],instructions.get(0).getParameters()[1],instructions.get(0).getParameters()[2]};
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(1));
-        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(2));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
         if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 

@@ -76,6 +76,7 @@ public abstract class Bot {
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
+                new ArrayList<>(this.objectives),
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
                 instructions);
@@ -87,6 +88,7 @@ public abstract class Bot {
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
+                new ArrayList<>(this.objectives),
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
                 null);

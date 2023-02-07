@@ -10,6 +10,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjec
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,8 +30,9 @@ public class BotSimulator extends Bot{
      * @param retrieveBoxIdWithParameters
      * @param bambooEated
      */
-    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions) {
+    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, ArrayList<Objective> objectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions) {
         super(name + 's', board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+        this.objectives = objectives;
         this.instructions = instructions;
         legal = true;
 
@@ -71,9 +73,9 @@ public class BotSimulator extends Bot{
         for(int i = 0; i < 3; i++)
             list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
         //Choose a random tile from the tiles drawn
-        HexagoneBox tileToPlace = list.get(0);
+        HexagoneBox tileToPlace = list.get(instructions.getParameters()[3]);
         //Choose a random available space
-        int[] placedTileCoords = instructions.getParameters();
+        int[] placedTileCoords = new int[]{instructions.getParameters()[0],instructions.getParameters()[1],instructions.getParameters()[2]};
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
@@ -82,12 +84,15 @@ public class BotSimulator extends Bot{
 
     @Override
     protected void moveGardener(String arg) {
-        if(Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).contains(instructions.getParameters()))
+        board.setGardenerCoords(instructions.getParameters());
+    }
+    /*
+            if(Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).contains(instructions.getParameters()))
             board.setGardenerCoords(instructions.getParameters());
         else{
             legal = false;
         }
-    }
+     */
 
     @Override
     protected void movePanda(String arg) {

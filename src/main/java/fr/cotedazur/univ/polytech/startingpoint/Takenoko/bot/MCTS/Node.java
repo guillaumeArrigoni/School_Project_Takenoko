@@ -8,6 +8,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Node {
     private int profondeur;
@@ -17,12 +18,20 @@ public class Node {
     private List<Node> children;
 
     public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg) {
-        this.profondeur = profondeur*2;
+        this.profondeur = profondeur;
         this.value = new GameState(bot, meteo);
         this.children = new ArrayList<>();
         this.parent = null;
         this.instruction = null;
         createChildren(arg);
+    }
+
+    public Node(){
+        this.profondeur = 0;
+        this.value = new GameState();
+        this.children = new ArrayList<>();
+        this.parent = null;
+        this.instruction = null;
     }
 
     protected Node(BotSimulator bot, int profondeur, Node parent, MeteoDice.Meteo meteo) {
@@ -34,24 +43,47 @@ public class Node {
     }
 
     public void createChildren(String arg) {
-        if(profondeur > 0 && profondeur % 2 == 0) {
+        if(profondeur > 0 ) {
             List<ActionLog> firstIntruction = createFirstInstruction();
-            for (ActionLog actionLog : firstIntruction) {
-                BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
-                botSimulator.playTurn(value.getMeteo(), arg);
-                botSimulator.getGestionObjectives().checkObjectives(botSimulator, arg);
-                children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+            activateBotSimulator(arg, firstIntruction);
+            if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                createChildrenIfNoGoodOption(arg);
             }
-        } else if (profondeur > 0) {
+        } else if (profondeur == 0) {
             List<ActionLog> secondIntruction = createSecondInstruction(instruction.getAction());
-            for (ActionLog actionLog : secondIntruction) {
-                BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
-                botSimulator.playTurn(value.getMeteo(), arg);
-                botSimulator.getGestionObjectives().checkObjectives(botSimulator, arg);
-                children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+            activateBotSimulator(arg, secondIntruction);
+            if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                createChildrenIfNoGoodOption(arg);
             }
-        }if(profondeur > 1)
-            this.getBestChild(arg).createChildren(arg);
+        }if(profondeur > 0)
+            this.getBestChild().createChildren(arg);
+    }
+
+
+
+    private void createChildrenIfNoGoodOption(String arg) {
+        if (this.getValue().getBotSimulator().getObjectives().size() < 5) {
+            simulateObjectivePicking(arg);
+        }else {
+            simulateDrawAndPutTile(arg);
+        }
+        if(this.children.isEmpty())
+            simulateDrawAndPutTile(arg);
+        else if(this.children.get(children.size()-1).getValue().getScore() < 0){
+            simulateDrawAndPutTile(arg);
+        }
+    }
+
+    public List<ActionLog> createDrawAndPutTileInstructions(){
+        List<ActionLog> drawAndPutTileInstructions = new ArrayList<>();
+        int[] parameters;
+        for (int i = 0; i < 3; i++) {
+            for(int[] coords : this.getValue().getBotSimulator().getBoard().getAvailableBox()){
+                parameters = new int[]{coords[0], coords[1], coords[2], i};
+                drawAndPutTileInstructions.add(new ActionLog(PossibleActions.DRAW_AND_PUT_TILE, parameters));
+            }
+        }
+        return drawAndPutTileInstructions;
     }
 
     public List<ActionLog> createFirstInstruction(){
@@ -114,26 +146,34 @@ public class Node {
         } else {
             actionlog = new ActionLog(PossibleActions.DRAW_OBJECTIVE, 2);
         }
-        BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionlog);
-        botSimulator.playTurn(value.getMeteo(),arg);
-        botSimulator.getGestionObjectives().checkObjectives(botSimulator, arg);
-        children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+        activateBotSimulator(arg, List.of(actionlog));
+        if(children.get(children.size()-1).getValue().getScore() >= 0){
+            children.subList(0, children.size() - 1).clear();
+        }
+    }
+
+    private void activateBotSimulator(String arg, List<ActionLog> instructions) {
+        for (ActionLog actionLog : instructions) {
+            BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
+            botSimulator.playTurn(value.getMeteo(), arg);
+            botSimulator.getGestionObjectives().checkObjectives(botSimulator, arg);
+            children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+        }
     }
 
     private void simulateDrawAndPutTile(String arg){
-        ActionLog actionlog;
-        actionlog = new ActionLog(PossibleActions.DRAW_AND_PUT_TILE, value.getBoard().getAvailableBox().get(0));
-        BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionlog);
-        botSimulator.playTurn(value.getMeteo(),arg);
-        botSimulator.getGestionObjectives().checkObjectives(botSimulator,arg);
-        children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+        List<ActionLog> tmp = createDrawAndPutTileInstructions();
+        activateBotSimulator(arg, tmp);
+        if(children.get(children.size()-tmp.size()).getValue().getScore() >= 0){
+            children.subList(0, children.size() - tmp.size()).clear();
+        }
     }
 
 
 
-    public Node getBestChild(String arg){
-        Node bestChild = null;
-        boolean goodChild = false;
+    public Node getBestChild(){
+        Node bestChild = new Node();
+        //Check if the childrens are good choices
         if(!children.isEmpty()) {
             bestChild = children.get(0);
             for (Node child : children) {
@@ -141,30 +181,15 @@ public class Node {
                     bestChild = child;
                 }
             }
-            if(bestChild.getValue().getScore() > this.value.getScore()){
-                goodChild = true;
-            }
-        }
-        if(!goodChild && this.getValue().getBotSimulator().getObjectives().size() < 5){
-            simulateObjectivePicking(arg);
-            if(children.get(children.size()-1).getValue().getScore() >= 0){
-                bestChild = children.get(children.size()-1);
-                goodChild = true;
-            }
-        }if(!goodChild){
-            simulateDrawAndPutTile(arg);
-            if(children.get(children.size()-1).getValue().getScore() >= 0) {
-                bestChild = children.get(children.size() - 1);
-            }
         }
         return bestChild;
     }
 
-    public List<ActionLog> getBestInstruction(String arg){
+    public List<ActionLog> getBestInstruction(){
         List<ActionLog> bestInstruction = new ArrayList<>();
-        Node bestChild = getBestChild(arg);
-        while(bestChild.profondeur > 1){
-            bestChild = bestChild.getBestChild(arg);
+        Node bestChild = getBestChild();
+        while(bestChild.profondeur > 0){
+            bestChild = bestChild.getBestChild();
         }
         bestInstruction.add(bestChild.getInstruction());
         while(bestChild.getParent() != null){

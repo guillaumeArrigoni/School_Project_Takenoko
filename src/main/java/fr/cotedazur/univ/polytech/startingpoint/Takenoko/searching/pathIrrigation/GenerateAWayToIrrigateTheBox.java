@@ -5,18 +5,24 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnarySimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 public class GenerateAWayToIrrigateTheBox {
 
     private final HexagoneBoxPlaced box;
     private final CrestGestionnary crestGestionnary;
     private ArrayList<Crest> closestCrestToIrrigatedOfTheBox;
+
+    private BoardSimulation boardSimulation;
+    private CrestGestionnarySimulation crestGestionnarySimulation;
     /**
      * To have a path just take the first element for the different ArrayList :
      * pathToIrrigation.get(0).get(0)
@@ -27,13 +33,13 @@ public class GenerateAWayToIrrigateTheBox {
      */
     private ArrayList<ArrayList<Crest>> pathToIrrigation;
 
-    public GenerateAWayToIrrigateTheBox(HexagoneBoxPlaced box) throws CrestNotRegistered {
+    public GenerateAWayToIrrigateTheBox(HexagoneBoxPlaced box) throws CrestNotRegistered, CloneNotSupportedException {
         this.box = box;
         this.crestGestionnary = box.getBoard().getCrestGestionnary();
         setup();
     }
 
-    public GenerateAWayToIrrigateTheBox(HexagoneBoxPlaced box, BoardSimulation board) throws CrestNotRegistered {
+    public GenerateAWayToIrrigateTheBox(HexagoneBoxPlaced box, BoardSimulation board) throws CrestNotRegistered, CloneNotSupportedException {
         this.box = box;
         this.crestGestionnary = board.getCrestGestionnary();
         setup();
@@ -47,8 +53,13 @@ public class GenerateAWayToIrrigateTheBox {
         return pathToIrrigation;
     }
 
-    private void setup() throws CrestNotRegistered {
+    private void setup() throws CrestNotRegistered, CloneNotSupportedException {
         setupClosestCrest();
+        this.boardSimulation = new BoardSimulation((Board) box.getBoard().clone());
+        this.crestGestionnarySimulation = boardSimulation.getCrestGestionnary();
+        boardSimulation.addBox(box);
+        System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+        System.out.println(closestCrestToIrrigatedOfTheBox);
         setupPath(closestCrestToIrrigatedOfTheBox);
     }
 
@@ -77,12 +88,19 @@ public class GenerateAWayToIrrigateTheBox {
         intructions.add(new ArrayList<>(crests));
         int rangeFirstCrestInlist = tryGetRange(intructions.get(0).get(0));
         while (rangeFirstCrestInlist != 1) {
-            ArrayList<Crest> listCrestToAdd = crestGestionnary.getLinkCrestChildrenToCrestParent().get(intructions.get(0).get(0));
+            ArrayList<Crest> listCrestToAdd = crestGestionnarySimulation.getLinkCrestChildrenToCrestParent().get(intructions.get(0).get(0));
             for (Crest crestInList : intructions.get(0)){
-                listCrestToAdd.addAll(crestGestionnary.getLinkCrestChildrenToCrestParent().get(crestInList));
+                System.out.println("aaa");
+                System.out.println(intructions.get(0).size());
+                listCrestToAdd.addAll((Collection<? extends Crest>) crestGestionnarySimulation.getLinkCrestChildrenToCrestParent().get(crestInList).clone());
+                LinkedHashSet<Crest> set = new LinkedHashSet<>(listCrestToAdd);
+                listCrestToAdd.clear();
+                listCrestToAdd.addAll(set);
             }
             intructions.add(0,listCrestToAdd);
             rangeFirstCrestInlist = tryGetRange(intructions.get(0).get(0));
+            System.out.println("ttttttt");
+            System.out.println(rangeFirstCrestInlist);
         }
         this.pathToIrrigation = intructions;
     }

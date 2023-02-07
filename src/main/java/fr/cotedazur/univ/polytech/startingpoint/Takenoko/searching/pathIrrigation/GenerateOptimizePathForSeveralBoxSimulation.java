@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class GenerateOptimizePathForSeveralBoxSimulation extends GenerateOptimizePathForSeveralBox{
 
-    public GenerateOptimizePathForSeveralBoxSimulation(ArrayList<HexagoneBoxSimulation> boxs) throws CrestNotRegistered {
+    public GenerateOptimizePathForSeveralBoxSimulation(ArrayList<HexagoneBoxSimulation> boxs) throws CrestNotRegistered, CloneNotSupportedException {
         super(new ArrayList<HexagoneBoxPlaced>(),false);
         super.boxToIrrigate = convertListOfBoxSimulationToBoxPlaced(boxs);
         super.crestGestionnary = boxs.get(0).getBoard().getCrestGestionnary();

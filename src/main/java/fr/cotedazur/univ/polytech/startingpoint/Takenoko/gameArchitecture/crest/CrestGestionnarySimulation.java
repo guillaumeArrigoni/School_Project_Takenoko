@@ -11,13 +11,13 @@ public class CrestGestionnarySimulation extends  CrestGestionnary {
     }
 
     private void setupGeneral(CrestGestionnary crestGestionnary){
-        this.linkCrestParentToCrestChildren = crestGestionnary.getLinkCrestParentToCrestChildren();
-        this.linkCrestChildrenToCrestParent = crestGestionnary.getLinkCrestChildrenToCrestParent();
-        this.rangeFromIrrigated = crestGestionnary.getRangeFromIrrigated();
-        this.parentChildless = crestGestionnary.getParentChildless();
-        this.alreadyIrrigated = crestGestionnary.getAlreadyIrrigated();
-        this.listOfCrestOneRangeToIrrigated = crestGestionnary.getListOfCrestOneRangeToIrrigated();
-        this.listOfCrestIrrigated = crestGestionnary.getListOfCrestIrrigated();
+        this.linkCrestParentToCrestChildren = (HashMap<Crest, ArrayList<Crest>>) crestGestionnary.getLinkCrestParentToCrestChildren().clone();
+        this.linkCrestChildrenToCrestParent = (HashMap<Crest, ArrayList<Crest>>) crestGestionnary.getLinkCrestChildrenToCrestParent().clone();
+        this.rangeFromIrrigated = (HashMap<Crest, Integer>) crestGestionnary.getRangeFromIrrigated().clone();
+        this.parentChildless = (ArrayList<Crest>) crestGestionnary.getParentChildless().clone();
+        this.alreadyIrrigated = (ArrayList<Integer>) crestGestionnary.getAlreadyIrrigated().clone();
+        this.listOfCrestOneRangeToIrrigated = (ArrayList<Crest>) crestGestionnary.getListOfCrestOneRangeToIrrigated().clone();
+        this.listOfCrestIrrigated = (ArrayList<Crest>) crestGestionnary.getListOfCrestIrrigated().clone();
     }
 
 }

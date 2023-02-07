@@ -32,6 +32,11 @@ public class Combination<T> implements Comparable<Combination>{
         this.size = this.size +1;
     }
 
+    public void removeElement(int i){
+        this.listOfElementInTheCombination.remove(i);
+        this.size = this.size -1;
+    }
+
     @Override
     public int compareTo(Combination combination) {
         if (new HashSet<T>(this.listOfElementInTheCombination).equals(new HashSet<T>(combination.listOfElementInTheCombination))){
@@ -62,5 +67,13 @@ public class Combination<T> implements Comparable<Combination>{
     public int hashCode() {
         Set<T> set = new HashSet<>(this.listOfElementInTheCombination);
         return Objects.hash(set);
+    }
+
+    @Override
+    public Combination<T> clone() throws CloneNotSupportedException {
+        Combination<T> clone = new Combination<>();
+        clone.size = this.size;
+        clone.listOfElementInTheCombination = (ArrayList<T>) this.listOfElementInTheCombination.clone();
+        return clone;
     }
 }

@@ -41,7 +41,7 @@ class GenerateOptimizePathForSeveralBoxTest {
 
     @BeforeAll
     @Order(1)
-    public static void setup() throws CrestNotRegistered {
+    public static void setup() throws CrestNotRegistered, CloneNotSupportedException {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,false,1);
         boardSimulation = new BoardSimulation(board);
@@ -99,7 +99,7 @@ class GenerateOptimizePathForSeveralBoxTest {
         for (HexagoneBoxPlaced box : boxToIrrigate){
             for (int i=0;i<generateOptimizePathForSeveralBox.getPathForEachBox().get(box).size();i++){
                 if (!generateOptimizePathForSeveralBox.getPathForEachBox().get(box).get(i).isIrrigated()){
-                    board.placeIrrigation(generateOptimizePathForSeveralBox.getPathForEachBox().get(box).get(i));
+                    boardSimulation.placeIrrigation(generateOptimizePathForSeveralBox.getPathForEachBox().get(box).get(i));
                 }
             }
         }

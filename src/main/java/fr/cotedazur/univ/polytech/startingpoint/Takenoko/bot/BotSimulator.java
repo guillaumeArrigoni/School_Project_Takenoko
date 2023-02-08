@@ -9,7 +9,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.lang.reflect.Array;
@@ -32,11 +31,12 @@ public class BotSimulator extends Bot{
      * @param retrieveBoxIdWithParameters
      * @param bambooEated
      */
-    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, ArrayList<Objective> objectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions,int nbIrrigation, LogInfoDemo logInfoDemo) {
-        super(name + 's', board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
+    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, ArrayList<Objective> objectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions, int nbIrrigation, LogInfoDemo logInfoDemo, int numberObjectiveDone) {
+        super(name + 's', board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
         this.objectives = objectives;
         this.instructions = instructions;
         this.nbIrrigation = nbIrrigation;
+        this.numberObjectiveDone = numberObjectiveDone;
         legal = true;
 
     }
@@ -47,18 +47,25 @@ public class BotSimulator extends Bot{
             legal = false;
             return;
         }
-        launchAction(arg);
+        doAction(arg);
     }
 
     @Override
-    public void movePandaStorm() {
+    protected void doAction(String arg) {
+        switch (instructions.getAction()){
+            case DRAW_AND_PUT_TILE:
+                placeTile(arg);
+                break;
+            case MOVE_GARDENER:
+                moveGardener(arg);
+                break;
+            case DRAW_OBJECTIVE:
+                drawObjective(arg);
+                break;
+            default://MOVE PANDA
+                movePanda(arg);
+        }
 
-    }
-
-    @Override
-    protected void launchAction(String arg){
-        PossibleActions action = instructions.getAction();
-        doAction(arg,action);
     }
 
     @Override
@@ -96,11 +103,6 @@ public class BotSimulator extends Bot{
     }
 
     @Override
-    protected void placeIrrigation() {
-
-    }
-
-    @Override
     public void drawObjective(String arg) {
         switch(instructions.getParameters()[0]){
             case 0 -> gestionObjectives.rollParcelleObjective(this, arg);
@@ -122,8 +124,4 @@ public class BotSimulator extends Bot{
         return instructions;
     }
 
-    @Override
-    public TypeObjective choseTypeObjectiveToRoll(String arg) {
-        return null;
-    }
 }

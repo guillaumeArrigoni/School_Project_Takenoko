@@ -76,6 +76,7 @@ public class Crest implements Comparable<Crest> {
         generateCoordinatesOfAdjacentBoxToACrest();
     }
 
+
     public void setRange_to_irrigation(int range){
         this.range_to_irrigation = range;
     }

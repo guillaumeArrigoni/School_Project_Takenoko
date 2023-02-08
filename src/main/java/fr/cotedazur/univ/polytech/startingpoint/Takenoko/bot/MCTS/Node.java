@@ -193,7 +193,7 @@ public class Node {
         for (ActionLog actionLog : instructions) {
             BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
             botSimulator.playTurn(value.getMeteo(), arg);
-            botSimulator.getGestionObjectives().checkObjectives(botSimulator, arg);
+            botSimulator.getGestionObjectives().checkObjectives(botSimulator, arg, botSimulator.getBoard().getNumberOfPlayers());
             children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
         }
     }

@@ -11,6 +11,8 @@ import java.net.URL;
 
 import java.nio.file.*;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoStats;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
@@ -42,6 +44,8 @@ public class Main {
         CSVWriter writer = new CSVWriter(new FileWriter(file));
 
         Main main = new Main();
+        LogInfoDemo logDemo = new LogInfoDemo(main.demo);
+        LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
         JCommander.newBuilder()
                 .addObject(main)
                 .build()
@@ -62,12 +66,12 @@ public class Main {
                         gestionnaire.ListOfObjectiveJardinierByDefault(),
                         gestionnaire.ListOfObjectivePandaByDefault()
                 );
-                Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
-                Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
+                Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 List<Bot> playerList = new ArrayList<>();
                 playerList.add(bot1);
                 playerList.add(bot2);
-                Game game = new Game(playerList,board);
+                Game game = new Game(playerList,board,logDemo);
                 int winner = game.play(gestionnaire, "twoThousands");
 
                 int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore()};
@@ -94,17 +98,16 @@ public class Main {
             MeteoDice meteoDice = new MeteoDice();
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
-            Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
-            Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
+            Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             List<Bot> playerList = new ArrayList<>();
             playerList.add(bot1);
             playerList.add(bot2);
-            Game game = new Game(playerList,board);
+            Game game = new Game(playerList,board,logDemo);
             System.out.println(bot1.getBoard().getElementOfTheBoard().getStackOfBox());
             game.play(gestionnaire, "demo");
         }
 
         writer.close();
-
     }
 }

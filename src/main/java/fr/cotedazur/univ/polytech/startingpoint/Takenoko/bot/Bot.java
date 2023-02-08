@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
@@ -49,6 +50,7 @@ public abstract class Bot {
     public GestionObjectives gestionObjectives;
     public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private AbstractMap <Color,Integer> bambooEaten;
+    protected LogInfoDemo logInfoDemo;
 
 
     //CONSTRUCTOR
@@ -58,7 +60,7 @@ public abstract class Bot {
      * @param name the name of the bot
      * @param board the board of the game
      */
-    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEaten) {
+    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEaten, LogInfoDemo logInfoDemo) {
         this.name = name;
         this.board = board;
         this.score = 0;
@@ -75,7 +77,7 @@ public abstract class Bot {
         resetPossibleAction();
     }
 
-    public BotSimulator createBotSimulator(ActionLog instructions) throws CloneNotSupportedException {
+    public BotSimulator createBotSimulator(ActionLog instructions){
         Board tmpBoard = new BoardSimulation(this.board,this.board.getElementOfTheBoard());
         RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         return new BotSimulator(this.name,
@@ -83,10 +85,10 @@ public abstract class Bot {
                 this.gestionObjectives.copy(tmpBoard, tmp),
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
-                instructions);
+                instructions,logInfoDemo);
     }
 
-    public BotSimulator createBotSimulator() throws CloneNotSupportedException {
+    public BotSimulator createBotSimulator(){
         Board tmpBoard = new BoardSimulation(this.board,this.board.getElementOfTheBoard());
         RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         return new BotSimulator(this.name,
@@ -94,7 +96,7 @@ public abstract class Bot {
                 this.gestionObjectives.copy(tmpBoard, tmp),
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
-                null);
+                null,logInfoDemo);
     }
 
     //METHODS
@@ -110,12 +112,12 @@ public abstract class Bot {
     /**
      * This method is called at the beginning of the turn
      */
-    public void playTurn(MeteoDice.Meteo meteo, String arg) throws CloneNotSupportedException {
+    public void playTurn(MeteoDice.Meteo meteo, String arg){
         possibleActions = PossibleActions.getAllActions();
+        logInfoDemo.displayTextMeteo(meteo);
         switch (meteo){
             case VENT -> {
                 //Deux fois la même action autorisé
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : VENT");
                 launchAction(arg);
                 resetPossibleAction();
                 launchAction(arg);
@@ -123,7 +125,6 @@ public abstract class Bot {
             case PLUIE -> {
                 //Le joueur peut faire pousser une tuile irriguée
                 //TODO c pas implémenté dans la classe hexagoneBox
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
                 launchAction(arg);
                 launchAction(arg);
             }
@@ -155,20 +156,7 @@ public abstract class Bot {
     }
 
     protected void displayTextAction(PossibleActions action){
-        switch (action){
-            case DRAW_AND_PUT_TILE:
-                System.out.println("Le bot a choisi : PiocherPoserTuile");
-                break;
-            case MOVE_GARDENER:
-                System.out.println("Le bot a choisi : BougerJardinier");
-                break;
-            case DRAW_OBJECTIVE:
-                System.out.println("Le bot a choisi : PiocherObjectif");
-                break;
-            case MOVE_PANDA:
-                System.out.println("Le bot a choisi : BougerPanda");
-                break;
-        }
+        logInfoDemo.displayTextAction(action);
     }
 
     //Gestion Actions possibles

@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
@@ -29,8 +30,8 @@ public class BotSimulator extends Bot{
      * @param retrieveBoxIdWithParameters
      * @param bambooEated
      */
-    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions) {
-        super(name + 's', board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions, LogInfoDemo logInfoDemo) {
+        super(name + 's', board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
         this.instructions = instructions;
         legal = true;
 

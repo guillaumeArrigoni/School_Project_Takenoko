@@ -436,19 +436,6 @@ public class GestionObjectives {
         return botWinnerList;
     }
 
-    public void printWinner(List<Bot> botWinnerList){
-        String str = botWinnerList.get(0).getName();
-        if(botWinnerList.size() >1){
-            for(int i=1; i<botWinnerList.size(); i++){
-                str += " et " + botWinnerList.get(i).getName();
-            }
-        }
-        switch (botWinnerList.size()){
-            case 1 -> System.out.println(str + " a gagné avec " + botWinnerList.get(0).getScore() + " points !");
-            default -> System.out.println(str + " sont à égalité avec " + botWinnerList.get(0).getScore() + " points !");
-        }
-    }
-
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
         return bot.getObjectives().size() < 5;
     }

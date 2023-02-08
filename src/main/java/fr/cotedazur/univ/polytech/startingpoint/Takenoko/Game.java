@@ -58,7 +58,7 @@ public class Game {
                 for (Bot bot : playerList) {
                     logInfoDemo.addLog("Score de " + bot.getName() + " : " + bot.getScore());
                 }
-                logInfoDemo.printWinner(playerList);
+                logInfoDemo.printWinner(gestionnaire.getWinner(playerList));
             }
             logInfoDemo.addLog("------------------------------------------");
             turn = (turn + 1)%numberPlayer;

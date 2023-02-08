@@ -49,7 +49,6 @@ public abstract class Bot {
      */
     public GestionObjectives gestionObjectives;
     public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private AbstractMap <Color,Integer> bambooEaten;
     protected LogInfoDemo logInfoDemo;
 
     protected int nbIrrigation;
@@ -140,8 +139,25 @@ public abstract class Bot {
                 launchAction(arg);
                 launchAction(arg);
             }
+            case NUAGES -> {
+                //TODO
+                launchAction(arg);
+                launchAction(arg);
+            }
+            case ORAGE -> {
+                movePandaStorm();
+                launchAction(arg);
+                launchAction(arg);
+            }
+            default/*SOLEIL*/ -> {
+                launchAction(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
         }
     }
+
+    public abstract void movePandaStorm();
 
     protected abstract void launchAction(String arg);
 
@@ -161,6 +177,10 @@ public abstract class Bot {
                 break;
             case MOVE_PANDA:
                 movePanda(arg);
+                break;
+            case TAKE_IRRIGATION :
+                this.nbIrrigation++;
+                placeIrrigation();
                 break;
             default :
                 movePanda(arg);
@@ -188,7 +208,7 @@ public abstract class Bot {
 
     protected abstract void movePanda(String arg);
 
-
+    protected abstract void placeIrrigation();
 
 
     //Score and objectives

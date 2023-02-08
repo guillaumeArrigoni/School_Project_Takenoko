@@ -51,6 +51,11 @@ public class BotSimulator extends Bot{
     }
 
     @Override
+    public void movePandaStorm() {
+
+    }
+
+    @Override
     protected void launchAction(String arg){
         PossibleActions action = instructions.getAction();
         doAction(arg,action);
@@ -88,6 +93,11 @@ public class BotSimulator extends Bot{
     @Override
     protected void movePanda(String arg) {
         board.setPandaCoords(instructions.getParameters(),this);
+    }
+
+    @Override
+    protected void placeIrrigation() {
+
     }
 
     @Override

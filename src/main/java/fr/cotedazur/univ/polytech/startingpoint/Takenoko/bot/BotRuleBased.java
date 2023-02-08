@@ -12,7 +12,8 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjectiv
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
-
+//TODO : changer car class action n'existe plus'
+/*
 public class BotRuleBased extends Bot {
 
     int currentScore;
@@ -54,6 +55,11 @@ public class BotRuleBased extends Bot {
             this.objectivesInHand--;
         }
         resetPossibleAction();
+    }
+
+    @Override
+    public void movePandaStorm() {
+
     }
 
     @Override
@@ -169,4 +175,11 @@ public class BotRuleBased extends Bot {
         logInfoDemo.displayMovementPanda(arg,board);
     }
 
+    @Override
+    protected void placeIrrigation() {
+
+    }
+
 }
+*/
+

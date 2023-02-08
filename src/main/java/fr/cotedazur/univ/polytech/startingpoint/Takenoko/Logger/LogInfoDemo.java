@@ -58,6 +58,11 @@ public class LogInfoDemo extends LoggerMain {
             case MOVE_PANDA:
                 super.addLog("Le bot a choisi : BougerPanda");
                 break;
+            case TAKE_IRRIGATION :
+                super.addLog("Le bot a choisi : PrendreIrrigation");
+                break;
+            default :
+                super.addLog("Le bot a choisi : BougerPanda");
         }
     }
 
@@ -68,6 +73,15 @@ public class LogInfoDemo extends LoggerMain {
             }
             case PLUIE -> {
                 super.addLog("Le dé a choisi : PLUIE");
+            }
+            case NUAGES -> {
+                super.addLog("Le dé a choisi : NUAGES");
+            }
+            case ORAGE -> {
+                super.addLog("Le dé a choisi : ORAGE");
+            }
+            default/*SOLEIL*/ -> {
+                super.addLog("Le dé a choisi : SOLEIL");
             }
         }
     }

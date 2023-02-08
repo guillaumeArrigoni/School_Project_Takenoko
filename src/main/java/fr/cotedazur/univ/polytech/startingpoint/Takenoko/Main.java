@@ -79,60 +79,36 @@ public class Main {
                 FileSystem fs = FileSystems.getDefault();
                 Path path = fs.getPath("./stats/", "stats.csv");
                 File file = new File(path.toString());
-                CSVWriter writer = new CSVWriter(new FileWriter(file, true),
-                        ' ',
-                        ICSVWriter.NO_QUOTE_CHARACTER,
-                        ICSVWriter.NO_ESCAPE_CHARACTER,
-                        ICSVWriter.DEFAULT_LINE_END);
+                CSVWriter writer = new CSVWriter(new FileWriter(file, true));
 
 
                 int lineCount = 0;
+                String line = null;
                 try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                    while (reader.readLine() != null) {
+                    while ((line = reader.readLine()) != null) {
                         lineCount++;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                String[] separator = new String[20];
-                Arrays.fill(separator, "-");
                 String[] winPercentage = winPercentageForBots.stream().map(String::valueOf).toArray(String[]::new);
                 String[] meanScore = meanScoreForBots.stream().map(String::valueOf).toArray(String[]::new);
                 String[] header = new String[numberOfPlayer+1];
                 String[] firstLine = new String[numberOfPlayer+1];
                 String[] secondLine = new String[numberOfPlayer+1];
-
-                header[0] = "          ";
-                firstLine[0] = "Winrate   ";
-                secondLine[0] = "Score     ";
-                String space;
+                firstLine[0] = "";
+                secondLine[0] = "";
 
                 for (int i = 1; i < numberOfPlayer+1; i++) {
-                    header[i] = "Bot" + i + "   ";
-                    if (winPercentage[i-1].length() > 4) {
-                        space = " ";
-                    }
-                    else if (winPercentage[i-1].length() == 4) {
-                        space = "  ";
-                    }
-                    else {
-                        space = "   ";
-                    }
-                    firstLine[i] = winPercentage[i-1] + "%" + space;
-                    if (meanScore[i-1].length() > 3) {
-                        space = "   ";
-                    }
-                    else {
-                        space = "    ";
-                    }
-                    secondLine[i] = meanScore[i-1] + space;
+                    header[i] = "Bot" + i;
+                    firstLine[i] = winPercentage[i-1] + "%";
+                    secondLine[i] = meanScore[i-1];
                 }
                 writer.writeNext(new String[]{"Simulation " + (lineCount/5 + 1) + " :"});
                 writer.writeNext(header);
                 writer.writeNext(firstLine);
                 writer.writeNext(secondLine);
-                writer.writeNext(separator);
                 writer.close();
             }
         }

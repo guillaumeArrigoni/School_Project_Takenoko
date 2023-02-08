@@ -42,25 +42,13 @@ public class BotSimulator extends Bot{
             legal = false;
             return;
         }
-        doAction(arg);
+        launchAction(arg);
     }
 
     @Override
-    protected void doAction(String arg) {
-        switch (instructions.getAction()){
-            case DRAW_AND_PUT_TILE:
-                placeTile(arg);
-                break;
-            case MOVE_GARDENER:
-                moveGardener(arg);
-                break;
-            case DRAW_OBJECTIVE:
-                drawObjective(arg);
-                break;
-            default://MOVE PANDA
-                movePanda(arg);
-        }
-
+    protected void launchAction(String arg){
+        PossibleActions action = instructions.getAction();
+        doAction(arg,action);
     }
 
     @Override

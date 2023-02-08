@@ -110,12 +110,66 @@ public abstract class Bot {
     /**
      * This method is called at the beginning of the turn
      */
-    public abstract void playTurn(MeteoDice.Meteo meteo, String arg) throws CloneNotSupportedException;
+    public void playTurn(MeteoDice.Meteo meteo, String arg) throws CloneNotSupportedException {
+        possibleActions = PossibleActions.getAllActions();
+        switch (meteo){
+            case VENT -> {
+                //Deux fois la même action autorisé
+                if (arg.equals("demo")) System.out.println("Le dé a choisi : VENT");
+                launchAction(arg);
+                resetPossibleAction();
+                launchAction(arg);
+            }
+            case PLUIE -> {
+                //Le joueur peut faire pousser une tuile irriguée
+                //TODO c pas implémenté dans la classe hexagoneBox
+                if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
+                launchAction(arg);
+                launchAction(arg);
+            }
+        }
+    }
+
+    protected abstract void launchAction(String arg);
 
     /**
      * This method is called to do an action
      */
-    protected abstract void doAction(String arg);
+    protected void doAction(String arg,PossibleActions action){
+        switch (action){
+            case DRAW_AND_PUT_TILE:
+                placeTile(arg);
+                break;
+            case MOVE_GARDENER:
+                moveGardener(arg);
+                break;
+            case DRAW_OBJECTIVE:
+                drawObjective(arg);
+                break;
+            case MOVE_PANDA:
+                movePanda(arg);
+                break;
+            default :
+                movePanda(arg);
+        }
+    }
+
+    protected void displayTextAction(PossibleActions action){
+        switch (action){
+            case DRAW_AND_PUT_TILE:
+                System.out.println("Le bot a choisi : PiocherPoserTuile");
+                break;
+            case MOVE_GARDENER:
+                System.out.println("Le bot a choisi : BougerJardinier");
+                break;
+            case DRAW_OBJECTIVE:
+                System.out.println("Le bot a choisi : PiocherObjectif");
+                break;
+            case MOVE_PANDA:
+                System.out.println("Le bot a choisi : BougerPanda");
+                break;
+        }
+    }
 
     //Gestion Actions possibles
 

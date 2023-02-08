@@ -35,21 +35,16 @@ public class BotMCTS extends Bot{
         instructions = node.getBestInstruction();
 //        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
         for(int i = 0; i < instructions.size(); i++){
-            doAction(arg);
+            launchAction(arg);
         }
     }
 
     @Override
-    protected void doAction(String arg) {
-        switch (instructions.get(0).getAction()) {
-            case DRAW_AND_PUT_TILE -> placeTile(arg);
-            case MOVE_GARDENER -> moveGardener(arg);
-            case DRAW_OBJECTIVE -> drawObjective(arg);
-            default -> movePanda(arg);
-        }
+    protected void launchAction(String arg){
+        PossibleActions action = instructions.get(0).getAction();
+        doAction(arg,action);
         instructions.remove(0);
     }
-
 
     @Override
     protected void placeTile(String arg){

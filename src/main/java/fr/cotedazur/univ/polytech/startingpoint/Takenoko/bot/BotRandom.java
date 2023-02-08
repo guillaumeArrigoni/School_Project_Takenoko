@@ -27,56 +27,12 @@ public class BotRandom extends Bot {
         this.random = random;
     }
 
-
-
-
     @Override
-    public void playTurn(MeteoDice.Meteo meteo, String arg){
-        possibleActions = PossibleActions.getAllActions();
-        switch (meteo){
-            case VENT -> {
-                //Deux fois la même action autorisé
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : VENT");
-                doAction(arg);
-                resetPossibleAction();
-                doAction(arg);
-            }
-            case PLUIE -> {
-                //Le joueur peut faire pousser une tuile irriguée
-                //TODO c pas implémenté dans la classe hexagoneBox
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
-                doAction(arg);
-                doAction(arg);
-            }
-
-
-        }
-    }
-
-    @Override
-    protected void doAction(String arg){
+    protected void launchAction(String arg){
         PossibleActions action = chooseAction();
-        switch (action){
-            case DRAW_AND_PUT_TILE:
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherPoserTuile");
-                placeTile(arg);
-                break;
-            case MOVE_GARDENER:
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : BougerJardinier");
-                moveGardener(arg);
-                break;
-            case DRAW_OBJECTIVE:
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherObjectif");
-                drawObjective(arg);
-                break;
-            case MOVE_PANDA:
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : BougerPanda");
-                movePanda(arg);
-                break;
-        }
-
+        displayTextAction(action);
+        doAction(arg,action);
     }
-
 
 
     protected PossibleActions chooseAction(){

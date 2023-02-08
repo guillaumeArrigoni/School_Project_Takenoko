@@ -177,8 +177,7 @@ public abstract class Bot {
                 (actions == PossibleActions.MOVE_PANDA && Bot.possibleMoveForGardenerOrPanda(board,board.getPandaCoords()).isEmpty()) ||
                 (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5) ||
                 (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getElementOfTheBoard().getStackOfBox().size() < 3) ||
-                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) ||
-                (actions == PossibleActions.PLACE_IRRIGATION));
+                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
     }
 
 

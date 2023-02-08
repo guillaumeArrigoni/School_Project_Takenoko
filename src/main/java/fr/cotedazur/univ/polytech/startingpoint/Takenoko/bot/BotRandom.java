@@ -13,6 +13,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjectiv
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
+import javax.swing.*;
 import java.util.*;
 
 
@@ -37,38 +38,35 @@ public class BotRandom extends Bot {
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg){
         possibleActions = PossibleActions.getAllActions();
+        placeIrrigation();
         switch (meteo){
             case VENT -> {
                 //Deux fois la même action autorisé
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : VENT");
-                placeIrrigation();
                 doAction(arg);
                 resetPossibleAction();
                 doAction(arg);
             }
             case PLUIE -> {
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
-                placeIrrigation();
+                growBambooRain();
                 doAction(arg);
                 doAction(arg);
             }
             case NUAGES -> {
                 System.out.println("Le dé a choisi : NUAGES");
                 //TODO
-                placeIrrigation();
                 doAction(arg);
                 doAction(arg);
             }
             case ORAGE -> {
                 System.out.println("Le dé a choisi : ORAGE");
-                placeIrrigation();
                 movePandaStorm();
                 doAction(arg);
                 doAction(arg);
             }
             default/*SOLEIL*/ -> {
                 System.out.println("Le dé a choisi : SOLEIL");
-                placeIrrigation();
                 doAction(arg);
                 doAction(arg);
                 doAction(arg);
@@ -112,7 +110,8 @@ public class BotRandom extends Bot {
     protected PossibleActions chooseAction(){
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
-        if (isObjectiveIllegal(acp))
+        if (isObjectiveIllegal(acp) ||
+        (acp != PossibleActions.DRAW_OBJECTIVE && acp != PossibleActions.DRAW_AND_PUT_TILE && acp != PossibleActions.MOVE_GARDENER && acp != PossibleActions.MOVE_PANDA && acp != PossibleActions.TAKE_IRRIGATION))
             return chooseAction();
         possibleActions.remove(acp);
         return acp;
@@ -169,6 +168,22 @@ public class BotRandom extends Bot {
         board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()) + " grâce à l'orage");
     }
+
+
+    public void growBambooRain(){
+        List<HexagoneBoxPlaced> tmp = new ArrayList<>();
+        for(HexagoneBoxPlaced box : board.getPlacedBox().values()){
+            if(box.isIrrigate() && box.getHeightBamboo() < 4){
+                tmp.add(box);
+            }
+        }
+        if(!tmp.isEmpty()) {
+            HexagoneBoxPlaced box = tmp.get(random.nextInt(0, tmp.size()));
+            box.growBamboo();
+            System.out.println(this.name + " a fait pousser du bambou grâce à la pluie en " + Arrays.toString(box.getCoordinates()));
+        }
+    }
+
 
 
 

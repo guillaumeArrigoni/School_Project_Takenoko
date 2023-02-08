@@ -9,6 +9,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Node {
@@ -59,7 +60,7 @@ public class Node {
             switch(value.getMeteo()){
                 case ORAGE -> {activateBotSimulator(arg,createPandaStormInstructions());}
                 //case NUAGES -> {profondeur -= 1;}// Idem*/
-                case PLUIE -> {}
+                case PLUIE -> {activateBotSimulator(arg,generateRainInstruction());}
                 default /*SOLEIL*/ -> {
                     List<ActionLog> instruction = generateInstruction();
                     activateBotSimulator(arg, instruction);
@@ -135,6 +136,18 @@ public class Node {
         }
         return irrigationInstructions;
     }
+
+    public List<ActionLog> generateRainInstruction(){
+        List<ActionLog> rainInstructions = new ArrayList<>();
+        for(HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()){
+            if(box.isIrrigate() && box.getHeightBamboo() < 4){
+                rainInstructions.add(new ActionLog(PossibleActions.GROW_BAMBOO, box.getId()));
+            }
+        }
+        return rainInstructions;
+    }
+
+
 
     public List<ActionLog> createDrawAndPutTileInstructions(){
         List<ActionLog> drawAndPutTileInstructions = new ArrayList<>();

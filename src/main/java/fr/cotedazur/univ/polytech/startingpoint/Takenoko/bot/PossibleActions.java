@@ -12,10 +12,9 @@ public enum PossibleActions {
     MOVE_GARDENER(1),
     DRAW_OBJECTIVE(2),
     MOVE_PANDA(3),
-
     TAKE_IRRIGATION(4),
-
-    PLACE_IRRIGATION(5);
+    PLACE_IRRIGATION(5),
+    GROW_BAMBOO(6);
 
     /**
      * The value of the action

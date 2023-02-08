@@ -70,6 +70,9 @@ public class BotSimulator extends Bot{
             case PLACE_IRRIGATION:
                 placeIrrigation(arg);
                 break;
+            case GROW_BAMBOO:
+                growBambooRain(arg);
+                break;
             default://MOVE PANDA
                 movePanda(arg);
         }
@@ -103,6 +106,12 @@ public class BotSimulator extends Bot{
             board.placeIrrigation(path.get(0));
             nbIrrigation--;
         }
+    }
+
+    protected void growBambooRain(String arg){
+        HexagoneBoxPlaced box = getBoard().getPlacedBox().get(instructions.getParameters()[0]);
+        box.growBamboo();
+        System.out.println(this.name + " a fait pousser du bambou grâce à la pluie en " + Arrays.toString(box.getCoordinates()));
     }
 
     @Override

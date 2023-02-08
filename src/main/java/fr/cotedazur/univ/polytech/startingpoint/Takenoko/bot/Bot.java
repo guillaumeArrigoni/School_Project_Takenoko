@@ -233,4 +233,6 @@ public abstract class Bot {
     public void IncrementNumberObjectiveDone() {
         this.numberObjectiveDone++;
     }
+
+    public abstract TypeObjective choseTypeObjectiveToRoll(String arg);
 }

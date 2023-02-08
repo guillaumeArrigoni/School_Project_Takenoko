@@ -49,7 +49,6 @@ public class BotRandom extends Bot {
                 doAction(arg);
             }
 
-
         }
     }
 
@@ -74,7 +73,6 @@ public class BotRandom extends Bot {
                 movePanda(arg);
                 break;
         }
-
     }
 
 
@@ -109,7 +107,6 @@ public class BotRandom extends Bot {
         if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
-        if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
     @Override
@@ -131,7 +128,8 @@ public class BotRandom extends Bot {
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
 
-    public TypeObjective chooseTypeObjectiveToRoll(String arg){
+    @Override
+    public TypeObjective choseTypeObjectiveToRoll(String arg){
         int i = random.nextInt(0,3) ;
         switch (i) {
             case 1 -> {

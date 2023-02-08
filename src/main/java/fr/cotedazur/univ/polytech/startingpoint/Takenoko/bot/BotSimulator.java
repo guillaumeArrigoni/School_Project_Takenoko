@@ -8,6 +8,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
@@ -116,4 +117,8 @@ public class BotSimulator extends Bot{
         return instructions;
     }
 
+    @Override
+    public TypeObjective choseTypeObjectiveToRoll(String arg) {
+        return null;
+    }
 }

@@ -56,11 +56,11 @@ public class Game {
             if (gestionnaire.DoesABotHaveEnoughObjectivesDone()) {
                 playing = false;
                 for (Bot bot : playerList) {
-                    logInfoDemo.addLog("Score de " + bot.getName() + " : " + bot.getScore());
+                    logInfoDemo.displayScore(bot);
                 }
                 logInfoDemo.printWinner(gestionnaire.getWinner(playerList));
             }
-            logInfoDemo.addLog("------------------------------------------");
+            logInfoDemo.displaySeparator();
             turn = (turn + 1)%numberPlayer;
             this.turnNumber++;
         }

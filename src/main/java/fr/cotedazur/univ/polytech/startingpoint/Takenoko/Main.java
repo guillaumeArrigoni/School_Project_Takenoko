@@ -48,7 +48,7 @@ public class Main {
         if (main.twoThousands || main.csv) {
             int numberOfPlayer = 2;
             Log log = new Log();
-            log.logInit(numberOfPlayer);
+            log.logInit(numberOfPlayer,logInfoStats);
             for (int i = 0; i < 10; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1);

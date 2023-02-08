@@ -121,7 +121,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     public void setIrrigate(boolean irrigate) {
         super.irrigate = irrigate;
         retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,super.irrigate);
-        if (irrigate){
+        if (irrigate && this.getColor()!=Color.Lac){
             this.heightBamboo = 1;
             retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
         }

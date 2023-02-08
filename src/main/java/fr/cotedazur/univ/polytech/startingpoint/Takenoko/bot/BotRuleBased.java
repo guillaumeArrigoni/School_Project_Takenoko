@@ -270,7 +270,7 @@ public class BotRuleBased extends Bot {
             for (HexagoneBoxPlaced box : boxWithBamboos) {
                 for (Objective obj : pandaObjectives) {
                     for (Color c : obj.getColors()) {
-                        if (box.getColor().equals(c) && box.getHeightBamboo() > 0) {
+                        if (box.getColor().equals(c) && box.getHeightBamboo() > 0 && this.bambooEaten.get(c) < obj.getPattern().getHauteurBambou()) {
                             board.setPandaCoords(box.getCoordinates(), this);
                             return 0;
                         }

@@ -97,6 +97,31 @@ class BotRuleBasedTest {
     }
 
     @Test
+    void movePandaStormTestTricolor() {
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1, -1, 0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced2 = new HexagoneBoxPlaced(1, 0, -1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced3 = new HexagoneBoxPlaced(0, 1, -1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        board.addBox(hexagoneBoxPlaced);
+        board.addBox(hexagoneBoxPlaced2);
+        board.addBox(hexagoneBoxPlaced3);
+        board.addBox(hexagoneBoxPlaced4);
+        board.addBox(hexagoneBoxPlaced5);
+        board.addBox(hexagoneBoxPlaced6);
+        //manger tricolore
+        botRB.objectives.add(gestionObjectives.getPandaObjectifs().get(13));
+        botRB.movePandaStorm();
+        botRB.movePandaStorm();
+        botRB.movePandaStorm();
+        assertEquals(0, hexagoneBoxPlaced.getHeightBamboo());
+        assertEquals(0, hexagoneBoxPlaced4.getHeightBamboo());
+        assertEquals(0, hexagoneBoxPlaced5.getHeightBamboo());
+
+    }
+
+    @Test
     void growBambooRainTest() {
         HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1, -1, 0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced2 = new HexagoneBoxPlaced(1, 0, -1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);

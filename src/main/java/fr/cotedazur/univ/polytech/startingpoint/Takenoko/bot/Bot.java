@@ -288,5 +288,8 @@ public abstract class Bot {
         return numberObjectiveDone;
     }
 
+    public int getNbIrrigation() {
+        return nbIrrigation;
+    }
 
 }

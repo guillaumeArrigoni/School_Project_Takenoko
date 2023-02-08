@@ -6,6 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +44,22 @@ public class Node {
     }
 
     public void createChildren(String arg) {
+        if(profondeur == 4 || (profondeur == 3 && (value.getMeteo() == MeteoDice.Meteo.NO_METEO || value.getMeteo() == MeteoDice.Meteo.VENT))){
+            List<ActionLog> instruction = generateIrrigationInstructions();
+            activateBotSimulator(arg, instruction);
+            if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                children.clear();
+                profondeur --;
+            }else{
+                this.getBestChild().createChildren(arg);
+                return;
+            }
+        }
         if(profondeur == 3){
             switch(value.getMeteo()){
                 case ORAGE -> {activateBotSimulator(arg,createPandaStormInstructions());}
-               /* case PLUIE -> {profondeur -= 1;} // Pas encore implémenté
-                case NUAGES -> {profondeur -= 1;}// Idem*/
+                //case NUAGES -> {profondeur -= 1;}// Idem*/
+                case PLUIE -> {}
                 default /*SOLEIL*/ -> {
                     List<ActionLog> instruction = generateInstruction();
                     activateBotSimulator(arg, instruction);
@@ -105,6 +117,23 @@ public class Node {
         else if(this.children.get(children.size()-1).getValue().getScore() < 0 && (value.getMeteo() == MeteoDice.Meteo.VENT || !tmp.contains(PossibleActions.DRAW_AND_PUT_TILE))){
             simulateDrawAndPutTile(arg);
         }
+    }
+
+    private List<ActionLog> generateIrrigationInstructions(){
+        List<ActionLog> irrigationInstructions = new ArrayList<>();
+        GenerateAWayToIrrigateTheBox temp;
+        for (HexagoneBoxPlaced box : value.getBoard().getPlacedBox().values()) {
+            if (!box.isIrrigate()) {
+                try {
+                    temp = new GenerateAWayToIrrigateTheBox(box);
+                    if (temp.getPathToIrrigation().size() <= this.getValue().getBotSimulator().getNbIrrigation())
+                        irrigationInstructions.add(new ActionLogIrrigation(PossibleActions.PLACE_IRRIGATION, temp.getPathToIrrigation()));
+                } catch (Exception e) {
+                    System.err.println("erreur irrigation");
+                }
+            }
+        }
+        return irrigationInstructions;
     }
 
     public List<ActionLog> createDrawAndPutTileInstructions(){

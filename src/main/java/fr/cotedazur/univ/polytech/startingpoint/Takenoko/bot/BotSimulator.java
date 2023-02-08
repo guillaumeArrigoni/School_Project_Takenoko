@@ -3,7 +3,9 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLogIrrigation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
@@ -62,6 +64,12 @@ public class BotSimulator extends Bot{
             case DRAW_OBJECTIVE:
                 drawObjective(arg);
                 break;
+            case TAKE_IRRIGATION:
+                takeIrrigation(arg);
+                break;
+            case PLACE_IRRIGATION:
+                placeIrrigation(arg);
+                break;
             default://MOVE PANDA
                 movePanda(arg);
         }
@@ -83,6 +91,18 @@ public class BotSimulator extends Bot{
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
+    }
+
+    protected void takeIrrigation(String arg){
+        nbIrrigation++;
+    }
+
+    protected void placeIrrigation(String arg){
+        ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions;
+        for (ArrayList<Crest> path : actionLogIrrigation.getParamirrig()) {
+            board.placeIrrigation(path.get(0));
+            nbIrrigation--;
+        }
     }
 
     @Override

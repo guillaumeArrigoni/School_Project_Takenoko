@@ -3,8 +3,10 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLogIrrigation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.Node;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
@@ -32,15 +34,15 @@ public class BotMCTS extends Bot{
 
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg) {
-        if (MeteoDice.Meteo.VENT == meteo || meteo == MeteoDice.Meteo.NO_METEO) {
-            node = new Node(this.createBotSimulator(), 2, meteo, arg);
-        } else {
+        if (MeteoDice.Meteo.VENT == meteo || meteo == MeteoDice.Meteo.NO_METEO) { //NOMETEO VENT PLUIE
             node = new Node(this.createBotSimulator(), 3, meteo, arg);
+        } else {
+            node = new Node(this.createBotSimulator(), 4, meteo, arg); //ORAGE NUAGE SOLEIL
         }
         instructions = node.getBestInstruction();
-        /*for (ActionLog instruction : instructions) {
-            System.out.println(instruction.getAction() + " " + Arrays.toString(instruction.getParameters()));
-        }*/
+        for (ActionLog instruction : instructions) {
+            System.out.println(instruction.getAction());
+        }
         for(int i = 0; i < instructions.size(); i++){
             doAction(arg);
         }
@@ -52,6 +54,8 @@ public class BotMCTS extends Bot{
             case DRAW_AND_PUT_TILE -> placeTile(arg);
             case MOVE_GARDENER -> moveGardener(arg);
             case DRAW_OBJECTIVE -> drawObjective(arg);
+            case TAKE_IRRIGATION -> nbIrrigation++;
+            case PLACE_IRRIGATION -> placeIrrigation(arg);
             default -> movePanda(arg);
         }
         instructions.remove(0);
@@ -89,6 +93,20 @@ public class BotMCTS extends Bot{
     protected void movePanda(String arg) {
         board.setPandaCoords(instructions.get(0).getParameters(),this);
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
+    }
+
+    protected void takeIrrigation(String arg){
+        if (arg.equals("demo")) System.out.println("Le bot a pris une irrigation");
+        nbIrrigation++;
+    }
+
+    protected void placeIrrigation(String arg){
+        ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions;
+        for (ArrayList<Crest> path : actionLogIrrigation.getParamirrig()) {
+            if (arg.equals("demo")) System.out.println("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
+            board.placeIrrigation(path.get(0));
+            nbIrrigation--;
+        }
     }
 
     @Override

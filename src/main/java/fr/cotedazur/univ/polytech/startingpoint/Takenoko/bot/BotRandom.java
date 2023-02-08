@@ -41,32 +41,34 @@ public class BotRandom extends Bot {
             case VENT -> {
                 //Deux fois la même action autorisé
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : VENT");
+                placeIrrigation();
                 doAction(arg);
                 resetPossibleAction();
                 doAction(arg);
             }
             case PLUIE -> {
-                //Le joueur peut faire pousser une tuile irriguée
-                //TODO c pas implémenté dans la classe hexagoneBox
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
-                
+                placeIrrigation();
                 doAction(arg);
                 doAction(arg);
             }
             case NUAGES -> {
                 System.out.println("Le dé a choisi : NUAGES");
-                //TODO 
+                //TODO
+                placeIrrigation();
                 doAction(arg);
                 doAction(arg);
             }
             case ORAGE -> {
                 System.out.println("Le dé a choisi : ORAGE");
+                placeIrrigation();
                 movePandaStorm();
                 doAction(arg);
                 doAction(arg);
             }
             default/*SOLEIL*/ -> {
                 System.out.println("Le dé a choisi : SOLEIL");
+                placeIrrigation();
                 doAction(arg);
                 doAction(arg);
                 doAction(arg);
@@ -79,7 +81,6 @@ public class BotRandom extends Bot {
     @Override
     protected void doAction(String arg){
         PossibleActions action = chooseAction();
-        placeIrrigation();
         switch (action) {
             case DRAW_AND_PUT_TILE -> {
                 if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherPoserTuile");
@@ -172,7 +173,7 @@ public class BotRandom extends Bot {
 
 
     public void placeIrrigation(){
-        if(random.nextInt(0,2) == 0) {
+        if(random.nextInt(0,4) == 0) {
             List<GenerateAWayToIrrigateTheBox> tmp = new ArrayList<>();
             GenerateAWayToIrrigateTheBox temp;
             for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
@@ -182,7 +183,7 @@ public class BotRandom extends Bot {
                         if (temp.getPathToIrrigation().size() <= this.nbIrrigation)
                             tmp.add(temp);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        System.err.println("erreur irrigation");
                     }
                 }
             }

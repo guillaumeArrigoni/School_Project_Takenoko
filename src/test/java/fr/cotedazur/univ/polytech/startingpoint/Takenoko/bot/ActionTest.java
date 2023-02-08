@@ -27,7 +27,7 @@ class ActionTest {
     void setUp() {
         this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         r = mock(Random.class);
-        board = new Board(retrieveBoxIdWithParameters, 1);
+        board = new Board(retrieveBoxIdWithParameters, 1,2);
     }
 
 

@@ -169,8 +169,6 @@ public class BotRandom extends Bot {
         System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()) + " grâce à l'orage");
     }
 
-
-
     public void placeIrrigation(){
         if(random.nextInt(0,2) == 0) {
             List<GenerateAWayToIrrigateTheBox> tmp = new ArrayList<>();

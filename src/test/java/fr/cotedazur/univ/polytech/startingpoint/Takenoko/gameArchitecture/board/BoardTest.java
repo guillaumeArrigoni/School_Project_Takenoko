@@ -58,7 +58,7 @@ class BoardTest {
         logInfoDemo = new LogInfoDemo(true);
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated);
+        board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated, 2);
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);

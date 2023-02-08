@@ -32,7 +32,7 @@ class BotRandomTest {
     void setUp() {
         logInfoDemo = new LogInfoDemo(true);
         this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters, 1);
+        board = new Board(retrieveBoxIdWithParameters, 1, 2);
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
         gestionObjectives.initialize(
                 gestionObjectives.ListOfObjectiveParcelleByDefault(),

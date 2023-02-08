@@ -200,21 +200,21 @@ public class GestionObjectives {
         Objective objective = this.getParcelleObjectifs().get(i);
         this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        displayPickObj(bot,objective);
+        //displayPickObj(bot,objective);
     }
     public void rollJardinierObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        displayPickObj(bot,objective);
+        //displayPickObj(bot,objective);
     }
     public void rollPandaObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        displayPickObj(bot,objective);
+        //displayPickObj(bot,objective);
     }
 
     private void displayPickObj(Bot bot, Objective objective){

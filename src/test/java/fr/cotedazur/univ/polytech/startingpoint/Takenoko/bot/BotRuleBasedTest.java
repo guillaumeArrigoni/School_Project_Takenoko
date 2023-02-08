@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Game;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
@@ -27,11 +28,12 @@ class BotRuleBasedTest {
     final String arg = "demo";
 
     GestionObjectives gestionObjectives;
+    private static LogInfoDemo logInfoDemo;
 
     @BeforeEach
     void setUp() {
         this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters, 1);
+        board = new Board(retrieveBoxIdWithParameters, 1, 2);
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
         gestionObjectives.initialize(
                 gestionObjectives.ListOfObjectiveParcelleByDefault(),
@@ -39,7 +41,7 @@ class BotRuleBasedTest {
                 gestionObjectives.ListOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
-        botRB = new BotRuleBased("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        botRB = new BotRuleBased("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
     }
 
     @Test

@@ -111,7 +111,6 @@ public class BotSimulator extends Bot{
     protected void growBambooRain(String arg){
         HexagoneBoxPlaced box = getBoard().getPlacedBox().get(instructions.getParameters()[0]);
         box.growBamboo();
-        System.out.println(this.name + " a fait pousser du bambou grâce à la pluie en " + Arrays.toString(box.getCoordinates()));
     }
 
     @Override

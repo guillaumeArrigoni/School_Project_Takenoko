@@ -60,7 +60,13 @@ public class Node {
             switch(value.getMeteo()){
                 case ORAGE -> {activateBotSimulator(arg,createPandaStormInstructions());}
                 //case NUAGES -> {profondeur -= 1;}// Idem*/
-                case PLUIE -> {activateBotSimulator(arg,generateRainInstruction());}
+                case PLUIE -> {
+                    activateBotSimulator(arg,generateRainInstruction());
+                    if (children.isEmpty()){
+                        profondeur --;
+                        createChildren(arg);
+                    }
+                }
                 default /*SOLEIL*/ -> {
                     List<ActionLog> instruction = generateInstruction();
                     activateBotSimulator(arg, instruction);

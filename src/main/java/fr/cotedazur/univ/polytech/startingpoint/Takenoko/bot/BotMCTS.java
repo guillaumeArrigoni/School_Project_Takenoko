@@ -34,10 +34,10 @@ public class BotMCTS extends Bot{
 
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg) {
-        if (MeteoDice.Meteo.VENT == meteo || meteo == MeteoDice.Meteo.NO_METEO) { //NOMETEO VENT PLUIE
+        if (MeteoDice.Meteo.VENT == meteo || meteo == MeteoDice.Meteo.NO_METEO) { //NOMETEO VENT
             node = new Node(this.createBotSimulator(), 3, meteo, arg);
         } else {
-            node = new Node(this.createBotSimulator(), 4, meteo, arg); //ORAGE NUAGE SOLEIL
+            node = new Node(this.createBotSimulator(), 4, meteo, arg); //ORAGE NUAGE SOLEIL PLUIE
         }
         instructions = node.getBestInstruction();
         for (ActionLog instruction : instructions) {
@@ -56,6 +56,7 @@ public class BotMCTS extends Bot{
             case DRAW_OBJECTIVE -> drawObjective(arg);
             case TAKE_IRRIGATION -> nbIrrigation++;
             case PLACE_IRRIGATION -> placeIrrigation(arg);
+            case GROW_BAMBOO -> growBambooRain(arg);
             default -> movePanda(arg);
         }
         instructions.remove(0);
@@ -87,6 +88,12 @@ public class BotMCTS extends Bot{
     protected void moveGardener(String arg) {
         board.setGardenerCoords(instructions.get(0).getParameters());
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+    }
+
+    protected void growBambooRain(String arg){
+        HexagoneBoxPlaced box = getBoard().getPlacedBox().get(instructions.get(0).getParameters()[0]);
+        box.growBamboo();
+        System.out.println(this.name + " a fait pousser du bambou grâce à la pluie en " + Arrays.toString(box.getCoordinates()));
     }
 
     @Override

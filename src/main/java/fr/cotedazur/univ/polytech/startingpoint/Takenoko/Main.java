@@ -30,7 +30,7 @@ import java.util.*;
 
 public class Main {
     //parameters for JCommander
-    @Parameter(names={"--2thousands"}, arity=0)
+    @Parameter(names={"--2thousands"}, arity=1)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;

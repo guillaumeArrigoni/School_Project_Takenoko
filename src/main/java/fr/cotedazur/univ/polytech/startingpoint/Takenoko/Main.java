@@ -44,7 +44,7 @@ public class Main {
         CSVWriter writer = new CSVWriter(new FileWriter(file));
 
         Main main = new Main();
-        LogInfoDemo logDemo = new LogInfoDemo(main.demo);
+        LogInfoDemo logDemo = new LogInfoDemo(main.demo || (!main.twoThousands && !main.csv));
         LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
         JCommander.newBuilder()
                 .addObject(main)

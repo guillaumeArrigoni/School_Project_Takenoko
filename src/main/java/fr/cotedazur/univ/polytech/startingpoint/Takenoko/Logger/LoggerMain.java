@@ -7,19 +7,20 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
+import java.util.logging.*;
 
 public class LoggerMain {
 
     protected final java.util.logging.Logger logger;
     protected final ConsoleHandler handler;
     private Level level;
+    private FormatterForLog formatterForLog;
 
     public LoggerMain(Level level, String name){
         this.logger = java.util.logging.Logger.getLogger(name);
         this.handler = new ConsoleHandler();
         this.level = level;
+        this.formatterForLog = new FormatterForLog();
         setup();
     }
 
@@ -33,13 +34,12 @@ public class LoggerMain {
 
     private void setup(){
         handler.setLevel(level);
-        handler.setLevel(level);
+        handler.setFormatter(formatterForLog);
         logger.addHandler(handler);
+        logger.setUseParentHandlers(false);
     }
 
     public void addLog(String msg){
         logger.log(level,msg);
     }
-
 }
-

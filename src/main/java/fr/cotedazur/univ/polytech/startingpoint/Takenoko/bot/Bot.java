@@ -74,6 +74,7 @@ public abstract class Bot {
         this.bambooEaten.put(Color.Jaune,0);
         this.bambooEaten.put(Color.Vert,0);
         this.bambooEaten.put(Color.Lac,0);
+        this.logInfoDemo = logInfoDemo;
         resetPossibleAction();
     }
 

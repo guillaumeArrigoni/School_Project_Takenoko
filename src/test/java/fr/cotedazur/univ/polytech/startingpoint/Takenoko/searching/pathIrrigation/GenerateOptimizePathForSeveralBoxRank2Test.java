@@ -25,7 +25,7 @@ class GenerateOptimizePathForSeveralBoxRank2Test {
 
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Board board;
-    private static GenerateOptimizePathForSeveralBoxRank2Simulation generateOptimizePathForSeveralBox;
+    private static GenerateOptimizePathForSeveralBoxSimulation generateOptimizePathForSeveralBox;
     private static HexagoneBoxSimulation hexagoneBoxPlaced1;
     private static HexagoneBoxSimulation hexagoneBoxPlaced2;
     private static HexagoneBoxSimulation hexagoneBoxPlaced3;
@@ -63,7 +63,7 @@ class GenerateOptimizePathForSeveralBoxRank2Test {
         boardSimulation.addBox(hexagoneBoxPlaced8);
         boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced5));
 
-        generateOptimizePathForSeveralBox = new GenerateOptimizePathForSeveralBoxRank2Simulation(boxToIrrigate);
+        generateOptimizePathForSeveralBox = new GenerateOptimizePathForSeveralBoxSimulation(boxToIrrigate);
     }
 
     private static Stream<Arguments> provideCheckBoxIrrigatedBefore(){

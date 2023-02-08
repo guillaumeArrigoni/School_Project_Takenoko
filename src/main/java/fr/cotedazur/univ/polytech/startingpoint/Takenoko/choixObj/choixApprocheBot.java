@@ -33,7 +33,7 @@ public class choixApprocheBot {
     }
 
 
-    private void smart_v1(ObjectiveParcelle objectiveParcelle, Board board) throws CrestNotRegistered {
+    private void smart_v1(ObjectiveParcelle objectiveParcelle, Board board) throws CrestNotRegistered, CloneNotSupportedException {
         ArrayList<HashMap<Integer, Optional<Color>>> g = generateInstruction(objectiveParcelle);
         getAllBoxFillingThePatternEntered i = new getAllBoxFillingThePatternEntered(g.get(0),board,true);
     }

@@ -5,7 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateOptimizePathForSeveralBoxWithSimulationRank3;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateOptimizePathForSeveralBoxWithSimulation;
 
 import java.util.*;
 
@@ -37,7 +37,7 @@ public class getAllBoxFillingThePatternEntered {
     private HashMap<Integer, Optional<Color>> instruction;
 
 
-    public getAllBoxFillingThePatternEntered(HashMap<Integer, Optional<Color>> instruction, Board board, boolean boxCanBePlaced) throws CrestNotRegistered {
+    public getAllBoxFillingThePatternEntered(HashMap<Integer, Optional<Color>> instruction, Board board, boolean boxCanBePlaced) throws CrestNotRegistered, CloneNotSupportedException {
         this.board = board;
         this.retrieveBoxIdWithParameters = board.getRetrieveBoxIdWithParameters();
         this.boxCanBePlaced = boxCanBePlaced;
@@ -63,7 +63,7 @@ public class getAllBoxFillingThePatternEntered {
      * Method that give all the box that are filling the instruction.
      * @return the ArrayList with all the central box that are filling the condition
      */
-    private void getAllBoxFillingTheInstruction_v1_3() throws CrestNotRegistered {
+    private void getAllBoxFillingTheInstruction_v1_3() throws CrestNotRegistered, CloneNotSupportedException {
         ArrayList<Integer> listOfAllBoxIdThatFillInstruction = this.retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(new ArrayList<>(Arrays.asList(this.instruction.get(0).get()))),Optional.empty(),Optional.empty(),Optional.empty());
         ArrayList<HexagoneBoxPlaced> listBoxThatAreFillingTheInstruction = new ArrayList<>();
         HashMap<HexagoneBoxPlaced,Integer> markForEachBoxAccordingToTheInstruction = new HashMap<>();
@@ -76,7 +76,7 @@ public class getAllBoxFillingThePatternEntered {
         this.hashmapToKnowWhichIsIrrigated = hashmapToKnowWhichIsIrrigated;
     }
 
-    private void comparatorForEachBox_v1_3(ArrayList<HexagoneBoxPlaced> listBoxThatAreFillingTheInstruction, HashMap<HexagoneBoxPlaced, Integer> markForEachBoxAccordingToTheInstruction, HashMap<HexagoneBoxPlaced, HashMap<Integer, Boolean>> hashmapToKnowWhichIsIrrigated, Integer id) throws CrestNotRegistered {
+    private void comparatorForEachBox_v1_3(ArrayList<HexagoneBoxPlaced> listBoxThatAreFillingTheInstruction, HashMap<HexagoneBoxPlaced, Integer> markForEachBoxAccordingToTheInstruction, HashMap<HexagoneBoxPlaced, HashMap<Integer, Boolean>> hashmapToKnowWhichIsIrrigated, Integer id) throws CrestNotRegistered, CloneNotSupportedException {
         HexagoneBoxPlaced box = board.getPlacedBox().get(id);
         ArrayList<HashMap<Integer,Boolean>> whichIsIrrigated = new ArrayList<>();
         ArrayList<ArrayList<HexagoneBoxPlaced>> listOfBoxNOtIrrigated = new ArrayList<>();
@@ -89,7 +89,7 @@ public class getAllBoxFillingThePatternEntered {
         }
     }
 
-    private int getBestConfigurationForABox_v1_3(ArrayList<ArrayList<HexagoneBoxPlaced>> listOfBoxNOtIrrigated) throws CrestNotRegistered {
+    private int getBestConfigurationForABox_v1_3(ArrayList<ArrayList<HexagoneBoxPlaced>> listOfBoxNOtIrrigated) throws CrestNotRegistered, CloneNotSupportedException {
         int nbTour = generateMark_v1_3(listOfBoxNOtIrrigated.get(0));
         int index = 0;
         for (int i = 1; i< listOfBoxNOtIrrigated.size(); i++){
@@ -150,7 +150,7 @@ public class getAllBoxFillingThePatternEntered {
         return test;
     }
 
-    private int generateMark_v1_3(ArrayList<HexagoneBoxPlaced> listOfBoxNotIrrigated) throws CrestNotRegistered {
-        return new GenerateOptimizePathForSeveralBoxWithSimulationRank3(listOfBoxNotIrrigated).getNbTour();
+    private int generateMark_v1_3(ArrayList<HexagoneBoxPlaced> listOfBoxNotIrrigated) throws CrestNotRegistered, CloneNotSupportedException {
+        return new GenerateOptimizePathForSeveralBoxWithSimulation(listOfBoxNotIrrigated).getNbTour();
     }
 }

@@ -9,7 +9,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.C
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.CombinationSortedOf_P_ElementAmong_N;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 
 public class GenerateOptimizePathForSeveralBoxWithSimulation {
@@ -18,8 +17,8 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
     private BoardSimulation boardSimulation;
     private CrestGestionnarySimulation crestGestionnarySimulation;
     private Combination<HexagoneBoxPlaced> bestCombination;
-    ArrayList<Crest> chosenPath = new ArrayList<>();
-
+    private ArrayList<Crest> chosenPath = new ArrayList<>();
+    private int nbTour;
 
     public GenerateOptimizePathForSeveralBoxWithSimulation(ArrayList<HexagoneBoxPlaced> listBox) throws CrestNotRegistered, CloneNotSupportedException {
         this.listCombination = new CombinationSortedOf_P_ElementAmong_N(listBox,listBox.size()).getListOfCombination();
@@ -32,6 +31,10 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
 
     public ArrayList<Crest> getChosenPath() {
         return chosenPath;
+    }
+
+    public int getNbTour() {
+        return nbTour;
     }
 
     private void setupNewSimulation(HexagoneBoxPlaced box){
@@ -50,7 +53,6 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
             for (HexagoneBoxPlaced box : combination.getListOfElementInTheCombination()){
                 GenerateAWayToIrrigateTheBox generateAWayToIrrigateTheBox = new GenerateAWayToIrrigateTheBox(box, this.boardSimulation);
                 ArrayList<ArrayList<Crest>> pathToIrrigateTheBox = (ArrayList<ArrayList<Crest>>) generateAWayToIrrigateTheBox.getPathToIrrigation().clone();
-                System.out.println("\n\n\n" + pathToIrrigateTheBox.get(0).get(0) + pathToIrrigateTheBox.get(1).get(0) + "\n\n\n");
                 for (int i=0;i<pathToIrrigateTheBox.size();i++){
                     Crest crest = pathToIrrigateTheBox.get(i).get(0);
                     if (!boardSimulation.getCrestGestionnary().getListOfCrestIrrigated().contains(crest)){
@@ -71,5 +73,7 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
         }
         this.chosenPath = chosenPath;
         this.bestCombination = chosenCombination;
+        this.nbTour = nbTour;
     }
 }
+

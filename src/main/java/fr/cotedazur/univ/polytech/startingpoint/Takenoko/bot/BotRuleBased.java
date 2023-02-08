@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
@@ -19,8 +20,8 @@ public class BotRuleBased extends Bot {
     int objectivesInHand;
     Random random;
 
-    public BotRuleBased(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+    public BotRuleBased(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated, LogInfoDemo logInfoDemo) {
+        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
         this.random = random;
         this.irrigationInHand = 0;
         this.objectivesInHand = 0;
@@ -36,16 +37,16 @@ public class BotRuleBased extends Bot {
                 if (objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
                     drawObjective(arg);
                 }
-                else doAction(arg);
+                else launchAction(arg);
                 resetPossibleAction();
-                doAction(arg);
+                launchAction(arg);
                 break;
             case PLUIE:
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
                 if (objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
                     drawObjective(arg);
                 }
-                doAction(arg);
+                launchAction(arg);
                 break;
         }
         if (this.getScore() > this.currentScore) {
@@ -53,6 +54,18 @@ public class BotRuleBased extends Bot {
             this.objectivesInHand--;
         }
         resetPossibleAction();
+    }
+
+    @Override
+    protected void launchAction(String arg) {
+        if (choseMoveForPanda() == null) {
+            PossibleActions action = chooseAction();
+            displayTextAction(action);
+            doAction(arg,action);
+        } else {
+            movePanda(arg);
+        }
+
     }
 
     protected PossibleActions chooseAction(){
@@ -87,7 +100,6 @@ public class BotRuleBased extends Bot {
         return new int[0];
     }
 
-    @Override
     protected void doAction(String arg) {
         if (choseMoveForPanda().length == 0) {
             PossibleActions action = chooseAction();
@@ -181,7 +193,6 @@ public class BotRuleBased extends Bot {
             List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
             board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         }
-        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
+        logInfoDemo.displayMovementPanda(arg,board);
     }
-
 }

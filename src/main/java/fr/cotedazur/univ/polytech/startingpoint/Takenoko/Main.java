@@ -9,6 +9,10 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
+import java.nio.file.*;
+
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoStats;
 import com.opencsv.ICSVWriter;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
@@ -34,6 +38,8 @@ public class Main {
     public static void main(String... args) throws IOException,CloneNotSupportedException {
         //detection of arg for JCommander
         Main main = new Main();
+        LogInfoDemo logDemo = new LogInfoDemo(main.demo || (!main.twoThousands && !main.csv));
+        LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
         JCommander.newBuilder()
                 .addObject(main)
                 .build()
@@ -53,12 +59,12 @@ public class Main {
                         gestionnaire.ListOfObjectiveJardinierByDefault(),
                         gestionnaire.ListOfObjectivePandaByDefault()
                 );
-                Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
-                Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
+                Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 List<Bot> playerList = new ArrayList<>();
                 playerList.add(bot1);
                 playerList.add(bot2);
-                Game game = new Game(playerList,board);
+                Game game = new Game(playerList,board,logDemo);
                 int winner = game.play(gestionnaire, "twoThousands");
 
                 int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore()};
@@ -118,13 +124,13 @@ public class Main {
             Board board = new Board(retrieving, 1);
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
-            //Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>());
-            Bot bot1 = new BotRuleBased("Bot1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
-            Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>());
+            //Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot1 = new BotRuleBased("Bot1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             List<Bot> playerList = new ArrayList<>();
             playerList.add(bot1);
             playerList.add(bot2);
-            Game game = new Game(playerList,board);
+            Game game = new Game(playerList,board,logDemo);
             System.out.println(bot1.getBoard().getElementOfTheBoard().getStackOfBox());
             game.play(gestionnaire, "demo");
         }

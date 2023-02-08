@@ -179,6 +179,10 @@ public class GestionObjectives {
         return PandaObjectifs;
     }
 
+    public boolean DoesABotHaveEnoughObjectivesDone() {
+        return ABotHasEnoughObjectivesDone;
+    }
+
     /**
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
@@ -196,30 +200,26 @@ public class GestionObjectives {
         Objective objective = this.getParcelleObjectifs().get(i);
         this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
-
-        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
-            System.out.println(bot.getName() + " a pioché un nouvel objectif.");
-            System.out.println(objective);
-        }
+        displayPickObj(bot,objective);
     }
     public void rollJardinierObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
-            System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-            System.out.println(objective);
-        }
+        displayPickObj(bot,objective);
     }
     public void rollPandaObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
-            System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-            System.out.println(objective);
+        displayPickObj(bot,objective);
+    }
+
+    private void displayPickObj(Bot bot, Objective objective){
+        if (!(bot instanceof BotSimulator)) {
+            bot.getLogInfoDemo().displayPickObj(bot.getName(),objective);
         }
     }
     public void checkObjectives(Bot bot, String arg,int sizePlayerList){
@@ -232,8 +232,8 @@ public class GestionObjectives {
                 if(objective.getType() == TypeObjective.PANDA){
                     bot.addScorePanda(objective);
                 }
-                if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
-                    System.out.println(objective.toString() + ", a été réalisé");
+                if (!(bot instanceof BotSimulator)) {
+                    bot.getLogInfoDemo().displayObjFinish(objective);
                 }
                 listOfObjectifDone.add(objective);
             }
@@ -402,8 +402,8 @@ public class GestionObjectives {
      */
     private boolean ParcelleObjectifCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
-            int adjIndice = (idOfAdjacentBoxCorrect.get(j)+ x)%7;
-            if (adjIndice == 0) adjIndice = 1;
+            int adjIndice = idOfAdjacentBoxCorrect.get(j)+ x;
+            if (adjIndice > 6) adjIndice = adjIndice - 6;
             if (idOfAdjacentBoxCorrect.contains(adjIndice)){
                 return true;
             }
@@ -434,19 +434,6 @@ public class GestionObjectives {
             }
         }
         return botWinnerList;
-    }
-
-    public void printWinner(List<Bot> botWinnerList){
-        String str = botWinnerList.get(0).getName();
-        if(botWinnerList.size() >1){
-            for(int i=1; i<botWinnerList.size(); i++){
-                str += " et " + botWinnerList.get(i).getName();
-            }
-        }
-        switch (botWinnerList.size()){
-            case 1 -> System.out.println(str + " a gagné avec " + botWinnerList.get(0).getScore() + " points !");
-            default -> System.out.println(str + " sont à égalité avec " + botWinnerList.get(0).getScore() + " points !");
-        }
     }
 
     public boolean checkIfBotCanDrawAnObjective(Bot bot){

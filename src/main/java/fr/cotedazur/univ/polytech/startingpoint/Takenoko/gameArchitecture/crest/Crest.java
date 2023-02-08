@@ -8,9 +8,17 @@ import java.util.Objects;
 
 public class Crest implements Comparable<Crest> {
 
+    /**
+     * Is the number of turn necessary to place an irrigation in this crest :
+     * If an irrigation can immediately be place, the value is 1
+     */
     private int range_to_irrigation;
     private int id;
     private int[] coordinates;
+
+    /**
+     * ArrayList that contain
+     */
     private ArrayList<ArrayList<Integer>> listOfCrestChildren;
     private int order;
     private boolean isIrrigated;

@@ -10,7 +10,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.
 
 import java.util.*;
 
-public class GenerateOptimizePathForSeveralBoxRank2 {
+public class GenerateOptimizePathForSeveralBox {
 
     protected ArrayList<HexagoneBoxPlaced> boxToIrrigate;
     protected CrestGestionnary crestGestionnary;
@@ -19,7 +19,7 @@ public class GenerateOptimizePathForSeveralBoxRank2 {
     private HashMap<HexagoneBoxPlaced,GenerateAWayToIrrigateTheBox> generalHashMapOfPathForEachBox;
 
 
-    public GenerateOptimizePathForSeveralBoxRank2(ArrayList<HexagoneBoxPlaced> boxs, boolean bool) throws CrestNotRegistered {
+    public GenerateOptimizePathForSeveralBox(ArrayList<HexagoneBoxPlaced> boxs, boolean bool) throws CrestNotRegistered, CloneNotSupportedException {
         if (bool){
             this.boxToIrrigate = boxs;
             this.crestGestionnary = boxs.get(0).getBoard().getCrestGestionnary();
@@ -29,7 +29,7 @@ public class GenerateOptimizePathForSeveralBoxRank2 {
         }
     }
 
-    public GenerateOptimizePathForSeveralBoxRank2(ArrayList<HexagoneBoxPlaced> boxs) throws CrestNotRegistered {
+    public GenerateOptimizePathForSeveralBox(ArrayList<HexagoneBoxPlaced> boxs) throws CrestNotRegistered, CloneNotSupportedException {
         this(boxs,true);
     }
 
@@ -44,7 +44,7 @@ public class GenerateOptimizePathForSeveralBoxRank2 {
         }
     }
 
-    protected void setupGeneralWayForEachBox() throws CrestNotRegistered {
+    protected void setupGeneralWayForEachBox() throws CrestNotRegistered, CloneNotSupportedException {
         generalHashMapOfPathForEachBox = new HashMap<>();
         for (HexagoneBoxPlaced box : boxToIrrigate){
             generalHashMapOfPathForEachBox.put(box,new GenerateAWayToIrrigateTheBox(box));

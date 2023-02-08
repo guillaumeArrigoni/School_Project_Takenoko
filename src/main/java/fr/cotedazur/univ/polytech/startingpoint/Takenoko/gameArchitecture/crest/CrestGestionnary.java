@@ -150,14 +150,17 @@ public class CrestGestionnary {
         if (candidateNewValue == this.rangeFromIrrigated.get(child)){
             ArrayList<Crest> listOfParent = this.linkCrestChildrenToCrestParent.get(child);
             listOfParent.add(parent);
+            listOfParent = eleminateDuplicate(listOfParent);
             this.linkCrestChildrenToCrestParent.put(child,listOfParent);
             if (rangeFromIrrigated.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
                 this.listOfCrestOneRangeToIrrigated.add(child);
+                this.listOfCrestOneRangeToIrrigated = eleminateDuplicate(this.listOfCrestOneRangeToIrrigated);
             }
             return 0;
         } else if (candidateNewValue < this.rangeFromIrrigated.get(child)){
             if (rangeFromIrrigated.get(parent) == 0 && !this.listOfCrestOneRangeToIrrigated.contains(child)){ //second condition should never be false
                 this.listOfCrestOneRangeToIrrigated.add(child);
+                this.listOfCrestOneRangeToIrrigated = eleminateDuplicate(this.listOfCrestOneRangeToIrrigated);
             }
             setRangeToIrrigate(child, candidateNewValue);
             this.linkCrestChildrenToCrestParent.put(child, new ArrayList<Crest>(Arrays.asList(parent)));
@@ -186,6 +189,7 @@ public class CrestGestionnary {
             for(int i = 0; i< this.parentChildless.size(); i++){
                 newParentChildless = createAndImplementTheChildCrestOfTheParent(allCrestImplemented, newParentChildless, i);
             }
+            newParentChildless = eleminateDuplicate(newParentChildless);
             this.parentChildless = newParentChildless;
         }
         for (Crest crest : newCrestToImplement){
@@ -209,6 +213,7 @@ public class CrestGestionnary {
             listOfChildrenForParent.add(child);
             newParentChildless = makeImplementationNeededForChildCrest(allCrestImplemented, newParentChildless, parent, listOfChildrenForParent, child);
         }
+        listOfChildrenForParent = eleminateDuplicate(listOfChildrenForParent);
         this.linkCrestParentToCrestChildren.put(parent,listOfChildrenForParent);
         return newParentChildless;
     }
@@ -250,6 +255,8 @@ public class CrestGestionnary {
                 linkCrestParentToCrestChildren.put(crest, new ArrayList<>());
                 parentChildless.add(crest);
                 listOfCrestOneRangeToIrrigated.add(crest);
+                parentChildless = eleminateDuplicate(parentChildless);
+                listOfCrestOneRangeToIrrigated = eleminateDuplicate(listOfCrestOneRangeToIrrigated);
                 setRangeToIrrigate(crest, 0);
             }
             ArrayList<Crest> newParentChildless = new ArrayList<>();
@@ -257,10 +264,18 @@ public class CrestGestionnary {
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
                 newParentChildless = createAndImplementTheChildCrestOfTheParent(this.linkCrestParentToCrestChildren.keySet(),newParentChildless,i);
             }
+            newParentChildless = eleminateDuplicate(newParentChildless);
             this.parentChildless = newParentChildless;
             //actualizeCrestVariable(new ArrayList<>(Arrays.asList(new Crest(5,-10,2))));
         } else {
             actualizeCrestVariable(box.getListOfCrestAroundBox());
         }
+    }
+
+    private ArrayList<Crest> eleminateDuplicate(ArrayList<Crest> listWithDuplicate){
+        LinkedHashSet<Crest> set = new LinkedHashSet<>(listWithDuplicate);
+        listWithDuplicate.clear();
+        listWithDuplicate.addAll(set);
+        return listWithDuplicate;
     }
 }

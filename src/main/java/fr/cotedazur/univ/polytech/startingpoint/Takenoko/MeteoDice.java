@@ -8,7 +8,9 @@ public class MeteoDice {
         ORAGE(3),
         SOLEIL(4),
         NUAGES(5),
-        HASARD(6);
+        HASARD(6),
+
+        NO_METEO(7);
         private final int id;
         Meteo(int id) {
             this.id = id;

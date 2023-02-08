@@ -5,6 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.Elemen
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.CrestGestionnary;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
@@ -12,12 +13,16 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.Impossi
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
 import java.util.*;
 
 
 public class Board implements Cloneable {
 
+    /**
+     * True if all the box are by default irrigated, false if not
+     */
     protected final boolean allIrrigated;
 
     /**
@@ -28,62 +33,33 @@ public class Board implements Cloneable {
     
     /**
      * PlacedBox is a Hashmap that contain in key all the box's id already place in the board
-     * and associate for each one their range to the center of the board (lake)
+     * and associate for each one the HexagoneBoxPlaced associated
      * Type :
-     *      - int[] : coordinates of the placed box
-     *      - Integer : range to the lake
+     *      - Integer : id of the placed box
+     *      - HexagoneBoxPlaced : the box associated
      */
     protected HashMap<Integer, HexagoneBoxPlaced> placedBox;
     
     /**
-     * AvailableBox is a Hashmap that contain in key all the box's id that can be placed.
-     * (= where new box can be place in the board).
-     * Associate to each key the range to the center of the board (lake)
-     * Type :
-     *      - int[] : coordinates of the placed box
-     *      - Integer : range to the lake
+     * AvailableBox is a ArrayList that contain all the coodinate where a new box can be place :
+     *      -> A new box can only place in a coordinate from this list.
      */
     protected ArrayList<int[]> AvailableBox;
+
+    /**
+     * Must be >0.
+     * Use to the hashcode if different board are use
+     */
+    protected final int idOfTheBoard;
     protected int[] gardenerCoords;
     protected int[] pandaCoords;
     protected RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     protected CrestGestionnary crestGestionnary;
     protected ElementOfTheBoard elementOfTheBoard;
 
-    /**
-     * Must be >0.
-     * Use to the hashcode if different board are used
-     */
-    protected final int idOfTheBoard;
 
-    public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
-        return retrieveBoxIdWithParameters;
-    }
 
-    public CrestGestionnary getCrestGestionnary() {
-        return crestGestionnary;
-    }
 
-    public ArrayList<Integer> getCrestGestionnaryAlreadyIrrigated(){
-        return crestGestionnary.getAlreadyIrrigated();
-    }
-
-    public boolean getAllIrrigated(){
-        return this.allIrrigated;
-    }
-
-    public void placeIrrigation(Crest crest){
-        try {
-            crestGestionnary.placeIrrigation(crest,this.placedBox);
-        } catch (ImpossibleToPlaceIrrigationException e) {
-            System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id){
-        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard());
-    }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id,ElementOfTheBoard elementOfTheBoard){
         this.idOfTheBoard = id;
@@ -93,41 +69,43 @@ public class Board implements Cloneable {
         this.placedBox = new HashMap<>();
         this.crestGestionnary = new CrestGestionnary();
         this.AvailableBox = new ArrayList<>();
-        this.generateLac();
         this.gardenerCoords = new int[]{0,0,0};
+        this.pandaCoords = new int[]{0,0,0};
+        this.generateLac();
     }
-
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id){
+        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard());
+    }
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
         //TODO set allIrrigated to false when irrigation add to the game
         this(retrieveBoxIdWithParameters,true,id);
     }
-
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated){
         //TODO set allIrrigated to false when irrigation add to the game
         this(retrieveBoxIdWithParameters,true,id,elementOfTheBoardCheated);
     }
 
-    private void generateLac(){
-        HexagoneBoxPlaced lac = new HexagoneBoxPlaced(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
-        this.numberBoxPlaced = 1;
-        for (int i=1;i<7;i++){
-            this.AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
-        }
-        this.placedBox.put(lac.getId(),lac);
-        crestGestionnary.launchUpdatingCrestWithAddingNewBox(lac);
-        lac.launchIrrigationChecking();
-    }
+
+
+
 
     public boolean isAllIrrigated() {
         return allIrrigated;
     }
-
+    public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
+        return retrieveBoxIdWithParameters;
+    }
+    public CrestGestionnary getCrestGestionnary() {
+        return crestGestionnary;
+    }
+    public boolean getAllIrrigated(){
+        return this.allIrrigated;
+    }
     public int[] getGardenerCoords() {
         return this.gardenerCoords;
     }
-    public int[] getPandaCoords() {return this.pandaCoords;}
-    public HexagoneBoxPlaced getBoxWithCoordinates(int[] coords) {
-        return this.placedBox.get(HexagoneBox.generateID(coords));
+    public int[] getPandaCoords() {
+        return this.pandaCoords;
     }
     public int getNumberBoxPlaced() {
         return numberBoxPlaced;
@@ -135,38 +113,33 @@ public class Board implements Cloneable {
     public HashMap<Integer, HexagoneBoxPlaced> getPlacedBox() {
         return placedBox;
     }
-    public ArrayList<HexagoneBoxPlaced> getAllBoxPlaced() {
-        return new ArrayList<>(this.placedBox.values());
-    }
     public ArrayList<int[]> getAvailableBox(){
         return this.AvailableBox;
     }
     public int getIdOfTheBoard(){
         return this.idOfTheBoard;
     }
-
     public ElementOfTheBoard getElementOfTheBoard() {
         return elementOfTheBoard;
     }
 
-    public void setPandaCoords(int[] newCoords, Bot bot) {
-        this.pandaCoords = newCoords;
-        HexagoneBoxPlaced box = getBoxWithCoordinates(newCoords);
-        if (box.getSpecial()!=Special.Protéger && box.getHeightBamboo()>0) {
-            Optional<Color> bambooEatedColor = box.eatBamboo();
-            if (bambooEatedColor.isPresent()){
-                bot.addBambooEaten(bambooEatedColor.get());
-            }
-        }
-    }
-    public void setGardenerCoords(int[] coords) {
-        this.gardenerCoords = coords;
-        growAfterMoveOfTheGardener(getBoxWithCoordinates(coords));
-    }
 
+    public ArrayList<Integer> getCrestGestionnaryAlreadyIrrigated(){
+        return crestGestionnary.getAlreadyIrrigated();
+    }
+    public HexagoneBoxPlaced getBoxWithCoordinates(int[] coords) {
+        return this.placedBox.get(HexagoneBox.generateID(coords));
+    }
+    public ArrayList<HexagoneBoxPlaced> getAllBoxPlaced() {
+        return new ArrayList<>(this.placedBox.values());
+    }
     public boolean isCoordinateInBoard(int[] Coord) {
         return this.placedBox.containsKey(HexagoneBox.generateID(Coord));
     }
+
+
+
+
 
     /**
      * Method use to :
@@ -186,12 +159,40 @@ public class Board implements Cloneable {
                 generateNewAdjacentBox(coord, adjacentCoord);
             }
         }
+        crestGestionnary.launchUpdatingCrestWithAddingNewBox(box);
+        box.launchIrrigationChecking();
     }
+    public void placeIrrigation(Crest crest){
+        try {
+            crestGestionnary.placeIrrigation(crest,this.placedBox);
+        } catch (ImpossibleToPlaceIrrigationException e) {
+            System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+            throw new RuntimeException(e);
+        }
+    }
+    public void setPandaCoords(int[] newCoords, Bot bot) {
+        this.pandaCoords = newCoords;
+        HexagoneBoxPlaced box = getBoxWithCoordinates(newCoords);
+        if (box.getSpecial()!=Special.Protéger && box.getHeightBamboo()>0) {
+            Optional<Color> bambooEatedColor = box.eatBamboo();
+            if (bambooEatedColor.isPresent()){
+                bot.addBambooEaten(bambooEatedColor.get());
+            }
+        }
+    }
+    public void setGardenerCoords(int[] coords) {
+        this.gardenerCoords = coords;
+        growAfterMoveOfTheGardener(getBoxWithCoordinates(coords));
+    }
+
+
+
+
 
     /**
      * Method use to :
      *      generate the adjacent box of 2 box (that are put as parameters in this method)
-     *      check if the nex box can be adding in the ArrayList AvailableBox
+     *      check if the nex box can be added in the ArrayList AvailableBox
      * @param coord the coordinate of a box from which we want the new adjacent box
      * @param adjacentCoord the coordinate of the second box in order to get the adjacent box
      */
@@ -214,8 +215,12 @@ public class Board implements Cloneable {
             newCoord1 = new int[]{Math.min(x,x1),Math.min(y,y1),z+1};
             newCoord2 = new int[]{Math.max(x,x1),Math.max(y,y1),z-1};
         }
-        addNewBoxInAvailableBox(newCoord1);
-        addNewBoxInAvailableBox(newCoord2);
+        if (!placedBox.containsKey(HexagoneBox.generateID(newCoord1))){
+            addNewBoxInAvailableBox(newCoord1);
+        }
+        if (!placedBox.containsKey(HexagoneBox.generateID(newCoord2))){
+            addNewBoxInAvailableBox(newCoord2);
+        }
     }
 
     /**
@@ -286,12 +291,28 @@ public class Board implements Cloneable {
             AvailableBox.remove(box.getCoordinates());
         }
         placedBox.put(box.getId(),box);
-        crestGestionnary.launchUpdatingCrestWithAddingNewBox(box);
-        box.launchIrrigationChecking();
     }
 
+    /**
+     * Method use to initialize the lake and thus the board
+     */
+    private void generateLac(){
+        HexagoneBoxPlaced lac = new HexagoneBoxPlaced(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
+        this.numberBoxPlaced = 1;
+        for (int i=1;i<7;i++){
+            this.AvailableBox.add(lac.getAdjacentBoxOfIndex(i));
+        }
+        this.placedBox.put(lac.getId(),lac);
+        crestGestionnary.launchUpdatingCrestWithAddingNewBox(lac);
+        lac.launchIrrigationChecking();
+    }
+
+
+
+
+
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 }

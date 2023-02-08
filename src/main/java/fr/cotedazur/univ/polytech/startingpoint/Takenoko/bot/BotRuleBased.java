@@ -57,17 +57,16 @@ public class BotRuleBased extends Bot {
         resetPossibleAction();
     }
 
-    @Override
     public void movePandaStorm() {
 
     }
 
-    @Override
+
     protected void launchAction(String arg) {
         if (choseMoveForPanda() == null) {
             PossibleActions action = chooseAction();
-            displayTextAction(action);
-            doAction(arg,action);
+            logInfoDemo.displayTextAction(action);
+            doAction(arg);
         } else {
             movePanda(arg);
         }
@@ -202,7 +201,7 @@ public class BotRuleBased extends Bot {
         logInfoDemo.displayMovementPanda(arg,board);
     }
 
-    @Override
+
     protected void placeIrrigation() {
 
     }

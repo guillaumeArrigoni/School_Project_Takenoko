@@ -26,8 +26,8 @@ public class BotMCTS extends Bot{
      * @param retrieveBoxIdWithParameters
      * @param bambooEated
      */
-    public BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated,LogInfoDemo logInfoDemo) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
+    public BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, LogInfoDemo logInfoDemo) {
+        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
     }
 
     @Override
@@ -42,16 +42,21 @@ public class BotMCTS extends Bot{
             System.out.println(instruction.getAction() + " " + Arrays.toString(instruction.getParameters()));
         }*/
         for(int i = 0; i < instructions.size(); i++){
-            launchAction(arg);
+            doAction(arg);
         }
     }
 
     @Override
-    protected void launchAction(String arg){
-        PossibleActions action = instructions.get(0).getAction();
-        doAction(arg,action);
+    protected void doAction(String arg) {
+        switch (instructions.get(0).getAction()) {
+            case DRAW_AND_PUT_TILE -> placeTile(arg);
+            case MOVE_GARDENER -> moveGardener(arg);
+            case DRAW_OBJECTIVE -> drawObjective(arg);
+            default -> movePanda(arg);
+        }
         instructions.remove(0);
     }
+
 
     @Override
     protected void placeTile(String arg){
@@ -71,19 +76,19 @@ public class BotMCTS extends Bot{
         board.addBox(placedTile);
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
-        super.logInfoDemo.displayPlacementBox(this.name,placedTile);
+        if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
     @Override
     protected void moveGardener(String arg) {
         board.setGardenerCoords(instructions.get(0).getParameters());
-        super.logInfoDemo.displayMovementGardener(this.name,board);
+        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
 
     @Override
     protected void movePanda(String arg) {
         board.setPandaCoords(instructions.get(0).getParameters(),this);
-        super.logInfoDemo.displayMovementPanda(this.name,board);
+        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
 
     @Override
@@ -91,30 +96,20 @@ public class BotMCTS extends Bot{
         switch(instructions.get(0).getParameters()[0]){
             case 0 -> {
                 gestionObjectives.rollParcelleObjective(this, arg);
-                super.logInfoDemo.displayPickPatternObj(this.name);
+                if (arg.equals("demo")) System.out.println(this.name + " a pioché un objectif de parcelle");
             }
             case 1 -> {
                 gestionObjectives.rollPandaObjective(this, arg);
-                super.logInfoDemo.displayPickPandaObj(this.name);
+                if (arg.equals("demo"))System.out.println(this.name + " a pioché un objectif de panda");
             }case 2 -> {
                 gestionObjectives.rollJardinierObjective(this, arg);
-                super.logInfoDemo.displayPickGardenerObj(this.name);
+                if (arg.equals("demo")) System.out.println(this.name + " a pioché un objectif de jardinier");
             }
         }
     }
 
     @Override
-    public TypeObjective choseTypeObjectiveToRoll(String arg) {
+    public TypeObjective choseTypeObjectiveToRoll(String arg){
         return null;
-    }
-
-    @Override
-    protected void placeIrrigation() {
-
-    }
-
-    @Override
-    public void movePandaStorm() {
-
     }
 }

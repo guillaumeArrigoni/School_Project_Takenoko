@@ -14,17 +14,17 @@ public class BoardSimulation extends Board {
     protected RetrieveSimulation retrieveSimulation;
     protected CrestGestionnarySimulation crestGestionnarySimulation;
     public BoardSimulation(Board board) {
-        this(board, new ElementOfTheBoardCheated());
+        this(board, new ElementOfTheBoardCheated(), board.getNumberOfPlayers());
     }
 
-    public BoardSimulation(Board board, ElementOfTheBoard elementOfTheBoard){
-        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoard);
+    public BoardSimulation(Board board, ElementOfTheBoard elementOfTheBoard, int numberOfPlayers){
+        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoard, numberOfPlayers);
         super.elementOfTheBoard = new ElementOfTheBoardSimulation(elementOfTheBoard);
         setupSimulation(board);
     }
 
-    public BoardSimulation(Board board, ElementOfTheBoardCheated elementOfTheBoardCheated) {
-        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoardCheated);
+    public BoardSimulation(Board board, ElementOfTheBoardCheated elementOfTheBoardCheated, int numberOfPlayers) {
+        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoardCheated, numberOfPlayers);
         super.elementOfTheBoard = elementOfTheBoardCheated;
         setupSimulation(board);
     }

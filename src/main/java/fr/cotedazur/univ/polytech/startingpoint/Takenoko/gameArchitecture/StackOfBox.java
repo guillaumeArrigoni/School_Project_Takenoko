@@ -20,6 +20,12 @@ public class StackOfBox {
 
     public StackOfBox(){}
 
+    public StackOfBox copy() {
+        StackOfBox res = new StackOfBox();
+        res.stackOfBox = new ArrayList<>(this.stackOfBox);
+        return res;
+    }
+
     /**
      * Method use to add a new element in the stack of HexagoneBox
      * @param box
@@ -37,6 +43,8 @@ public class StackOfBox {
         stackOfBox.remove(0);
         return box;
     }
+
+
 
     public int size(){
         return this.stackOfBox.size();

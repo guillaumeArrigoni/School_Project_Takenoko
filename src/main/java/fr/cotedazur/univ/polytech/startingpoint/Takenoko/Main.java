@@ -52,7 +52,7 @@ public class Main {
             log.logInit(numberOfPlayer);
             for (int i = 0; i < 10; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-                Board board = new Board(retrieving, 1);
+                Board board = new Board(retrieving, 1, 2);
                 Random random = new Random();
                 GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
                 gestionnaire.initialize(
@@ -122,7 +122,7 @@ public class Main {
         }
         else if (main.demo || (!main.csv && !main.twoThousands)) {
             RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-            Board board = new Board(retrieving, 1);
+            Board board = new Board(retrieving, 1,2);
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
             Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
@@ -135,7 +135,5 @@ public class Main {
             System.out.println(bot1.getBoard().getElementOfTheBoard().getStackOfBox());
             game.play(gestionnaire, "demo");
         }
-
-
     }
 }

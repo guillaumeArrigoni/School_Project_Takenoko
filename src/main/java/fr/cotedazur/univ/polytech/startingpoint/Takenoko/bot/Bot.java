@@ -1,6 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
@@ -11,6 +13,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjec
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
 import java.util.*;
 
@@ -31,6 +34,8 @@ public abstract class Bot {
 
     protected int scorePanda;
 
+    protected int numberObjectiveDone;
+
     /**
      * The list of possible actions
      */
@@ -42,10 +47,12 @@ public abstract class Bot {
     /**
      *
      */
+    public GestionObjectives gestionObjectives;
+    public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    private AbstractMap <Color,Integer> bambooEaten;
+    protected LogInfoDemo logInfoDemo;
 
     protected int nbIrrigation;
-    protected final GestionObjectives gestionObjectives;
-    protected final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     protected final Map <Color,Integer> bambooEaten;
 
 
@@ -57,11 +64,12 @@ public abstract class Bot {
      * @param name the name of the bot
      * @param board the board of the game
      */
-    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color,Integer> bambooEaten) {
+    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color,Integer> bambooEaten, LogInfoDemo logInfoDemo) {
         this.name = name;
         this.board = board;
         this.score = 0;
         this.scorePanda = 0;
+        this.numberObjectiveDone = 0;
         this.objectives = new ArrayList<>();
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -71,12 +79,13 @@ public abstract class Bot {
         this.bambooEaten.put(Color.Vert,0);
         this.bambooEaten.put(Color.Lac,0);
         this.nbIrrigation = 0;
+        this.logInfoDemo = logInfoDemo;
         resetPossibleAction();
     }
 
     public BotSimulator createBotSimulator(ActionLog instructions){
-        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
-        Board tmpBoard = this.board.copy(tmp);
+        Board tmpBoard = new BoardSimulation(this.board,this.board.getElementOfTheBoard());
+        RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
@@ -84,12 +93,13 @@ public abstract class Bot {
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
                 instructions,
-                this.nbIrrigation);
+                this.nbIrrigation,
+                logInfoDemo);
     }
 
     public BotSimulator createBotSimulator(){
-        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
-        Board tmpBoard = this.board.copy(tmp);
+        Board tmpBoard = new BoardSimulation(this.board,this.board.getElementOfTheBoard());
+        RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
@@ -97,7 +107,8 @@ public abstract class Bot {
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
                 null,
-                this.nbIrrigation);
+                this.nbIrrigation,
+                logInfoDemo);
     }
 
     //METHODS
@@ -113,12 +124,52 @@ public abstract class Bot {
     /**
      * This method is called at the beginning of the turn
      */
-    public abstract void playTurn(MeteoDice.Meteo meteo, String arg);
+    public void playTurn(MeteoDice.Meteo meteo, String arg){
+        possibleActions = PossibleActions.getAllActions();
+        logInfoDemo.displayTextMeteo(meteo);
+        switch (meteo){
+            case VENT -> {
+                //Deux fois la même action autorisé
+                launchAction(arg);
+                resetPossibleAction();
+                launchAction(arg);
+            }
+            case PLUIE -> {
+                //Le joueur peut faire pousser une tuile irriguée
+                //TODO c pas implémenté dans la classe hexagoneBox
+                launchAction(arg);
+                launchAction(arg);
+            }
+        }
+    }
+
+    protected abstract void launchAction(String arg);
 
     /**
      * This method is called to do an action
      */
-    protected abstract void doAction(String arg);
+    protected void doAction(String arg,PossibleActions action){
+        switch (action){
+            case DRAW_AND_PUT_TILE:
+                placeTile(arg);
+                break;
+            case MOVE_GARDENER:
+                moveGardener(arg);
+                break;
+            case DRAW_OBJECTIVE:
+                drawObjective(arg);
+                break;
+            case MOVE_PANDA:
+                movePanda(arg);
+                break;
+            default :
+                movePanda(arg);
+        }
+    }
+
+    protected void displayTextAction(PossibleActions action){
+        logInfoDemo.displayTextAction(action);
+    }
 
     //Gestion Actions possibles
 
@@ -210,6 +261,10 @@ public abstract class Bot {
         return this.scorePanda;
     }
 
+    public int getNumberObjectiveDone() {
+        return numberObjectiveDone;
+    }
+
     public void setScore(int score) {
         this.score = score;
     }
@@ -266,6 +321,13 @@ public abstract class Bot {
     }
 
 
+    public void IncrementNumberObjectiveDone() {
+        this.numberObjectiveDone++;
+    }
 
+    public LogInfoDemo getLogInfoDemo() {
+        return logInfoDemo;
+    }
 
+    public abstract TypeObjective choseTypeObjectiveToRoll(String arg);
 }

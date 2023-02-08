@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
@@ -25,14 +26,14 @@ public class BotRandom extends Bot {
      */
     private final Random random;
 
-    public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color,Integer> bambooEated) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+    public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color,Integer> bambooEated, LogInfoDemo logInfoDemo) {
+        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
         this.random = random;
     }
 
 
 
-
+    //TODO move to bot
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg){
         possibleActions = PossibleActions.getAllActions();
@@ -48,13 +49,13 @@ public class BotRandom extends Bot {
                 //Le joueur peut faire pousser une tuile irriguée
                 //TODO c pas implémenté dans la classe hexagoneBox
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
-                
+
                 doAction(arg);
                 doAction(arg);
             }
             case NUAGES -> {
                 System.out.println("Le dé a choisi : NUAGES");
-                //TODO 
+                //TODO
                 doAction(arg);
                 doAction(arg);
             }
@@ -75,6 +76,7 @@ public class BotRandom extends Bot {
         }
     }
 
+    //TODO move to bot
     @Override
     protected void doAction(String arg){
         PossibleActions action = chooseAction();
@@ -102,7 +104,13 @@ public class BotRandom extends Bot {
                 placeIrrigation();
             }
         }
+    }
 
+    Override
+    protected void launchAction(String arg){
+        PossibleActions action = chooseAction();
+        displayTextAction(action);
+        doAction(arg,action);
     }
 
 
@@ -134,17 +142,16 @@ public class BotRandom extends Bot {
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-        if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+        super.logInfoDemo.displayPlacementBox(this.name,placedTile);
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
-        if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
     @Override
     protected void moveGardener(String arg){
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
-        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+        super.logInfoDemo.displayMovementGardener(this.name,board);
     }
 
     @Override
@@ -156,7 +163,7 @@ public class BotRandom extends Bot {
     public void movePanda(String arg){
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
         board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
-        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
+        super.logInfoDemo.displayMovementPanda(this.name,board);
     }
 
     public void movePandaStorm(){
@@ -196,20 +203,20 @@ public class BotRandom extends Bot {
         }
     }
 
-
+    @Override
     public TypeObjective chooseTypeObjectiveToRoll(String arg){
         int i = random.nextInt(0,3) ;
         switch (i) {
             case 1 -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de jardinier");
+                super.logInfoDemo.displayPickGardenerObj(this.name);
                 return TypeObjective.JARDINIER;
             }
             case 2 -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de panda");
+                super.logInfoDemo.displayPickPandaObj(this.name);
                 return TypeObjective.PANDA;
             }
             default -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de parcelle");
+                super.logInfoDemo.displayPickPatternObj(this.name);
                 return TypeObjective.PARCELLE;
             }
         }

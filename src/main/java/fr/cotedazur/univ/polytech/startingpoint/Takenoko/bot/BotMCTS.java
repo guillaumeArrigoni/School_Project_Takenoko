@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.Node;
@@ -25,8 +26,8 @@ public class BotMCTS extends Bot{
      * @param retrieveBoxIdWithParameters
      * @param bambooEated
      */
-    public BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
+    public BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated,LogInfoDemo logInfoDemo) {
+        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
     }
 
     @Override
@@ -41,21 +42,16 @@ public class BotMCTS extends Bot{
             System.out.println(instruction.getAction() + " " + Arrays.toString(instruction.getParameters()));
         }*/
         for(int i = 0; i < instructions.size(); i++){
-            doAction(arg);
+            launchAction(arg);
         }
     }
 
     @Override
-    protected void doAction(String arg) {
-        switch (instructions.get(0).getAction()) {
-            case DRAW_AND_PUT_TILE -> placeTile(arg);
-            case MOVE_GARDENER -> moveGardener(arg);
-            case DRAW_OBJECTIVE -> drawObjective(arg);
-            default -> movePanda(arg);
-        }
+    protected void launchAction(String arg){
+        PossibleActions action = instructions.get(0).getAction();
+        doAction(arg,action);
         instructions.remove(0);
     }
-
 
     @Override
     protected void placeTile(String arg){
@@ -75,19 +71,19 @@ public class BotMCTS extends Bot{
         board.addBox(placedTile);
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
-        if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+        super.logInfoDemo.displayPlacementBox(this.name,placedTile);
     }
 
     @Override
     protected void moveGardener(String arg) {
         board.setGardenerCoords(instructions.get(0).getParameters());
-        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+        super.logInfoDemo.displayMovementGardener(this.name,board);
     }
 
     @Override
     protected void movePanda(String arg) {
         board.setPandaCoords(instructions.get(0).getParameters(),this);
-        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
+        super.logInfoDemo.displayMovementPanda(this.name,board);
     }
 
     @Override
@@ -95,17 +91,21 @@ public class BotMCTS extends Bot{
         switch(instructions.get(0).getParameters()[0]){
             case 0 -> {
                 gestionObjectives.rollParcelleObjective(this, arg);
-                if (arg.equals("demo")) System.out.println(this.name + " a pioché un objectif de parcelle");
+                super.logInfoDemo.displayPickPatternObj(this.name);
             }
             case 1 -> {
                 gestionObjectives.rollPandaObjective(this, arg);
-                if (arg.equals("demo"))System.out.println(this.name + " a pioché un objectif de panda");
+                super.logInfoDemo.displayPickPandaObj(this.name);
             }case 2 -> {
                 gestionObjectives.rollJardinierObjective(this, arg);
-                if (arg.equals("demo")) System.out.println(this.name + " a pioché un objectif de jardinier");
+                super.logInfoDemo.displayPickGardenerObj(this.name);
             }
         }
     }
 
+    @Override
+    public TypeObjective choseTypeObjectiveToRoll(String arg) {
+        return null;
+    }
 
 }

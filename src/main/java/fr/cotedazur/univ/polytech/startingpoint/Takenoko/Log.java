@@ -1,38 +1,47 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Log {
-    private int winsForBot1;
-    private int winsForBot2;
-    private int scoreForBot1;
-    private int scoreForBot2;
-    private int nubmerOfGame;
+    private int[] winsForBots;
+    private int[] scoreForBots;
+    private int numberOfGame;
 
-    public void logResult(int winner, int scoreBot1, int scoreBot2) {
-        if (winner == 1) {
-            winsForBot1++;
-        } else if (winner == 2) {
-            winsForBot2++;
+    public void logInit(int numberOfPlayer) {
+        winsForBots = new int[numberOfPlayer];
+        scoreForBots = new int[numberOfPlayer];
+        Arrays.fill(winsForBots, 0);
+        Arrays.fill(scoreForBots, 0);
+    }
+
+    public void logResult(int winner, int[] score) {
+        for (int i = 0; i < score.length; i++) {
+            if (i+1==winner) {
+                winsForBots[i]++;
+            }
+            scoreForBots[i] += score[i];
         }
-        scoreForBot1 += scoreBot1;
-        scoreForBot2 += scoreBot2;
-
-        nubmerOfGame++;
+        numberOfGame++;
     }
 
-    public float getWinPercentageForBot1() {
-        return (float) winsForBot1 / nubmerOfGame * 100;
+    public float getWinPercentageForIndex(int index) {
+        return (float) winsForBots[index] / numberOfGame * 100;
     }
 
-    public float getWinPercentageForBot2() {
-        return (float) winsForBot2 / nubmerOfGame * 100;
+    public float getMeanScoreForIndex(int index) {
+        return (float) scoreForBots[index] / numberOfGame;
     }
 
-    public float getMeanScoreForBot1() {
-        return (float) scoreForBot1 / nubmerOfGame;
+    public void printLog(int numberOfPlayer, ArrayList<Float> winPercentageForBots, ArrayList<Float> meanScoreForBots) {
+        DecimalFormat df = new DecimalFormat("0.0");
+        System.out.println("------------------------------------------------");
+        for (int i = 0; i < numberOfPlayer; i++) {
+            System.out.println("Bot" + (i + 1) + ":");
+            System.out.println(" -Pourcentage de victoire : " + df.format(winPercentageForBots.get(i)) + "%");
+            System.out.println(" -Score moyen : " + df.format(meanScoreForBots.get(i)));
+            System.out.println("------------------------------------------------");
+        }
     }
-
-    public float getMeanScoreForBot2() {
-        return (float) scoreForBot2 / nubmerOfGame;
-    }
-
 }

@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
@@ -41,6 +42,7 @@ class BoardTest {
     private static HexagoneBoxPlaced vert18Engrais;
     private static HexagoneBoxPlaced notPlacedInBoard;
     private static ElementOfTheBoardCheated elementOfTheBoardCheated;
+    private static LogInfoDemo logInfoDemo;
     /**
      *                  12     13      14
      *              11    4         5      15
@@ -53,6 +55,7 @@ class BoardTest {
     @BeforeAll
     @Order(1)
     public static void setUpGeneral() {
+        logInfoDemo = new LogInfoDemo(true);
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated);
@@ -85,7 +88,7 @@ class BoardTest {
     }
 
     private static void setupBambooAte(){
-        botRandom = new BotRandom("testBot", board, random, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        botRandom = new BotRandom("testBot", board, random, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(),logInfoDemo);
     }
 
     /**

@@ -20,8 +20,8 @@ public class GestionObjectives {
     private ArrayList<ObjectiveParcelle> ParcelleObjectifs;
     private ArrayList<ObjectiveJardinier> JardinierObjectifs;
     private ArrayList<ObjectivePanda> PandaObjectifs;
-
     private final int NB_LISTES_OBJECTIVES = 3;
+    private boolean ABotHasEnoughObjectivesDone;
 
     PatternParcelle POSER_TRIANGLE = new PatternParcelle("TRIANGLE");
     PatternParcelle POSER_LIGNE = new PatternParcelle("LIGNE");
@@ -91,6 +91,7 @@ public class GestionObjectives {
         this.ParcelleObjectifs = new ArrayList<>();
         this.JardinierObjectifs = new ArrayList<>();
         this.PandaObjectifs = new ArrayList<>();
+        this.ABotHasEnoughObjectivesDone = false;
 
     }
     public ArrayList<ObjectiveParcelle> ListOfObjectiveParcelleByDefault(){
@@ -178,12 +179,16 @@ public class GestionObjectives {
         return PandaObjectifs;
     }
 
+    public boolean DoesABotHaveEnoughObjectivesDone() {
+        return ABotHasEnoughObjectivesDone;
+    }
+
     /**
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    public void rollObjective(BotRandom bot, String arg){
-        TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll(arg);
+    public void rollObjective(Bot bot, String arg){
+        TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg);
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot, arg);
         case JARDINIER -> rollJardinierObjective(bot, arg);
@@ -195,42 +200,40 @@ public class GestionObjectives {
         Objective objective = this.getParcelleObjectifs().get(i);
         this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
-
-        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
-            System.out.println(bot.getName() + " a pioché un nouvel objectif.");
-            System.out.println(objective);
-        }
+        displayPickObj(bot,objective);
     }
     public void rollJardinierObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
-            System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-            System.out.println(objective);
-        }
+        displayPickObj(bot,objective);
     }
     public void rollPandaObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
-            System.out.println(bot.getName() + " a pioché un nouvel objectif. ");
-            System.out.println(objective);
+        displayPickObj(bot,objective);
+    }
+
+    private void displayPickObj(Bot bot, Objective objective){
+        if (!(bot instanceof BotSimulator)) {
+            bot.getLogInfoDemo().displayPickObj(bot.getName(),objective);
         }
     }
-    public void checkObjectives(Bot bot, String arg){
+    public void checkObjectives(Bot bot, String arg,int sizePlayerList){
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
                 bot.addScore(objective, arg);
+                bot.IncrementNumberObjectiveDone();
+                addPointsIfEnoughObjectivesDone(bot, sizePlayerList);
                 if(objective.getType() == TypeObjective.PANDA){
                     bot.addScorePanda(objective);
                 }
-                if (arg.equals("demo") && !(bot instanceof BotSimulator)) {
-                    System.out.println(objective.toString() + ", a été réalisé");
+                if (!(bot instanceof BotSimulator)) {
+                    bot.getLogInfoDemo().displayObjFinish(objective);
                 }
                 listOfObjectifDone.add(objective);
             }
@@ -238,6 +241,21 @@ public class GestionObjectives {
         ArrayList<Objective> listOfAllObjectivesFromABot = bot.getObjectives();
         listOfAllObjectivesFromABot.removeAll(listOfObjectifDone);
         bot.setObjectives(listOfAllObjectivesFromABot);
+    }
+
+    public int getNumberOfObjectivesDoneToStartLastTurn(int sizePlayerList) {
+        return switch (sizePlayerList){
+            case 2 -> 9;
+            case 3 -> 8;
+            default -> 7;
+        };
+    }
+
+    public void addPointsIfEnoughObjectivesDone(Bot bot, int sizePlayerlist){
+        if(bot.getNumberObjectiveDone() >= this.getNumberOfObjectivesDoneToStartLastTurn(sizePlayerlist) && !this.ABotHasEnoughObjectivesDone){
+            bot.setScore(bot.getScore() + 2);
+            this.ABotHasEnoughObjectivesDone = true;
+        }
     }
 
 
@@ -384,8 +402,8 @@ public class GestionObjectives {
      */
     private boolean ParcelleObjectifCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
-            int adjIndice = (idOfAdjacentBoxCorrect.get(j)+ x)%7;
-            if (adjIndice == 0) adjIndice = 1;
+            int adjIndice = idOfAdjacentBoxCorrect.get(j)+ x;
+            if (adjIndice > 6) adjIndice = adjIndice - 6;
             if (idOfAdjacentBoxCorrect.contains(adjIndice)){
                 return true;
             }
@@ -416,19 +434,6 @@ public class GestionObjectives {
             }
         }
         return botWinnerList;
-    }
-
-    public void printWinner(List<Bot> botWinnerList){
-        String str = botWinnerList.get(0).getName();
-        if(botWinnerList.size() >1){
-            for(int i=1; i<botWinnerList.size(); i++){
-                str += " et " + botWinnerList.get(i).getName();
-            }
-        }
-        switch (botWinnerList.size()){
-            case 1 -> System.out.println(str + " a gagné avec " + botWinnerList.get(0).getScore() + " points !");
-            default -> System.out.println(str + " sont à égalité avec " + botWinnerList.get(0).getScore() + " points !");
-        }
     }
 
     public boolean checkIfBotCanDrawAnObjective(Bot bot){

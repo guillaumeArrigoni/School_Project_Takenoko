@@ -179,6 +179,10 @@ public class GestionObjectives {
         return PandaObjectifs;
     }
 
+    public boolean DoesABotHaveEnoughObjectivesDone() {
+        return ABotHasEnoughObjectivesDone;
+    }
+
     /**
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).

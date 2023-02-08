@@ -124,8 +124,8 @@ public class Main {
             Board board = new Board(retrieving, 1);
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
-            //            Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-            Bot bot1 = new BotRuleBased("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            //Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot1 = new BotRuleBased("Bot1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             List<Bot> playerList = new ArrayList<>();
             playerList.add(bot1);

@@ -183,8 +183,8 @@ public class GestionObjectives {
      * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
      * Supprime cet objectif de la hashmap associée (objectif plus disponible).
      */
-    public void rollObjective(BotRandom bot, String arg){
-        TypeObjective typeObjective = bot.chooseTypeObjectiveToRoll(arg);
+    public void rollObjective(Bot bot, String arg){
+        TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg);
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot, arg);
         case JARDINIER -> rollJardinierObjective(bot, arg);

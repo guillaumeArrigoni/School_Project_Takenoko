@@ -99,5 +99,9 @@ public class BotMCTS extends Bot{
         }
     }
 
+    @Override
+    public TypeObjective choseTypeObjectiveToRoll(String arg) {
+        return null;
+    }
 
 }

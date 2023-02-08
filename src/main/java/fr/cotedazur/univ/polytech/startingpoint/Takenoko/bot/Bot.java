@@ -280,4 +280,6 @@ public abstract class Bot {
     public LogInfoDemo getLogInfoDemo() {
         return logInfoDemo;
     }
+
+    public abstract TypeObjective choseTypeObjectiveToRoll(String arg);
 }

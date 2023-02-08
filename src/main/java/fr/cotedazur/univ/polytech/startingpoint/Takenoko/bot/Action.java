@@ -54,14 +54,4 @@ public class Action {
         return possibleMove;
     }
 
-    public static void moveGardener(Board board, int[] coords) {
-        board.setGardenerCoords(coords);
-    }
-
-    public static void movePanda(Board board, int[] coords, Bot bot) {
-        board.setPandaCoords(coords, bot);
-    }
-
-
-
 }

@@ -87,7 +87,8 @@ public class BotRandom extends Bot {
         super.logInfoDemo.displayMovementPanda(this.name,board);
     }
 
-    public TypeObjective chooseTypeObjectiveToRoll(String arg){
+    @Override
+    public TypeObjective choseTypeObjectiveToRoll(String arg){
         int i = random.nextInt(0,3) ;
         switch (i) {
             case 1 -> {

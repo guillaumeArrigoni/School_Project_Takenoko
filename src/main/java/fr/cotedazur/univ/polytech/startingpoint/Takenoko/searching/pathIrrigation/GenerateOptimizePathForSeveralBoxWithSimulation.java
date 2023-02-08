@@ -9,7 +9,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.C
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.CombinationSortedOf_P_ElementAmong_N;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 
 public class GenerateOptimizePathForSeveralBoxWithSimulation {

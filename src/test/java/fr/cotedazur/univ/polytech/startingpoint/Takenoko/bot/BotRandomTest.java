@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
@@ -26,8 +27,10 @@ class BotRandomTest {
     final String arg = "demo";
 
     GestionObjectives gestionObjectives;
+    private static LogInfoDemo logInfoDemo;
     @BeforeEach
     void setUp() {
+        logInfoDemo = new LogInfoDemo(true);
         this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters, 1);
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
@@ -37,7 +40,7 @@ class BotRandomTest {
                 gestionObjectives.ListOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
-        botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>());
+        botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(),logInfoDemo);
     }
 
     @Test

@@ -5,7 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateOptimizePathForSeveralBoxWithSimulationRank3;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateOptimizePathForSeveralBoxWithSimulation;
 
 import java.util.*;
 
@@ -96,8 +96,8 @@ public class getAllBoxFillingThePatternEntered {
         return test;
     }
 
-    private int generateMark(ArrayList<HexagoneBoxPlaced> listOfBoxNotIrrigated) throws CrestNotRegistered {
-        return new GenerateOptimizePathForSeveralBoxWithSimulationRank3(listOfBoxNotIrrigated).getNbTour();
+    private int generateMark(ArrayList<HexagoneBoxPlaced> listOfBoxNotIrrigated) throws CrestNotRegistered, CloneNotSupportedException {
+        return new GenerateOptimizePathForSeveralBoxWithSimulation(listOfBoxNotIrrigated).getNbTour();
     }
 
 

@@ -249,6 +249,12 @@ public class Board implements Cloneable {
         }
     }
 
+    public void growAfterRain(HexagoneBoxPlaced box){
+        if (box.isIrrigate() &&
+                !Arrays.equals(box.getCoordinates(), new int[]{0,0,0}) &&
+                box.getHeightBamboo()<4) box.growBamboo();
+    }
+
     /**
      * Check if the number of box placed is equals to 2
      * (correspond to the case when the players add the first HexagoneBox to the booard (the first is the lake)

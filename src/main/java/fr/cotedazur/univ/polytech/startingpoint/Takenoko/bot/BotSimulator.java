@@ -30,10 +30,11 @@ public class BotSimulator extends Bot{
      * @param retrieveBoxIdWithParameters
      * @param bambooEated
      */
-    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, ArrayList<Objective> objectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions) {
+    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, ArrayList<Objective> objectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions,int nbIrrigation) {
         super(name + 's', board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated);
         this.objectives = objectives;
         this.instructions = instructions;
+        this.nbIrrigation = nbIrrigation;
         legal = true;
 
     }

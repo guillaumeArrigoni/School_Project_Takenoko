@@ -102,7 +102,7 @@ public class Board implements Cloneable {
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
         //TODO set allIrrigated to false when irrigation add to the game
-        this(retrieveBoxIdWithParameters,true,id);
+        this(retrieveBoxIdWithParameters,false,id);
     }
 
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated){

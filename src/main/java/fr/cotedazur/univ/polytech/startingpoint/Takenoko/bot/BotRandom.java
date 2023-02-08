@@ -1,6 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
@@ -8,6 +10,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
 import java.util.*;
 
@@ -45,6 +48,7 @@ public class BotRandom extends Bot {
                 //Le joueur peut faire pousser une tuile irriguée
                 //TODO c pas implémenté dans la classe hexagoneBox
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
+                
                 doAction(arg);
                 doAction(arg);
             }
@@ -74,6 +78,7 @@ public class BotRandom extends Bot {
     @Override
     protected void doAction(String arg){
         PossibleActions action = chooseAction();
+        placeIrrigation();
         switch (action) {
             case DRAW_AND_PUT_TILE -> {
                 if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherPoserTuile");
@@ -90,6 +95,11 @@ public class BotRandom extends Bot {
             case MOVE_PANDA -> {
                 if (arg.equals("demo")) System.out.println("Le bot a choisi : BougerPanda");
                 movePanda(arg);
+            }
+            case TAKE_IRRIGATION -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : PrendreIrrigation");
+                this.nbIrrigation++;
+                placeIrrigation();
             }
         }
 
@@ -132,7 +142,7 @@ public class BotRandom extends Bot {
 
     @Override
     protected void moveGardener(String arg){
-        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
+        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
@@ -144,7 +154,7 @@ public class BotRandom extends Bot {
 
     @Override
     public void movePanda(String arg){
-        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
+        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
         board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
@@ -156,6 +166,34 @@ public class BotRandom extends Bot {
         }
         board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()) + " grâce à l'orage");
+    }
+
+
+
+    public void placeIrrigation(){
+        if(random.nextInt(0,2) == 0) {
+            List<GenerateAWayToIrrigateTheBox> tmp = new ArrayList<>();
+            GenerateAWayToIrrigateTheBox temp;
+            for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
+                if (!box.isIrrigate()) {
+                    try {
+                        temp = new GenerateAWayToIrrigateTheBox(box);
+                        if (temp.getPathToIrrigation().size() <= this.nbIrrigation)
+                            tmp.add(temp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if(!tmp.isEmpty()) {
+                temp = tmp.get(random.nextInt(0, tmp.size()));
+                for (ArrayList<Crest> path : temp.getPathToIrrigation()) {
+                    System.out.println("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
+                    board.placeIrrigation(path.get(0));
+                    nbIrrigation--;
+                }
+            }
+        }
     }
 
 

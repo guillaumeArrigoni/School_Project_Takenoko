@@ -49,8 +49,11 @@ public abstract class Bot {
      */
     public GestionObjectives gestionObjectives;
     public RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    private AbstractMap <Color,Integer> bambooEaten;
     protected LogInfoDemo logInfoDemo;
+
+    protected int nbIrrigation;
+    protected final Map <Color,Integer> bambooEaten;
+
 
 
     //CONSTRUCTOR
@@ -60,7 +63,7 @@ public abstract class Bot {
      * @param name the name of the bot
      * @param board the board of the game
      */
-    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEaten, LogInfoDemo logInfoDemo) {
+    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color,Integer> bambooEaten, LogInfoDemo logInfoDemo) {
         this.name = name;
         this.board = board;
         this.score = 0;
@@ -74,6 +77,7 @@ public abstract class Bot {
         this.bambooEaten.put(Color.Jaune,0);
         this.bambooEaten.put(Color.Vert,0);
         this.bambooEaten.put(Color.Lac,0);
+        this.nbIrrigation = 0;
         this.logInfoDemo = logInfoDemo;
         resetPossibleAction();
     }
@@ -84,9 +88,12 @@ public abstract class Bot {
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
+                new ArrayList<>(this.objectives),
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
-                instructions,logInfoDemo);
+                instructions,
+                this.nbIrrigation,
+                logInfoDemo);
     }
 
     public BotSimulator createBotSimulator(){
@@ -95,9 +102,12 @@ public abstract class Bot {
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
+                new ArrayList<>(this.objectives),
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
-                null,logInfoDemo);
+                null,
+                this.nbIrrigation,
+                logInfoDemo);
     }
 
     //METHODS
@@ -129,8 +139,25 @@ public abstract class Bot {
                 launchAction(arg);
                 launchAction(arg);
             }
+            case NUAGES -> {
+                //TODO
+                launchAction(arg);
+                launchAction(arg);
+            }
+            case ORAGE -> {
+                movePandaStorm();
+                launchAction(arg);
+                launchAction(arg);
+            }
+            default/*SOLEIL*/ -> {
+                launchAction(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
         }
     }
+
+    public abstract void movePandaStorm();
 
     protected abstract void launchAction(String arg);
 
@@ -150,6 +177,10 @@ public abstract class Bot {
                 break;
             case MOVE_PANDA:
                 movePanda(arg);
+                break;
+            case TAKE_IRRIGATION :
+                this.nbIrrigation++;
+                placeIrrigation();
                 break;
             default :
                 movePanda(arg);
@@ -177,6 +208,9 @@ public abstract class Bot {
 
     protected abstract void movePanda(String arg);
 
+    protected abstract void placeIrrigation();
+
+
     //Score and objectives
     public int getScore() {
         return score;
@@ -199,11 +233,45 @@ public abstract class Bot {
     public abstract void drawObjective(String arg);
 
     public boolean isObjectiveIllegal(PossibleActions actions){
-        return ((actions == PossibleActions.MOVE_GARDENER &&  Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
-                (actions == PossibleActions.MOVE_PANDA && Action.possibleMoveForGardenerOrPanda(board,board.getPandaCoords()).isEmpty()) ||
+        return ((actions == PossibleActions.MOVE_GARDENER &&  Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
+                (actions == PossibleActions.MOVE_PANDA && Bot.possibleMoveForGardenerOrPanda(board,board.getPandaCoords()).isEmpty()) ||
                 (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5) ||
                 (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getElementOfTheBoard().getStackOfBox().size() < 3) ||
-                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
+                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) ||
+                (actions == PossibleActions.PLACE_IRRIGATION));
+    }
+
+
+    public static ArrayList<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {
+        int x = coord[0];
+        int y = coord[1];
+        int z = coord[2];
+        ArrayList<int[]> possibleMove = new ArrayList<>();
+        boolean possible = true;
+        int count = 1;
+        int[] newCoord;
+        for (int i=0;i<6;i++) {
+            while (possible) {
+                newCoord = switch (i) {
+                    case 0 -> new int[]{x, y + count, z - count};
+                    case 1 -> new int[]{x, y - count, z + count};
+                    case 2 -> new int[]{x + count, y, z - count};
+                    case 3 -> new int[]{x - count, y, z + count};
+                    case 4 -> new int[]{x - count, y + count, z};
+                    case 5 -> new int[]{x + count, y - count, z};
+                    default -> new int[]{0, 0, 0};
+                };
+
+                if (!board.isCoordinateInBoard(newCoord)) possible=false;
+                else {
+                    possibleMove.add(newCoord);
+                    count++;
+                }
+            }
+            possible = true;
+            count = 1;
+        }
+        return possibleMove;
     }
 
     public String getName() {

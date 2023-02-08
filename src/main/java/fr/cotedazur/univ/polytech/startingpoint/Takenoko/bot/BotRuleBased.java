@@ -12,6 +12,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjectiv
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
+//TODO : changer car class action n'existe plus'
 
 public class BotRuleBased extends Bot {
 
@@ -57,6 +58,11 @@ public class BotRuleBased extends Bot {
     }
 
     @Override
+    public void movePandaStorm() {
+
+    }
+
+    @Override
     protected void launchAction(String arg) {
         if (choseMoveForPanda() == null) {
             PossibleActions action = chooseAction();
@@ -89,7 +95,7 @@ public class BotRuleBased extends Bot {
 
     protected int[] choseMoveForPanda() {
         List<int[]> hexagoneBoxWithBamboos = hexagoneBoxWithBamboos();
-        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(this.board, board.getPandaCoords());
+        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(this.board, board.getPandaCoords());
         for (int[] possiblePandaCoords : possibleMoves) {
             for (int[] boxWithBamboos : hexagoneBoxWithBamboos) {
                 if (Arrays.equals(possiblePandaCoords, boxWithBamboos)) {
@@ -153,7 +159,7 @@ public class BotRuleBased extends Bot {
 
     @Override
     protected void moveGardener(String arg){
-        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
+        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
@@ -190,9 +196,17 @@ public class BotRuleBased extends Bot {
             board.setPandaCoords(choseMoveForPanda(),this);
         }
         else {
-            List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
+            List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
             board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         }
         logInfoDemo.displayMovementPanda(arg,board);
     }
+
+    @Override
+    protected void placeIrrigation() {
+
+    }
+
 }
+
+

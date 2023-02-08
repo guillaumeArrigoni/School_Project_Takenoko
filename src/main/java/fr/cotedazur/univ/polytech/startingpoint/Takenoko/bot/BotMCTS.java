@@ -31,10 +31,16 @@ public class BotMCTS extends Bot{
     }
 
     @Override
-    public void playTurn(MeteoDice.Meteo meteo, String arg){
-        node = new Node(this.createBotSimulator(), 2, meteo, arg);
+    public void playTurn(MeteoDice.Meteo meteo, String arg) {
+        if (MeteoDice.Meteo.VENT == meteo || meteo == MeteoDice.Meteo.NO_METEO) {
+            node = new Node(this.createBotSimulator(), 2, meteo, arg);
+        } else {
+            node = new Node(this.createBotSimulator(), 3, meteo, arg);
+        }
         instructions = node.getBestInstruction();
-//        System.out.println("instructions : " + instructions.get(0) + " " + instructions.get(1));
+        /*for (ActionLog instruction : instructions) {
+            System.out.println(instruction.getAction() + " " + Arrays.toString(instruction.getParameters()));
+        }*/
         for(int i = 0; i < instructions.size(); i++){
             launchAction(arg);
         }
@@ -55,18 +61,16 @@ public class BotMCTS extends Bot{
         for(int i = 0; i < 3; i++)
             list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
         //Choose a random tile from the tiles drawn
-        int placedTileIndex = 0;
+        int placedTileIndex = instructions.get(0).getParameters()[3];
         HexagoneBox tileToPlace = list.get(placedTileIndex);
-        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(1));
-        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(2));
         //Choose a random available space
-        int[] placedTileCoords = instructions.get(0).getParameters();
+        int[] placedTileCoords = new int[]{instructions.get(0).getParameters()[0],instructions.get(0).getParameters()[1],instructions.get(0).getParameters()[2]};
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(1));
-        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(2));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
+        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
         super.logInfoDemo.displayPlacementBox(this.name,placedTile);
     }
 
@@ -104,4 +108,13 @@ public class BotMCTS extends Bot{
         return null;
     }
 
+    @Override
+    protected void placeIrrigation() {
+
+    }
+
+    @Override
+    public void movePandaStorm() {
+
+    }
 }

@@ -83,7 +83,8 @@ public class GestionObjectives {
     ObjectivePanda MANGER_TRICOLORE_3 = new ObjectivePanda("MANGER_TRICOLORE_3",6,MANGER_TROIS_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
 
     /**
-     * Contient 3 hashmap qui stockent les differents types d'objectifs disponibles (les pioches).
+     * This Constructor creates an instance witch contains the different ArrayLists of Objective.
+     * This instance rolls the Objectives to draw for the bots, and checks if the Objectives are achieved.
      */
     public GestionObjectives(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -94,6 +95,11 @@ public class GestionObjectives {
         this.ABotHasEnoughObjectivesDone = false;
 
     }
+
+    /**
+     * This method creates the ArrayList of ObjectiveParcelle by default, using all the objectives with the type PARCELLE.
+     * @return An ArrayList with all the ObjectiveParcelle.
+     */
     public ArrayList<ObjectiveParcelle> ListOfObjectiveParcelleByDefault(){
         return new ArrayList<>(Arrays.asList(
                 POSER_TRIANGLE_VERT,
@@ -112,6 +118,11 @@ public class GestionObjectives {
                 POSER_LOSANGE_VERT_JAUNE,
                 POSER_LOSANGE_ROUGE_JAUNE));
     }
+
+    /**
+     * This method creates the ArrayList of ObjectiveJardinier by default, using all the objectives with the type JARDINIER.
+     * @return An ArrayList with all the ObjectiveJardinier.
+     */
     public ArrayList<ObjectiveJardinier> ListOfObjectiveJardinierByDefault(){
         return new ArrayList<>(Arrays.asList(
                 PLANTER_SUR_SOURCE_EAU_BAMBOU_VERT,
@@ -130,6 +141,11 @@ public class GestionObjectives {
                 PLANTER_TROIS_BAMBOUS_JAUNES,
                 PLANTER_QUATRE_BAMBOUS_VERTS));
     }
+
+    /**
+     * This method creates the ArrayList of ObjectivePanda by default, using all the objectives with the type PANDA.
+     * @return An ArrayList with all the ObjectivePanda.
+     */
     public ArrayList<ObjectivePanda> ListOfObjectivePandaByDefault(){
         return new ArrayList<>(Arrays.asList(
                 MANGER_DEUX_VERTS_1,
@@ -150,6 +166,10 @@ public class GestionObjectives {
         ));
     }
 
+    /**
+     * This method creates a copy of the instance of GestionObjectives.
+     * @return a new instance of GestionObjectives witch is a copy of the instance this method is applied to.
+     */
     public GestionObjectives copy(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
         GestionObjectives gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
         gestionObjectives.ParcelleObjectifs = new ArrayList<>(this.ParcelleObjectifs);
@@ -159,7 +179,10 @@ public class GestionObjectives {
     }
 
     /**
-     * Remplit les hashmap avec tous les objectifs du jeu.
+     * @param objectiveParcelleArrayList is the Arraylist of the Objectives with the type PARCELLE that will be used for the game.
+     * @param objectiveJardinierArrayList is the Arraylist of the Objectives with the type JARDINIER that will be used for the game.
+     * @param objectivePandaArrayList is the Arraylist of the Objectives with the type PANDA that will be used for the game.
+     * This method initializes the fields of the instance corresponding to the different Arraylists of Objectives.
      */
     public void initialize(ArrayList<ObjectiveParcelle> objectiveParcelleArrayList,ArrayList<ObjectiveJardinier> objectiveJardinierArrayList, ArrayList<ObjectivePanda> objectivePandaArrayList) {
         this.ParcelleObjectifs = objectiveParcelleArrayList;
@@ -167,25 +190,41 @@ public class GestionObjectives {
         this.PandaObjectifs = objectivePandaArrayList;
     }
 
+    /**
+     * This method is a getter for the field ParcelleObjectives.
+     * @return an ArrayList witch correspond to the field ParcelleObjectives.
+     */
     public ArrayList<ObjectiveParcelle> getParcelleObjectifs() {
         return ParcelleObjectifs;
     }
 
+    /**
+     * This method is a getter for the field JardinierObjectives.
+     * @return an ArrayList witch correspond to the field JardinierObjectives.
+     */
     public ArrayList<ObjectiveJardinier> getJardinierObjectifs() {
         return JardinierObjectifs;
     }
 
+    /**
+     * This method is a getter for the field PandaObjectives.
+     * @return an ArrayList witch correspond to the field PandaObjectives.
+     */
     public ArrayList<ObjectivePanda> getPandaObjectifs() {
         return PandaObjectifs;
     }
 
+    /**
+     * This method is a getter for the field ABotHasEnoughObjectivesDone.
+     * @return a boolean witch correspond to the field ABotHasEnoughObjectivesDone.
+     */
     public boolean DoesABotHaveEnoughObjectivesDone() {
         return ABotHasEnoughObjectivesDone;
     }
 
     /**
-     * Choisit aléatoirement un objectif de la catégorie correspondant au choix du bot.
-     * Supprime cet objectif de la hashmap associée (objectif plus disponible).
+     * @param bot corresponds to the bot who rolls the objective to draw.
+     * This method rolls (random) an objective among the objectives available with the TypeObjective chosen by the bot.
      */
     public void rollObjective(BotRandom bot, String arg){
         TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg);
@@ -195,6 +234,11 @@ public class GestionObjectives {
         case PANDA -> rollPandaObjective(bot, arg);
         }
     }
+
+    /**
+     * @param bot corresponds to the bot who rolls the objective to draw.
+     * This method rolls (random) an objective among the objectives available with the TypeObjective PARCELLE.
+     */
     public void rollParcelleObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getParcelleObjectifs().size());
         Objective objective = this.getParcelleObjectifs().get(i);
@@ -202,6 +246,11 @@ public class GestionObjectives {
         bot.getObjectives().add(objective);
         displayPickObj(bot,objective);
     }
+
+    /**
+     * @param bot corresponds to the bot who rolls the objective to draw.
+     * This method rolls (random) an objective among the objectives available with the TypeObjective JARDINIER.
+     */
     public void rollJardinierObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = this.getJardinierObjectifs().get(i);
@@ -209,6 +258,11 @@ public class GestionObjectives {
         bot.getObjectives().add(objective);
         displayPickObj(bot,objective);
     }
+
+    /**
+     * @param bot corresponds to the bot who rolls the objective to draw.
+     * This method rolls (random) an objective among the objectives available with the TypeObjective PANDA.
+     */
     public void rollPandaObjective(Bot bot, String arg){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = this.getPandaObjectifs().get(i);
@@ -222,6 +276,13 @@ public class GestionObjectives {
             bot.getLogInfoDemo().displayPickObj(bot.getName(),objective);
         }
     }
+
+    /**
+     * This method checks all the objectives of the bots, and gives him the points if they are achieved.
+     * If an objective is achieved, it will be removed from the bot's ArrayList of objective.
+     * @param bot corresponds to the bot to whom the objectives are checked.
+     * @param sizePlayerList corresponds to the number of players in the game.
+     */
     public void checkObjectives(Bot bot, String arg,int sizePlayerList){
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
@@ -243,6 +304,11 @@ public class GestionObjectives {
         bot.setObjectives(listOfAllObjectivesFromABot);
     }
 
+    /**
+     * @param sizePlayerList sizePlayerList corresponds to the number of players in the game.
+     * @return the necessary amount of objectives that have to be achieved in order to start the last turn,
+     * witch depends on the number of players in the game.
+     */
     public int getNumberOfObjectivesDoneToStartLastTurn(int sizePlayerList) {
         return switch (sizePlayerList){
             case 2 -> 9;
@@ -251,14 +317,24 @@ public class GestionObjectives {
         };
     }
 
-    public void addPointsIfEnoughObjectivesDone(Bot bot, int sizePlayerlist){
-        if(bot.getNumberObjectiveDone() >= this.getNumberOfObjectivesDoneToStartLastTurn(sizePlayerlist) && !this.ABotHasEnoughObjectivesDone){
+    /**
+     * If the bot is the first to achieve the necessary amount of objectives to start the last turn,
+     * the Emperor rewards him and the bot wins 2 points.
+     * @param bot corresponds to the bot to whom the objectives are checked.
+     * @param sizePlayerList corresponds to the number of players in the game.
+     */
+    public void addPointsIfEnoughObjectivesDone(Bot bot, int sizePlayerList){
+        if(bot.getNumberObjectiveDone() >= this.getNumberOfObjectivesDoneToStartLastTurn(sizePlayerList) && !this.ABotHasEnoughObjectivesDone){
             bot.setScore(bot.getScore() + 2);
             this.ABotHasEnoughObjectivesDone = true;
         }
     }
 
-
+    /**
+     * @param objective corresponds to the objective that is being checked.
+     * @param bot corresponds to the bot to whom the objectives are checked.
+     * @return a boolean corresponding to if the objective is achieved or not.
+     */
     public boolean checkOneObjective(Objective objective, Bot bot){
         return switch(objective.getType()) {
             case PARCELLE -> checkParcelleObjectives(objective);
@@ -268,6 +344,11 @@ public class GestionObjectives {
 
     }
 
+    /**
+     * @param objective corresponds to the objective that is being checked.
+     * @param bot corresponds to the bot to whom the objectives are checked.
+     * @return a boolean corresponding to if the objectivePanda is achieved or not.
+     */
     public boolean checkPandaObjectives(Objective objective, Bot bot) {
         boolean isDone = false;
         try{
@@ -290,6 +371,10 @@ public class GestionObjectives {
         return isDone;
     }
 
+    /**
+     * @param objective corresponds to the objective that is being checked.
+     * @return a boolean corresponding to if the objectiveJardinier is achieved or not.
+     */
     public boolean checkJardinierObjectives(Objective objective) {
         ArrayList<Integer> listOfIdAvailable = new ArrayList<>();
         if(objective.getPattern().getSpecial() == null){
@@ -301,6 +386,10 @@ public class GestionObjectives {
         return listOfIdAvailable.size() == objective.getPattern().getNbBambou();
     }
 
+    /**
+     * @param objective corresponds to the objective that is being checked.
+     * @return a boolean corresponding to if the objectiveParcelle is achieved or not.
+     */
     public boolean checkParcelleObjectives(Objective objective) {
         return switch (objective.getPattern().getForme()){
             case "TRIANGLE" -> checkParcelleTriangleOrLigneOrCourbeObjectives(objective,1);
@@ -411,6 +500,10 @@ public class GestionObjectives {
         return false;
     }
 
+    /**
+     * @param bots corresponds to the list of bot playing the game.
+     * @return a list of bot who win the game.
+     */
     public List<Bot> getWinner(List<Bot> bots){
         int[] scores = new int[bots.size()];
         for(int i=0; i<bots.size(); i++){
@@ -436,6 +529,10 @@ public class GestionObjectives {
         return botWinnerList;
     }
 
+    /**
+     * @param bot
+     * @return a boolean corresponding to if the bot can draw an objective or if he has already too many objectives.
+     */
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
         return bot.getObjectives().size() < 5;
     }
@@ -505,6 +602,10 @@ public class GestionObjectives {
         }
     }
 
+    /**
+     * @param array corresponds to an array of int.
+     * @return an ArrayList corresponding to the position(s) of the maximum int value in the array.
+     */
     public ArrayList<Integer> indiceMax(int[] array){
         int max = array[0];
         ArrayList<Integer> res = new ArrayList<>();
@@ -522,6 +623,10 @@ public class GestionObjectives {
         }
         return res;
     }
+
+    /**
+     * @return the most present TypeObjective that can be drawn.
+     */
     public TypeObjective mostPresentTypeObjectiveAvailableToDraw(){
         int[] numberOfTypeObjectiveAvailable = new int[NB_LISTES_OBJECTIVES];
         numberOfTypeObjectiveAvailable[0] = this.getParcelleObjectifs().size();

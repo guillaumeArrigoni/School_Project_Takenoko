@@ -84,12 +84,12 @@ public class BotRuleBased extends Bot {
                 }
             }
         }
-        return null;
+        return new int[0];
     }
 
     @Override
     protected void doAction(String arg) {
-        if (choseMoveForPanda() == null) {
+        if (choseMoveForPanda().length == 0) {
             PossibleActions action = chooseAction();
             switch (action) {
                 case DRAW_AND_PUT_TILE:

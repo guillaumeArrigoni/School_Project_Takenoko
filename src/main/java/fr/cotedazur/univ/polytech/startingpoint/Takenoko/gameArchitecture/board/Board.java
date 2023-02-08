@@ -191,7 +191,7 @@ public class Board implements Cloneable {
     /**
      * Method use to :
      *      generate the adjacent box of 2 box (that are put as parameters in this method)
-     *      check if the nex box can be add in the ArrayList AvailableBox
+     *      check if the nex box can be adding in the ArrayList AvailableBox
      * @param coord the coordinate of a box from which we want the new adjacent box
      * @param adjacentCoord the coordinate of the second box in order to get the adjacent box
      */
@@ -224,8 +224,25 @@ public class Board implements Cloneable {
      */
     private void addNewBoxInAvailableBox(int[] newCoord) {
         if (!(isCoordinateInBoard(newCoord)) && !(AvailableBox.contains(newCoord))) {
-            AvailableBox.add(newCoord);
+            if (getSommeAbsolu(newCoord)<24){
+                AvailableBox.add(newCoord);
+            }
         }
+    }
+
+    /**
+     * Method use to calculate the absolute add of the coordinate,
+     * in order to limitate the range to the lake
+     * @param coord
+     * @return
+     */
+    private int getSommeAbsolu(int[] coord){
+        int sommeAbsolu = 0;
+        for (int i : coord){
+            if (i<0) i = i*-1;
+            sommeAbsolu = sommeAbsolu + i;
+        }
+        return sommeAbsolu;
     }
 
     /**

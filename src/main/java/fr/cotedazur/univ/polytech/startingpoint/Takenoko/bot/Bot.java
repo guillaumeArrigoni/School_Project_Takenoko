@@ -276,4 +276,8 @@ public abstract class Bot {
     public void IncrementNumberObjectiveDone() {
         this.numberObjectiveDone++;
     }
+
+    public LogInfoDemo getLogInfoDemo() {
+        return logInfoDemo;
+    }
 }

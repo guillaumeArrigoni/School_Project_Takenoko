@@ -5,6 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 
 import java.util.ArrayList;
@@ -93,5 +94,18 @@ public class LogInfoDemo extends LoggerMain {
 
     public void displayPickPandaObj(String name){
         super.addLog(name + " a pioché un objectif de jardinier");
+    }
+
+    public void displayTurn(int turn){
+        super.addLog("Tour n°" + turn + " :");;
+    }
+
+    public void displayObjFinish(Objective obj){
+        super.addLog(obj.toString() + ", a été réalisé");;
+    }
+
+    public void displayPickObj(String name,Objective obj){
+        System.out.println(name + " a pioché un nouvel objectif. ");
+        System.out.println(obj);
     }
 }

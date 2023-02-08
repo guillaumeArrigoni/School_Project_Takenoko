@@ -14,8 +14,8 @@ public class FormatterForLog extends Formatter {
     public String format(LogRecord record) {
         StringBuilder builder = new StringBuilder();
         builder.append(ANSI_WHITE2);
-        builder.append(record.getMessage());
-        builder.append("\n");
+        //builder.append(record.getMessage());
+        //builder.append("\n");
         return builder.toString();
     }
 }

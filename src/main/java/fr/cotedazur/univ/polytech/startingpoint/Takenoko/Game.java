@@ -46,7 +46,7 @@ public class Game {
         int numberPlayer = this.playerList.size();
         MeteoDice.Meteo meteo = MeteoDice.Meteo.NO_METEO;
         while (playing) {
-            System.out.println("Tour n°" + turnNumber + " :");
+            logInfoDemo.displayTurn(turnNumber);
             if (turnNumber == 2) logInfoDemo.addLog("Deuxième tour, la météo entre en jeu !");
             if (turnNumber != 1) meteo = meteoDice.roll();
             Bot playingBot = this.playerList.get(turn);

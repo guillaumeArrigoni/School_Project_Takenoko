@@ -38,7 +38,7 @@ public class Log {
         DecimalFormat df = new DecimalFormat("0.0");
         System.out.println("------------------------------------------------");
         for (int i = 0; i < numberOfPlayer; i++) {
-            System.out.println("Bot" + (i+1) + ":");
+            System.out.println("Bot" + (i + 1) + ":");
             System.out.println(" -Pourcentage de victoire : " + df.format(winPercentageForBots.get(i)) + "%");
             System.out.println(" -Score moyen : " + df.format(meanScoreForBots.get(i)));
             System.out.println("------------------------------------------------");

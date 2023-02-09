@@ -20,10 +20,20 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
     private ArrayList<Crest> chosenPath = new ArrayList<>();
     private int nbTour;
 
+
+
+    /**
+     * Method use to get the best Combination with the shortest path
+     * @param listBox : the list of box that have to be irrigated
+     * @throws CrestNotRegistered
+     * @throws CloneNotSupportedException
+     */
     public GenerateOptimizePathForSeveralBoxWithSimulation(ArrayList<HexagoneBoxPlaced> listBox) throws CrestNotRegistered, CloneNotSupportedException {
         this.listCombination = new CombinationSortedOf_P_ElementAmong_N(listBox,listBox.size()).getListOfCombination();
         GenerateBestPath();
     }
+
+
 
     public Combination<HexagoneBoxPlaced> getBestCombination() {
         return bestCombination;
@@ -37,11 +47,28 @@ public class GenerateOptimizePathForSeveralBoxWithSimulation {
         return nbTour;
     }
 
+
+    /**
+     * Method use to set up the Simulation in order to generate the path
+     * @param box any box given at the initialization of the class
+     */
     private void setupNewSimulation(HexagoneBoxPlaced box){
         this.boardSimulation = new BoardSimulation(box.getBoard());
         this.crestGestionnarySimulation = boardSimulation.getCrestGestionnary();
     }
 
+    /**
+     * Method use to generate the path
+     * Will try all the combination sorted available that contain all the box given at the initialization of the class
+     * Will generate a simulation in order to generate the path for each of them
+     * Will retain only the best path and thus the best combination
+     *      <=> (the best order of the box)
+     *      <=> Irrigate the first one, then the second..
+     *      <=> For instance it can be easier to irrigate the second box starting from the first box
+     *              and not from the irrigation placed in the board
+     * @throws CrestNotRegistered
+     * @throws CloneNotSupportedException
+     */
     private void GenerateBestPath() throws CrestNotRegistered, CloneNotSupportedException {
         int nbTour = -1;
         Combination<HexagoneBoxPlaced> chosenCombination = new Combination<>();

@@ -42,4 +42,8 @@ public class LoggerMain {
     public void addLog(String msg){
         logger.log(level,msg);
     }
+
+    public void displaySeparator(){
+        this.addLog("------------------------------------------------");
+    }
 }

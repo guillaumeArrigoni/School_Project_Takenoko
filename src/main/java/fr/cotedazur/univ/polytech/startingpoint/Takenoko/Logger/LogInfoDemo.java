@@ -105,7 +105,11 @@ public class LogInfoDemo extends LoggerMain {
     }
 
     public void displayPickObj(String name,Objective obj){
-        System.out.println(name + " a pioché un nouvel objectif. ");
-        System.out.println(obj);
+        super.addLog(name + " a pioché un nouvel objectif. ");
+        super.addLog(obj.toString());
+    }
+
+    public void displayScore(Bot bot){
+        super.addLog("Score de " + bot.getName() + " : " + bot.getScore());
     }
 }

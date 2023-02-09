@@ -9,7 +9,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigatio
 
 import java.util.*;
 
-public class getAllBoxFillingThePatternEntered {
+public class GetAllBoxFillingThePatternEntered {
     private ArrayList<HexagoneBoxPlaced> listBoxThatAreFillingTheInstruction;
     private HashMap<HexagoneBoxPlaced,Integer> markForEachBoxAccordingToTheInstruction;
     private HashMap<HexagoneBoxPlaced,HashMap<Integer,Boolean>> hashmapToKnowWhichIsIrrigated;
@@ -37,7 +37,7 @@ public class getAllBoxFillingThePatternEntered {
     private HashMap<Integer, Optional<Color>> instruction;
 
 
-    public getAllBoxFillingThePatternEntered(HashMap<Integer, Optional<Color>> instruction, Board board, boolean boxCanBePlaced) throws CrestNotRegistered, CloneNotSupportedException {
+    public GetAllBoxFillingThePatternEntered(HashMap<Integer, Optional<Color>> instruction, Board board, boolean boxCanBePlaced) throws CrestNotRegistered, CloneNotSupportedException {
         this.board = board;
         this.retrieveBoxIdWithParameters = board.getRetrieveBoxIdWithParameters();
         this.boxCanBePlaced = boxCanBePlaced;
@@ -76,6 +76,15 @@ public class getAllBoxFillingThePatternEntered {
         this.hashmapToKnowWhichIsIrrigated = hashmapToKnowWhichIsIrrigated;
     }
 
+    /**
+     * Method use to launch the algorithm for the box with a right id
+     * @param listBoxThatAreFillingTheInstruction : ArrayList that will be updated, list of all the box that are correct for the instruction
+     * @param markForEachBoxAccordingToTheInstruction : Hashmap that will be updated, give for each box, the best mark associated
+     * @param hashmapToKnowWhichIsIrrigated : Hashmap that will be updated, give for each box, the hashmap of irrigation associated (cf whichIsIrrigatedUnder)
+     * @param id : the id of one of the box correct given the instruction
+     * @throws CrestNotRegistered
+     * @throws CloneNotSupportedException
+     */
     private void comparatorForEachBox_v1_3(ArrayList<HexagoneBoxPlaced> listBoxThatAreFillingTheInstruction, HashMap<HexagoneBoxPlaced, Integer> markForEachBoxAccordingToTheInstruction, HashMap<HexagoneBoxPlaced, HashMap<Integer, Boolean>> hashmapToKnowWhichIsIrrigated, Integer id) throws CrestNotRegistered, CloneNotSupportedException {
         HexagoneBoxPlaced box = board.getPlacedBox().get(id);
         ArrayList<HashMap<Integer,Boolean>> whichIsIrrigated = new ArrayList<>();
@@ -89,6 +98,15 @@ public class getAllBoxFillingThePatternEntered {
         }
     }
 
+    /**
+     * Method use to get only the best mark for each box
+     *      <=> Only the configuration with the shortest number of turn to irrigate the box is retained
+     * @param listOfBoxNOtIrrigated : the list that contain all the listOfBoxNOtIrrigatedUnder available
+     *                                Use to generate the mark
+     * @return : the index in the list of the best configuration
+     * @throws CrestNotRegistered
+     * @throws CloneNotSupportedException
+     */
     private int getBestConfigurationForABox_v1_3(ArrayList<ArrayList<HexagoneBoxPlaced>> listOfBoxNOtIrrigated) throws CrestNotRegistered, CloneNotSupportedException {
         int nbTour = generateMark_v1_3(listOfBoxNOtIrrigated.get(0));
         int index = 0;
@@ -102,6 +120,15 @@ public class getAllBoxFillingThePatternEntered {
         return index;
     }
 
+    /**
+     * Try all the rotation possible in order to know if this box and thus this combination pass the instruction
+     * Update the variable whichIsIrrigated and listOfBoxNOtIrrigated with the correct rotation
+     * @param box : the box use to generate the adjacent box and thus the combination
+     * @param whichIsIrrigated : the list of all the whichIsIrrigatedUnder available
+     * @param listOfBoxNOtIrrigated : the list of all the listOfBoxNOtIrrigatedUnder available
+     * @return true if at least one rotation is available
+     *      <=> This box is available
+     */
     private boolean doesPassAllInstruction_v1_3(HexagoneBoxPlaced box, ArrayList<HashMap<Integer, Boolean>> whichIsIrrigated, ArrayList<ArrayList<HexagoneBoxPlaced>> listOfBoxNOtIrrigated) {
         for (int i = 0;i<6;i++){
             boolean test = true;
@@ -119,12 +146,23 @@ public class getAllBoxFillingThePatternEntered {
         return false;
     }
 
+    /**
+     * Method use to know if this index of rotation is correct for the instruction
+     * Check if the box must not be place and verify all the condition if it is
+     * If not launch isTestSpecifiedCondition_v1_3
+     * @param box the box use to generate the adjacent box
+     * @param i : the index of rotation
+     * @param test : the boolean to modify and return, allow to know if the instruction are passed for this rotation and this index
+     * @param whichIsIrrigatedUnder : update the hashMap for this combination with if the box is irrigated or not
+     * @param listOfBoxNOtIrrigatedUnder : the list of box not irrigated (they will be used to generate the mark)
+     * @return true if the index of rotation is correct for the instruction
+     */
     private boolean runInstruction_v1_3(HexagoneBoxPlaced box, int i, boolean test, HashMap<Integer, Boolean> whichIsIrrigatedUnder, ArrayList<HexagoneBoxPlaced> listOfBoxNOtIrrigatedUnder) {
         for (int pos : this.instruction.keySet()) {
             int idOfOneAdjacentBox = HexagoneBox.generateID(box.getAdjacentBox().get(pos + i));
             if (this.instruction.get(pos).isEmpty()) {
                 if (this.board.getPlacedBox().containsKey(idOfOneAdjacentBox) ||
-                        (this.boxCanBePlaced && board.getAvailableBox().contains(idOfOneAdjacentBox))) test = false;
+                        (this.boxCanBePlaced && !board.getAvailableBox().contains(idOfOneAdjacentBox))) test = false;
             } else {
                 test = isTestSpecifiedCondition_v1_3(i, test, whichIsIrrigatedUnder, listOfBoxNOtIrrigatedUnder, pos, idOfOneAdjacentBox);
             }
@@ -135,6 +173,18 @@ public class getAllBoxFillingThePatternEntered {
         return test;
     }
 
+    /**
+     * Method use to know if this index is correct for the instruction
+     * And if it is, check if the box is not irrigated and add it to the list of the box not irrigated in order to generate the mark
+     * @param i : the index of rotation use to take the box in the instruction
+     * @param test : true if the test is passed <=> this index is correct for the instruction
+     * @param whichIsIrrigatedUnder : update the hashMap for this combination with if the box is irrigated or not
+     * @param listOfBoxNOtIrrigatedUnder : the list of box not irrigated (they will be used to generate the mark)
+     * @param pos : the position of the instruction we are looking for
+     * @param idOfOneAdjacentBox : the id of the box at the position pos rotated by i
+     * @return true if the test is passed, false if not
+     *      <=> This box is correct for the instruction
+     */
     private boolean isTestSpecifiedCondition_v1_3(int i, boolean test, HashMap<Integer, Boolean> whichIsIrrigatedUnder, ArrayList<HexagoneBoxPlaced> listOfBoxNOtIrrigatedUnder, int pos, int idOfOneAdjacentBox) {
         if (this.board.getPlacedBox().containsKey(idOfOneAdjacentBox) &&
                 this.board.getPlacedBox().get(idOfOneAdjacentBox).getColor() == this.instruction.get(pos).get()) {
@@ -142,6 +192,7 @@ public class getAllBoxFillingThePatternEntered {
             if (adjBox.isIrrigate()) {
                 whichIsIrrigatedUnder.put(pos + i, true);
             } else {
+                whichIsIrrigatedUnder.put(pos + i, false);
                 listOfBoxNOtIrrigatedUnder.add(adjBox);
             }
         } else {
@@ -150,6 +201,14 @@ public class getAllBoxFillingThePatternEntered {
         return test;
     }
 
+    /**
+     * Method use to generate the mark of a Combination
+     *      The mark is the number of turn need to irrigate all the box in the combination
+     * @param listOfBoxNotIrrigated : the list of box not irrigated in the combination
+     * @return : a number that is the number of turn need to irrigate all the box
+     * @throws CrestNotRegistered
+     * @throws CloneNotSupportedException
+     */
     private int generateMark_v1_3(ArrayList<HexagoneBoxPlaced> listOfBoxNotIrrigated) throws CrestNotRegistered, CloneNotSupportedException {
         return new GenerateOptimizePathForSeveralBoxWithSimulation(listOfBoxNotIrrigated).getNbTour();
     }

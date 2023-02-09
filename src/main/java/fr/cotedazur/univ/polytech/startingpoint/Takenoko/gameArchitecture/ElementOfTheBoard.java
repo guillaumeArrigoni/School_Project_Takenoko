@@ -13,6 +13,9 @@ import java.util.*;
 public class ElementOfTheBoard {
 
     protected HashMap<Color,Integer> nbOfBambooForEachColorAvailable = new HashMap<>();
+    protected HashMap<Special,Integer> nbJetonSpecial;
+    protected int nbIrrigationAvailable;
+    protected StackOfBox stackOfBox;
     protected final HashMap<Color,Integer> defaultInstructionBamboo = new HashMap<Color,Integer>() {{
         put(Color.Vert, 36);
         put(Color.Jaune, 30);
@@ -32,33 +35,50 @@ public class ElementOfTheBoard {
         put(new HexagoneBox(Color.Rouge,Special.Protéger),1);
         put(new HexagoneBox(Color.Rouge,Special.SourceEau),1);
     }};
-    protected StackOfBox stackOfBox;
+
+    protected final HashMap<Special,Integer> defaultInstructionSpecial = new HashMap<Special,Integer>() {{
+        put(Special.Engrais, 3);
+        put(Special.SourceEau, 3);
+        put(Special.Protéger, 3);
+    }};
+
+    protected final int defaultInstructionIrrigation = 20;
 
 
     public ElementOfTheBoard(HashMap<Color,Integer> instructionBamboo, HashMap<HexagoneBox,Integer> instructionBox){
         this.stackOfBox = new StackOfBox(instructionBox);
         this.nbOfBambooForEachColorAvailable = instructionBamboo;
+        this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
+        this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
     public ElementOfTheBoard(){
         this.stackOfBox = new StackOfBox(defaultInstructionBox);
         this.nbOfBambooForEachColorAvailable = defaultInstructionBamboo;
+        this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
+        this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
     public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo,
                              ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox, boolean fromBeginingBox){
         this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginingBox));
         this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginingBamboo);
+        this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
+        this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
     public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo){
         this.stackOfBox = new StackOfBox(defaultInstructionBox);
         this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginingBamboo);
+        this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
+        this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
     public ElementOfTheBoard(boolean fromBeginingBox,ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox){
         this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginingBox));
         this.nbOfBambooForEachColorAvailable = defaultInstructionBamboo;
+        this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
+        this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
     public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor,
@@ -66,6 +86,35 @@ public class ElementOfTheBoard {
         this(listOfBambooAvailable,listOfColor,false,listOfBoxAvailable,listOfBox,false);
     }
 
+    public boolean pickSpecial(Special special){
+        if (this.nbJetonSpecial.containsKey(special)){
+            int valueSpecial = this.nbJetonSpecial.get(special);
+            if (valueSpecial==0){
+                return false;
+            } else {
+                valueSpecial = valueSpecial-1;
+                this.nbJetonSpecial.put(special,valueSpecial);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean pickIrrigation(){
+        if (this.nbIrrigationAvailable==0){
+            return false;
+        }
+        this.nbIrrigationAvailable = this.nbIrrigationAvailable-1;
+        return true;
+    }
+
+    public HashMap<Special, Integer> getNbJetonSpecial() {
+        return nbJetonSpecial;
+    }
+
+    public int getNbIrrigationAvailable() {
+        return nbIrrigationAvailable;
+    }
 
     public StackOfBox getStackOfBox(){
         return stackOfBox;

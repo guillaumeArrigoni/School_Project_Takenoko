@@ -138,11 +138,11 @@ class BotRuleBasedTest {
         hexagoneBoxPlaced5.setHeightBamboo(2);
         //planter 2 bambous rouges
         botRB.objectives.add(gestionObjectives.getJardinierObjectifs().get(12));
-        botRB.growBambooRain();
+        botRB.growBambooRain(arg);
         assertEquals(3, hexagoneBoxPlaced5.getHeightBamboo());
-        botRB.growBambooRain();
+        botRB.growBambooRain(arg);
         assertEquals(4, hexagoneBoxPlaced5.getHeightBamboo());
-        botRB.growBambooRain();
+        botRB.growBambooRain(arg);
         assertEquals(2, hexagoneBoxPlaced2.getHeightBamboo());
     }
 }

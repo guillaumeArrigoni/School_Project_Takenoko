@@ -1,6 +1,5 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLogIrrigation;
@@ -12,14 +11,10 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BotSimulator extends Bot{
 
@@ -28,19 +23,18 @@ public class BotSimulator extends Bot{
     boolean legal;
     /**
      * Constructor of the bot
-     *
-     * @param name                        the name of the bot
+     *the name of the bot
      * @param board                       the board of the game
-     * @param gestionObjectives
-     * @param retrieveBoxIdWithParameters
-     * @param bambooEated
+     * @param gestionObjectives             d
+     * @param retrieveBoxIdWithParameters       d
+     * @param bambooEated                   d
      */
-    public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, ArrayList<Objective> objectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions, int nbIrrigation, LogInfoDemo logInfoDemo, int numberObjectiveDone) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
+    public BotSimulator(Bot bot, Board board, GestionObjectives gestionObjectives, List<Objective> objectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEated, ActionLog instructions) {
+        super(bot.name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, bot.logInfoDemo);
         this.objectives = objectives;
         this.instructions = instructions;
-        this.nbIrrigation = nbIrrigation;
-        this.numberObjectiveDone = numberObjectiveDone;
+        this.nbIrrigation = bot.nbIrrigation;
+        this.numberObjectiveDone = bot.numberObjectiveDone;
         legal = true;
 
     }
@@ -56,30 +50,16 @@ public class BotSimulator extends Bot{
 
     @Override
     protected void doAction(String arg) {
-        switch (instructions.getAction()){
-            case DRAW_AND_PUT_TILE:
-                placeTile(arg);
-                break;
-            case MOVE_GARDENER:
-                moveGardener(arg);
-                break;
-            case DRAW_OBJECTIVE:
-                drawObjective(arg);
-                break;
-            case TAKE_IRRIGATION:
-                takeIrrigation(arg);
-                break;
-            case PLACE_IRRIGATION:
-                placeIrrigation(arg);
-                break;
-            case GROW_BAMBOO:
-                growBambooRain(arg);
-                break;
-            case ADD_AUGMENT:
-                addAugment(arg);
-                break;
-            default://MOVE PANDA
-                movePanda(arg);
+        switch (instructions.getAction()) {
+            case DRAW_AND_PUT_TILE -> placeTile(arg);
+            case MOVE_GARDENER -> moveGardener(arg);
+            case DRAW_OBJECTIVE -> drawObjective(arg);
+            case TAKE_IRRIGATION -> nbIrrigation++;
+            case PLACE_IRRIGATION -> placeIrrigation(arg);
+            case GROW_BAMBOO -> growBambooRain(arg);
+            case ADD_AUGMENT -> placeAugment(arg);
+            default ->//MOVE PANDA
+                    movePanda(arg);
         }
 
     }
@@ -101,9 +81,6 @@ public class BotSimulator extends Bot{
         board.addBox(placedTile);
     }
 
-    protected void takeIrrigation(String arg){
-        nbIrrigation++;
-    }
 
     protected void placeIrrigation(String arg){
         ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions;
@@ -123,7 +100,8 @@ public class BotSimulator extends Bot{
         board.setGardenerCoords(instructions.getParameters());
     }
 
-    protected void addAugment(String arg){
+    @Override
+    protected void placeAugment(String arg){
         HexagoneBoxPlaced box = board.getPlacedBox().get(instructions.getParameters()[0]);
         switch (instructions.getParameters()[1]) {
             case 1 -> {
@@ -151,13 +129,8 @@ public class BotSimulator extends Bot{
         switch(instructions.getParameters()[0]){
             case 0 -> gestionObjectives.rollParcelleObjective(this, arg);
             case 1 -> gestionObjectives.rollPandaObjective(this, arg);
-            case 2 -> gestionObjectives.rollJardinierObjective(this, arg);
+            default -> gestionObjectives.rollJardinierObjective(this, arg);
         }
-    }
-
-    @Override
-    public void addScore(Objective objective, String arg){
-        this.score += objective.getValue();
     }
 
     public boolean isLegal(){
@@ -168,8 +141,4 @@ public class BotSimulator extends Bot{
         return instructions;
     }
 
-    @Override
-    public TypeObjective choseTypeObjectiveToRoll(String arg) {
-        return null;
-    }
 }

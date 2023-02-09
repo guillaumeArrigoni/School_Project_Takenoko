@@ -16,16 +16,15 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigatio
 import java.util.*;
 //TODO : changer car class action n'existe plus'
 
-public class BotRuleBased extends Bot {
+public class BotRuleBased extends BotRandom {
 
     int currentScore;
     int irrigationInHand;
     int objectivesInHand;
-    Random random;
+
 
     public BotRuleBased(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated, LogInfoDemo logInfoDemo) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
-        this.random = random;
+        super(name, board, random, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
         this.irrigationInHand = 0;
         this.objectivesInHand = 0;
         this.currentScore = 0;
@@ -47,7 +46,7 @@ public class BotRuleBased extends Bot {
             case PLUIE -> {
                 //peut faire pousser sur une parcelle irriguée
                 logInfoDemo.addLog("Le dé a choisi : PLUIE");
-                growBambooRain();
+                growBambooRain(arg);
                 launchAction(arg);
                 launchAction(arg);
             }
@@ -192,24 +191,8 @@ public class BotRuleBased extends Bot {
         this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
     }
 
-    @Override
-    public TypeObjective choseTypeObjectiveToRoll(String arg){
-        int i = random.nextInt(0,3);
-        switch (i) {
-            case 1 -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de jardinier");
-                return TypeObjective.JARDINIER;
-            }
-            case 2 -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de panda");
-                return TypeObjective.PANDA;
-            }
-            default -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de parcelle");
-                return TypeObjective.PARCELLE;
-            }
-        }
-    }
+
+
 
     @Override
     public void movePanda(String arg){
@@ -261,7 +244,7 @@ public class BotRuleBased extends Bot {
     }
 
 
-    public int movePandaStorm() {
+    public void movePandaStorm() {
         List<Objective> pandaObjectives = getObjectivesOfType(TypeObjective.PANDA);
         List<HexagoneBoxPlaced> boxWithBamboos = hexagoneBoxWithBamboos();
         if (!pandaObjectives.isEmpty()) {
@@ -270,7 +253,7 @@ public class BotRuleBased extends Bot {
                     for (Color c : obj.getColors()) {
                         if (box.getColor().equals(c) && box.getHeightBamboo() > 0 && this.bambooEaten.get(c) < obj.getPattern().getHauteurBambou()) {
                             board.setPandaCoords(box.getCoordinates(), this);
-                            return 0;
+                            return;
                         }
                     }
                 }
@@ -279,7 +262,6 @@ public class BotRuleBased extends Bot {
         else if (!boxWithBamboos.isEmpty()) {
             board.setPandaCoords(boxWithBamboos.get(random.nextInt(0, boxWithBamboos.size())).getCoordinates(),this);
         }
-        return 0;
     }
 
     public HexagoneBoxPlaced getHighestBamboosOfColor(Color color) {
@@ -294,14 +276,15 @@ public class BotRuleBased extends Bot {
         return highestBox;
     }
 
-    public int growBambooRain() {
+    @Override
+    public void growBambooRain(String arg) {
         List<Objective> gardenerObj = getObjectivesOfType(TypeObjective.JARDINIER);
         for (Objective obj : gardenerObj) {
             for (Color c : obj.getColors()) {
                 HexagoneBoxPlaced box = getHighestBamboosOfColor(c);
                 if (box != null) {
                     box.growBamboo();
-                    return 0;
+                    return;
                 }
             }
         }
@@ -310,7 +293,6 @@ public class BotRuleBased extends Bot {
             HexagoneBoxPlaced box = allBox.get(random.nextInt(0,allBox.size()));
             box.growBamboo();
         }
-        return 0;
     }
 
 }

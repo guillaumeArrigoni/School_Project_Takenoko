@@ -52,8 +52,8 @@ public class BotRuleBased extends BotRandom {
             }
             case NUAGES -> {
                 //peut prendre un aménagement
-                logInfoDemo.addLog("Le dé a choisi : PLUIE");
-                //TODO
+                logInfoDemo.addLog("Le dé a choisi : NUAGES");
+                placeAugment(arg);
                 launchAction(arg);
                 launchAction(arg);
             }
@@ -64,13 +64,20 @@ public class BotRuleBased extends BotRandom {
                 launchAction(arg);
                 launchAction(arg);
             }
-            default -> {
-                //soleil
+            case SOLEIL -> {
                 //3 actions possible
                 logInfoDemo.addLog("Le dé à choisi : SOLEIL");
                 launchAction(arg);
                 launchAction(arg);
                 launchAction(arg);
+            }
+            default -> {
+                // hasard "?"
+                logInfoDemo.addLog("Le dé a choisi : HASARD");
+                placeAugment(arg);
+                launchAction(arg);
+                launchAction(arg);
+
             }
         }
         if (this.getScore() > this.currentScore) {

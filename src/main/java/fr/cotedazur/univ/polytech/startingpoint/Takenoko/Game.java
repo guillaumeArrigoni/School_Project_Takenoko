@@ -42,6 +42,8 @@ public class Game {
         for (Bot bot : this.playerList) {
             gestionnaire.rollParcelleObjective(bot, arg);
             gestionnaire.rollJardinierObjective(bot, arg);
+            gestionnaire.rollPandaObjective(bot, arg);
+            logInfoDemo.displaySeparator();
         }
         int numberPlayer = this.playerList.size();
         MeteoDice.Meteo meteo = MeteoDice.Meteo.NO_METEO;

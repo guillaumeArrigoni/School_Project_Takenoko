@@ -244,7 +244,7 @@ public class GestionObjectives {
         Objective objective = this.getParcelleObjectifs().get(i);
         this.getParcelleObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        //displayPickObj(bot,objective);
+        displayPickObj(bot,objective);
     }
 
     /**
@@ -256,7 +256,7 @@ public class GestionObjectives {
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        //displayPickObj(bot,objective);
+        displayPickObj(bot,objective);
     }
 
     /**
@@ -268,7 +268,7 @@ public class GestionObjectives {
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
         bot.getObjectives().add(objective);
-        //displayPickObj(bot,objective);
+        displayPickObj(bot,objective);
     }
 
     private void displayPickObj(Bot bot, Objective objective){

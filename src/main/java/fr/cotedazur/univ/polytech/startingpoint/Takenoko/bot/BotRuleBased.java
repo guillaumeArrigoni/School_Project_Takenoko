@@ -37,41 +37,40 @@ public class BotRuleBased extends Bot {
         this.objectives = getObjectives();
         System.out.println();
         switch (meteo) {
-            case VENT:
+            case VENT -> {
                 //2 fois la même action possible
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : VENT");
                 launchAction(arg);
                 resetPossibleAction();
                 launchAction(arg);
-                break;
-            case PLUIE:
+            }
+            case PLUIE -> {
                 //peut faire pousser sur une parcelle irriguée
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
                 growBambooRain();
                 launchAction(arg);
                 launchAction(arg);
-                break;
-            case NUAGES:
+            }
+            case NUAGES -> {
                 //peut prendre un aménagement
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
                 //TODO
                 launchAction(arg);
                 launchAction(arg);
-                break;
-            case ORAGE:
+            }
+            case ORAGE -> {
                 //peut placer le panda n'importe où et manger un bambou
                 movePandaStorm();
                 launchAction(arg);
                 launchAction(arg);
-                break;
-            case SOLEIL:
+            }
+            default -> {
+                //soleil
                 //3 actions possible
                 launchAction(arg);
                 launchAction(arg);
                 launchAction(arg);
-                break;
-            case HASARD:
-
+            }
         }
         if (this.getScore() > this.currentScore) {
             this.currentScore = this.getScore();
@@ -81,18 +80,19 @@ public class BotRuleBased extends Bot {
     }
 
     protected void launchAction(String arg) {
-        if (objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
+        if (this.possibleActions.contains(PossibleActions.DRAW_OBJECTIVE) && objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
             drawObjective(arg);
+            this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
         }
-        else if (choseMoveForPanda() == null) {
+        else if (choseMoveForPanda().length == 0 || !(this.possibleActions.contains(PossibleActions.MOVE_PANDA))) {
             doAction(arg);
         } else {
             movePanda(arg);
+            this.possibleActions.remove(PossibleActions.MOVE_PANDA);
         }
-
     }
 
-    protected PossibleActions chooseAction(){
+    protected PossibleActions chooseAction() {
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
         if (isObjectiveIllegal(acp))
@@ -125,34 +125,31 @@ public class BotRuleBased extends Bot {
     }
 
     protected void doAction(String arg) {
-        if (choseMoveForPanda().length == 0) {
-            PossibleActions action = chooseAction();
-            logInfoDemo.displayTextAction(action);
-            switch (action) {
-                case DRAW_AND_PUT_TILE:
-                    if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherPoserTuile");
-                    placeTile(arg);
-                    break;
-                case MOVE_GARDENER:
-                    if (arg.equals("demo")) System.out.println("Le bot a choisi : BougerJardinier");
-                    moveGardener(arg);
-                    break;
-                case DRAW_OBJECTIVE:
-                    if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherObjectif");
-                    drawObjective(arg);
-                    break;
-                case MOVE_PANDA:
-                    if (arg.equals("demo")) System.out.println("Le bot a choisi : BougerPanda");
-                    movePanda(arg);
-                    break;
-                case TAKE_IRRIGATION:
-                    if (arg.equals("demo")) System.out.println("Le bot a choisi : PrendreIrrigation");
-                    this.nbIrrigation++;
-                    placeIrrigation();
+        PossibleActions action = chooseAction();
+        logInfoDemo.displayTextAction(action);
+        switch (action) {
+            case DRAW_AND_PUT_TILE -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherPoserTuile");
+                placeTile(arg);
             }
-        }
-        else {
-            movePanda(arg);
+            case MOVE_GARDENER -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : BougerJardinier");
+                moveGardener(arg);
+            }
+            case DRAW_OBJECTIVE -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherObjectif");
+                drawObjective(arg);
+            }
+            case TAKE_IRRIGATION -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : PrendreIrrigation");
+                this.nbIrrigation++;
+                placeIrrigation();
+            }
+            case MOVE_PANDA -> {
+                movePanda(arg);
+            }
+            default -> {
+            }
         }
     }
 
@@ -177,7 +174,6 @@ public class BotRuleBased extends Bot {
         if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
-
     }
 
     @Override
@@ -215,7 +211,7 @@ public class BotRuleBased extends Bot {
 
     @Override
     public void movePanda(String arg){
-        if (choseMoveForPanda() != null) {
+        if (choseMoveForPanda().length != 0) {
             board.setPandaCoords(choseMoveForPanda(),this);
         }
         else {

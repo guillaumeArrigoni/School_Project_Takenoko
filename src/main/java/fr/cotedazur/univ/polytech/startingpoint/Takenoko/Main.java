@@ -18,7 +18,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 //TODO remettre quand botRuleBased marche
-//import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRuleBased;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRuleBased;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;

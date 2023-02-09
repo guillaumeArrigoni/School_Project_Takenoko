@@ -110,7 +110,7 @@ public class BotSimulator extends Bot{
 
     protected void growBambooRain(String arg){
         HexagoneBoxPlaced box = getBoard().getPlacedBox().get(instructions.getParameters()[0]);
-        box.growBamboo();
+        board.growAfterRain(box);
     }
 
     @Override

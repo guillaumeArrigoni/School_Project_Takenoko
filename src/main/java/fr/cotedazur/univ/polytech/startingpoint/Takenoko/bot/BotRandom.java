@@ -179,7 +179,7 @@ public class BotRandom extends Bot {
         }
         if(!tmp.isEmpty()) {
             HexagoneBoxPlaced box = tmp.get(random.nextInt(0, tmp.size()));
-            box.growBamboo();
+            board.growAfterRain(box);
             System.out.println(this.name + " a fait pousser du bambou grâce à la pluie en " + Arrays.toString(box.getCoordinates()));
         }
     }

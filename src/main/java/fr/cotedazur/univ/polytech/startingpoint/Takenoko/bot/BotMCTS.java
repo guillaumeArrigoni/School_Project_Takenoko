@@ -54,7 +54,7 @@ public class BotMCTS extends Bot{
             case DRAW_AND_PUT_TILE -> placeTile(arg);
             case MOVE_GARDENER -> moveGardener(arg);
             case DRAW_OBJECTIVE -> drawObjective(arg);
-            case TAKE_IRRIGATION -> nbIrrigation++;
+            case TAKE_IRRIGATION -> takeIrrigation(arg);
             case PLACE_IRRIGATION -> placeIrrigation(arg);
             case GROW_BAMBOO -> growBambooRain(arg);
             default -> movePanda(arg);
@@ -92,7 +92,7 @@ public class BotMCTS extends Bot{
 
     protected void growBambooRain(String arg){
         HexagoneBoxPlaced box = getBoard().getPlacedBox().get(instructions.get(0).getParameters()[0]);
-        box.growBamboo();
+        board.growAfterRain(box);
         System.out.println(this.name + " a fait pousser du bambou grâce à la pluie en " + Arrays.toString(box.getCoordinates()));
     }
 

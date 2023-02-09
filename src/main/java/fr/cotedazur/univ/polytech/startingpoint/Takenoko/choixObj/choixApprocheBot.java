@@ -5,7 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.ObjectivePanda;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.ObjectiveParcelle;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.getAllBoxFillingThePatternEntered;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.GetAllBoxFillingThePatternEntered;
 
 import java.util.*;
 
@@ -35,7 +35,7 @@ public class choixApprocheBot {
 
     private void smart_v1(ObjectiveParcelle objectiveParcelle, Board board) throws CrestNotRegistered, CloneNotSupportedException {
         ArrayList<HashMap<Integer, Optional<Color>>> g = generateInstruction(objectiveParcelle);
-        getAllBoxFillingThePatternEntered i = new getAllBoxFillingThePatternEntered(g.get(0),board,true);
+        GetAllBoxFillingThePatternEntered i = new GetAllBoxFillingThePatternEntered(g.get(0),board,true);
     }
 
     private ArrayList<HashMap<Integer, Optional<Color>>> generateInstruction(ObjectiveParcelle objectiveParcelle){

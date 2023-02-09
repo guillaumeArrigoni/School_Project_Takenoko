@@ -158,15 +158,12 @@ public class BotRandom extends Bot {
         while (x) {
             switch (rdm) {
                 case 1 -> {
-                    if (arg.equals("demo")) System.out.println("Le bot a choisi : Placer une source d'eau");
                     special = Special.SourceEau;
                 }
                 case 2 -> {
-                    if (arg.equals("demo")) System.out.println("Le bot a choisi : Placer un engrais");
                     special = Special.Engrais;
                 }
                 default -> {
-                    if (arg.equals("demo")) System.out.println("Le bot a choisi : Placer une protection");
                     special = Special.Protéger;
                 }
             }

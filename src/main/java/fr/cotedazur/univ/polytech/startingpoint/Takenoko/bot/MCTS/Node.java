@@ -5,6 +5,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
@@ -59,7 +60,13 @@ public class Node {
         if(profondeur == 3){
             switch(value.getMeteo()){
                 case ORAGE -> {activateBotSimulator(arg,createPandaStormInstructions());}
-                //case NUAGES -> {profondeur -= 1;}// Idem*/
+                case NUAGES -> {
+                    activateBotSimulator(arg,generateSpecialInstruction());
+                    if (children.isEmpty()){
+                        profondeur --;
+                        createChildren(arg);
+                    }
+                }// Idem*/
                 case PLUIE -> {
                     activateBotSimulator(arg,generateRainInstruction());
                     if (children.isEmpty()){
@@ -142,6 +149,38 @@ public class Node {
         }
         return irrigationInstructions;
     }
+
+    private int getNbSpecial(Special special){
+        return getValue().getBoard().getElementOfTheBoard().getNbJetonSpecial().get(special);
+    }
+
+    private List<ActionLog> generateSpecialInstruction(){
+        List<ActionLog> specialInstructions = new ArrayList<>();
+        if(getNbSpecial(Special.SourceEau) > 0){
+            for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
+                if (box.getSpecial() == Special.Classique) {
+                    specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 1));
+                }
+            }
+        }
+        if(getNbSpecial(Special.Engrais) > 0){
+            for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
+                if (box.getSpecial() == Special.Classique) {
+                    specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 2));
+                }
+            }
+        }
+        if(getNbSpecial(Special.Protéger) > 0){
+            for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
+                if (box.getSpecial() == Special.Classique) {
+                    specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 3));
+                }
+            }
+        }
+        return specialInstructions;
+    }
+
+
 
     public List<ActionLog> generateRainInstruction(){
         List<ActionLog> rainInstructions = new ArrayList<>();

@@ -9,6 +9,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -73,6 +74,9 @@ public class BotSimulator extends Bot{
             case GROW_BAMBOO:
                 growBambooRain(arg);
                 break;
+            case ADD_AUGMENT:
+                addAugment(arg);
+                break;
             default://MOVE PANDA
                 movePanda(arg);
         }
@@ -117,13 +121,24 @@ public class BotSimulator extends Bot{
     protected void moveGardener(String arg) {
         board.setGardenerCoords(instructions.getParameters());
     }
-    /*
-            if(Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).contains(instructions.getParameters()))
-            board.setGardenerCoords(instructions.getParameters());
-        else{
-            legal = false;
+
+    protected void addAugment(String arg){
+        HexagoneBoxPlaced box = board.getPlacedBox().get(instructions.getParameters()[0]);
+        switch (instructions.getParameters()[1]) {
+            case 1 -> {
+                board.getElementOfTheBoard().pickSpecial(Special.SourceEau);
+                box.setSpecial(Special.SourceEau);
+            }
+            case 2 -> {
+                board.getElementOfTheBoard().pickSpecial(Special.Engrais);
+                box.setSpecial(Special.Engrais);
+            }
+            default -> {
+                board.getElementOfTheBoard().pickSpecial(Special.Protéger);
+                box.setSpecial(Special.Protéger);
+            }
         }
-     */
+    }
 
     @Override
     protected void movePanda(String arg) {

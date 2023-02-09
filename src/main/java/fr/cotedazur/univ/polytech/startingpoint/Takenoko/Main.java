@@ -18,7 +18,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 //TODO remettre quand botRuleBased marche
-//import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRuleBased;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRuleBased;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
@@ -47,10 +47,10 @@ public class Main {
                 .parse(args);
 
         if (main.twoThousands || main.csv) {
-            int numberOfPlayer = 2;
+            int numberOfPlayer = 4;
             Log log = new Log();
             log.logInit(numberOfPlayer,logInfoStats);
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1, 2);
                 Random random = new Random();
@@ -61,14 +61,18 @@ public class Main {
                         gestionnaire.ListOfObjectivePandaByDefault()
                 );
                 Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-                Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot2 = new BotRuleBased("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot3 = new BotRandom("Bot3",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot4 = new BotRandom("Bot4",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 List<Bot> playerList = new ArrayList<>();
                 playerList.add(bot1);
                 playerList.add(bot2);
+                playerList.add(bot3);
+                playerList.add(bot4);
                 Game game = new Game(playerList,board,logDemo);
                 int winner = game.play(gestionnaire, "twoThousands");
 
-                int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore()};
+                int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore(), bot3.getScore(), bot4.getScore()};
                 log.logResult(winner, scoreForBots);
             }
 
@@ -126,11 +130,14 @@ public class Main {
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
             Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-            //Bot bot1 = new BotRuleBased("Bot1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-            Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot2 = new BotRuleBased("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot3 = new BotRandom("Bot3",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot4 = new BotRandom("Bot4",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             List<Bot> playerList = new ArrayList<>();
             playerList.add(bot1);
             playerList.add(bot2);
+            playerList.add(bot3);
+            playerList.add(bot4);
             Game game = new Game(playerList,board,logDemo);
             game.play(gestionnaire, "demo");
         }

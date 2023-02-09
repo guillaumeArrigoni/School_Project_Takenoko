@@ -24,7 +24,7 @@ public class BotRandom extends Bot {
     /**
      * The random generator
      */
-    private final Random random;
+    protected final Random random;
 
     public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEated, LogInfoDemo logInfoDemo) {
         super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
@@ -36,14 +36,14 @@ public class BotRandom extends Bot {
 
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg) {
-        possibleActions = PossibleActions.getAllActions();
+        resetPossibleAction();
         placeIrrigation(arg);
         switch (meteo) {
             case VENT -> {
                 //Deux fois la même action autorisé
                 if (arg.equals("demo")) logInfoDemo.addLog("Le dé a choisi : VENT");
                 doAction(arg);
-                possibleActions = PossibleActions.getAllActions();
+                resetPossibleAction();
                 doAction(arg);
             }
             case PLUIE -> {

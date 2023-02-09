@@ -75,7 +75,7 @@ public abstract class Bot {
         this.nbIrrigation = 0;
         this.logInfoDemo = logInfoDemo;
         this.numberObjectiveDone = 0;
-        possibleActions = PossibleActions.getAllActions();
+        resetPossibleAction();
     }
 
     public BotSimulator createBotSimulator(ActionLog ... instructions) {
@@ -181,6 +181,10 @@ public abstract class Bot {
         if (!errorImpossibleToDeleteTheseBamboo.isEmpty()) {
             throw new DeletingBotBambooException(errorImpossibleToDeleteTheseBamboo);
         }
+    }
+
+    public void resetPossibleAction(){
+        possibleActions = PossibleActions.getAllActions();
     }
 
     //GETTER

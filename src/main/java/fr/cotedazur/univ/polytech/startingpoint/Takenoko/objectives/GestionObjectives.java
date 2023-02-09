@@ -299,7 +299,7 @@ public class GestionObjectives {
                 listOfObjectifDone.add(objective);
             }
         }
-        ArrayList<Objective> listOfAllObjectivesFromABot = new ArrayList<>(bot.getObjectives());
+        List<Objective> listOfAllObjectivesFromABot = bot.getObjectives();
         listOfAllObjectivesFromABot.removeAll(listOfObjectifDone);
         bot.setObjectives(listOfAllObjectivesFromABot);
     }

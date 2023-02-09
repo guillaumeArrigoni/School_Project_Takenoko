@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GenerateOptimizePathForSeveralBoxRank2Test {
+class GenerateOptimizePathForSeveralBoxTest {
 
     private static RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private static Board board;

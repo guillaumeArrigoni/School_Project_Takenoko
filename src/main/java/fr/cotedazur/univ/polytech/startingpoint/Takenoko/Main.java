@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoStats;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
@@ -32,12 +33,14 @@ public class Main {
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
     boolean csv;
+
     public static void main(String... args) throws IOException,CloneNotSupportedException {
         //detection of arg for JCommander
         Main main = new Main();
-        LogInfoDemo logDemo = new LogInfoDemo(main.demo || (!main.twoThousands && !main.csv));
+        LogInfoDemo logDemo = new LogInfoDemo(false);
         LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
-        LoggerError loggerError = new LoggerError(true);
+        LoggerError loggerError = new LoggerError(main.demo || (!main.twoThousands && !main.csv));
+        LoggerSevere loggerSevere = new LoggerSevere(main.demo || (!main.twoThousands && !main.csv));
         JCommander.newBuilder()
                 .addObject(main)
                 .build()
@@ -49,7 +52,7 @@ public class Main {
             log.logInit(numberOfPlayer,logInfoStats);
             for (int i = 0; i < 10; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-                Board board = new Board(retrieving, 1);
+                Board board = new Board(retrieving, 1,loggerSevere);
                 Random random = new Random();
                 GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
                 gestionnaire.initialize(
@@ -119,7 +122,7 @@ public class Main {
         }
         else if (main.demo || (!main.csv && !main.twoThousands)) {
             RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-            Board board = new Board(retrieving, 1);
+            Board board = new Board(retrieving, 1,loggerSevere);
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving,loggerError);
             //Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);

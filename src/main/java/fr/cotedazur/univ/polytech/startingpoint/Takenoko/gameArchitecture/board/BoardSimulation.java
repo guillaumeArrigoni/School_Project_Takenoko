@@ -18,13 +18,13 @@ public class BoardSimulation extends Board {
     }
 
     public BoardSimulation(Board board, ElementOfTheBoard elementOfTheBoard){
-        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoard);
+        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoard, board.getLoggerSevere());
         super.elementOfTheBoard = new ElementOfTheBoardSimulation(elementOfTheBoard);
         setupSimulation(board);
     }
 
     public BoardSimulation(Board board, ElementOfTheBoardCheated elementOfTheBoardCheated) {
-        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoardCheated);
+        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoardCheated, board.getLoggerSevere());
         super.elementOfTheBoard = elementOfTheBoardCheated;
         setupSimulation(board);
     }
@@ -33,7 +33,7 @@ public class BoardSimulation extends Board {
     /**
      * Method use to copy the board and place in the new board generated
      * the HexagoneBoxSimulation corresponding to the box already place in the true board
-     * @param board : the true box use to to generate this simulation
+     * @param board : the true box use to generate this simulation
      */
     private void setupSimulation(Board board) {
         this.crestGestionnarySimulation = new CrestGestionnarySimulation(board.getCrestGestionnary());

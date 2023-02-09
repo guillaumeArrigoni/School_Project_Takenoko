@@ -1,11 +1,12 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 
 public class ElementOfTheBoardCheated extends ElementOfTheBoard{
 
     public ElementOfTheBoardCheated(){
-        super();
+        super(new LoggerSevere(true)); //should never be use because the cheated ElementOfTheBoard can't call method throwing error
     }
 
     /**

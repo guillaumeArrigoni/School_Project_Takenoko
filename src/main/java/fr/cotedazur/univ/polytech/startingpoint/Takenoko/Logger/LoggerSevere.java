@@ -6,10 +6,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class LoggerError extends LoggerMain {
+public class LoggerSevere extends LoggerMain {
 
-    public LoggerError(boolean IsOn) {
-        super(Level.WARNING, LogInfoStats.class.getName());
+    public LoggerSevere(boolean IsOn) {
+        super(Level.SEVERE, LogInfoStats.class.getName());
         if (!IsOn){
             this.setOff();
         }

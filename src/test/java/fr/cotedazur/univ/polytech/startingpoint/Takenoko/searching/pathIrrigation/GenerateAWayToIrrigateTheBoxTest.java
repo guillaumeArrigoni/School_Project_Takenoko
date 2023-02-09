@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
@@ -39,7 +40,7 @@ class GenerateAWayToIrrigateTheBoxTest {
     @Order(1)
     public static void setup() throws CrestNotRegistered, CloneNotSupportedException {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters,false,1);
+        board = new Board(retrieveBoxIdWithParameters,false,1, new LoggerSevere(true));
         boardSimulation = new BoardSimulation(board);
         retrieveSimulation = boardSimulation.getRetrieveBoxIdWithParameters();
         hexagoneBoxPlaced1 = new HexagoneBoxSimulation(-1,1,0, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);

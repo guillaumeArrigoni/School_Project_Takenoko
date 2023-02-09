@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
@@ -56,12 +57,14 @@ public class Board implements Cloneable {
     protected RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     protected CrestGestionnary crestGestionnary;
     protected ElementOfTheBoard elementOfTheBoard;
+    protected LoggerSevere loggerSevere;
 
 
 
 
 
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id,ElementOfTheBoard elementOfTheBoard){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters,
+                 boolean allIrrigated, int id, ElementOfTheBoard elementOfTheBoard, LoggerSevere loggerSevere){
         this.idOfTheBoard = id;
         this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -71,18 +74,19 @@ public class Board implements Cloneable {
         this.AvailableBox = new ArrayList<>();
         this.gardenerCoords = new int[]{0,0,0};
         this.pandaCoords = new int[]{0,0,0};
+        this.loggerSevere = loggerSevere;
         this.generateLac();
     }
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id){
-        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard());
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id, LoggerSevere loggerSevere){
+        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard(loggerSevere),loggerSevere);
     }
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, LoggerSevere loggerSevere){
         //TODO set allIrrigated to false when irrigation add to the game
-        this(retrieveBoxIdWithParameters,true,id);
+        this(retrieveBoxIdWithParameters,true,id,loggerSevere);
     }
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated, LoggerSevere loggerSevere){
         //TODO set allIrrigated to false when irrigation add to the game
-        this(retrieveBoxIdWithParameters,true,id,elementOfTheBoardCheated);
+        this(retrieveBoxIdWithParameters,true,id,elementOfTheBoardCheated,loggerSevere);
     }
 
 
@@ -122,6 +126,7 @@ public class Board implements Cloneable {
     public ElementOfTheBoard getElementOfTheBoard() {
         return elementOfTheBoard;
     }
+    public LoggerSevere getLoggerSevere() { return loggerSevere; }
 
 
     public ArrayList<Integer> getCrestGestionnaryAlreadyIrrigated(){

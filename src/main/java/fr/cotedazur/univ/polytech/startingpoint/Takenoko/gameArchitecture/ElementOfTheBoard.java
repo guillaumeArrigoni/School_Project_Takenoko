@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.elementOfTheBoard.BambooNotAvailableException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.elementOfTheBoard.BambooOfColorNotExistingException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
@@ -16,6 +17,7 @@ public class ElementOfTheBoard {
     protected HashMap<Special,Integer> nbJetonSpecial;
     protected int nbIrrigationAvailable;
     protected StackOfBox stackOfBox;
+    protected LoggerSevere loggerSevere;
     protected final HashMap<Color,Integer> defaultInstructionBamboo = new HashMap<Color,Integer>() {{
         put(Color.Vert, 36);
         put(Color.Jaune, 30);
@@ -45,14 +47,16 @@ public class ElementOfTheBoard {
     protected final int defaultInstructionIrrigation = 20;
 
 
-    public ElementOfTheBoard(HashMap<Color,Integer> instructionBamboo, HashMap<HexagoneBox,Integer> instructionBox){
+    public ElementOfTheBoard(HashMap<Color,Integer> instructionBamboo, HashMap<HexagoneBox,Integer> instructionBox,LoggerSevere loggerSevere){
+        this.loggerSevere = loggerSevere;
         this.stackOfBox = new StackOfBox(instructionBox);
         this.nbOfBambooForEachColorAvailable = instructionBamboo;
         this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
         this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
-    public ElementOfTheBoard(){
+    public ElementOfTheBoard(LoggerSevere loggerSevere){
+        this.loggerSevere = loggerSevere;
         this.stackOfBox = new StackOfBox(defaultInstructionBox);
         this.nbOfBambooForEachColorAvailable = defaultInstructionBamboo;
         this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
@@ -60,21 +64,25 @@ public class ElementOfTheBoard {
     }
 
     public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo,
-                             ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox, boolean fromBeginingBox){
+                             ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox, boolean fromBeginingBox,
+                                LoggerSevere loggerSevere){
+        this.loggerSevere = loggerSevere;
         this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginingBox));
         this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginingBamboo);
         this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
         this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
-    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo){
+    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo,LoggerSevere loggerSevere){
+        this.loggerSevere = loggerSevere;
         this.stackOfBox = new StackOfBox(defaultInstructionBox);
         this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginingBamboo);
         this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
         this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
-    public ElementOfTheBoard(boolean fromBeginingBox,ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox){
+    public ElementOfTheBoard(boolean fromBeginingBox,ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox,LoggerSevere loggerSevere){
+        this.loggerSevere = loggerSevere;
         this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginingBox));
         this.nbOfBambooForEachColorAvailable = defaultInstructionBamboo;
         this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
@@ -82,8 +90,8 @@ public class ElementOfTheBoard {
     }
 
     public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor,
-                             ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox){
-        this(listOfBambooAvailable,listOfColor,false,listOfBoxAvailable,listOfBox,false);
+                             ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox,LoggerSevere loggerSevere){
+        this(listOfBambooAvailable,listOfColor,false,listOfBoxAvailable,listOfBox,false,loggerSevere);
     }
 
     public boolean pickSpecial(Special special){
@@ -188,7 +196,7 @@ public class ElementOfTheBoard {
             }
             instruction = generateWithArrayList(instruction, listOfNumberToCreate, listKey);
         } catch (ListOfDifferentSize e) {
-            System.err.println("\n  -> An error has occurred : "
+            loggerSevere.addLog("\n  -> An error has occurred : "
                     + e.getErrorTitle()
                     + "\n"
                     + "In line :\n"

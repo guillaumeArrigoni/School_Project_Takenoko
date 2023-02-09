@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.ListOfDifferentSize;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -37,24 +38,26 @@ class ElementOfTheBoardTest {
     static ArrayList<HexagoneBox> defaultBoxValueGenerated = new ArrayList<>();
     static HashMap<Color,Integer> newBambooValueHashMap = new HashMap<>();
     static HashMap<Color,Integer> addBambooValueHashMap = new HashMap<>();
+    static LoggerSevere loggerSevere;
 
     @BeforeAll
     @Order(1)
     public static void setUpGeneral() {
+        loggerSevere = new LoggerSevere(true);
         newBoxNumber = new ArrayList<>(Arrays.asList(1,2));
         newBambooNumber = new ArrayList<>(Arrays.asList(2,3));
         newBoxValue = new ArrayList<>(Arrays.asList(
                 new HexagoneBox(Color.Vert, Special.Classique),
                 new HexagoneBox(Color.Vert,Special.Protéger)));
         newBambooValue = new ArrayList<>(Arrays.asList(Color.Jaune,Color.Rouge));
-        elementOfTheBoardClassic = new ElementOfTheBoard();
-        elementOfTheBoardNewBox = new ElementOfTheBoard(true,newBoxNumber,newBoxValue);
-        elementOfTheBoardNewColor = new ElementOfTheBoard(newBambooNumber,newBambooValue,true);
+        elementOfTheBoardClassic = new ElementOfTheBoard(loggerSevere);
+        elementOfTheBoardNewBox = new ElementOfTheBoard(true,newBoxNumber,newBoxValue,loggerSevere);
+        elementOfTheBoardNewColor = new ElementOfTheBoard(newBambooNumber,newBambooValue,true,loggerSevere);
         elementOfTheBoardNewBoxAndColor = new ElementOfTheBoard(
-                newBambooNumber,newBambooValue,true,newBoxNumber,newBoxValue,true);
-        elementOfTheBoardAddBox = new ElementOfTheBoard(false,newBoxNumber,newBoxValue);
-        elementOfTheBoardAddColor = new ElementOfTheBoard(newBambooNumber,newBambooValue,false);
-        elementOfTheBoardAddBoxAndColor = new ElementOfTheBoard(newBambooNumber,newBambooValue,newBoxNumber,newBoxValue);
+                newBambooNumber,newBambooValue,true,newBoxNumber,newBoxValue,true,loggerSevere);
+        elementOfTheBoardAddBox = new ElementOfTheBoard(false,newBoxNumber,newBoxValue,loggerSevere);
+        elementOfTheBoardAddColor = new ElementOfTheBoard(newBambooNumber,newBambooValue,false,loggerSevere);
+        elementOfTheBoardAddBoxAndColor = new ElementOfTheBoard(newBambooNumber,newBambooValue,newBoxNumber,newBoxValue,loggerSevere);
         setupBoxGenerationDefault();
         setupBoxGenerationAdd();
         addBoxValueGenerated();

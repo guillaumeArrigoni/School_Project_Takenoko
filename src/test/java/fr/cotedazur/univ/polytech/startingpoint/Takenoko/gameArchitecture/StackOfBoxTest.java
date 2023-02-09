@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -21,7 +22,7 @@ class StackOfBoxTest {
     @BeforeEach
     @Order(1)
     public void setupGeneral(){
-        elementOfTheBoard = new ElementOfTheBoard();
+        elementOfTheBoard = new ElementOfTheBoard(new LoggerSevere(true));
         stackOfBox = new StackOfBox(elementOfTheBoard.defaultInstructionBox);
         hexagoneBox = new HexagoneBox(Color.Vert, Special.Classique);
     }

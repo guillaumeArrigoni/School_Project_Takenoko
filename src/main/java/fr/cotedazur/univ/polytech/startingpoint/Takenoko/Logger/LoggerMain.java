@@ -30,6 +30,7 @@ public class LoggerMain {
 
     protected void setOff(){
         this.level = Level.OFF;
+        setup();
     }
 
     private void setup(){

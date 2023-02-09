@@ -39,27 +39,28 @@ public class BotRuleBased extends Bot {
         switch (meteo) {
             case VENT -> {
                 //2 fois la même action possible
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : VENT");
+                logInfoDemo.addLog("Le dé a choisi : VENT");
                 launchAction(arg);
                 resetPossibleAction();
                 launchAction(arg);
             }
             case PLUIE -> {
                 //peut faire pousser sur une parcelle irriguée
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
+                logInfoDemo.addLog("Le dé a choisi : PLUIE");
                 growBambooRain();
                 launchAction(arg);
                 launchAction(arg);
             }
             case NUAGES -> {
                 //peut prendre un aménagement
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
+                logInfoDemo.addLog("Le dé a choisi : PLUIE");
                 //TODO
                 launchAction(arg);
                 launchAction(arg);
             }
             case ORAGE -> {
                 //peut placer le panda n'importe où et manger un bambou
+                logInfoDemo.addLog("Le dé a choisi : ORAGE");
                 movePandaStorm();
                 launchAction(arg);
                 launchAction(arg);
@@ -67,6 +68,7 @@ public class BotRuleBased extends Bot {
             default -> {
                 //soleil
                 //3 actions possible
+                logInfoDemo.addLog("Le dé à choisi : SOLEIL");
                 launchAction(arg);
                 launchAction(arg);
                 launchAction(arg);

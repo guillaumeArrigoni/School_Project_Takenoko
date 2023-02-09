@@ -244,8 +244,25 @@ public class Board implements Cloneable {
      */
     private void addNewBoxInAvailableBox(int[] newCoord) {
         if (!(isCoordinateInBoard(newCoord)) && !(AvailableBox.contains(newCoord))) {
-            AvailableBox.add(newCoord);
+            if (getSommeAbsolu(newCoord)<24){
+                AvailableBox.add(newCoord);
+            }
         }
+    }
+
+    /**
+     * Method use to calculate the absolute add of the coordinate,
+     * in order to limitate the range to the lake
+     * @param coord
+     * @return
+     */
+    private int getSommeAbsolu(int[] coord){
+        int sommeAbsolu = 0;
+        for (int i : coord){
+            if (i<0) i = i*-1;
+            sommeAbsolu = sommeAbsolu + i;
+        }
+        return sommeAbsolu;
     }
 
     /**
@@ -267,6 +284,12 @@ public class Board implements Cloneable {
 
             }
         }
+    }
+
+    public void growAfterRain(HexagoneBoxPlaced box){
+        if (box.isIrrigate() &&
+                !Arrays.equals(box.getCoordinates(), new int[]{0,0,0}) &&
+                box.getHeightBamboo()<4) box.growBamboo();
     }
 
     /**

@@ -10,6 +10,10 @@ public class Combination<T> implements Comparable<Combination>{
     private ArrayList<T> listOfElementInTheCombination;
     private int size;
 
+    /**
+     * Will create the new Combination thanks to the list of element entered
+     * @param listOfElementInTheCombination : the list of element that will be declared as a combination
+     */
     public Combination(ArrayList<T> listOfElementInTheCombination){
         this.listOfElementInTheCombination = listOfElementInTheCombination;
         this.size = this.listOfElementInTheCombination.size();

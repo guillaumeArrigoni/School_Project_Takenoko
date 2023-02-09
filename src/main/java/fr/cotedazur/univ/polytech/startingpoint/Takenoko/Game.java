@@ -55,7 +55,7 @@ public class Game {
             playingBot.playTurn(meteo, arg);
             gestionnaire.checkObjectives(playingBot, arg, numberPlayer);
             printBoardState(board);
-            if (gestionnaire.DoesABotHaveEnoughObjectivesDone()) {
+            if (gestionnaire.DoesABotHaveEnoughObjectivesDone() || turnNumber > 100) {
                 playing = false;
                 for (Bot bot : playerList) {
                     logInfoDemo.displayScore(bot);

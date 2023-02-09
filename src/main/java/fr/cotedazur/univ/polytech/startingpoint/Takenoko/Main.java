@@ -47,10 +47,12 @@ public class Main {
                 .parse(args);
 
         if (main.twoThousands || main.csv) {
+            int numberOfGame = 0;
             int numberOfPlayer = 4;
             Log log = new Log();
             log.logInit(numberOfPlayer,logInfoStats);
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
+                numberOfGame++;
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1, 2);
                 Random random = new Random();
@@ -91,37 +93,52 @@ public class Main {
                 FileSystem fs = FileSystems.getDefault();
                 Path path = fs.getPath("./stats/", "stats.csv");
                 File file = new File(path.toString());
-                CSVWriter writer = new CSVWriter(new FileWriter(file, true));
+                File tempfile = new File("temp_" + file.getName());
+                CSVWriter writer = new CSVWriter(new FileWriter(tempfile, true));
 
+                Scanner scanner = new Scanner(file);
+                List<String[]> lines = new ArrayList<>();
 
-                int lineCount = 0;
-                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        lineCount++;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                while (scanner.hasNextLine()) {
+                    lines.add(scanner.nextLine().split(";"));
                 }
+                lines.remove(0);
+
+                for (int i = 0; i < lines.size(); i++) {
+                    List<String> tempLine = Arrays.asList(lines.get(i));
+                    tempLine.remove(0);
+                    lines.set(i, (String[]) tempLine.toArray());
+                }
+
+                String[] currentWinPercentage = lines.get(0);
+                String[] currentMeanScore = lines.get(1);
+                String[] currentGamePlayed = lines.get(2);
 
                 String[] winPercentage = winPercentageForBots.stream().map(String::valueOf).toArray(String[]::new);
                 String[] meanScore = meanScoreForBots.stream().map(String::valueOf).toArray(String[]::new);
-                String[] header = new String[numberOfPlayer+1];
-                String[] firstLine = new String[numberOfPlayer+1];
-                String[] secondLine = new String[numberOfPlayer+1];
+                String[] header = new String[4];
+                String[] firstLine = new String[4];
+                String[] secondLine = new String[4];
+                String[] thirdLine = new String[4];
                 firstLine[0] = "";
                 secondLine[0] = "";
+                thirdLine[0] = "";
 
-                for (int i = 1; i < numberOfPlayer+1; i++) {
+                for (int i = 1; i < 5; i++) {
                     header[i] = "Bot" + i;
-                    firstLine[i] = winPercentage[i-1] + "%";
-                    secondLine[i] = meanScore[i-1];
                 }
-                writer.writeNext(new String[]{"Simulation " + (lineCount/5 + 1) + " :"});
+                for (int i = 1; i < numberOfPlayer+1; i++) {
+                    firstLine[i] = ((Double.parseDouble(winPercentage[i-1])*numberOfGame + Double.parseDouble(currentWinPercentage[i-1])*Double.parseDouble(currentGamePlayed[i-1]))/(numberOfGame + Double.parseDouble(currentGamePlayed[i-1])) + "%");
+                    secondLine[i] = ((Double.parseDouble(meanScore[i-1])*numberOfGame + Double.parseDouble(currentMeanScore[i-1])*Double.parseDouble(currentGamePlayed[i-1]))/(numberOfGame + Double.parseDouble(currentGamePlayed[i-1])) + "");
+                    thirdLine[i] = ((Double.parseDouble(currentGamePlayed[i-1])+numberOfGame) + "");
+                }
                 writer.writeNext(header);
                 writer.writeNext(firstLine);
                 writer.writeNext(secondLine);
+                writer.writeNext(thirdLine);
                 writer.close();
+                file.delete();
+                tempfile.renameTo(file);
             }
         }
         else if (main.demo || (!main.csv && !main.twoThousands)) {
@@ -129,10 +146,10 @@ public class Main {
             Board board = new Board(retrieving, 1,2);
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
-            Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-            Bot bot2 = new BotRuleBased("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-            Bot bot3 = new BotRandom("Bot3",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-            Bot bot4 = new BotRandom("Bot4",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot1 = new BotMCTS("BotMCTS",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot2 = new BotRuleBased("BotRB",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot3 = new BotRandom("BotRandom1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot4 = new BotRandom("BotRandom2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             List<Bot> playerList = new ArrayList<>();
             playerList.add(bot1);
             playerList.add(bot2);

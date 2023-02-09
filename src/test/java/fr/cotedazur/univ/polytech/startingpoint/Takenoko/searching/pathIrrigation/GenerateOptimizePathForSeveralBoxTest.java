@@ -43,7 +43,7 @@ class GenerateOptimizePathForSeveralBoxTest {
     @Order(1)
     public static void setup() throws CrestNotRegistered, CloneNotSupportedException {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters,false,1, new LoggerSevere(true));
+        board = new Board(retrieveBoxIdWithParameters,false,1,1,new LoggerSevere(true));
         boardSimulation = new BoardSimulation(board);
         retrieveSimulation = boardSimulation.getRetrieveBoxIdWithParameters();
         hexagoneBoxPlaced1 = new HexagoneBoxSimulation(-1,0,1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);

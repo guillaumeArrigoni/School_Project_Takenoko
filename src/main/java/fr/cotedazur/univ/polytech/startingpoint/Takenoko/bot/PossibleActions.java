@@ -8,16 +8,19 @@ import java.util.List;
  * List of all the possible actions
  */
 public enum PossibleActions {
-    DRAW_AND_PUT_TILE(0),
-    MOVE_GARDENER(1),
-    DRAW_OBJECTIVE(2),
-    MOVE_PANDA(3);
+    DRAW_AND_PUT_TILE(),
+    MOVE_GARDENER(),
+    DRAW_OBJECTIVE(),
+    MOVE_PANDA(),
+    TAKE_IRRIGATION(),
+    PLACE_IRRIGATION(),
+    GROW_BAMBOO(),
+    ADD_AUGMENT();
 
     /**
      * The value of the action
      */
-    PossibleActions(int i) {
-    }
+    PossibleActions() {}
 
     /**
      * This method return the list of all the possible actions

@@ -27,7 +27,7 @@ import java.util.*;
 
 public class Main {
     //parameters for JCommander
-    @Parameter(names={"--2thousands"}, arity=0)
+    @Parameter(names={"--2thousands"}, arity=1)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;
@@ -37,7 +37,7 @@ public class Main {
     public static void main(String... args) throws IOException,CloneNotSupportedException {
         //detection of arg for JCommander
         Main main = new Main();
-        LogInfoDemo logDemo = new LogInfoDemo(false);
+        LogInfoDemo logDemo = new LogInfoDemo(main.demo || (!main.twoThousands && !main.csv));
         LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
         LoggerError loggerError = new LoggerError(main.demo || (!main.twoThousands && !main.csv));
         LoggerSevere loggerSevere = new LoggerSevere(main.demo || (!main.twoThousands && !main.csv));
@@ -47,12 +47,12 @@ public class Main {
                 .parse(args);
 
         if (main.twoThousands || main.csv) {
-            int numberOfPlayer = 2;
+            int numberOfPlayer = 4;
             Log log = new Log();
             log.logInit(numberOfPlayer,logInfoStats);
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-                Board board = new Board(retrieving, 1,loggerSevere);
+                Board board = new Board(retrieving, 1, 2,loggerSevere);
                 Random random = new Random();
                 GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
                 gestionnaire.initialize(
@@ -61,14 +61,18 @@ public class Main {
                         gestionnaire.ListOfObjectivePandaByDefault()
                 );
                 Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-                Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot2 = new BotRuleBased("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot3 = new BotRandom("Bot3",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot4 = new BotRandom("Bot4",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 List<Bot> playerList = new ArrayList<>();
                 playerList.add(bot1);
                 playerList.add(bot2);
+                playerList.add(bot3);
+                playerList.add(bot4);
                 Game game = new Game(playerList,board,logDemo);
                 int winner = game.play(gestionnaire, "twoThousands");
 
-                int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore()};
+                int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore(), bot3.getScore(), bot4.getScore()};
                 log.logResult(winner, scoreForBots);
             }
 
@@ -122,15 +126,18 @@ public class Main {
         }
         else if (main.demo || (!main.csv && !main.twoThousands)) {
             RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-            Board board = new Board(retrieving, 1,loggerSevere);
+            Board board = new Board(retrieving, 1,2,loggerSevere);
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving,loggerError);
-            //Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-            Bot bot1 = new BotRuleBased("Bot1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-            Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot2 = new BotRuleBased("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot3 = new BotRandom("Bot3",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot4 = new BotRandom("Bot4",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             List<Bot> playerList = new ArrayList<>();
             playerList.add(bot1);
             playerList.add(bot2);
+            playerList.add(bot3);
+            playerList.add(bot4);
             Game game = new Game(playerList,board,logDemo);
             game.play(gestionnaire, "demo");
         }

@@ -26,8 +26,8 @@ class PatternTest {
     public static void setUp(){
         loggerError = new LoggerError(true);
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters, 1, new LoggerSevere(true));
-        gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters, loggerError);
+        board = new Board(retrieveBoxIdWithParameters, 1, 2,new LoggerSevere(true));
+        gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError);
         pattern1 = gestionnaire.PLANTER_SUR_SOURCE_EAU;
         pattern2 = gestionnaire.PLANTER_TROIS_JAUNES;
         pattern3 = gestionnaire.POSER_TRIANGLE;

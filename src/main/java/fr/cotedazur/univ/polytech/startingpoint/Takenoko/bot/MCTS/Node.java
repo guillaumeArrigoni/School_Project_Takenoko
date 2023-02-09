@@ -1,28 +1,40 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Action;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
     private int profondeur;
-    private Node parent;
-    private GameState value;
-    private ActionLog instruction;
-    private List<Node> children;
+    private final Node parent;
+    private final GameState value;
+    private final ActionLog instructions;
+    private final List<Node> children;
 
-    public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg){
-        this.profondeur = profondeur*2;
+    public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg) {
+        this.profondeur = profondeur;
         this.value = new GameState(bot, meteo);
         this.children = new ArrayList<>();
         this.parent = null;
-        this.instruction = null;
+        this.instructions = null;
         createChildren(arg);
+    }
+
+    public Node(){
+        this.profondeur = 0;
+        this.value = new GameState();
+        this.children = new ArrayList<>();
+        this.parent = null;
+        this.instructions = null;
     }
 
     protected Node(BotSimulator bot, int profondeur, Node parent, MeteoDice.Meteo meteo) {
@@ -30,120 +42,284 @@ public class Node {
         this.value = new GameState(bot, meteo);
         this.children = new ArrayList<>();
         this.parent = parent;
-        this.instruction = bot.getInstructions();
+        this.instructions = bot.getInstructions();
     }
 
-    public void createChildren(String arg){
-        if(profondeur > 0 && profondeur % 2 == 0) {
-            List<ActionLog> firstIntruction = createFirstInstruction();
-            for (ActionLog actionLog : firstIntruction) {
-                BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
-                botSimulator.playTurn(value.getMeteo(), arg);
-                botSimulator.gestionObjectives.checkObjectives(botSimulator, arg,2);
-                children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+    public void createChildren(String arg) {
+        if(profondeur == 4 || (profondeur == 3 && (value.getMeteo() == MeteoDice.Meteo.NO_METEO || value.getMeteo() == MeteoDice.Meteo.VENT))){
+            List<ActionLog> instruction = generateIrrigationInstructions();
+            activateBotSimulator(arg, instruction);
+            if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                children.clear();
+                profondeur --;
+            }else{
+                this.getBestChild().createChildren(arg);
+                return;
             }
-        } else if (profondeur > 0) {
-            List<ActionLog> secondIntruction = createSecondInstruction(instruction.getAction());
-            for (ActionLog actionLog : secondIntruction) {
-                BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
-                botSimulator.playTurn(value.getMeteo(), arg);
-                botSimulator.gestionObjectives.checkObjectives(botSimulator, arg,2);
-                children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+        }
+        if(profondeur == 3){
+            switch(value.getMeteo()){
+                case ORAGE -> activateBotSimulator(arg,createPandaStormInstructions());
+                case NUAGES -> {
+                    activateBotSimulator(arg,generateSpecialInstruction());
+                    if (children.isEmpty()){
+                        profondeur --;
+                        createChildren(arg);
+                    }
+                }
+                case PLUIE -> {
+                    activateBotSimulator(arg,generateRainInstruction());
+                    if (children.isEmpty()){
+                        profondeur --;
+                        createChildren(arg);
+                    }
+                }
+                default /*SOLEIL*/ -> {
+                    List<ActionLog> instruction = generateInstruction();
+                    activateBotSimulator(arg, instruction);
+                    if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                        createChildrenIfNoGoodOption(arg);
+                    }
+                }
+            }
+        } else if(profondeur > 1 ) {
+            List<ActionLog> instruction;
+            if(value.getMeteo() == MeteoDice.Meteo.SOLEIL) {
+                instruction = generateInstruction(instructions.getAction());
+                activateBotSimulator(arg, instruction);
+                if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                    createChildrenIfNoGoodOption(arg,instructions.getAction());
+                }
+            }else{
+                instruction = generateInstruction();
+                activateBotSimulator(arg, instruction);
+                if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                    createChildrenIfNoGoodOption(arg);
+                }
+            }
+
+        } else if (profondeur == 1) {
+            List<ActionLog> instruction;
+            if(value.getMeteo() == MeteoDice.Meteo.SOLEIL) {
+                instruction = generateInstruction(instructions.getAction(), parent.instructions.getAction());
+                activateBotSimulator(arg, instruction);
+                if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                    createChildrenIfNoGoodOption(arg,instructions.getAction(), parent.instructions.getAction());
+                }
+            }else{
+                instruction = generateInstruction(instructions.getAction());
+                activateBotSimulator(arg, instruction);
+                if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                    createChildrenIfNoGoodOption(arg,instructions.getAction());
+                }
             }
         }if(profondeur > 1)
             this.getBestChild().createChildren(arg);
     }
 
-    public List<ActionLog> createFirstInstruction(){
-        List<ActionLog> firstInstruction = new ArrayList<>();
-        for (PossibleActions action : PossibleActions.getAllActions()) {
-            firstInstruction.addAll(createInstruction(action));
+
+
+    private void createChildrenIfNoGoodOption(String arg, PossibleActions ... actionPre) {
+        List<PossibleActions> tmp = List.of(actionPre);
+        if (this.getValue().getBotSimulator().getObjectives().size() < 5 && (value.getMeteo() == MeteoDice.Meteo.VENT || !tmp.contains(PossibleActions.DRAW_OBJECTIVE))) {
+            simulateObjectivePicking(arg);
+        }else if(value.getMeteo() == MeteoDice.Meteo.VENT || !tmp.contains(PossibleActions.DRAW_AND_PUT_TILE)) {
+            simulateDrawAndPutTile(arg);
         }
-        return firstInstruction;
+        if(this.children.isEmpty() && (value.getMeteo() == MeteoDice.Meteo.VENT || !tmp.contains(PossibleActions.DRAW_AND_PUT_TILE)))
+            simulateDrawAndPutTile(arg);
+        else if(this.children.get(children.size()-1).getValue().getScore() < 0 && (value.getMeteo() == MeteoDice.Meteo.VENT || !tmp.contains(PossibleActions.DRAW_AND_PUT_TILE))){
+            simulateDrawAndPutTile(arg);
+        }
     }
 
-    public List<ActionLog> createSecondInstruction(PossibleActions actionPre){
-        if(value.getMeteo() == MeteoDice.Meteo.VENT) {
-            return createFirstInstruction();
-        }else{
-            List<ActionLog> secondInstruction = new ArrayList<>();
+    private List<ActionLog> generateIrrigationInstructions(){
+        List<ActionLog> irrigationInstructions = new ArrayList<>();
+        GenerateAWayToIrrigateTheBox temp;
+        for (HexagoneBoxPlaced box : value.getBoard().getPlacedBox().values()) {
+            if (!box.isIrrigate()) {
+                try {
+                    temp = new GenerateAWayToIrrigateTheBox(box);
+                    if (temp.getPathToIrrigation().size() <= this.getValue().getBotSimulator().getNbIrrigation())
+                        irrigationInstructions.add(new ActionLogIrrigation(PossibleActions.PLACE_IRRIGATION, temp.getPathToIrrigation()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return irrigationInstructions;
+    }
+
+    private int getNbSpecial(Special special){
+        return getValue().getBoard().getElementOfTheBoard().getNbJetonSpecial().get(special);
+    }
+
+    private List<ActionLog> generateSpecialInstruction(){
+        List<ActionLog> specialInstructions = new ArrayList<>();
+        if(getNbSpecial(Special.SourceEau) > 0){
+            for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
+                if (box.getSpecial() == Special.Classique) {
+                    specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 1));
+                }
+            }
+        }
+        if(getNbSpecial(Special.Engrais) > 0){
+            for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
+                if (box.getSpecial() == Special.Classique) {
+                    specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 2));
+                }
+            }
+        }
+        if(getNbSpecial(Special.Protéger) > 0){
+            for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
+                if (box.getSpecial() == Special.Classique) {
+                    specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 3));
+                }
+            }
+        }
+        return specialInstructions;
+    }
+
+
+
+    public List<ActionLog> generateRainInstruction(){
+        List<ActionLog> rainInstructions = new ArrayList<>();
+        for(HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()){
+            if(box.isIrrigate() && box.getHeightBamboo() < 4){
+                rainInstructions.add(new ActionLog(PossibleActions.GROW_BAMBOO, box.getId()));
+            }
+        }
+        return rainInstructions;
+    }
+
+
+
+    public List<ActionLog> createDrawAndPutTileInstructions(){
+        List<ActionLog> drawAndPutTileInstructions = new ArrayList<>();
+        int[] parameters;
+        for (int i = 0; i < 3; i++) {
+            for(int[] coords : this.getValue().getBotSimulator().getBoard().getAvailableBox()){
+                parameters = new int[]{coords[0], coords[1], coords[2], i};
+                drawAndPutTileInstructions.add(new ActionLog(PossibleActions.DRAW_AND_PUT_TILE, parameters));
+            }
+        }
+        return drawAndPutTileInstructions;
+    }
+
+    public List<ActionLog> createPandaStormInstructions(){
+        List<ActionLog> pandaStormInstructions = new ArrayList<>();
+        for (HexagoneBoxPlaced boxpossible : value.getBoard().getPlacedBox().values()) {
+            pandaStormInstructions.add(new ActionLog(PossibleActions.MOVE_PANDA, boxpossible.getCoordinates()));
+        }
+        return pandaStormInstructions;
+    }
+
+
+    public List<ActionLog> generateInstruction(PossibleActions ... actionPre){
+        List<PossibleActions> tmp = List.of(actionPre);
+        List<ActionLog> secondInstruction = new ArrayList<>();
+        if(value.getMeteo() == MeteoDice.Meteo.VENT ) {
             for (PossibleActions action : PossibleActions.getAllActions()) {
-                if(action != actionPre) {
+                secondInstruction.addAll(createInstruction(action));
+            }
+        }else{
+            for (PossibleActions action : PossibleActions.getAllActions()) {
+                if(!tmp.contains(action)) {
                     secondInstruction.addAll(createInstruction(action));
                 }
             }
-            return secondInstruction;
 
         }
+        return secondInstruction;
     }
 
     private List<ActionLog> createInstruction(PossibleActions action) {
         List<ActionLog> tmp = new ArrayList<>();
-        switch (action) {
-            case DRAW_AND_PUT_TILE -> {
-                for (int[] coords : value.getBoard().getAvailableBox()) {
+        if(action == PossibleActions.MOVE_GARDENER || action == PossibleActions.MOVE_PANDA) {
+            if (action == PossibleActions.MOVE_GARDENER) {
+                for (int[] coords : Bot.possibleMoveForGardenerOrPanda(value.getBoard(), value.getBoard().getGardenerCoords())) {
                     tmp.add(new ActionLog(action, coords));
                 }
-            }
-            case MOVE_GARDENER -> {
-                for (int[] coords : Action.possibleMoveForGardenerOrPanda(value.getBoard(), value.getBoard().getGardenerCoords())) {
+            } else { /*MOVE_PANDA*/
+                for (int[] coords : Bot.possibleMoveForGardenerOrPanda(value.getBoard(), value.getBoard().getPandaCoords())) {
                     tmp.add(new ActionLog(action, coords));
-                }
-            }
-            case DRAW_OBJECTIVE -> {
-                List<Objective> objectives = value.getBotSimulator().getObjectives();
-                int parcelObjective = 0;
-                int pandaObjective = 0;
-                int gardenerObjective = 0;
-                for (Objective objective : objectives) {
-                    switch (objective.getType()) {
-                        case PARCELLE -> parcelObjective++;
-                        case PANDA -> pandaObjective++;
-                        case JARDINIER -> gardenerObjective++;
-                    }
-                }
-                if (parcelObjective <= pandaObjective && parcelObjective <= gardenerObjective) {
-                    tmp.add(new ActionLog(action, 0));
-                } else if (pandaObjective <= parcelObjective && pandaObjective <= gardenerObjective) {
-                    tmp.add(new ActionLog(action, 1));
-                } else {
-                    tmp.add(new ActionLog(action, 2));
                 }
             }
         }
         return tmp;
     }
 
+    private void simulateObjectivePicking(String arg){
+        List<Objective> objectives = value.getBotSimulator().getObjectives();
+        int parcelObjective = 0;
+        int pandaObjective = 0;
+        int gardenerObjective = 0;
+        ActionLog actionlog ;
+        for (Objective objective : objectives) {
+            switch (objective.getType()) {
+                case PARCELLE -> parcelObjective++;
+                case PANDA -> pandaObjective++;
+                case JARDINIER -> gardenerObjective++;
+            }
+        }
+        if (parcelObjective <= pandaObjective && parcelObjective <= gardenerObjective) {
+            actionlog = new ActionLog(PossibleActions.DRAW_OBJECTIVE, 0);
+        } else if (pandaObjective <= parcelObjective && pandaObjective <= gardenerObjective) {
+            actionlog = new ActionLog(PossibleActions.DRAW_OBJECTIVE, 1);
+        } else {
+            actionlog = new ActionLog(PossibleActions.DRAW_OBJECTIVE, 2);
+        }
+        activateBotSimulator(arg, List.of(actionlog));
+        if(children.get(children.size()-1).getValue().getScore() >= 0){
+            children.subList(0, children.size() - 1).clear();
+        }
+    }
+
+    private void activateBotSimulator(String arg, List<ActionLog> instructions) {
+        for (ActionLog actionLog : instructions) {
+            BotSimulator botSimulator = value.getBotSimulator().createBotSimulator(actionLog);
+            botSimulator.playTurn(value.getMeteo(), arg);
+            botSimulator.getGestionObjectives().checkObjectives(botSimulator, arg, botSimulator.getBoard().getNumberOfPlayers());
+            children.add(new Node(botSimulator, profondeur, this, value.getMeteo()));
+        }
+    }
+
+    private void simulateDrawAndPutTile(String arg){
+        List<ActionLog> tmp = createDrawAndPutTileInstructions();
+        activateBotSimulator(arg, tmp);
+        if(children.get(children.size()-tmp.size()).getValue().getScore() >= 0){
+            children.subList(0, children.size() - tmp.size()).clear();
+        }
+    }
+
+
+
     public Node getBestChild(){
-        Node bestChild = children.get(0);
-        for (Node child : children) {
-            if(child.getValue().getScore() > bestChild.getValue().getScore()){
-                bestChild = child;
+        Node bestChild = new Node();
+        //Check if the childrens are good choices
+        if(!children.isEmpty()) {
+            bestChild = children.get(0);
+            for (Node child : children) {
+                if (child.getValue().getScore() > bestChild.getValue().getScore()) {
+                    bestChild = child;
+                }
             }
         }
         return bestChild;
     }
-
-    public List<ActionLog> getBestInstruction(){
-        List<ActionLog> bestInstruction = new ArrayList<>();
-        Node bestChild = getBestChild();
-        while(bestChild.profondeur > 1){
-            bestChild = bestChild.getBestChild();
-        }
-        bestInstruction.add(bestChild.getInstruction());
-        while(bestChild.getParent() != null){
-            bestChild = bestChild.getParent();
-            bestInstruction.add(bestChild.getInstruction());
-        }
-        return bestInstruction;
+public List<ActionLog> getBestInstruction(){
+    List<ActionLog> bestInstruction = new ArrayList<>();
+    Node bestChild = getBestChild();
+    bestInstruction.add(bestChild.getInstructions());
+    while(bestChild.profondeur >= 1){
+        bestChild = bestChild.getBestChild();
+        bestInstruction.add(bestChild.getInstructions());
     }
+    return bestInstruction;
+}
 
-    private Node getParent() {
-        return parent;
-    }
-
-    private ActionLog getInstruction() {
-        return instruction;
+    private ActionLog getInstructions() {
+        return instructions;
     }
 
     private GameState getValue() {

@@ -39,6 +39,8 @@ public class Game {
         for (Bot bot : this.playerList) {
             gestionnaire.rollParcelleObjective(bot);
             gestionnaire.rollJardinierObjective(bot);
+            gestionnaire.rollPandaObjective(bot);
+            logInfoDemo.displaySeparator();
         }
         int numberPlayer = this.playerList.size();
         MeteoDice.Meteo meteo = MeteoDice.Meteo.NO_METEO;
@@ -50,7 +52,7 @@ public class Game {
             playingBot.playTurn(meteo, arg);
             gestionnaire.checkObjectives(playingBot, arg, numberPlayer);
             printBoardState(board);
-            if (gestionnaire.doesABotHaveEnoughObjectivesDone()) {
+            if (gestionnaire.DoesABotHaveEnoughObjectivesDone() || turnNumber>= 200) {
                 playing = false;
                 for (Bot bot : playerList) {
                     logInfoDemo.displayScore(bot);

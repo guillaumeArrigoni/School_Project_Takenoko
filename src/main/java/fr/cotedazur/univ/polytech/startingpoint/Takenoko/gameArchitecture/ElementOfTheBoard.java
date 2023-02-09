@@ -94,6 +94,15 @@ public class ElementOfTheBoard {
         this(listOfBambooAvailable,listOfColor,false,listOfBoxAvailable,listOfBox,false,loggerSevere);
     }
 
+    public ElementOfTheBoard copy(){
+        ElementOfTheBoard res = new ElementOfTheBoard();
+        res.stackOfBox = this.stackOfBox.copy();
+        res.nbOfBambooForEachColorAvailable = new HashMap<>(this.nbOfBambooForEachColorAvailable);
+        res.nbIrrigationAvailable = this.nbIrrigationAvailable;
+        res.nbJetonSpecial = new HashMap<>(this.nbJetonSpecial);
+        return res;
+    }
+
     public boolean pickSpecial(Special special){
         if (this.nbJetonSpecial.containsKey(special)){
             int valueSpecial = this.nbJetonSpecial.get(special);

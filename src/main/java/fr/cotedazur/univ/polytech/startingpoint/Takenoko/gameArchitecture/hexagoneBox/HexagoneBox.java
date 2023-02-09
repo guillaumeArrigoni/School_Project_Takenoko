@@ -22,10 +22,6 @@ public class HexagoneBox implements Comparable<HexagoneBox> {
         this.irrigate = special==Special.SourceEau;
     }
 
-    public HexagoneBox copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Board board){
-        HexagoneBox hexagoneBox = new HexagoneBox(this.color, this.special);
-        return hexagoneBox;
-    }
 
     public HexagoneBox (HexagoneBox box){
         this(box.getColor(),box.getSpecial());

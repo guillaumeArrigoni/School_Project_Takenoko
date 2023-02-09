@@ -1,7 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 public class MeteoDice {
-    private final int NBSIDE = 1;
+    private final int NBSIDE = 6;
     public enum Meteo {
         VENT(1),
         PLUIE(2),

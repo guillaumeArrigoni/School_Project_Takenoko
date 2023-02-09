@@ -2,19 +2,14 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
-
-import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameState {
 
     private BotSimulator botSimulator;
 
 
-    private int score;
+    private final int score;
 
     private MeteoDice.Meteo meteo;
 
@@ -22,6 +17,10 @@ public class GameState {
         this.botSimulator = botSimulator;
         this.meteo = meteo;
         this.score = calculateScore();
+    }
+
+    public GameState(){
+        score = -999;
     }
 
     private int calculateScore() {

@@ -58,13 +58,13 @@ public class Board implements Cloneable {
     protected CrestGestionnary crestGestionnary;
     protected ElementOfTheBoard elementOfTheBoard;
     protected LoggerSevere loggerSevere;
+    protected int numberOfPlayers;
 
 
 
 
 
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters,
-                 boolean allIrrigated, int id, ElementOfTheBoard elementOfTheBoard, LoggerSevere loggerSevere){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id,ElementOfTheBoard elementOfTheBoard, int numberOfPlayers, LoggerSevere loggerSevere){
         this.idOfTheBoard = id;
         this.allIrrigated = allIrrigated;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
@@ -75,18 +75,31 @@ public class Board implements Cloneable {
         this.gardenerCoords = new int[]{0,0,0};
         this.pandaCoords = new int[]{0,0,0};
         this.loggerSevere = loggerSevere;
+        this.numberOfPlayers = numberOfPlayers;
         this.generateLac();
     }
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id, LoggerSevere loggerSevere){
-        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard(loggerSevere),loggerSevere);
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id, int numberOfPlayers, LoggerSevere loggerSevere){
+        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard(loggerSevere), numberOfPlayers, LoggerSevere loggerSevere);
     }
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, LoggerSevere loggerSevere){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, int numberOfPlayers, LoggerSevere loggerSevere){
         //TODO set allIrrigated to false when irrigation add to the game
-        this(retrieveBoxIdWithParameters,true,id,loggerSevere);
+        this(retrieveBoxIdWithParameters,false,id, numberOfPlayers, LoggerSevere loggerSevere);
     }
-    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated, LoggerSevere loggerSevere){
+    public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated, int numberOfPlayers, LoggerSevere loggerSevere){
         //TODO set allIrrigated to false when irrigation add to the game
-        this(retrieveBoxIdWithParameters,true,id,elementOfTheBoardCheated,loggerSevere);
+        this(retrieveBoxIdWithParameters,false,id,elementOfTheBoardCheated, numberOfPlayers, LoggerSevere loggerSevere);
+    }
+
+    public Board copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+        Board newBoard = new Board(retrieveBoxIdWithParameters,this.allIrrigated,this.idOfTheBoard,this.numberOfPlayers);
+        newBoard.numberBoxPlaced = this.numberBoxPlaced;
+        newBoard.placedBox = new HashMap<>(this.placedBox);
+        newBoard.crestGestionnary.copy();
+        newBoard.AvailableBox = new ArrayList<>(this.AvailableBox);
+        newBoard.gardenerCoords = this.gardenerCoords;
+        newBoard.pandaCoords = this.pandaCoords;
+        newBoard.elementOfTheBoard = this.elementOfTheBoard.copy();
+        return newBoard;
     }
 
 
@@ -127,6 +140,9 @@ public class Board implements Cloneable {
         return elementOfTheBoard;
     }
     public LoggerSevere getLoggerSevere() { return loggerSevere; }
+    public int getNumberOfPlayers(){
+        return this.numberOfPlayers;
+    }
 
 
     public ArrayList<Integer> getCrestGestionnaryAlreadyIrrigated(){
@@ -311,8 +327,6 @@ public class Board implements Cloneable {
         crestGestionnary.launchUpdatingCrestWithAddingNewBox(lac);
         lac.launchIrrigationChecking();
     }
-
-
 
 
 

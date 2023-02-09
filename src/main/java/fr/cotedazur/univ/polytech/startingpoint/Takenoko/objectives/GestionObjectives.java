@@ -227,7 +227,7 @@ public class GestionObjectives {
      * @param bot corresponds to the bot who rolls the objective to draw.
      * This method rolls (random) an objective among the objectives available with the TypeObjective chosen by the bot.
      */
-    public void rollObjective(Bot bot, String arg){
+    public void rollObjective(BotRandom bot, String arg){
         TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg);
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot);
@@ -288,8 +288,8 @@ public class GestionObjectives {
         ArrayList<Objective> listOfObjectifDone = new ArrayList<>();
         for(Objective objective : bot.getObjectives()){
             if(checkOneObjective(objective, bot)){
-                bot.addScore(objective, arg);
-                bot.IncrementNumberObjectiveDone();
+                bot.addScore(objective);
+                bot.incrementNumberObjectiveDone();
                 addPointsIfEnoughObjectivesDone(bot, sizePlayerList);
                 if(objective.getType() == TypeObjective.PANDA){
                     bot.addScorePanda(objective);
@@ -300,7 +300,7 @@ public class GestionObjectives {
                 listOfObjectifDone.add(objective);
             }
         }
-        ArrayList<Objective> listOfAllObjectivesFromABot = bot.getObjectives();
+        List<Objective> listOfAllObjectivesFromABot = bot.getObjectives();
         listOfAllObjectivesFromABot.removeAll(listOfObjectifDone);
         bot.setObjectives(listOfAllObjectivesFromABot);
     }

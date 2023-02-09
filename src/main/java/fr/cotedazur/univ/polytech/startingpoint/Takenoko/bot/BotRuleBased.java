@@ -8,21 +8,23 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
 import java.util.*;
+//TODO : changer car class action n'existe plus'
 
-public class BotRuleBased extends Bot {
+public class BotRuleBased extends BotRandom {
 
     int currentScore;
     int irrigationInHand;
     int objectivesInHand;
-    Random random;
+
 
     public BotRuleBased(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated, LogInfoDemo logInfoDemo) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
-        this.random = random;
+        super(name, board, random, gestionObjectives, retrieveBoxIdWithParameters, bambooEated,logInfoDemo);
         this.irrigationInHand = 0;
         this.objectivesInHand = 0;
         this.currentScore = 0;
@@ -31,23 +33,45 @@ public class BotRuleBased extends Bot {
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg) {
         possibleActions = PossibleActions.getAllActions();
+        this.objectives = getObjectives();
+        System.out.println();
         switch (meteo) {
-            case VENT:
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : VENT");
-                if (objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
-                    drawObjective(arg);
-                }
-                else launchAction(arg);
+            case VENT -> {
+                //2 fois la même action possible
+                logInfoDemo.addLog("Le dé a choisi : VENT");
+                launchAction(arg);
                 resetPossibleAction();
                 launchAction(arg);
-                break;
-            case PLUIE:
-                if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
-                if (objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
-                    drawObjective(arg);
-                }
+            }
+            case PLUIE -> {
+                //peut faire pousser sur une parcelle irriguée
+                logInfoDemo.addLog("Le dé a choisi : PLUIE");
+                growBambooRain(arg);
                 launchAction(arg);
-                break;
+                launchAction(arg);
+            }
+            case NUAGES -> {
+                //peut prendre un aménagement
+                logInfoDemo.addLog("Le dé a choisi : PLUIE");
+                //TODO
+                launchAction(arg);
+                launchAction(arg);
+            }
+            case ORAGE -> {
+                //peut placer le panda n'importe où et manger un bambou
+                logInfoDemo.addLog("Le dé a choisi : ORAGE");
+                movePandaStorm();
+                launchAction(arg);
+                launchAction(arg);
+            }
+            default -> {
+                //soleil
+                //3 actions possible
+                logInfoDemo.addLog("Le dé à choisi : SOLEIL");
+                launchAction(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
         }
         if (this.getScore() > this.currentScore) {
             this.currentScore = this.getScore();
@@ -56,19 +80,20 @@ public class BotRuleBased extends Bot {
         resetPossibleAction();
     }
 
-    @Override
     protected void launchAction(String arg) {
-        if (choseMoveForPanda() == null) {
-            PossibleActions action = chooseAction();
-            displayTextAction(action);
-            doAction(arg,action);
+        if (this.possibleActions.contains(PossibleActions.DRAW_OBJECTIVE) && objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
+            drawObjective(arg);
+            this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
+        }
+        else if (choseMoveForPanda().length == 0 || !(this.possibleActions.contains(PossibleActions.MOVE_PANDA))) {
+            doAction(arg);
         } else {
             movePanda(arg);
+            this.possibleActions.remove(PossibleActions.MOVE_PANDA);
         }
-
     }
 
-    protected PossibleActions chooseAction(){
+    protected PossibleActions chooseAction() {
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
         if (isObjectiveIllegal(acp))
@@ -77,27 +102,56 @@ public class BotRuleBased extends Bot {
         return acp;
     }
 
-    protected List<int[]> hexagoneBoxWithBamboos() {
-        List<int[]> hexagoneBoxWithBamboos = new ArrayList<>();
+    protected List<HexagoneBoxPlaced> hexagoneBoxWithBamboos() {
+        List<HexagoneBoxPlaced> hexagoneBoxWithBamboos = new ArrayList<>();
         for (HexagoneBoxPlaced box : this.board.getAllBoxPlaced()) {
             if (box.getHeightBamboo() != 0) {
-                hexagoneBoxWithBamboos.add(box.getCoordinates());
+                hexagoneBoxWithBamboos.add(box);
             }
         }
         return hexagoneBoxWithBamboos;
     }
 
     protected int[] choseMoveForPanda() {
-        List<int[]> hexagoneBoxWithBamboos = hexagoneBoxWithBamboos();
-        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(this.board, board.getPandaCoords());
+        List<HexagoneBoxPlaced> hexagoneBoxWithBamboos = hexagoneBoxWithBamboos();
+        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(this.board, board.getPandaCoords());
         for (int[] possiblePandaCoords : possibleMoves) {
-            for (int[] boxWithBamboos : hexagoneBoxWithBamboos) {
-                if (Arrays.equals(possiblePandaCoords, boxWithBamboos)) {
+            for (HexagoneBoxPlaced boxWithBamboos : hexagoneBoxWithBamboos) {
+                if (Arrays.equals(possiblePandaCoords, boxWithBamboos.getCoordinates())) {
                     return possiblePandaCoords;
                 }
             }
         }
-        return null;
+        return new int[0];
+    }
+
+    protected void doAction(String arg) {
+        PossibleActions action = chooseAction();
+        logInfoDemo.displayTextAction(action);
+        switch (action) {
+            case DRAW_AND_PUT_TILE -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherPoserTuile");
+                placeTile(arg);
+            }
+            case MOVE_GARDENER -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : BougerJardinier");
+                moveGardener(arg);
+            }
+            case DRAW_OBJECTIVE -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherObjectif");
+                drawObjective(arg);
+            }
+            case TAKE_IRRIGATION -> {
+                if (arg.equals("demo")) System.out.println("Le bot a choisi : PrendreIrrigation");
+                this.nbIrrigation++;
+                placeIrrigation();
+            }
+            case MOVE_PANDA -> {
+                movePanda(arg);
+            }
+            default -> {
+            }
+        }
     }
 
     @Override
@@ -121,12 +175,11 @@ public class BotRuleBased extends Bot {
         if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
-
     }
 
     @Override
     protected void moveGardener(String arg){
-        List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
+        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
@@ -138,35 +191,110 @@ public class BotRuleBased extends Bot {
         this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
     }
 
-    @Override
-    public TypeObjective choseTypeObjectiveToRoll(String arg){
-        int i = random.nextInt(0,3);
-        switch (i) {
-            case 1 -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de jardinier");
-                return TypeObjective.JARDINIER;
-            }
-            case 2 -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de panda");
-                return TypeObjective.PANDA;
-            }
-            default -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : Piocher un objectif de parcelle");
-                return TypeObjective.PARCELLE;
-            }
-        }
-    }
+
+
 
     @Override
     public void movePanda(String arg){
-        if (choseMoveForPanda() != null) {
+        if (choseMoveForPanda().length != 0) {
             board.setPandaCoords(choseMoveForPanda(),this);
         }
         else {
-            List<int[]> possibleMoves = Action.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
+            List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
             board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         }
         logInfoDemo.displayMovementPanda(arg,board);
     }
 
+
+    protected void placeIrrigation() {
+        if(random.nextInt(0,2) == 0) {
+            List<GenerateAWayToIrrigateTheBox> tmp = new ArrayList<>();
+            GenerateAWayToIrrigateTheBox temp;
+            for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
+                if (!box.isIrrigate()) {
+                    try {
+                        temp = new GenerateAWayToIrrigateTheBox(box);
+                        if (temp.getPathToIrrigation().size() <= this.nbIrrigation)
+                            tmp.add(temp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if(!tmp.isEmpty()) {
+                temp = tmp.get(random.nextInt(0, tmp.size()));
+                for (ArrayList<Crest> path : temp.getPathToIrrigation()) {
+                    System.out.println("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
+                    board.placeIrrigation(path.get(0));
+                    nbIrrigation--;
+                }
+            }
+        }
+    }
+
+    protected ArrayList<Objective> getObjectivesOfType(TypeObjective typeObj) {
+        ArrayList<Objective> objectivesOfType = new ArrayList<>();
+        for (Objective obj : this.objectives) {
+            if (obj.getType().equals(typeObj)) {
+                objectivesOfType.add(obj);
+            }
+        }
+        return objectivesOfType;
+    }
+
+
+    public void movePandaStorm() {
+        List<Objective> pandaObjectives = getObjectivesOfType(TypeObjective.PANDA);
+        List<HexagoneBoxPlaced> boxWithBamboos = hexagoneBoxWithBamboos();
+        if (!pandaObjectives.isEmpty()) {
+            for (HexagoneBoxPlaced box : boxWithBamboos) {
+                for (Objective obj : pandaObjectives) {
+                    for (Color c : obj.getColors()) {
+                        if (box.getColor().equals(c) && box.getHeightBamboo() > 0 && this.bambooEaten.get(c) < obj.getPattern().getHauteurBambou()) {
+                            board.setPandaCoords(box.getCoordinates(), this);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        else if (!boxWithBamboos.isEmpty()) {
+            board.setPandaCoords(boxWithBamboos.get(random.nextInt(0, boxWithBamboos.size())).getCoordinates(),this);
+        }
+    }
+
+    public HexagoneBoxPlaced getHighestBamboosOfColor(Color color) {
+        int highest = 0;
+        HexagoneBoxPlaced highestBox = null;
+        for (HexagoneBoxPlaced box : this.board.getAllBoxPlaced()) {
+            if (box.getColor().equals(color) && box.getHeightBamboo() < 4 && box.getHeightBamboo() > highest) {
+                highest = box.getHeightBamboo();
+                highestBox = box;
+            }
+        }
+        return highestBox;
+    }
+
+    @Override
+    public void growBambooRain(String arg) {
+        List<Objective> gardenerObj = getObjectivesOfType(TypeObjective.JARDINIER);
+        for (Objective obj : gardenerObj) {
+            for (Color c : obj.getColors()) {
+                HexagoneBoxPlaced box = getHighestBamboosOfColor(c);
+                if (box != null) {
+                    box.growBamboo();
+                    return;
+                }
+            }
+        }
+        List<HexagoneBoxPlaced> allBox = this.board.getAllBoxPlaced();
+        if (!allBox.isEmpty()) {
+            HexagoneBoxPlaced box = allBox.get(random.nextInt(0,allBox.size()));
+            box.growBamboo();
+        }
+    }
+
 }
+
+

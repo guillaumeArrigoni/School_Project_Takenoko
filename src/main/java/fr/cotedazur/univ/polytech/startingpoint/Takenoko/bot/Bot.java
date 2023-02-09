@@ -166,7 +166,7 @@ public abstract class Bot {
     public boolean isObjectiveIllegal(PossibleActions actions) {
         return ((actions == PossibleActions.MOVE_GARDENER && Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
                 (actions == PossibleActions.MOVE_PANDA && Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords()).isEmpty()) ||
-                (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5) ||
+                (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() >= 5) ||
                 (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getElementOfTheBoard().getStackOfBox().size() < 3) ||
                 (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
     }

@@ -8,6 +8,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -55,7 +56,7 @@ public class BotRandom extends Bot {
             }
             case NUAGES -> {
                 System.out.println("Le dé a choisi : NUAGES");
-                //TODO
+                placeAugment(arg);
                 doAction(arg);
                 doAction(arg);
             }
@@ -146,6 +147,46 @@ public class BotRandom extends Bot {
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+    }
+
+    protected void placeAugment(String arg){
+        int rdm = random.nextInt(1,4);
+        Special special = null;
+        boolean x = board.getElementOfTheBoard().getNbJetonSpecial().get(Special.SourceEau) > 0 ||
+                    board.getElementOfTheBoard().getNbJetonSpecial().get(Special.Engrais) > 0 ||
+                    board.getElementOfTheBoard().getNbJetonSpecial().get(Special.Protéger) > 0;
+        while (x) {
+            switch (rdm) {
+                case 1 -> {
+                    if (arg.equals("demo")) System.out.println("Le bot a choisi : Placer une source d'eau");
+                    special = Special.SourceEau;
+                }
+                case 2 -> {
+                    if (arg.equals("demo")) System.out.println("Le bot a choisi : Placer un engrais");
+                    special = Special.Engrais;
+                }
+                default -> {
+                    if (arg.equals("demo")) System.out.println("Le bot a choisi : Placer une protection");
+                    special = Special.Protéger;
+                }
+            }
+             x = !board.getElementOfTheBoard().pickSpecial(special);
+            rdm = ((rdm +1) % 3) + 1;
+        }
+
+        if(special != null) {
+            List<HexagoneBoxPlaced> tmp = new ArrayList<>();
+            for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
+                if (box.getSpecial() == Special.Classique) {
+                    tmp.add(box);
+                }
+            }
+            if(!tmp.isEmpty()) {
+                HexagoneBoxPlaced box = tmp.get(random.nextInt(0, tmp.size()));
+                box.setSpecial(special);
+                if (arg.equals("demo")) System.out.println(this.name + " a placé une " + special + " en " + Arrays.toString(box.getCoordinates()));
+            }
+        }
     }
 
     @Override

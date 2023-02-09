@@ -57,6 +57,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
         hexagoneBox.setHeightBamboo(this.heightBamboo);
         hexagoneBox.AdjacentBox = new HashMap<>(this.getAdjacentBox());
         hexagoneBox.listOfCrestAroundBox = new ArrayList<>(this.listOfCrestAroundBox);
+        hexagoneBox.special = special;
         return hexagoneBox;
     }
 

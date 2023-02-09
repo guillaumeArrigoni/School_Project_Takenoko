@@ -90,6 +90,8 @@ public class ElementOfTheBoard {
         ElementOfTheBoard res = new ElementOfTheBoard();
         res.stackOfBox = this.stackOfBox.copy();
         res.nbOfBambooForEachColorAvailable = new HashMap<>(this.nbOfBambooForEachColorAvailable);
+        res.nbIrrigationAvailable = this.nbIrrigationAvailable;
+        res.nbJetonSpecial = new HashMap<>(this.nbJetonSpecial);
         return res;
     }
 

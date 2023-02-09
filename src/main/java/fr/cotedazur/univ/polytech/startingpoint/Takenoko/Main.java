@@ -30,7 +30,7 @@ import java.util.*;
 
 public class Main {
     //parameters for JCommander
-    @Parameter(names={"--2thousands"}, arity=0)
+    @Parameter(names={"--2thousands"}, arity=1)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;
@@ -49,7 +49,7 @@ public class Main {
         if (main.twoThousands || main.csv) {
             int numberOfPlayer = 2;
             Log log = new Log();
-            log.logInit(numberOfPlayer);
+            log.logInit(numberOfPlayer,logInfoStats);
             for (int i = 0; i < 10; i++) {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1, 2);
@@ -132,7 +132,6 @@ public class Main {
             playerList.add(bot1);
             playerList.add(bot2);
             Game game = new Game(playerList,board,logDemo);
-            System.out.println(bot1.getBoard().getElementOfTheBoard().getStackOfBox());
             game.play(gestionnaire, "demo");
         }
     }

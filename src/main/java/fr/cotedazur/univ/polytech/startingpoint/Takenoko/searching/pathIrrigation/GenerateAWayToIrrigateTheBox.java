@@ -58,8 +58,6 @@ public class GenerateAWayToIrrigateTheBox {
         this.boardSimulation = new BoardSimulation((Board) box.getBoard().clone());
         this.crestGestionnarySimulation = boardSimulation.getCrestGestionnary();
         boardSimulation.addBox(box);
-        System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-        System.out.println(closestCrestToIrrigatedOfTheBox);
         setupPath(closestCrestToIrrigatedOfTheBox);
     }
 
@@ -90,8 +88,6 @@ public class GenerateAWayToIrrigateTheBox {
         while (rangeFirstCrestInlist != 1) {
             ArrayList<Crest> listCrestToAdd = crestGestionnarySimulation.getLinkCrestChildrenToCrestParent().get(intructions.get(0).get(0));
             for (Crest crestInList : intructions.get(0)){
-                System.out.println("aaa");
-                System.out.println(intructions.get(0).size());
                 listCrestToAdd.addAll((Collection<? extends Crest>) crestGestionnarySimulation.getLinkCrestChildrenToCrestParent().get(crestInList).clone());
                 LinkedHashSet<Crest> set = new LinkedHashSet<>(listCrestToAdd);
                 listCrestToAdd.clear();
@@ -99,8 +95,6 @@ public class GenerateAWayToIrrigateTheBox {
             }
             intructions.add(0,listCrestToAdd);
             rangeFirstCrestInlist = tryGetRange(intructions.get(0).get(0));
-            System.out.println("ttttttt");
-            System.out.println(rangeFirstCrestInlist);
         }
         this.pathToIrrigation = intructions;
     }

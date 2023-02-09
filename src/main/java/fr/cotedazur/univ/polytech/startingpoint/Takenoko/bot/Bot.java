@@ -51,18 +51,18 @@ public abstract class Bot {
     protected int nbIrrigation;
     protected final GestionObjectives gestionObjectives;
     protected final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
-    protected final Map <Color,Integer> bambooEaten;
-
+    protected final Map<Color, Integer> bambooEaten;
 
 
     //CONSTRUCTOR
 
     /**
      * Constructor of the bot
-     * @param name the name of the bot
+     *
+     * @param name  the name of the bot
      * @param board the board of the game
      */
-    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color,Integer> bambooEaten, LogInfoDemo logInfoDemo) {
+    protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEaten, LogInfoDemo logInfoDemo) {
         this.name = name;
         this.board = board;
         this.score = 0;
@@ -71,41 +71,30 @@ public abstract class Bot {
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.bambooEaten = bambooEaten;
-        this.bambooEaten.put(Color.Rouge,0);
-        this.bambooEaten.put(Color.Jaune,0);
-        this.bambooEaten.put(Color.Vert,0);
-        this.bambooEaten.put(Color.Lac,0);
+        this.bambooEaten.put(Color.Rouge, 0);
+        this.bambooEaten.put(Color.Jaune, 0);
+        this.bambooEaten.put(Color.Vert, 0);
+        this.bambooEaten.put(Color.Lac, 0);
         this.nbIrrigation = 0;
-        this.logInfoDemo= logInfoDemo;
+        this.logInfoDemo = logInfoDemo;
         this.numberObjectiveDone = 0;
         resetPossibleAction();
     }
 
-    public BotSimulator createBotSimulator(ActionLog instructions){
+    public BotSimulator createBotSimulator(ActionLog ... instructions) {
         RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
         Board tmpBoard = this.board.copy(tmp);
+        List<ActionLog> instructionsList = new ArrayList<>(List.of(instructions));
+        ActionLog inst = null;
+        if(!instructionsList.isEmpty())
+            inst = instructionsList.get(0);
         return new BotSimulator(this.name,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
                 new ArrayList<>(this.objectives),
                 tmp,
                 new HashMap<>(this.getBambooEaten()),
-                instructions,
-                this.nbIrrigation,
-                this.logInfoDemo,
-                this.numberObjectiveDone);
-    }
-
-    public BotSimulator createBotSimulator(){
-        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
-        Board tmpBoard = this.board.copy(tmp);
-        return new BotSimulator(this.name,
-                tmpBoard,
-                this.gestionObjectives.copy(tmpBoard, tmp),
-                new ArrayList<>(this.objectives),
-                tmp,
-                new HashMap<>(this.getBambooEaten()),
-                null,
+                inst,
                 this.nbIrrigation,
                 this.logInfoDemo,
                 this.numberObjectiveDone);
@@ -134,21 +123,21 @@ public abstract class Bot {
     //Gestion Actions possibles
 
 
-    protected void resetPossibleAction(){
+    protected void resetPossibleAction() {
         possibleActions = PossibleActions.getAllActions();
     }
+
     /**
      * This method place a tile on the board
      */
     protected abstract void placeTile(String arg);
+
     /**
      * This method move the gardener
      */
     protected abstract void moveGardener(String arg);
 
     protected abstract void movePanda(String arg);
-
-
 
 
     //Score and objectives
@@ -164,21 +153,22 @@ public abstract class Bot {
         this.objectives = objectives;
     }
 
-    public void addScore(Objective objective, String arg){
+    public void addScore(Objective objective, String arg) {
         this.score += objective.getValue();
     }
-    public void addScorePanda(Objective objective){
+
+    public void addScorePanda(Objective objective) {
         this.scorePanda += objective.getValue();
     }
+
     public abstract void drawObjective(String arg);
 
-    public boolean isObjectiveIllegal(PossibleActions actions){
-        return ((actions == PossibleActions.MOVE_GARDENER &&  Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
-                (actions == PossibleActions.MOVE_PANDA && Bot.possibleMoveForGardenerOrPanda(board,board.getPandaCoords()).isEmpty()) ||
-                (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() == 5) ||
+    public boolean isObjectiveIllegal(PossibleActions actions) {
+        return ((actions == PossibleActions.MOVE_GARDENER && Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
+                (actions == PossibleActions.MOVE_PANDA && Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords()).isEmpty()) ||
+                (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() >= 5) ||
                 (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getElementOfTheBoard().getStackOfBox().size() < 3) ||
-                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) ||
-                (actions == PossibleActions.PLACE_IRRIGATION));
+                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
     }
 
 
@@ -190,7 +180,7 @@ public abstract class Bot {
         boolean possible = true;
         int count = 1;
         int[] newCoord;
-        for (int i=0;i<6;i++) {
+        for (int i = 0; i < 6; i++) {
             while (possible) {
                 newCoord = switch (i) {
                     case 0 -> new int[]{x, y + count, z - count};
@@ -202,7 +192,7 @@ public abstract class Bot {
                     default -> new int[]{0, 0, 0};
                 };
 
-                if (!board.isCoordinateInBoard(newCoord)) possible=false;
+                if (!board.isCoordinateInBoard(newCoord)) possible = false;
                 else {
                     possibleMove.add(newCoord);
                     count++;
@@ -217,6 +207,7 @@ public abstract class Bot {
     public String getName() {
         return name;
     }
+
     public int getScorePanda() {
         return this.scorePanda;
     }
@@ -229,17 +220,17 @@ public abstract class Bot {
         this.scorePanda = scorePanda;
     }
 
-    public void addBambooEaten(Color colorAte){
+    public void addBambooEaten(Color colorAte) {
         int nbAte = bambooEaten.get(colorAte) + 1;
-        bambooEaten.put(colorAte,nbAte);
+        bambooEaten.put(colorAte, nbAte);
     }
 
     public void deleteBambooEaten(ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
         ArrayList<Color> errorImpossibleToDeleteTheseBamboo = new ArrayList<>();
-        for (Color color : listBambooToDelete){
+        for (Color color : listBambooToDelete) {
             int nbBambooOfOneColorAte = bambooEaten.get(color);
-            if (nbBambooOfOneColorAte>0){
-                bambooEaten.put(color,nbBambooOfOneColorAte-1);
+            if (nbBambooOfOneColorAte > 0) {
+                bambooEaten.put(color, nbBambooOfOneColorAte - 1);
                 try {
                     board.getElementOfTheBoard().giveBackBamboo(color);
                 } catch (TakenokoException e) {
@@ -250,13 +241,13 @@ public abstract class Bot {
                 errorImpossibleToDeleteTheseBamboo.add(color);
             }
         }
-        if (errorImpossibleToDeleteTheseBamboo.size()!=0){
+        if (errorImpossibleToDeleteTheseBamboo.size() != 0) {
             throw new DeletingBotBambooException(errorImpossibleToDeleteTheseBamboo);
         }
 
     }
 
-    public Map<Color,Integer> getBambooEaten(){
+    public Map<Color, Integer> getBambooEaten() {
         return this.bambooEaten;
     }
 
@@ -289,5 +280,9 @@ public abstract class Bot {
     }
 
     public abstract TypeObjective choseTypeObjectiveToRoll(String arg);
+
+    public int getNbIrrigation() {
+        return nbIrrigation;
+    }
 
 }

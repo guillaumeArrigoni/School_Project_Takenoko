@@ -3,10 +3,13 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLogIrrigation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
@@ -33,7 +36,7 @@ public class BotSimulator extends Bot{
      * @param bambooEated
      */
     public BotSimulator(String name, Board board, GestionObjectives gestionObjectives, ArrayList<Objective> objectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, ActionLog instructions, int nbIrrigation, LogInfoDemo logInfoDemo, int numberObjectiveDone) {
-        super(name + 's', board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
+        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
         this.objectives = objectives;
         this.instructions = instructions;
         this.nbIrrigation = nbIrrigation;
@@ -63,6 +66,18 @@ public class BotSimulator extends Bot{
             case DRAW_OBJECTIVE:
                 drawObjective(arg);
                 break;
+            case TAKE_IRRIGATION:
+                takeIrrigation(arg);
+                break;
+            case PLACE_IRRIGATION:
+                placeIrrigation(arg);
+                break;
+            case GROW_BAMBOO:
+                growBambooRain(arg);
+                break;
+            case ADD_AUGMENT:
+                addAugment(arg);
+                break;
             default://MOVE PANDA
                 movePanda(arg);
         }
@@ -86,17 +101,45 @@ public class BotSimulator extends Bot{
         board.addBox(placedTile);
     }
 
+    protected void takeIrrigation(String arg){
+        nbIrrigation++;
+    }
+
+    protected void placeIrrigation(String arg){
+        ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions;
+        for (ArrayList<Crest> path : actionLogIrrigation.getParamirrig()) {
+            board.placeIrrigation(path.get(0));
+            nbIrrigation--;
+        }
+    }
+
+    protected void growBambooRain(String arg){
+        HexagoneBoxPlaced box = getBoard().getPlacedBox().get(instructions.getParameters()[0]);
+        board.growAfterRain(box);
+    }
+
     @Override
     protected void moveGardener(String arg) {
         board.setGardenerCoords(instructions.getParameters());
     }
-    /*
-            if(Action.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).contains(instructions.getParameters()))
-            board.setGardenerCoords(instructions.getParameters());
-        else{
-            legal = false;
+
+    protected void addAugment(String arg){
+        HexagoneBoxPlaced box = board.getPlacedBox().get(instructions.getParameters()[0]);
+        switch (instructions.getParameters()[1]) {
+            case 1 -> {
+                board.getElementOfTheBoard().pickSpecial(Special.SourceEau);
+                box.setSpecial(Special.SourceEau);
+            }
+            case 2 -> {
+                board.getElementOfTheBoard().pickSpecial(Special.Engrais);
+                box.setSpecial(Special.Engrais);
+            }
+            default -> {
+                board.getElementOfTheBoard().pickSpecial(Special.Protéger);
+                box.setSpecial(Special.Protéger);
+            }
         }
-     */
+    }
 
     @Override
     protected void movePanda(String arg) {

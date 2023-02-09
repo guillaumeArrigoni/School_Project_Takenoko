@@ -65,5 +65,7 @@ public class StackOfBox {
         Collections.shuffle(this.stackOfBox);
     }
 
-
+    public ArrayList<HexagoneBox> getStackOfBox() {
+        return stackOfBox;
+    }
 }

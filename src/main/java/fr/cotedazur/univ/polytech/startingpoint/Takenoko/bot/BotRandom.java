@@ -8,11 +8,13 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
+import javax.swing.*;
 import java.util.*;
 
 
@@ -37,6 +39,7 @@ public class BotRandom extends Bot {
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg){
         possibleActions = PossibleActions.getAllActions();
+        placeIrrigation();
         switch (meteo){
             case VENT -> {
                 //Deux fois la même action autorisé
@@ -46,16 +49,14 @@ public class BotRandom extends Bot {
                 doAction(arg);
             }
             case PLUIE -> {
-                //Le joueur peut faire pousser une tuile irriguée
-                //TODO c pas implémenté dans la classe hexagoneBox
                 if (arg.equals("demo")) System.out.println("Le dé a choisi : PLUIE");
-                
+                growBambooRain();
                 doAction(arg);
                 doAction(arg);
             }
             case NUAGES -> {
                 System.out.println("Le dé a choisi : NUAGES");
-                //TODO 
+                placeAugment(arg);
                 doAction(arg);
                 doAction(arg);
             }
@@ -79,7 +80,6 @@ public class BotRandom extends Bot {
     @Override
     protected void doAction(String arg){
         PossibleActions action = chooseAction();
-        placeIrrigation();
         switch (action) {
             case DRAW_AND_PUT_TILE -> {
                 if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherPoserTuile");
@@ -111,7 +111,8 @@ public class BotRandom extends Bot {
     protected PossibleActions chooseAction(){
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
-        if (isObjectiveIllegal(acp))
+        if (isObjectiveIllegal(acp) ||
+        (acp != PossibleActions.DRAW_OBJECTIVE && acp != PossibleActions.DRAW_AND_PUT_TILE && acp != PossibleActions.MOVE_GARDENER && acp != PossibleActions.MOVE_PANDA && acp != PossibleActions.TAKE_IRRIGATION))
             return chooseAction();
         possibleActions.remove(acp);
         return acp;
@@ -148,6 +149,43 @@ public class BotRandom extends Bot {
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
 
+    protected void placeAugment(String arg){
+        int rdm = random.nextInt(1,4);
+        Special special = null;
+        boolean x = board.getElementOfTheBoard().getNbJetonSpecial().get(Special.SourceEau) > 0 ||
+                    board.getElementOfTheBoard().getNbJetonSpecial().get(Special.Engrais) > 0 ||
+                    board.getElementOfTheBoard().getNbJetonSpecial().get(Special.Protéger) > 0;
+        while (x) {
+            switch (rdm) {
+                case 1 -> {
+                    special = Special.SourceEau;
+                }
+                case 2 -> {
+                    special = Special.Engrais;
+                }
+                default -> {
+                    special = Special.Protéger;
+                }
+            }
+             x = !board.getElementOfTheBoard().pickSpecial(special);
+            rdm = ((rdm +1) % 3) + 1;
+        }
+
+        if(special != null) {
+            List<HexagoneBoxPlaced> tmp = new ArrayList<>();
+            for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
+                if (box.getSpecial() == Special.Classique) {
+                    tmp.add(box);
+                }
+            }
+            if(!tmp.isEmpty()) {
+                HexagoneBoxPlaced box = tmp.get(random.nextInt(0, tmp.size()));
+                box.setSpecial(special);
+                if (arg.equals("demo")) System.out.println(this.name + " a placé une " + special + " en " + Arrays.toString(box.getCoordinates()));
+            }
+        }
+    }
+
     @Override
     public void drawObjective(String arg){
         gestionObjectives.rollObjective(this, arg);
@@ -168,9 +206,25 @@ public class BotRandom extends Bot {
         board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()) + " grâce à l'orage");
     }
+    public void growBambooRain(){
+        List<HexagoneBoxPlaced> tmp = new ArrayList<>();
+        for(HexagoneBoxPlaced box : board.getPlacedBox().values()){
+            if(box.isIrrigate() && box.getHeightBamboo() < 4){
+                tmp.add(box);
+            }
+        }
+        if(!tmp.isEmpty()) {
+            HexagoneBoxPlaced box = tmp.get(random.nextInt(0, tmp.size()));
+            board.growAfterRain(box);
+            System.out.println(this.name + " a fait pousser du bambou grâce à la pluie en " + Arrays.toString(box.getCoordinates()));
+        }
+    }
+
+
+
 
     public void placeIrrigation(){
-        if(random.nextInt(0,2) == 0) {
+        if(random.nextInt(0,4) == 0) {
             List<GenerateAWayToIrrigateTheBox> tmp = new ArrayList<>();
             GenerateAWayToIrrigateTheBox temp;
             for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
@@ -180,7 +234,7 @@ public class BotRandom extends Bot {
                         if (temp.getPathToIrrigation().size() <= this.nbIrrigation)
                             tmp.add(temp);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        System.err.println("erreur irrigation");
                     }
                 }
             }

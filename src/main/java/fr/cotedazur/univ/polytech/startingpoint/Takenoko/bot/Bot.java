@@ -10,11 +10,9 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBa
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-
 import java.util.*;
-
+import java.util.logging.*;
 public abstract class Bot {
     //ATTRIBUTES
     /**
@@ -39,7 +37,7 @@ public abstract class Bot {
     /**
      * The list of objectives of the bot
      */
-    protected ArrayList<Objective> objectives;
+    protected List<Objective> objectives;
 
     protected LogInfoDemo logInfoDemo;
     /**
@@ -55,7 +53,6 @@ public abstract class Bot {
 
 
     //CONSTRUCTOR
-
     /**
      * Constructor of the bot
      *
@@ -78,7 +75,7 @@ public abstract class Bot {
         this.nbIrrigation = 0;
         this.logInfoDemo = logInfoDemo;
         this.numberObjectiveDone = 0;
-        resetPossibleAction();
+        possibleActions = PossibleActions.getAllActions();
     }
 
     public BotSimulator createBotSimulator(ActionLog ... instructions) {
@@ -88,72 +85,28 @@ public abstract class Bot {
         ActionLog inst = null;
         if(!instructionsList.isEmpty())
             inst = instructionsList.get(0);
-        return new BotSimulator(this.name,
+        return new BotSimulator(this,
                 tmpBoard,
                 this.gestionObjectives.copy(tmpBoard, tmp),
                 new ArrayList<>(this.objectives),
                 tmp,
-                new HashMap<>(this.getBambooEaten()),
-                inst,
-                this.nbIrrigation,
-                this.logInfoDemo,
-                this.numberObjectiveDone);
+                new EnumMap<>(this.getBambooEaten()),
+                inst);
     }
+
+    //ABSTRACT METHODS
+    public abstract void playTurn(MeteoDice.Meteo meteo, String arg);
+    protected abstract void doAction(String arg);
+    protected abstract void placeTile(String arg);
+    protected abstract void moveGardener(String arg);
+    protected abstract void movePanda(String arg);
+    protected abstract void growBambooRain(String arg);
+    protected abstract void drawObjective(String arg);
+    protected abstract void placeIrrigation(String arg);
+    protected abstract void placeAugment(String arg);
 
     //METHODS
-    //Joueur fait les dés;
-    //fait action 2 actions
-    //placertuile
-    //prendre et poser s'il veut une irrigation
-    //Déplacer le jardinier
-    //Déplacer le panda
-    //piocher une carte objectif
-
-
-    /**
-     * This method is called at the beginning of the turn
-     */
-    public abstract void playTurn(MeteoDice.Meteo meteo, String arg);
-
-    /**
-     * This method is called to do an action
-     */
-    protected abstract void doAction(String arg);
-
-    //Gestion Actions possibles
-
-
-    protected void resetPossibleAction() {
-        possibleActions = PossibleActions.getAllActions();
-    }
-
-    /**
-     * This method place a tile on the board
-     */
-    protected abstract void placeTile(String arg);
-
-    /**
-     * This method move the gardener
-     */
-    protected abstract void moveGardener(String arg);
-
-    protected abstract void movePanda(String arg);
-
-
-    //Score and objectives
-    public int getScore() {
-        return score;
-    }
-
-    public ArrayList<Objective> getObjectives() {
-        return objectives;
-    }
-
-    public void setObjectives(ArrayList<Objective> objectives) {
-        this.objectives = objectives;
-    }
-
-    public void addScore(Objective objective, String arg) {
+    public void addScore(Objective objective) {
         this.score += objective.getValue();
     }
 
@@ -161,7 +114,14 @@ public abstract class Bot {
         this.scorePanda += objective.getValue();
     }
 
-    public abstract void drawObjective(String arg);
+    public void addBambooEaten(Color colorAte) {
+        int nbAte = bambooEaten.get(colorAte) + 1;
+        bambooEaten.put(colorAte, nbAte);
+    }
+
+    public void incrementNumberObjectiveDone() {
+        this.numberObjectiveDone++;
+    }
 
     public boolean isObjectiveIllegal(PossibleActions actions) {
         return ((actions == PossibleActions.MOVE_GARDENER && Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
@@ -171,8 +131,7 @@ public abstract class Bot {
                 (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
     }
 
-
-    public static ArrayList<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {
+    public static List<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {
         int x = coord[0];
         int y = coord[1];
         int z = coord[2];
@@ -204,28 +163,7 @@ public abstract class Bot {
         return possibleMove;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getScorePanda() {
-        return this.scorePanda;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public void setScorePanda(int scorePanda) {
-        this.scorePanda = scorePanda;
-    }
-
-    public void addBambooEaten(Color colorAte) {
-        int nbAte = bambooEaten.get(colorAte) + 1;
-        bambooEaten.put(colorAte, nbAte);
-    }
-
-    public void deleteBambooEaten(ArrayList<Color> listBambooToDelete) throws DeletingBotBambooException {
+    public void deleteBambooEaten(List<Color> listBambooToDelete) throws DeletingBotBambooException {
         ArrayList<Color> errorImpossibleToDeleteTheseBamboo = new ArrayList<>();
         for (Color color : listBambooToDelete) {
             int nbBambooOfOneColorAte = bambooEaten.get(color);
@@ -234,45 +172,28 @@ public abstract class Bot {
                 try {
                     board.getElementOfTheBoard().giveBackBamboo(color);
                 } catch (TakenokoException e) {
-                    System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
-                    throw new RuntimeException();
+                    e.printStackTrace();
                 }
             } else {
                 errorImpossibleToDeleteTheseBamboo.add(color);
             }
         }
-        if (errorImpossibleToDeleteTheseBamboo.size() != 0) {
+        if (!errorImpossibleToDeleteTheseBamboo.isEmpty()) {
             throw new DeletingBotBambooException(errorImpossibleToDeleteTheseBamboo);
         }
+    }
 
+    //GETTER
+    public int getScore() {
+        return score;
+    }
+
+    public int getScorePanda() {
+        return this.scorePanda;
     }
 
     public Map<Color, Integer> getBambooEaten() {
         return this.bambooEaten;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public List<PossibleActions> getPossibleActions() {
-        return possibleActions;
-    }
-
-    public GestionObjectives getGestionObjectives() {
-        return gestionObjectives;
-    }
-
-    public RetrieveBoxIdWithParameters getRetrieveBoxIdWithParameters() {
-        return retrieveBoxIdWithParameters;
-    }
-
-    public LogInfoDemo getLogInfoDemo() {
-        return logInfoDemo;
-    }
-
-    public void IncrementNumberObjectiveDone() {
-        this.numberObjectiveDone++;
     }
 
     public int getNumberObjectiveDone() {
@@ -281,6 +202,39 @@ public abstract class Bot {
 
     public int getNbIrrigation() {
         return nbIrrigation;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Objective> getObjectives() {
+        return objectives;
+    }
+
+    public LogInfoDemo getLogInfoDemo() {
+        return logInfoDemo;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public GestionObjectives getGestionObjectives() {
+        return gestionObjectives;
+    }
+
+    //SETTERS
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setScorePanda(int scorePanda) {
+        this.scorePanda = scorePanda;
+    }
+
+    public void setObjectives(List<Objective> objectives) {
+        this.objectives = objectives;
     }
 
 }

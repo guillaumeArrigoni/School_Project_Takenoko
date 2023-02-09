@@ -2,9 +2,6 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
 
-import java.lang.reflect.Parameter;
-import java.util.List;
-
 public class ActionLog {
     PossibleActions action;
     int[] parameters;
@@ -24,11 +21,11 @@ public class ActionLog {
     }
 
     public String toString(){
-        String s = action.toString();
-        for(int i = 0; i < parameters.length; i++){
-            s += " " + parameters[i];
+        StringBuilder s = new StringBuilder(action.toString());
+        for (int parameter : parameters) {
+            s.append(" ").append(parameter);
         }
-        return s;
+        return s.toString();
     }
 
 }

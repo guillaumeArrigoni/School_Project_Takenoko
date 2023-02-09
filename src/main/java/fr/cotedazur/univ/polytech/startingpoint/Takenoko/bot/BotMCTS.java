@@ -12,11 +12,10 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
-
+import java.util.logging.*;
 public class BotMCTS extends Bot{
     Node node;
     List<ActionLog> instructions;
@@ -25,11 +24,11 @@ public class BotMCTS extends Bot{
      *
      * @param name                        the name of the bot
      * @param board                       the board of the game     the random generator
-     * @param gestionObjectives
-     * @param retrieveBoxIdWithParameters
-     * @param bambooEated
+     * @param gestionObjectives             d
+     * @param retrieveBoxIdWithParameters   d
+     * @param bambooEated               d
      */
-    public BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color, Integer> bambooEated, LogInfoDemo logInfoDemo) {
+    public BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEated, LogInfoDemo logInfoDemo) {
         super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
     }
 
@@ -52,7 +51,9 @@ public class BotMCTS extends Bot{
             case DRAW_AND_PUT_TILE -> placeTile(arg);
             case MOVE_GARDENER -> moveGardener(arg);
             case DRAW_OBJECTIVE -> drawObjective(arg);
-            case TAKE_IRRIGATION -> takeIrrigation(arg);
+            case TAKE_IRRIGATION -> {
+                if (arg.equals("demo")) System.out.println("Le bot a pris une irrigation");
+                nbIrrigation++;}
             case PLACE_IRRIGATION -> placeIrrigation(arg);
             case GROW_BAMBOO -> growBambooRain(arg);
             case ADD_AUGMENT -> placeAugment(arg);
@@ -101,10 +102,6 @@ public class BotMCTS extends Bot{
         if (arg.equals("demo")) System.out.println(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()));
     }
 
-    protected void takeIrrigation(String arg){
-        if (arg.equals("demo")) System.out.println("Le bot a pris une irrigation");
-        nbIrrigation++;
-    }
 
     protected void placeIrrigation(String arg){
         ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions;
@@ -148,7 +145,7 @@ public class BotMCTS extends Bot{
             case 1 -> {
                 gestionObjectives.rollPandaObjective(this, arg);
                 if (arg.equals("demo"))System.out.println(this.name + " a pioché un objectif de panda");
-            }case 2 -> {
+            }default -> {
                 gestionObjectives.rollJardinierObjective(this, arg);
                 if (arg.equals("demo")) System.out.println(this.name + " a pioché un objectif de jardinier");
             }

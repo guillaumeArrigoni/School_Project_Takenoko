@@ -13,7 +13,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjectiv
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -87,9 +86,9 @@ public class BotSimulator extends Bot{
     @Override
     public void drawObjective(String arg) {
         switch(instructions.getParameters()[0]){
-            case 0 -> gestionObjectives.rollParcelleObjective(this, arg);
-            case 1 -> gestionObjectives.rollPandaObjective(this, arg);
-            case 2 -> gestionObjectives.rollJardinierObjective(this, arg);
+            case 0 -> gestionObjectives.rollParcelleObjective(this);
+            case 1 -> gestionObjectives.rollPandaObjective(this);
+            case 2 -> gestionObjectives.rollJardinierObjective(this);
         }
     }
 

@@ -86,14 +86,14 @@ public class BotMCTS extends Bot{
     public void drawObjective(String arg) {
         switch(instructions.get(0).getParameters()[0]){
             case 0 -> {
-                gestionObjectives.rollParcelleObjective(this, arg);
+                gestionObjectives.rollParcelleObjective(this);
                 super.logInfoDemo.displayPickPatternObj(this.name);
             }
             case 1 -> {
-                gestionObjectives.rollPandaObjective(this, arg);
+                gestionObjectives.rollPandaObjective(this);
                 super.logInfoDemo.displayPickPandaObj(this.name);
             }case 2 -> {
-                gestionObjectives.rollJardinierObjective(this, arg);
+                gestionObjectives.rollJardinierObjective(this);
                 super.logInfoDemo.displayPickGardenerObj(this.name);
             }
         }

@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -26,7 +27,7 @@ class ObjectiveTest {
     public static void setUp(){
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters, 1);
-        gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters, new LoggerError(true));
         objective1 = gestionnaire.POSER_TRIANGLE_VERT;
         objective2 = gestionnaire.POSER_LIGNE_JAUNE;
         objective3 = gestionnaire.PLANTER_SUR_PROTEGER_BAMBOU_VERT;

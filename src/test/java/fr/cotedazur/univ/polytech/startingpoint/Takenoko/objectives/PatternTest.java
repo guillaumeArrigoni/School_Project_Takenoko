@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
@@ -18,12 +19,14 @@ class PatternTest {
     private static Pattern pattern4;
     private static Pattern pattern5;
     private static Pattern pattern6;
+    private static LoggerError loggerError;
 
     @BeforeAll
     public static void setUp(){
+        loggerError = new LoggerError(true);
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters, 1);
-        gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters, loggerError);
         pattern1 = gestionnaire.PLANTER_SUR_SOURCE_EAU;
         pattern2 = gestionnaire.PLANTER_TROIS_JAUNES;
         pattern3 = gestionnaire.POSER_TRIANGLE;

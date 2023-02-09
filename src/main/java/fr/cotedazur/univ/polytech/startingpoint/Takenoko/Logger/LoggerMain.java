@@ -20,7 +20,7 @@ public class LoggerMain {
         this.logger = java.util.logging.Logger.getLogger(name);
         this.handler = new ConsoleHandler();
         this.level = level;
-        this.formatterForLog = new FormatterForLog();
+        this.formatterForLog = new FormatterForLog(this.level);
         setup();
     }
 

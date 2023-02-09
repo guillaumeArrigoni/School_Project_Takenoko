@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
@@ -59,16 +60,18 @@ class GestionObjectivesTest {
 
     private final String arg = "demo";
     private static LogInfoDemo logInfoDemo;
+    private static LoggerError loggerError;
 
     @BeforeAll
     public static void setupBox() {
+        loggerError = new LoggerError(true);
         logInfoDemo = new LogInfoDemo(true);
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters, 1,elementOfTheBoardCheated);
         meteoDice = new MeteoDice();
         random = new Random();
-        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
+        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters,loggerError );
         gestionObjectives.initialize(
                 gestionObjectives.ListOfObjectiveParcelleByDefault(),
                 gestionObjectives.ListOfObjectiveJardinierByDefault(),
@@ -180,7 +183,7 @@ class GestionObjectivesTest {
 
     @Test
     void initialize() {
-        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError );
         gestionObjectives2.initialize(
                 gestionObjectives2.ListOfObjectiveParcelleByDefault(),
                 gestionObjectives2.ListOfObjectiveJardinierByDefault(),
@@ -194,7 +197,7 @@ class GestionObjectivesTest {
 
     @Test
     void getParcelleObjectifs() {
-        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError );
         gestionObjectives2.initialize(
                 gestionObjectives2.ListOfObjectiveParcelleByDefault(),
                 gestionObjectives2.ListOfObjectiveJardinierByDefault(),
@@ -205,7 +208,7 @@ class GestionObjectivesTest {
 
     @Test
     void getJardinierObjectifs() {
-        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError );
         gestionObjectives2.initialize(
                 gestionObjectives2.ListOfObjectiveParcelleByDefault(),
                 gestionObjectives2.ListOfObjectiveJardinierByDefault(),
@@ -216,7 +219,7 @@ class GestionObjectivesTest {
 
     @Test
     void getPandaObjectifs() {
-        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError );
         gestionObjectives2.initialize(
                 gestionObjectives2.ListOfObjectiveParcelleByDefault(),
                 gestionObjectives2.ListOfObjectiveJardinierByDefault(),
@@ -238,7 +241,7 @@ class GestionObjectivesTest {
     @Test
     void rollParcelleObjective() {
         BotRandom botRoll = new BotRandom("botRoll", board,random,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>(),logInfoDemo);
-        gestionObjectives.rollParcelleObjective(botRoll, arg);
+        gestionObjectives.rollParcelleObjective(botRoll);
         assertEquals(TypeObjective.PARCELLE, botRoll.getObjectives().get(0).getType());
 
     }
@@ -246,14 +249,14 @@ class GestionObjectivesTest {
     @Test
     void rollJardinierObjective() {
         BotRandom botRoll = new BotRandom("botRoll", board,random,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>(),logInfoDemo);
-        gestionObjectives.rollJardinierObjective(botRoll, arg);
+        gestionObjectives.rollJardinierObjective(botRoll);
         assertEquals(TypeObjective.JARDINIER,botRoll.getObjectives().get(0).getType());
     }
 
     @Test
     void rollPandaObjective() {
         BotRandom botRoll = new BotRandom("botRoll", board,random,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>(),logInfoDemo);
-        gestionObjectives.rollPandaObjective(botRoll, arg);
+        gestionObjectives.rollPandaObjective(botRoll);
         assertEquals(TypeObjective.PANDA,botRoll.getObjectives().get(0).getType());
     }
     @Test

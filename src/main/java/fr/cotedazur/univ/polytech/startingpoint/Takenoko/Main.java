@@ -9,11 +9,9 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
-import java.nio.file.*;
-
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoStats;
-import com.opencsv.ICSVWriter;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
@@ -23,7 +21,6 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
-import java.text.DecimalFormat;
 import java.util.*;
 //https://www.redblobgames.com/grids/hexagons/#coordinates
 
@@ -40,6 +37,7 @@ public class Main {
         Main main = new Main();
         LogInfoDemo logDemo = new LogInfoDemo(main.demo || (!main.twoThousands && !main.csv));
         LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
+        LoggerError loggerError = new LoggerError(true);
         JCommander.newBuilder()
                 .addObject(main)
                 .build()
@@ -53,7 +51,7 @@ public class Main {
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1);
                 Random random = new Random();
-                GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
+                GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
                 gestionnaire.initialize(
                         gestionnaire.ListOfObjectiveParcelleByDefault(),
                         gestionnaire.ListOfObjectiveJardinierByDefault(),
@@ -123,7 +121,7 @@ public class Main {
             RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
             Board board = new Board(retrieving, 1);
             Random random = new Random();
-            GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
+            GestionObjectives gestionnaire = new GestionObjectives(board, retrieving,loggerError);
             //Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             Bot bot1 = new BotRuleBased("Bot1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             Bot bot2 = new BotRandom("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);

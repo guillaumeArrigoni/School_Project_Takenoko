@@ -1,14 +1,11 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerMain;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 public class Game {
     private List<Bot> playerList;
@@ -40,8 +37,8 @@ public class Game {
                 gestionnaire.ListOfObjectivePandaByDefault()
         );
         for (Bot bot : this.playerList) {
-            gestionnaire.rollParcelleObjective(bot, arg);
-            gestionnaire.rollJardinierObjective(bot, arg);
+            gestionnaire.rollParcelleObjective(bot);
+            gestionnaire.rollJardinierObjective(bot);
         }
         int numberPlayer = this.playerList.size();
         MeteoDice.Meteo meteo = MeteoDice.Meteo.NO_METEO;
@@ -53,7 +50,7 @@ public class Game {
             playingBot.playTurn(meteo, arg);
             gestionnaire.checkObjectives(playingBot, arg, numberPlayer);
             printBoardState(board);
-            if (gestionnaire.DoesABotHaveEnoughObjectivesDone()) {
+            if (gestionnaire.doesABotHaveEnoughObjectivesDone()) {
                 playing = false;
                 for (Bot bot : playerList) {
                     logInfoDemo.displayScore(bot);

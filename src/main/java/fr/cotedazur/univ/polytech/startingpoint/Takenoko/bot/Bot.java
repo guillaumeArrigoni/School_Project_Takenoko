@@ -12,7 +12,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjec
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import java.util.*;
-import java.util.logging.*;
+
 public abstract class Bot {
     //ATTRIBUTES
     /**

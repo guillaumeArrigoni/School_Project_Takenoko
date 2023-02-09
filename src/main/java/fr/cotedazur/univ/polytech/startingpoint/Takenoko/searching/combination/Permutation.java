@@ -1,40 +1,54 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination.Combination;
-
 import java.util.ArrayList;
 
 public class Permutation<T> {
 
     ArrayList<Combination<T>> listOfCombination;
 
-    public Permutation(ArrayList<Combination<T>> elements) throws CloneNotSupportedException {
-        listOfCombination = new ArrayList<>();
-        permute(elements);
-    }
-
-    public void permute(ArrayList<Combination<T>> elements) throws CloneNotSupportedException {
-        for (Combination combination : elements){
-            backtrack(new Combination<>(), combination);
-        }
+    /**
+     * Will created all the combination sorted for a list of combination entered
+     * @param listOfCombination : the list of all the combination which the sorted combination will be created
+     * @throws CloneNotSupportedException : if Enable to create the clone of a Combination
+     */
+    public Permutation(ArrayList<Combination<T>> listOfCombination) throws CloneNotSupportedException {
+        this.listOfCombination = new ArrayList<>();
+        launchPermutation(listOfCombination);
     }
 
     public ArrayList<Combination<T>> getListOfCombination() {
         return listOfCombination;
     }
 
-    private void backtrack(Combination<T> temp, Combination<T> elements) throws CloneNotSupportedException {
-        if (temp.getSize() == elements.getSize()) {
-            Combination<T> clone = temp.clone();
+    /**
+     * Launch the permutation algorithm
+     * @param listOfCombination : the list of all the Combination use to create the sorted combination
+     * @throws CloneNotSupportedException
+     */
+    public void launchPermutation(ArrayList<Combination<T>> listOfCombination) throws CloneNotSupportedException {
+        for (Combination combination : listOfCombination){
+            permutationAlgorithm(new Combination<>(), combination);
+        }
+    }
+
+    /**
+     * Method recursive that will create the new sorted combination wanted
+     * @param newCombinationInCreation : the new Combination that is in creation
+     * @param combinationUseToCreateNewOne : the Combination that is used to create new one
+     * @throws CloneNotSupportedException : is thrown if enable to create a clone of a Combination
+     */
+    private void permutationAlgorithm(Combination<T> newCombinationInCreation, Combination<T> combinationUseToCreateNewOne) throws CloneNotSupportedException {
+        if (newCombinationInCreation.getSize() == combinationUseToCreateNewOne.getSize()) {
+            Combination<T> clone = newCombinationInCreation.clone();
             this.listOfCombination.add(clone);
         } else {
-            for (T t : elements.getListOfElementInTheCombination()) {
-                if (temp.getListOfElementInTheCombination().contains(t)) {
+            for (T elementInCombination : combinationUseToCreateNewOne.getListOfElementInTheCombination()) {
+                if (newCombinationInCreation.getListOfElementInTheCombination().contains(elementInCombination)) {
                     continue;
                 }
-                temp.addNewElement(t);
-                backtrack(temp, elements);
-                temp.removeElement(temp.getSize() - 1);
+                newCombinationInCreation.addNewElement(elementInCombination);
+                permutationAlgorithm(newCombinationInCreation, combinationUseToCreateNewOne);
+                newCombinationInCreation.removeElement(newCombinationInCreation.getSize() - 1);
             }
         }
     }

@@ -185,6 +185,11 @@ public class Board implements Cloneable {
         }
         crestGestionnary.launchUpdatingCrestWithAddingNewBox(box);
         box.launchIrrigationChecking();
+        for (Crest crest : box.getListOfCrestAroundBox()){
+            if (crestGestionnary.getListOfCrestIrrigated().contains(crest)){
+                box.setIrrigate(true);
+            }
+        }
     }
     public void placeIrrigation(Crest crest){
         try {

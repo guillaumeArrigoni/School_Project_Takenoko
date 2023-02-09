@@ -233,7 +233,7 @@ class GestionObjectivesTest {
     void rollObjective() {
         BotRandom botRoll = new BotRandom("botRoll", board,random,gestionObjectives,retrieveBoxIdWithParameters,new HashMap<Color,Integer>(),logInfoDemo);
         for(int i = 0;i<5; i++){
-            gestionObjectives.rollObjective(botRoll, arg);
+            gestionObjectives.rollObjective(botRoll, arg, 1);
         }
         assertEquals(5, botRoll.getObjectives().size());
 

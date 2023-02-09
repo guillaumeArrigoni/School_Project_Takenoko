@@ -1,6 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
@@ -227,8 +228,9 @@ public class GestionObjectives {
      * @param bot corresponds to the bot who rolls the objective to draw.
      * This method rolls (random) an objective among the objectives available with the TypeObjective chosen by the bot.
      */
-    public void rollObjective(BotRandom bot, String arg){
-        TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg);
+
+    public void rollObjective(Bot bot, String arg, int id){
+        TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg,id);
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot);
         case JARDINIER -> rollJardinierObjective(bot);

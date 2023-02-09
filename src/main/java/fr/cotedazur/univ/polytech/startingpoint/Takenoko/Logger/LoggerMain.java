@@ -34,6 +34,9 @@ public class LoggerMain {
     }
 
     private void setup(){
+        for (Handler handler : logger.getHandlers()){
+            logger.removeHandler(handler);
+        }
         handler.setLevel(level);
         handler.setFormatter(formatterForLog);
         logger.addHandler(handler);
@@ -41,10 +44,12 @@ public class LoggerMain {
     }
 
     public void addLog(String msg){
+        setup();
         logger.log(level,msg);
     }
 
     public void displaySeparator(){
+        setup();
         this.addLog("------------------------------------------------");
     }
 }

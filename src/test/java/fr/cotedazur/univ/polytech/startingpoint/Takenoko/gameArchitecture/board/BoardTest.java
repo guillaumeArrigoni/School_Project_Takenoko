@@ -60,7 +60,7 @@ class BoardTest {
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated, 2,new LoggerSevere(true));
-        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerSevere(true));
+        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true));
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         vert01 = new HexagoneBoxPlaced(0,1,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);

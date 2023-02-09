@@ -36,7 +36,7 @@ class BotRandomTest {
         logInfoDemo = new LogInfoDemo(true);
         this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters, 1, 2,new LoggerSevere(true));
-        gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters,new LoggerSevere(true));
+        gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters,new LoggerError(true));
         gestionObjectives.initialize(
                 gestionObjectives.ListOfObjectiveParcelleByDefault(),
                 gestionObjectives.ListOfObjectiveJardinierByDefault(),

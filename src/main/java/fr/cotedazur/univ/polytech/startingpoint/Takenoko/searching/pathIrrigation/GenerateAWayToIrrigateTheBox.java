@@ -88,7 +88,7 @@ public class GenerateAWayToIrrigateTheBox {
     private void setup() throws CrestNotRegistered, CloneNotSupportedException {
         setupClosestCrest();
         this.boardSimulation = new BoardSimulation((Board) box.getBoard().clone());
-        this.crestGestionnarySimulation = boardSimulation.getCrestGestionnary();
+        this.crestGestionnarySimulation = new CrestGestionnarySimulation(boardSimulation.getCrestGestionnary());
         if (!this.boardSimulation.getPlacedBox().containsKey(box.getId())){
             boardSimulation.addBox(box);
         }
@@ -136,13 +136,18 @@ public class GenerateAWayToIrrigateTheBox {
         ArrayList<ArrayList<Crest>> intructions = new ArrayList<>();
         intructions.add(new ArrayList<>(crests));
         int rangeFirstCrestInlist = tryGetRange(intructions.get(0).get(0));
-        while (rangeFirstCrestInlist != 1) {
-            ArrayList<Crest> listCrestToAdd = crestGestionnarySimulation.getLinkCrestChildrenToCrestParent().get(intructions.get(0).get(0));
+        boolean pass = true;
+        while (rangeFirstCrestInlist != 1 || rangeFirstCrestInlist != 0 || pass) {
+            ArrayList<Crest> listCrestToAdd = new ArrayList<>();
             for (Crest crestInList : intructions.get(0)){
-                listCrestToAdd.addAll((Collection<? extends Crest>) crestGestionnarySimulation.getLinkCrestChildrenToCrestParent().get(crestInList).clone());
-                LinkedHashSet<Crest> set = new LinkedHashSet<>(listCrestToAdd);
-                listCrestToAdd.clear();
-                listCrestToAdd.addAll(set);
+                if (crestInList.getId() == (new Crest(99,99,1).getId())){
+                    pass = false;
+                } else if (!crestGestionnarySimulation.getListOfCrestIrrigated().contains(crestInList)){
+                    listCrestToAdd.addAll((Collection<? extends Crest>) crestGestionnarySimulation.getLinkCrestChildrenToCrestParent().get(crestInList).clone());
+                    LinkedHashSet<Crest> set = new LinkedHashSet<>(listCrestToAdd);
+                    listCrestToAdd.clear();
+                    listCrestToAdd.addAll(set);
+                }
             }
             intructions.add(0,listCrestToAdd);
             rangeFirstCrestInlist = tryGetRange(intructions.get(0).get(0));
@@ -158,17 +163,22 @@ public class GenerateAWayToIrrigateTheBox {
      * @return
      */
     private int tryGetRange(Crest crest){
-        try {
-            return crestGestionnarySimulation.getRangeFromIrrigatedOfCrest(crest);
-        } catch (CrestNotRegistered e) {
-            System.err.println("\n  -> An error has occurred : "
-                    + e.getErrorTitle()
-                    + "\n"
-                    + "In line :\n"
-                    + e.getStackTrace()
-                    + "\n\n"
-                    + "Fatal error.");
-            throw new RuntimeException();
+        Crest fakeCrest = new Crest(99,99,1);
+        if (!crest.equals(fakeCrest)){
+            try {
+                return crestGestionnarySimulation.getRangeFromIrrigatedOfCrest(crest);
+            } catch (CrestNotRegistered e) {
+                System.err.println("\n  -> An error has occurred : "
+                        + e.getErrorTitle()
+                        + "\n"
+                        + "In line :\n"
+                        + e.getStackTrace()
+                        + "\n\n"
+                        + "Fatal error.");
+                throw new RuntimeException();
+            }
+        } else {
+            return 0;
         }
     }
 }

@@ -129,8 +129,13 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     }
 
     public void setSpecial(Special special) {
-        super.special = special;
-        retrieveBoxIdWithParameters.setBoxSpeciality(this.id,super.special);
+        if (this.heightBamboo==0){
+            super.special = special;
+            retrieveBoxIdWithParameters.setBoxSpeciality(this.id,super.special);
+        } else {
+            System.err.println("Impossible d'ajouter un spécial à la tuile");
+            throw new RuntimeException();
+        }
     }
 
     public void setIrrigate(boolean irrigate) {

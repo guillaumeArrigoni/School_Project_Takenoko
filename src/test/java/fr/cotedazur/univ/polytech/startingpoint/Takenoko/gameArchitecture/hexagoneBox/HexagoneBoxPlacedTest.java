@@ -65,7 +65,7 @@ class HexagoneBoxPlacedTest {
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated, 2,new LoggerSevere(true));
-        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerSevere(true));
+        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true));
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         botRandom = new BotRandom("testBot", board, random,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(),logInfoDemo);

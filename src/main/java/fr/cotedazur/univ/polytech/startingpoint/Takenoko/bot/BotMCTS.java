@@ -34,6 +34,7 @@ public class BotMCTS extends Bot{
 
     @Override
     public void playTurn(MeteoDice.Meteo meteo, String arg) {
+        logInfoDemo.displayTextMeteo(meteo);
         if (MeteoDice.Meteo.VENT == meteo || meteo == MeteoDice.Meteo.NO_METEO) { //NOMETEO VENT
             node = new Node(this.createBotSimulator(), 3, meteo, arg);
         } else {
@@ -46,30 +47,17 @@ public class BotMCTS extends Bot{
     }
 
     @Override
+    public void movePandaStorm() {
+
+    }
+
+    @Override
     protected void launchAction(String arg){
         PossibleActions action = instructions.get(0).getAction();
+        displayTextAction(action);
         doAction(arg,action);
         instructions.remove(0);
     }
-
-    /*
-    @Override
-    protected void doAction(String arg) {
-        switch (instructions.get(0).getAction()) {
-            case DRAW_AND_PUT_TILE -> placeTile(arg);
-            case MOVE_GARDENER -> moveGardener(arg);
-            case DRAW_OBJECTIVE -> drawObjective(arg);
-            case TAKE_IRRIGATION -> {
-                if (arg.equals("demo")) logInfoDemo.addLog("Le bot a pris une irrigation");
-                nbIrrigation++;}
-            case PLACE_IRRIGATION -> placeIrrigation(arg);
-            case GROW_BAMBOO -> growBambooRain(arg);
-            case ADD_AUGMENT -> placeAugment(arg);
-            default -> movePanda(arg);
-        }
-        instructions.remove(0);
-     */
-
 
     @Override
     protected void placeTile(String arg){
@@ -160,8 +148,5 @@ public class BotMCTS extends Bot{
         }
     }
 
-    @Override
-    public TypeObjective choseTypeObjectiveToRoll(String arg) {
-        return null;
-    }
+
 }

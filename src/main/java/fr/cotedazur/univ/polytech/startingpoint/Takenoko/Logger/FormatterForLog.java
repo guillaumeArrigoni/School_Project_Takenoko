@@ -21,7 +21,7 @@ public class FormatterForLog extends Formatter {
         StringBuilder builder = new StringBuilder();
         switch (this.level.getName()){
             case "INFO" -> builder.append(ANSI_WHITE_Brighter);
-            case "SEVERE" -> builder.append(ANSI_ORANGE);
+            case "SEVERE" -> builder.append(ANSI_RED);
             case "WARNING" -> builder.append(ANSI_RED);
         }
         builder.append(ANSI_WHITE_Brighter);

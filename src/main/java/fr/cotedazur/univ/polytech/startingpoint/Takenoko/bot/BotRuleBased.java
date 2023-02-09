@@ -186,7 +186,8 @@ public class BotRuleBased extends BotRandom {
 
     @Override
     public void drawObjective(String arg){
-        gestionObjectives.rollObjective(this, arg);
+        int i = random.nextInt(0, 3);
+        gestionObjectives.rollObjective(this, arg, i);
         this.objectivesInHand++;
         this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
     }

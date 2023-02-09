@@ -50,28 +50,15 @@ public class BotSimulator extends Bot{
     }
 
     @Override
+    public void movePandaStorm() {
+    }
+
+    @Override
     protected void launchAction(String arg){
         PossibleActions action = instructions.getAction();
         doAction(arg,action);
     }
 
-    /*
-    @Override
-    protected void doAction(String arg) {
-        switch (instructions.getAction()) {
-            case DRAW_AND_PUT_TILE -> placeTile(arg);
-            case MOVE_GARDENER -> moveGardener(arg);
-            case DRAW_OBJECTIVE -> drawObjective(arg);
-            case TAKE_IRRIGATION -> nbIrrigation++;
-            case PLACE_IRRIGATION -> placeIrrigation(arg);
-            case GROW_BAMBOO -> growBambooRain(arg);
-            case ADD_AUGMENT -> placeAugment(arg);
-            default ->//MOVE PANDA
-                    movePanda(arg);
-        }
-
-    }
-     */
 
     @Override
     protected void placeTile(String arg){
@@ -150,8 +137,4 @@ public class BotSimulator extends Bot{
         return instructions;
     }
 
-    @Override
-    public TypeObjective choseTypeObjectiveToRoll(String arg) {
-        return null;
-    }
 }

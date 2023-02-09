@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardSimulation;
@@ -14,7 +15,7 @@ public class BoardSimulation extends Board {
     protected RetrieveSimulation retrieveSimulation;
     protected CrestGestionnarySimulation crestGestionnarySimulation;
     public BoardSimulation(Board board) {
-        this(board, new ElementOfTheBoardCheated(), board.getNumberOfPlayers(),board.getLoggerSevere());
+        this(board, new ElementOfTheBoardCheated(), board.getNumberOfPlayers());
     }
 
     public BoardSimulation(Board board, ElementOfTheBoard elementOfTheBoard, int numberOfPlayers){

@@ -79,17 +79,18 @@ public class Board implements Cloneable {
         this.generateLac();
     }
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, boolean allIrrigated, int id, int numberOfPlayers, LoggerSevere loggerSevere){
-        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard(loggerSevere), numberOfPlayers, LoggerSevere loggerSevere);
+        this(retrieveBoxIdWithParameters,allIrrigated,id,new ElementOfTheBoard(loggerSevere), numberOfPlayers, loggerSevere);
     }
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, int numberOfPlayers, LoggerSevere loggerSevere){
         //TODO set allIrrigated to false when irrigation add to the game
-        this(retrieveBoxIdWithParameters,false,id, numberOfPlayers, LoggerSevere loggerSevere);
+        this(retrieveBoxIdWithParameters,false,id, numberOfPlayers, loggerSevere);
     }
     public Board(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, int id, ElementOfTheBoardCheated elementOfTheBoardCheated, int numberOfPlayers, LoggerSevere loggerSevere){
         //TODO set allIrrigated to false when irrigation add to the game
-        this(retrieveBoxIdWithParameters,false,id,elementOfTheBoardCheated, numberOfPlayers, LoggerSevere loggerSevere);
+        this(retrieveBoxIdWithParameters,false,id,elementOfTheBoardCheated, numberOfPlayers, loggerSevere);
     }
 
+    /*
     public Board copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
         Board newBoard = new Board(retrieveBoxIdWithParameters,this.allIrrigated,this.idOfTheBoard,this.numberOfPlayers);
         newBoard.numberBoxPlaced = this.numberBoxPlaced;
@@ -101,6 +102,8 @@ public class Board implements Cloneable {
         newBoard.elementOfTheBoard = this.elementOfTheBoard.copy();
         return newBoard;
     }
+
+     */
 
 
 
@@ -186,6 +189,7 @@ public class Board implements Cloneable {
     public void placeIrrigation(Crest crest){
         try {
             crestGestionnary.placeIrrigation(crest,this.placedBox);
+            crest.setIrrigated(true);
         } catch (ImpossibleToPlaceIrrigationException e) {
             System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
             throw new RuntimeException(e);
@@ -326,6 +330,7 @@ public class Board implements Cloneable {
         this.placedBox.put(lac.getId(),lac);
         crestGestionnary.launchUpdatingCrestWithAddingNewBox(lac);
         lac.launchIrrigationChecking();
+        lac.setIrrigate(true);
     }
 
 

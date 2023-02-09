@@ -61,6 +61,15 @@ public class LogInfoDemo extends LoggerMain {
             case TAKE_IRRIGATION :
                 super.addLog("Le bot a choisi : PrendreIrrigation");
                 break;
+            case PLACE_IRRIGATION :
+                super.addLog("Le bot a choisi : Placer une irrigation");
+                break;
+            case GROW_BAMBOO :
+                super.addLog("Le bot a choisi : Faire pousser des bambou");
+                break;
+            case ADD_AUGMENT :
+                super.addLog("Le bot a choisi : Prendre un jeton special");
+                break;
             default :
                 super.addLog("Le bot a choisi : BougerPanda");
         }

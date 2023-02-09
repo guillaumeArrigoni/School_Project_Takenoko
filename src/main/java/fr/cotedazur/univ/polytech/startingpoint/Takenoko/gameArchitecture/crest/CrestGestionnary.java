@@ -6,6 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -261,15 +262,19 @@ public class CrestGestionnary {
      */
     private void updateCrestVariableWithNewBoxAdded(HexagoneBoxPlaced box){
         if (box.getColor() == Color.Lac){
+            Crest fakeCrest = new Crest(99,99,1);
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
                 Crest crest = box.getListOfCrestAroundBox().get(i);
                 linkCrestParentToCrestChildren.put(crest, new ArrayList<>());
+                linkCrestChildrenToCrestParent.put(crest,new ArrayList<>(Arrays.asList(fakeCrest)));
                 parentChildless.add(crest);
                 listOfCrestOneRangeToIrrigated.add(crest);
                 parentChildless = eleminateDuplicate(parentChildless);
                 listOfCrestOneRangeToIrrigated = eleminateDuplicate(listOfCrestOneRangeToIrrigated);
                 setRangeToIrrigate(crest, 0);
+                crest.setIrrigated(true);
             }
+            box.setIrrigate(true);
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             //actualizeCrestVariable(box.getListOfCrestAroundBox());
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){

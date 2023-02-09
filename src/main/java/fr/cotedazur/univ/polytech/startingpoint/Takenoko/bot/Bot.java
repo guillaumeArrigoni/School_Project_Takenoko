@@ -2,6 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
@@ -10,6 +11,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBa
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import java.util.*;
 
@@ -79,8 +81,8 @@ public abstract class Bot {
     }
 
     public BotSimulator createBotSimulator(ActionLog ... instructions) {
-        RetrieveBoxIdWithParameters tmp = this.retrieveBoxIdWithParameters.copy();
-        Board tmpBoard = this.board.copy(tmp);
+        Board tmpBoard = new BoardSimulation(this.board,this.board.getElementOfTheBoard(),this.board.getNumberOfPlayers());
+        RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
         List<ActionLog> instructionsList = new ArrayList<>(List.of(instructions));
         ActionLog inst = null;
         if(!instructionsList.isEmpty())
@@ -94,9 +96,86 @@ public abstract class Bot {
                 inst);
     }
 
+    /**
+     * This method is called at the beginning of the turn
+     */
+    public void playTurn(MeteoDice.Meteo meteo, String arg){
+        possibleActions = PossibleActions.getAllActions();
+        this.objectives = getObjectives();
+        logInfoDemo.displayTextMeteo(meteo);
+        switch (meteo){
+            case VENT -> {
+                //Deux fois la même action autorisé
+                launchAction(arg);
+                resetPossibleAction();
+                launchAction(arg);
+            }
+            case PLUIE -> {
+                //Le joueur peut faire pousser une tuile irriguée
+                growBambooRain(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
+            case NUAGES -> {
+                placeAugment(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
+            case ORAGE -> {
+                movePandaStorm();
+                launchAction(arg);
+                launchAction(arg);
+            }
+            default/*SOLEIL*/ -> {
+                launchAction(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
+        }
+    }
+
+    public TypeObjective choseTypeObjectiveToRoll(String arg, int nb) {
+        switch (nb) {
+            case 1 -> {
+                logInfoDemo.displayPickGardenerObj(this.name);
+                return TypeObjective.JARDINIER;
+            }
+            case 2 -> {
+                logInfoDemo.displayPickPandaObj(this.name);
+                return TypeObjective.PANDA;
+            }
+            default -> {
+                logInfoDemo.displayPickPatternObj(this.name);
+                return TypeObjective.PARCELLE;
+            }
+        }
+    }
+
+    public abstract void movePandaStorm();
+
+    protected abstract void launchAction(String arg);
+
+    /**
+     * This method is called to do an action
+     */
+    protected void doAction(String arg,PossibleActions action){
+        switch (action){
+            case DRAW_AND_PUT_TILE -> placeTile(arg);
+            case MOVE_GARDENER -> moveGardener(arg);
+            case DRAW_OBJECTIVE -> drawObjective(arg);
+            case TAKE_IRRIGATION -> nbIrrigation++;
+            case PLACE_IRRIGATION -> placeIrrigation(arg);
+            case GROW_BAMBOO -> growBambooRain(arg);
+            case ADD_AUGMENT -> placeAugment(arg);
+            default -> movePanda(arg);
+        }
+    }
+
+    protected void displayTextAction(PossibleActions action){
+        logInfoDemo.displayTextAction(action);
+    }
+
     //ABSTRACT METHODS
-    public abstract void playTurn(MeteoDice.Meteo meteo, String arg);
-    protected abstract void doAction(String arg);
     protected abstract void placeTile(String arg);
     protected abstract void moveGardener(String arg);
     protected abstract void movePanda(String arg);
@@ -172,7 +251,8 @@ public abstract class Bot {
                 try {
                     board.getElementOfTheBoard().giveBackBamboo(color);
                 } catch (TakenokoException e) {
-                    e.printStackTrace();
+                    System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+                    throw new RuntimeException();
                 }
             } else {
                 errorImpossibleToDeleteTheseBamboo.add(color);
@@ -240,5 +320,4 @@ public abstract class Bot {
     public void setObjectives(List<Objective> objectives) {
         this.objectives = objectives;
     }
-
 }

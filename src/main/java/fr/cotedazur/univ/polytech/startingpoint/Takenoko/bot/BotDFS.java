@@ -16,7 +16,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxId
 
 import java.util.*;
 
-public class BotMCTS extends Bot{
+public class BotDFS extends Bot{
     Node node;
     List<ActionLog> instructions;
     /**
@@ -28,7 +28,7 @@ public class BotMCTS extends Bot{
      * @param retrieveBoxIdWithParameters   d
      * @param bambooEated               d
      */
-    public BotMCTS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEated, LogInfoDemo logInfoDemo) {
+    public BotDFS(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEated, LogInfoDemo logInfoDemo) {
         super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
     }
 

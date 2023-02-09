@@ -15,9 +15,8 @@ import java.nio.file.*;
 import com.opencsv.exceptions.CsvException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoStats;
-import com.opencsv.ICSVWriter;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotMCTS;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotDFS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 //TODO remettre quand botRuleBased marche
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRuleBased;
@@ -26,13 +25,12 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
-import java.text.DecimalFormat;
 import java.util.*;
 //https://www.redblobgames.com/grids/hexagons/#coordinates
 
 public class Main {
     //parameters for JCommander
-    @Parameter(names={"--2thousands"}, arity=1)
+    @Parameter(names={"--2thousands"}, arity=0)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;
@@ -64,7 +62,7 @@ public class Main {
                         gestionnaire.ListOfObjectiveJardinierByDefault(),
                         gestionnaire.ListOfObjectivePandaByDefault()
                 );
-                Bot bot1 = new BotMCTS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot1 = new BotDFS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 Bot bot2 = new BotRuleBased("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 Bot bot3 = new BotRandom("Bot3",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 Bot bot4 = new BotRandom("Bot4",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
@@ -173,7 +171,7 @@ public class Main {
             Board board = new Board(retrieving, 1,2);
             Random random = new Random();
             GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
-            Bot bot1 = new BotMCTS("BotMCTS",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+            Bot bot1 = new BotDFS("BotDFS",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             Bot bot2 = new BotRuleBased("BotRB",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             Bot bot3 = new BotRandom("BotRandom1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             Bot bot4 = new BotRandom("BotRandom2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActionLogIrrigation extends  ActionLog{
-    private List<ArrayList<Crest>> paramirrig;
+    private final List<ArrayList<Crest>> paramirrig;
 
     public ActionLogIrrigation(PossibleActions action, List<ArrayList<Crest>> paramirrig, int... parameters) {
         super(action, parameters);

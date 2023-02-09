@@ -9,16 +9,16 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Node {
     private int profondeur;
-    private Node parent;
-    private GameState value;
-    private ActionLog instructions;
-    private List<Node> children;
+    private final Node parent;
+    private final GameState value;
+    private final ActionLog instructions;
+    private final List<Node> children;
 
     public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg) {
         this.profondeur = profondeur;
@@ -59,14 +59,14 @@ public class Node {
         }
         if(profondeur == 3){
             switch(value.getMeteo()){
-                case ORAGE -> {activateBotSimulator(arg,createPandaStormInstructions());}
+                case ORAGE -> activateBotSimulator(arg,createPandaStormInstructions());
                 case NUAGES -> {
                     activateBotSimulator(arg,generateSpecialInstruction());
                     if (children.isEmpty()){
                         profondeur --;
                         createChildren(arg);
                     }
-                }// Idem*/
+                }
                 case PLUIE -> {
                     activateBotSimulator(arg,generateRainInstruction());
                     if (children.isEmpty()){
@@ -143,7 +143,7 @@ public class Node {
                     if (temp.getPathToIrrigation().size() <= this.getValue().getBotSimulator().getNbIrrigation())
                         irrigationInstructions.add(new ActionLogIrrigation(PossibleActions.PLACE_IRRIGATION, temp.getPathToIrrigation()));
                 } catch (Exception e) {
-                    System.err.println("erreur irrigation");
+                    e.printStackTrace();
                 }
             }
         }
@@ -235,13 +235,12 @@ public class Node {
 
     private List<ActionLog> createInstruction(PossibleActions action) {
         List<ActionLog> tmp = new ArrayList<>();
-        switch (action) {
-            case MOVE_GARDENER -> {
+        if(action == PossibleActions.MOVE_GARDENER || action == PossibleActions.MOVE_PANDA) {
+            if (action == PossibleActions.MOVE_GARDENER) {
                 for (int[] coords : Bot.possibleMoveForGardenerOrPanda(value.getBoard(), value.getBoard().getGardenerCoords())) {
                     tmp.add(new ActionLog(action, coords));
                 }
-            }
-            case MOVE_PANDA -> {
+            } else { /*MOVE_PANDA*/
                 for (int[] coords : Bot.possibleMoveForGardenerOrPanda(value.getBoard(), value.getBoard().getPandaCoords())) {
                     tmp.add(new ActionLog(action, coords));
                 }
@@ -318,9 +317,6 @@ public List<ActionLog> getBestInstruction(){
     }
     return bestInstruction;
 }
-    private Node getParent() {
-        return parent;
-    }
 
     private ActionLog getInstructions() {
         return instructions;

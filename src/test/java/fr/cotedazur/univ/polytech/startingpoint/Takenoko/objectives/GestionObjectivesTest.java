@@ -65,7 +65,7 @@ class GestionObjectivesTest {
         logInfoDemo = new LogInfoDemo(true);
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters, 1,elementOfTheBoardCheated);
+        board = new Board(retrieveBoxIdWithParameters, 1,elementOfTheBoardCheated, 2);
         meteoDice = new MeteoDice();
         random = new Random();
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);

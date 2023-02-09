@@ -63,7 +63,7 @@ class HexagoneBoxPlacedTest {
         logInfoDemo = new LogInfoDemo(true);
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated);
+        board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated, 2);
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
@@ -137,7 +137,7 @@ class HexagoneBoxPlacedTest {
 
     private static Stream<Arguments> provideIrrigationAutomatic(){
         RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        Board board = new Board(retrieveBoxIdWithParameters,false, 1);
+        Board board = new Board(retrieveBoxIdWithParameters,false, 1, 2);
         HexagoneBoxPlaced vertClassique04 = new HexagoneBoxPlaced(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         board.addBox(vertClassique04);
         HexagoneBoxPlaced vertClassique05 = new HexagoneBoxPlaced(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);

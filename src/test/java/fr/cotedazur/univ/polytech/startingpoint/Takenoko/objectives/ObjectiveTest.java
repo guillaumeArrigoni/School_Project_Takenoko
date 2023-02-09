@@ -25,7 +25,7 @@ class ObjectiveTest {
     @BeforeAll
     public static void setUp(){
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters, 1);
+        board = new Board(retrieveBoxIdWithParameters, 1, 2);
         gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters);
         objective1 = gestionnaire.POSER_TRIANGLE_VERT;
         objective2 = gestionnaire.POSER_LIGNE_JAUNE;

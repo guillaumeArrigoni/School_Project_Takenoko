@@ -22,7 +22,7 @@ class PatternTest {
     @BeforeAll
     public static void setUp(){
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters, 1);
+        board = new Board(retrieveBoxIdWithParameters, 1, 2);
         gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters);
         pattern1 = gestionnaire.PLANTER_SUR_SOURCE_EAU;
         pattern2 = gestionnaire.PLANTER_TROIS_JAUNES;

@@ -33,9 +33,6 @@ Les différents logger peuvent tous être paramétrés pour s'afficher ou non à
 Ainsi, par exemple, la simulation "--thousand" affichera uniquement le logger LogInfoStats.
 
 ### Bot spécifique :
--   On récupère le chemin du fichier stats.csv qu'importe le système d'exploitation (ou on le crée s'il n'existe pas)
--   Si le fichier est vide (ou vient d'être créé), on lance les 100 parties et on écrit les statistiques dans le fichier
--   Sinon, on lit le contenu du fichier, on en crée un autre temporaire (temp_stats.csv), dedans on écrit le résultat du calcul des nouvelles statistiques de chaque bot en prenant en comtpe le nombre de parties jouées, on supprime ensuite "stats.csv" et on renomme "temps_stats.csv" en "stats.csv".
 
 Le bot spécifique demandé est capable de :
 -   Récupérer un maximum de bambous, même s'il n'a pas de cartes de la couleur correspondante
@@ -62,21 +59,9 @@ On constate environ une cinquantaine de pourcentage de victoire pour le bot DFS,
 -   Les parties se déroulant à 4 bots, il peut être probable qu'un bot Random prenne l'avantage en début de partie, passant donc dans la priorité pour le sabotage.
 -   Cela à deux effets, tout d'abord le bot random ne peut pas être saboté étant donné qu'il n'a aucune stratégie, et le bot DFS est finalement avantagé par rapport au BotRuleBased car ce dernier perd des tours à effectuer des sabotages inutiles.
 
-### Analyse
-En ce qui concerne l'analyse, sur plus d'une centaine de réalisations avec les bots suivant participant à la partie :
-  Deux bots Random
-  Un bot de type DFS
-  Le bot en question (BotRuleBased)
-On constate environ une cinquantaine de pourcentage de victoire pour le bot DFS, contre environ une petite quarantaine pour le bot en question.
-Le meilleur bot semble donc être le bot DFS.
-Ce résultat peut s'expliquer par plusieurs raisons :
-  - Tout d'abord le bot DFS à une profondeur de 1, il cherche donc uniquement à résoudre un objectif se tour ci, le sabotage du bot en question est donc inutile.
-  - Le BotRuleBased n'est pas complétement aboutit, il manque la corrélation entre les objectifs de type "Terrain".
-  - Les parties se déroulant à 4 bots, il peut être probable qu'un bot Random prenne l'avantage en début de partie, passant donc dans la priorité pour le sabotage.
-  - Cela à deux effets, tout d'abord le bot random ne peut pas être saboté étant donné qu'il n'a aucune stratégie, et le bot DFS est finalement avantagé par rapport au BotRuleBased car ce dernier perd des tours à effectuer des sabotages inutiles
 On peut cependant noter que même lors de la réalisation de parties avec le BotRuleBased contre le bot DFS, ce dernier l'emporte en moyenne plus souvent, appuyant nos premiers arguments.
 
-## Architecture et Qualité
+## 2 - Architecture et Qualité
 ### Choix d'architecture
 #### Bots
 Les bots sont composés à la base d'une classe abstraite Bot qui sers de base pour tout les autres les différents bots disponibles sont:
@@ -168,67 +153,66 @@ Nous pouvons donc voir que les classes possédant la plus faible dette technique
 
 Au contraire les classes représentant les points faibles seraient GestionObjectives/BotRuleBased/ElementOfTheBoard qui de part leur taille amènent beaucoup de dette technique ainsi que beaucoup de petites classes comme choixApprocheBot ou Log qui n'ont pas pu être testées dus à un manque de temps. 
 
-## Processus
-### Répartition du travail
-Qui est responsable de quoi / qui a fait quoi ?
-- Loris :
-    - La classe MétéoDice
-    - La classe Objective et ses classes "enfants" 
-    - La classe Pattern et ses classes "enfants"
-    - La classe TypeObjective
-    - La classe GestionObjectives
-    - Les tests de ces classes
-- Guillaume :
-    - La classe Board
-    - La classe HexagoneBox
-    - La classe HexagoneBoxPlaced
-    - La classe Crest
-    - La classe CrestGestionnary
-    - La classe ElementOfTheBoard
-    - La classe StackOfBox
-    - La classe RetrieveBoxIdWIthParameters
-    - La classe GetAllBoxFillingThePatternEntered
-    - La classe Combination
-    - La classe Permutation
-    - La classe GenerateAWayToIrrigateTheBox
-    - La classe GenerateOptimizePathForSeveralBox
-    - La classe GenerateOptimizePathForSeveralBoxWithSimulation
-    - Quelques méthodes de la classes BotRuleBased et GestionObjectifs
-    - La classe TakenokoException et ses classes "enfants"
-    - Les classes Simulations des précédentes si besoin (Board, HexagoneBoxPlaced,StackOfBox...)
-    - Les tests de ces classes
-- Arthur :
-    - La classe Main
-    - La classe Game
-    - La classe Log
-    - La classe BotRuleBased
-    - Les tests de ces classes
-- Loïc :
-   - La classe Bot
-   - La classe BotDFS
-   - La classe BotRandom
-   - La classe BotSimulator
-   - La classe ActionLog
-   - La classe ActionLogIrrigation
-   - La classe GameState
-   - La classe Node
-   - Les tests de ces classes
 
-### Le process de l'équipe :
-#### Milestones : 
-   - 11 milestones ont été utilisé dont 2 pour la dernière semaine.
-   - Chaque milestone couvre de nouvelles fonctionnalités sur un maximum de règles et éléments du jeu
-   - Chaque milestone dont toutes les issues sont fermées est également fermé
-#### Issues : 
-   - Chaque issue est toujours rattachée à un milestone
-   - Création d'une nouvelle issue pour chaque nouvelle fonctionnalité (ou même pour chacune des "sous" fonctionnalités quand elle est trop importante)
-   - Chaque issue finie est fermée
-#### Label :
-   - Création de plusieurs labels personnalisés afin de mieux distinguer les issues entre elles (merging, refactoring, test...)
-#### Branche : 
-   - 13 branches en tout
-   - Création de plusieurs branches afin de distinguer l'avancement de chaque fonctionnalité et de travailler sans problèmes. 
-     Ainsi dans le cas du travail sur plusieurs fonctionnalités à la fois, il y a une possibilité de "checkout" la branche correspondant à la fonctionnalité voulue et travailler dessus, 
-     tout en mettant en ligne et en permettant à d'autres membres d'également travailler sur cette fonctionnalité si besoin
-   - Création de branches pour de nouvelles fonctionnalités qui ont, par la suite été abandonnées pour une autre implémentation (branche sql par exemple)
-   - Création de branches pour des types de travaux récurrents, par exemple la branche refactoring, implementTest...
+## 3 - Processus 
+**Qui est responsable de quoi / qui a fait quoi ?**
+
+-   Loris :
+    -   La classe MétéoDice
+    -   La classe Objective et ses classes "enfants"
+    -   La classe Pattern et ses classes "enfants"
+    -   La classe TypeObjective
+    -   La classe GestionObjectives
+    -   Les tests de ces classes
+-   Guillaume :
+    -   La classe Board
+    -   La classe HexagoneBox
+    -   La classe HexagoneBoxPlaced
+    -   La classe Crest
+    -   La classe CrestGestionnary
+    -   La classe ElementOfTheBoard
+    -   La classe StackOfBox
+    -   La classe RetrieveBoxIdWIthParameters
+    -   La classe GetAllBoxFillingThePatternEntered
+    -   La classe Combination
+    -   La classe Permutation
+    -   La classe GenerateAWayToIrrigateTheBox
+    -   La classe GenerateOptimizePathForSeveralBox
+    -   La classe GenerateOptimizePathForSeveralBoxWithSimulation
+    -   Quelques méthodes de la classes BotRuleBased et GestionObjectifs
+    -   La classe TakenokoException et ses classes "enfants"
+    -   Les classes Simulations des précédentes si besoin (Board, HexagoneBoxPlaced,StackOfBox...)
+    -   Les tests de ces classes
+-   Arthur :
+    -   La classe Main
+    -   La classe Game
+    -   La classe Log
+    -   La classe BotRuleBased
+    -   Les tests de ces classes
+-   Loïc :
+    -   La classe Bot
+    -   La classe BotDFS
+    -   La classe BotRandom
+    -   La classe BotSimulator
+    -   La classe ActionLog
+    -   La classe ActionLogIrrigation
+    -   La classe GameState
+    -   La classe Node
+    -   Les tests de ces classes
+
+**Le process de l'équipe :** 
+- Milestones :
+	-   11 milestones ont été utilisé dont 2 pour la dernière semaine.
+	-   Chaque milestone couvre de nouvelles fonctionnalités sur un maximum de règles et éléments du jeu
+	-   Chaque milestone dont toutes les issues sont fermées est également fermé 
+- Issues :
+	-   Chaque issue est toujours rattachée à un milestone
+	-   Création d'une nouvelle issue pour chaque nouvelle fonctionnalité (ou même pour chacune des "sous" fonctionnalités quand elle est trop importante)
+	-   Chaque issue finie est fermée 
+- Label :
+	-   Création de plusieurs labels personnalisés afin de mieux distinguer les issues entre elles (merging, refactoring, test...) 
+- Branche :
+	-   13 branches en tout
+	-   Création de plusieurs branches afin de distinguer l'avancement de chaque fonctionnalité et de travailler sans problèmes. Ainsi dans le cas du travail sur plusieurs fonctionnalités à la fois, il y a une possibilité de "checkout" la branche correspondant à la fonctionnalité voulue et travailler dessus, tout en mettant en ligne et en permettant à d'autres membres d'également travailler sur cette fonctionnalité si besoin
+-   Création de branches pour de nouvelles fonctionnalités qui ont, par la suite été abandonnées pour une autre implémentation (branche sql par exemple)
+-   Création de branches pour des types de travaux récurrents, par exemple la branche refactoring, implementTest...

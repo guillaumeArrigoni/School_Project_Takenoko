@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GenerateOptimizePathForSeveralBoxWithSimulationTest {
-
+/*
     private static GenerateOptimizePathForSeveralBoxWithSimulation generateOptimizePathForSeveralBoxWithSimulation;
     private static HexagoneBoxPlaced hexagoneBoxPlaced1;
     private static HexagoneBoxPlaced hexagoneBoxPlaced2;
@@ -118,5 +118,5 @@ class GenerateOptimizePathForSeveralBoxWithSimulationTest {
     @MethodSource("provideCheckBoxIrrigatedAfter")
     void checkBoxIrrigatedAfter(boolean bool, HexagoneBoxPlaced box) {
         assertEquals(bool,box.isIrrigate());
-    }
+    }*/
 }

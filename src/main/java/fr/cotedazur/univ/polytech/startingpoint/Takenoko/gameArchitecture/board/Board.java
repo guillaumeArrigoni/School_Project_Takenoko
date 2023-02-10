@@ -90,25 +90,6 @@ public class Board implements Cloneable {
         this(retrieveBoxIdWithParameters,false,id,elementOfTheBoardCheated, numberOfPlayers, loggerSevere);
     }
 
-    /*
-    public Board copy(RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
-        Board newBoard = new Board(retrieveBoxIdWithParameters,this.allIrrigated,this.idOfTheBoard,this.numberOfPlayers);
-        newBoard.numberBoxPlaced = this.numberBoxPlaced;
-        newBoard.placedBox = new HashMap<>(this.placedBox);
-        newBoard.crestGestionnary.copy();
-        newBoard.AvailableBox = new ArrayList<>(this.AvailableBox);
-        newBoard.gardenerCoords = this.gardenerCoords;
-        newBoard.pandaCoords = this.pandaCoords;
-        newBoard.elementOfTheBoard = this.elementOfTheBoard.copy();
-        return newBoard;
-    }
-
-     */
-
-
-
-
-
     public boolean isAllIrrigated() {
         return allIrrigated;
     }
@@ -259,7 +240,7 @@ public class Board implements Cloneable {
      */
     private void addNewBoxInAvailableBox(int[] newCoord) {
         if (!(isCoordinateInBoard(newCoord)) && !(AvailableBox.contains(newCoord))) {
-            if (getSommeAbsolu(newCoord)<24){
+            if (getSommeAbsolu(newCoord)<8){
                 AvailableBox.add(newCoord);
             }
         }

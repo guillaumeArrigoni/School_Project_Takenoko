@@ -54,7 +54,6 @@ public class GenerateAWayToIrrigateTheBox {
         this.box = box;
         this.crestGestionnary = box.getBoard().getCrestGestionnary();
         setup();
-        System.out.println(pathToIrrigation);
     }
 
     /**
@@ -68,7 +67,6 @@ public class GenerateAWayToIrrigateTheBox {
         this.box = box;
         this.crestGestionnary = board.getCrestGestionnary();
         setup();
-        System.out.println(pathToIrrigation);
     }
 
 

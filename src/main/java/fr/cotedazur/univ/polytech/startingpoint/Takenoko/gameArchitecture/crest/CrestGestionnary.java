@@ -106,7 +106,7 @@ public class CrestGestionnary {
             crest.setIrrigated(true);
             setRangeToIrrigate(crest, 0);
             this.listOfCrestOneRangeToIrrigated.remove(crest);
-            rewriteRangeToIrrigatedAfterNewIrrigation(crest);
+            rewriteRangeToIrrigatedAfterNewIrrigation(crest,0);
             for (int i = 0; i<2;i++) {
                 if (placedBox.containsKey(crest.getIdOfAdjacentBox()[i])) {
                     placedBox.get(crest.getIdOfAdjacentBox()[i]).setIrrigate(true);
@@ -133,14 +133,17 @@ public class CrestGestionnary {
      *      - call itself until we reach the end of a genealogy branch
      * @param parent : the new Irrigation that has been placed
      */
-    private void rewriteRangeToIrrigatedAfterNewIrrigation(Crest parent){
-        if (linkCrestParentToCrestChildren.containsKey(parent) && !linkCrestParentToCrestChildren.get(parent).isEmpty()){
+    private void rewriteRangeToIrrigatedAfterNewIrrigation(Crest parent, int nb){
+        if (nb>50){
+            return;
+        }
+        if ((linkCrestParentToCrestChildren.containsKey(parent) && !linkCrestParentToCrestChildren.get(parent).isEmpty())){
             ArrayList<Crest> children = this.linkCrestParentToCrestChildren.get(parent);
             for (int i = 0; i<children.size();i++){
                 Crest child = children.get(i);
                 int candidateNewRange = rangeFromIrrigated.get(parent)+1;
                 updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewRange);
-                rewriteRangeToIrrigatedAfterNewIrrigation(child);
+                rewriteRangeToIrrigatedAfterNewIrrigation(child,nb+1);
             }
         }
     }

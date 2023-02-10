@@ -50,38 +50,42 @@ public class RetrieveBoxIdWithParameters {
 
     public void setBoxColor(int id, Color color) {
         ArrayList<Integer> listId = BoxColor.get(color);
+        listId.remove(Integer.valueOf(id));
         listId.add(id);
         BoxColor.put(color,listId);
     }
 
     public void setBoxIsIrrigated(int id, boolean isIrrigated) {
         ArrayList<Integer> listId = BoxIsIrrigated.get(isIrrigated);
+        listId.remove(Integer.valueOf(id));
         listId.add(id);
         BoxIsIrrigated.put(isIrrigated,listId);
         ArrayList<Integer> listIdToDelete = BoxIsIrrigated.get(!isIrrigated);
-        listIdToDelete.removeAll(new ArrayList<Integer>(Arrays.asList(id)));
+        listIdToDelete.remove(Integer.valueOf(id));
         BoxIsIrrigated.put(!isIrrigated,listIdToDelete);
     }
 
     public void setBoxHeight(int id, int height) {
         ArrayList<Integer> listId = BoxHeight.get(height);
+        listId.remove(Integer.valueOf(id));
         listId.add(id);
         BoxHeight.put(height,listId);
     }
 
     public void setBoxHeightDelete(int id, int height) {
         ArrayList<Integer> listId = BoxHeight.get(height);
-        listId.removeAll(new ArrayList<>(Arrays.asList(id)));
+        listId.remove(Integer.valueOf(id));
         BoxHeight.put(height,listId);
     }
 
     public void setBoxSpeciality(int id, Special speciality) {
         ArrayList<Integer> listId = BoxSpeciality.get(speciality);
+        listId.remove(Integer.valueOf(id));
         listId.add(id);
         BoxSpeciality.put(speciality,listId);
         if (speciality != Special.Classique){
             ArrayList<Integer> listIdToDelete = BoxSpeciality.get(Special.Classique);
-            listIdToDelete.removeAll(new ArrayList<>(Arrays.asList(id)));
+            listId.remove(Integer.valueOf(id));
             BoxSpeciality.put(Special.Classique,listIdToDelete);
         }
     }

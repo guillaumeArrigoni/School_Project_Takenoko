@@ -4,13 +4,22 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 
+/**
+ * Class that represents a game state
+ */
 public class GameState {
-
+    /**
+     * The bot simulator
+     */
     private BotSimulator botSimulator;
 
-
+    /**
+     * The score of the game state
+     */
     private final int score;
-
+    /**
+     * The meteo of the game state
+     */
     private MeteoDice.Meteo meteo;
 
     public GameState(BotSimulator botSimulator, MeteoDice.Meteo meteo) {
@@ -23,6 +32,10 @@ public class GameState {
         score = -999;
     }
 
+    /**
+     * Calculate the score of the game state
+     * @return the score of the game state or -999 if the game state is illegal
+     */
     private int calculateScore() {
         if(botSimulator.isLegal())
             return botSimulator.getScore();

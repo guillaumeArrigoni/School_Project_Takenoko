@@ -13,11 +13,29 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigatio
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that represents a node of the tree
+ */
 public class Node {
+    /**
+     * The depth of the node
+     */
     private int profondeur;
+    /**
+     * The parent of the node
+     */
     private final Node parent;
+    /**
+     * The value of the node
+     */
     private final GameState value;
+    /**
+     * The instructions of the node
+     */
     private final ActionLog instructions;
+    /**
+     * The children of the node
+     */
     private final List<Node> children;
 
     public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg) {
@@ -118,7 +136,11 @@ public class Node {
     }
 
 
-
+    /**
+     * Create children if there is no good option generated
+     * @param arg Argument for the logger
+     * @param actionPre The action that has been done before
+     */
     private void createChildrenIfNoGoodOption(String arg, PossibleActions ... actionPre) {
         List<PossibleActions> tmp = List.of(actionPre);
         if (this.getValue().getBotSimulator().getObjectives().size() < 5 && (value.getMeteo() == MeteoDice.Meteo.VENT || !tmp.contains(PossibleActions.DRAW_OBJECTIVE))) {

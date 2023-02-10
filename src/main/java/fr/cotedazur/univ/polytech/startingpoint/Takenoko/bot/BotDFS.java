@@ -47,11 +47,6 @@ public class BotDFS extends Bot{
     }
 
     @Override
-    public void movePandaStorm() {
-
-    }
-
-    @Override
     protected void launchAction(String arg){
         PossibleActions action = instructions.get(0).getAction();
         displayTextAction(action);

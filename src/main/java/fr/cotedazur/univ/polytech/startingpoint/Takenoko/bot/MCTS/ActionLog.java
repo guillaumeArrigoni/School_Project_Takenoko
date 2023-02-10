@@ -2,8 +2,17 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
 
+/**
+ * Class that represents an action and its parameters
+ */
 public class ActionLog {
+    /**
+     * The action
+     */
     PossibleActions action;
+    /**
+     * The parameters of the action
+     */
     int[] parameters;
 
 

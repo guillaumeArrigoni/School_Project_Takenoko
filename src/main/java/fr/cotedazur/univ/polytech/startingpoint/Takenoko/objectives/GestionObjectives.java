@@ -1,7 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
@@ -230,7 +229,7 @@ public class GestionObjectives {
      */
 
     public void rollObjective(Bot bot, String arg, int id){
-        TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg,id);
+        TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(id);
         switch (typeObjective){
         case PARCELLE -> rollParcelleObjective(bot);
         case JARDINIER -> rollJardinierObjective(bot);

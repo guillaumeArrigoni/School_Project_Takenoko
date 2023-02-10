@@ -47,6 +47,7 @@ class HexagoneBoxPlacedTest {
     private static HexagoneBoxPlaced vert19;
     private static HexagoneBoxPlaced vert20;
     private static LogInfoDemo logInfoDemo;
+    private static BotRandom bot;
 
     /**
      *                  12     13      14
@@ -79,15 +80,16 @@ class HexagoneBoxPlacedTest {
         vert18Engrais = new HexagoneBoxPlaced(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board);
         vert19 = new HexagoneBoxPlaced(-1,3,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         vert20 = new HexagoneBoxPlaced(-2,3,-1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        board.addBox(vert01);
-        board.addBox(vert02);
-        board.addBox(vert07);
-        board.addBox(jaune03);
-        board.addBox(jaune08);
-        board.addBox(rouge09Protected);
-        board.addBox(vert18Engrais);
-        board.addBox(vert19);
-        board.addBox(vert20);
+        bot = new BotRandom("bot",board,new Random(),gestionObjectives,retrieveBoxIdWithParameters,new HashMap<>(),logInfoDemo);
+        board.addBox(vert01,bot);
+        board.addBox(vert02,bot);
+        board.addBox(vert07,bot);
+        board.addBox(jaune03,bot);
+        board.addBox(jaune08,bot);
+        board.addBox(rouge09Protected,bot);
+        board.addBox(vert18Engrais,bot);
+        board.addBox(vert19,bot);
+        board.addBox(vert20,bot);
     }
 
 
@@ -140,11 +142,11 @@ class HexagoneBoxPlacedTest {
         RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         Board board = new Board(retrieveBoxIdWithParameters,false, 1, 2,new LoggerSevere(true));
         HexagoneBoxPlaced vertClassique04 = new HexagoneBoxPlaced(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        board.addBox(vertClassique04);
+        board.addBox(vertClassique04,bot);
         HexagoneBoxPlaced vertClassique05 = new HexagoneBoxPlaced(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         HexagoneBoxPlaced vertClassique13 = new HexagoneBoxPlaced(1,-2,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        board.addBox(vertClassique05);
-        board.addBox(vertClassique13);
+        board.addBox(vertClassique05,bot);
+        board.addBox(vertClassique13,bot);
         return Stream.of(Arguments.of(vertClassique04,vertClassique13));
     }
 

@@ -94,7 +94,7 @@ public class BotSimulator extends Bot{
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
-        board.addBox(placedTile);
+        board.addBox(placedTile,this);
     }
 
     /**
@@ -122,7 +122,7 @@ public class BotSimulator extends Bot{
      */
     @Override
     protected void moveGardener(String arg) {
-        board.setGardenerCoords(instructions.getParameters());
+        board.setGardenerCoords(instructions.getParameters(),this);
     }
     /**
      * Allows the bot to place an augment

@@ -1,17 +1,23 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest;
 
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.crest.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.HashMap;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,6 +40,7 @@ class CrestGestionnaryTest {
     private static Crest crestOneRangeToIrrigated04;
     private static Crest crestOneRangeToIrrigated05;
     private static Crest crestOneRangeToIrrigated06;
+    private static BotRandom bot;
 
 
     /**
@@ -57,6 +64,7 @@ class CrestGestionnaryTest {
         crestOneRangeToIrrigated04 = new Crest(-5,10,2);
         crestOneRangeToIrrigated05 = new Crest(-10,5,3);
         crestOneRangeToIrrigated06 = new Crest(-5,-5,1);
+        bot = new BotRandom("bot",board,new Random(),new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true)),retrieveBoxIdWithParameters,new HashMap<>(),new LogInfoDemo(true));
     }
 
     @BeforeEach
@@ -70,14 +78,14 @@ class CrestGestionnaryTest {
     }
 
     private void setup_placeBox_5_4_13(){
-        board.addBox(boxIn5);
-        board.addBox(boxIn4);
-        board.addBox(boxIn13);
+        board.addBox(boxIn5,bot);
+        board.addBox(boxIn4,bot);
+        board.addBox(boxIn13,bot);
     }
 
     private void setup_placeBox_5_4(){
-        board.addBox(boxIn5);
-        board.addBox(boxIn4);
+        board.addBox(boxIn5,bot);
+        board.addBox(boxIn4,bot);
     }
 
     private static Stream<Arguments> provideCrestInOrderToCheckIfInHashmap(){

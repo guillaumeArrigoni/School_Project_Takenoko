@@ -55,12 +55,12 @@ class BotRuleBasedTest {
         HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
-        board.addBox(hexagoneBoxPlaced);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
-        board.addBox(hexagoneBoxPlaced4);
-        board.addBox(hexagoneBoxPlaced5);
-        board.addBox(hexagoneBoxPlaced6);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
         hexagoneBoxPlaced.setHeightBamboo(0);
         hexagoneBoxPlaced2.setHeightBamboo(0);
         hexagoneBoxPlaced3.setHeightBamboo(0);
@@ -78,12 +78,12 @@ class BotRuleBasedTest {
         HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
-        board.addBox(hexagoneBoxPlaced);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
-        board.addBox(hexagoneBoxPlaced4);
-        board.addBox(hexagoneBoxPlaced5);
-        board.addBox(hexagoneBoxPlaced6);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
         botRB.objectives.add(gestionObjectives.getPandaObjectifs().get(0));
         assertEquals(Arrays.toString((new int[]{-1, 1, 0})), Arrays.toString(botRB.choseMoveForPanda()));
     }
@@ -96,12 +96,12 @@ class BotRuleBasedTest {
         HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
-        board.addBox(hexagoneBoxPlaced);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
-        board.addBox(hexagoneBoxPlaced4);
-        board.addBox(hexagoneBoxPlaced5);
-        board.addBox(hexagoneBoxPlaced6);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
         //manger 2 verts
         botRB.objectives.add(gestionObjectives.getPandaObjectifs().get(0));
         botRB.movePandaStorm();
@@ -116,12 +116,12 @@ class BotRuleBasedTest {
         HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
-        board.addBox(hexagoneBoxPlaced);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
-        board.addBox(hexagoneBoxPlaced4);
-        board.addBox(hexagoneBoxPlaced5);
-        board.addBox(hexagoneBoxPlaced6);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
         //manger tricolore
         botRB.objectives.add(gestionObjectives.getPandaObjectifs().get(13));
         botRB.movePandaStorm();
@@ -141,12 +141,12 @@ class BotRuleBasedTest {
         HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
-        board.addBox(hexagoneBoxPlaced);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
-        board.addBox(hexagoneBoxPlaced4);
-        board.addBox(hexagoneBoxPlaced5);
-        board.addBox(hexagoneBoxPlaced6);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
         hexagoneBoxPlaced5.setHeightBamboo(2);
         //planter 2 bambous rouges
         botRB.objectives.add(gestionObjectives.getJardinierObjectifs().get(12));
@@ -166,12 +166,12 @@ class BotRuleBasedTest {
         HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
-        board.addBox(hexagoneBoxPlaced);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
-        board.addBox(hexagoneBoxPlaced4);
-        board.addBox(hexagoneBoxPlaced5);
-        board.addBox(hexagoneBoxPlaced6);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
         hexagoneBoxPlaced5.setHeightBamboo(2);
         //planter 2 bambous rouges
         botRB.objectives.add(gestionObjectives.getJardinierObjectifs().get(12));
@@ -191,12 +191,12 @@ class BotRuleBasedTest {
         HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
         HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
-        board.addBox(hexagoneBoxPlaced);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
-        board.addBox(hexagoneBoxPlaced4);
-        board.addBox(hexagoneBoxPlaced5);
-        board.addBox(hexagoneBoxPlaced6);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
         hexagoneBoxPlaced5.setHeightBamboo(2);
         //planter 2 bambous rouges
         botRB.objectives.add(gestionObjectives.getJardinierObjectifs().get(12));

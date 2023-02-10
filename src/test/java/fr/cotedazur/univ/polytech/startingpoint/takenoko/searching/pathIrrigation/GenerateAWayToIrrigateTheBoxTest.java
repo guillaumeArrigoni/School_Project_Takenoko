@@ -1,6 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation;
 
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.BoardSimulation;
@@ -9,6 +12,7 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
@@ -19,6 +23,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +41,7 @@ class GenerateAWayToIrrigateTheBoxTest {
     private static Crest crest2;
     private static BoardSimulation boardSimulation;
     private static RetrieveSimulation retrieveSimulation;
+    private static BotRandom bot;
 
     @BeforeAll
     @Order(1)
@@ -46,9 +53,10 @@ class GenerateAWayToIrrigateTheBoxTest {
         hexagoneBoxPlaced1 = new HexagoneBoxSimulation(-1,1,0, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
         hexagoneBoxPlaced2 = new HexagoneBoxSimulation(0,1,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
         hexagoneBoxPlaced3 = new HexagoneBoxSimulation(-1,2,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
-        boardSimulation.addBox(hexagoneBoxPlaced1);
-        boardSimulation.addBox(hexagoneBoxPlaced2);
-        boardSimulation.addBox(hexagoneBoxPlaced3);
+        bot = new BotRandom("bot",board,new Random(),new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true)),retrieveBoxIdWithParameters,new HashMap<>(),new LogInfoDemo(true));
+        boardSimulation.addBox(hexagoneBoxPlaced1,bot);
+        boardSimulation.addBox(hexagoneBoxPlaced2,bot);
+        boardSimulation.addBox(hexagoneBoxPlaced3,bot);
         crest1 = new Crest(-5,15,1);
         crest2 = new Crest(-10,15,3);
         generateAWayToIrrigateTheBox = new GenerateAWayToIrrigateTheBox(hexagoneBoxPlaced3, boardSimulation);

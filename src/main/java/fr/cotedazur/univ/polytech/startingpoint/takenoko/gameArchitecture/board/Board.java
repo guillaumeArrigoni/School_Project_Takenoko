@@ -152,7 +152,7 @@ public class Board implements Cloneable {
      *      Add the new adjacent box from the box placed and any other box placed before in the ArrayList AvailableBox
      * @param box : the new Hexagone box to add to the board
      */
-    public void addBox(HexagoneBoxPlaced box) {
+    public void addBox(HexagoneBoxPlaced box, Bot bot) {
         int[] coord = box.getCoordinates();
         int[] newCoord1, newCoord2;
         UpdateAvaiableBoxAndPlacedBox(box);
@@ -169,6 +169,7 @@ public class Board implements Cloneable {
                 box.setIrrigate(true);
             }
         }
+        bot.setLastBoxPlaced(box.getCoordinates());
     }
     public void placeIrrigation(Crest crest){
         try {
@@ -187,11 +188,13 @@ public class Board implements Cloneable {
             if (bambooEatedColor.isPresent()){
                 bot.addBambooEaten(bambooEatedColor.get());
             }
+            bot.setLastCoordPanda(newCoords);
         }
     }
-    public void setGardenerCoords(int[] coords) {
+    public void setGardenerCoords(int[] coords, Bot bot) {
         this.gardenerCoords = coords;
         growAfterMoveOfTheGardener(getBoxWithCoordinates(coords));
+        bot.setLastCoordGardener(coords);
     }
 
 

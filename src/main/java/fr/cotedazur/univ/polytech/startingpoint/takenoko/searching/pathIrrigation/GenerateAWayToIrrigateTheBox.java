@@ -1,5 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation;
 
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.BoardSimulation;
@@ -7,11 +10,10 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.CrestGestionnary;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.CrestGestionnarySimulation;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 public class GenerateAWayToIrrigateTheBox {
 
@@ -89,7 +91,7 @@ public class GenerateAWayToIrrigateTheBox {
         this.boardSimulation = new BoardSimulation((Board) box.getBoard().clone());
         this.crestGestionnarySimulation = new CrestGestionnarySimulation(boardSimulation.getCrestGestionnary());
         if (!this.boardSimulation.getPlacedBox().containsKey(box.getId())){
-            boardSimulation.addBox(box);
+            boardSimulation.addBox(box, new BotRandom("bot",boardSimulation,new Random(),new GestionObjectives(boardSimulation,new RetrieveBoxIdWithParameters(),new LoggerError(true)),new RetrieveBoxIdWithParameters(),new HashMap<>(),new LogInfoDemo(true)));
         }
         setupPath(closestCrestToIrrigatedOfTheBox);
     }

@@ -48,6 +48,34 @@ public abstract class Bot {
     protected final Map<Color, Integer> bambooEaten;
 
 
+    protected int[] lastCoordGardener;
+    protected int[] lastCoordPanda;
+    protected int[] lastBoxPlaced;
+
+    public void setLastBoxPlaced(int[] lastBoxPlaced) {
+        this.lastBoxPlaced = lastBoxPlaced;
+    }
+
+    public void setLastCoordGardener(int[] lastCoordGardener) {
+        this.lastCoordGardener = lastCoordGardener;
+    }
+
+    public void setLastCoordPanda(int[] lastCoordPanda) {
+        this.lastCoordPanda = lastCoordPanda;
+    }
+
+    public int[] getLastCoordGardener() {
+        return lastCoordGardener;
+    }
+
+    public int[] getLastCoordPanda() {
+        return lastCoordPanda;
+    }
+
+    public int[] getLastBoxPlaced() {
+        return lastBoxPlaced;
+    }
+
     //CONSTRUCTOR
     /**
      * Constructs a new `Bot` instance with the given parameters.
@@ -75,6 +103,9 @@ public abstract class Bot {
         this.nbIrrigation = 0;
         this.logInfoDemo = logInfoDemo;
         this.numberObjectiveDone = 0;
+        this.lastBoxPlaced = new int[]{};
+        this.lastCoordGardener = new int[]{};
+        this.lastCoordPanda = new int[]{};
         resetPossibleAction();
     }
 

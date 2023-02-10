@@ -1,5 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board;
 
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.ElementOfTheBoardSimulation;
@@ -7,7 +10,11 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveSimulation;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class BoardSimulation extends Board {
 
@@ -42,6 +49,7 @@ public class BoardSimulation extends Board {
         super.crestGestionnary = this.crestGestionnarySimulation;
         super.gardenerCoords = board.getGardenerCoords().clone();
         super.pandaCoords = board.getPandaCoords().clone();
+        BotRandom bot = new BotRandom("bot",board,new Random(),new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true)),retrieveBoxIdWithParameters,new HashMap<>(),new LogInfoDemo(true));
         for (HexagoneBoxPlaced box : board.placedBox.values()) {
             if (box.getColor()== Color.Lac){
                 continue;
@@ -53,7 +61,7 @@ public class BoardSimulation extends Board {
                     box.getColor(),
                     box.getSpecial(),
                     retrieveSimulation,
-                    this));
+                    this),bot);
         }
     }
 

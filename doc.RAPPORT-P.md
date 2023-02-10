@@ -60,29 +60,30 @@ Le bot spécifique demandé est capable de :
           Déplacer le panda sur n'importe quel tuile de la même couleur
 
 En ce qui concerne l'analyse, sur plus d'une centaine de réalisation avec les bots suivant participant à la partie :
-  Deux bots Random
-  Un bot de type DFS
-  Le bot en question (BotRuleBased)
+  - Deux bots Random
+  - Un bot de type DFS
+  - Le bot en question (BotRuleBased)
+
 On constate environ une cinquantaine de pourcentage de victoire pour le bot DFS, contre environ une petite quarentaine pour le bot en question.
 Le meilleur bot semble donc être le bot DFS.
 Ce résultat peut s'expliquer par plusieurs raison :
   - Tout d'abord le bot DFS à une profondeur de 1, il cherche donc uniquement à résoudre un objectif se tour ci, le sabotage du bot en question est donc inutile.
   - Le BotRuleBased n'est pas complétement aboutit, il manque la corrélation entre les objectifs de type "Terrain".
-  - Les parties se déroulant à 4 bots, il peut être probable qu'un bot Random prenne l'avantage en début de partie, passant donc dans la priorité pour le sabotage.
-    - Cela à deux effets, tout d'abord le bot random ne peut pas être saboter étant donné qu'il n'a aucune stratégie, et le bot DFS est finalement avantagé par rapport au BotRuleBased car ce dernier perd des tour à effectuer des sabotages inutiles
+  - Les parties se déroulant à 4 bots, il peut être probable qu'un bot Random prenne l'avantage en début de partie, passant donc dans la priorité pour le sabotage. Cela à deux effets : tout d'abord le bot random ne peut pas être saboter étant donné qu'il n'a aucune stratégie, et le bot DFS est finalement avantagé par rapport au BotRuleBased car ce dernier perd des tour à effectuer des sabotages inutiles
+
 On peut cependant noté que même lors de la réalisation de partie avec le BotRuleBased contre le bot DFS, ce dernier l'emporte en moyenne plus souvent, appuyant nos premiers arguements.
   
   
 3 - Processus
 Qui est responsable de quoi/qui a fait quoi ?
-Loris :
-    - La classe MétéoDice
-    - La classe Objective et ses classes "enfants" 
-    - La classe Pattern et ses classes "enfants"
-    - La classe TypeObjective
-    - La classe GestionObjectives
-    - Les tests de ces classes
-Guillaume :
+- Loris :
+	- La classe MétéoDice
+	- La classe Objective et ses classes "enfants" 
+	- La classe Pattern et ses classes "enfants"
+	- La classe TypeObjective
+	- La classe GestionObjectives
+	- Les tests de ces classes
+- Guillaume :
     - La classe Board
     - La classe HexagoneBox
     - La classe HexagoneBoxPlaced
@@ -101,14 +102,13 @@ Guillaume :
     - La classe TakenokoException et ses classes "enfants"
     - Les classes Simulations des précédentes si besoin (Board, HexagoneBoxPlaced,StackOfBox...)
     - Les tests de ces classes
-Arthur :
+- Arthur :
     - La classe Main
     - La classe Game
     - La classe Log
     - La classe BotRuleBased
-    - La classe CSVHandler
     - Les tests de ces classes
-Loïc :
+- Loïc :
    - La classe Bot
    - La classe BotDFS
    - La classe BotRandom
@@ -120,17 +120,17 @@ Loïc :
    - Les tests de ces classes
 
 Le process de l'équipe :
-Milestones : 
+- Milestones : 
    - 11 milestones ont été utilisés donc 2 pour la dernière semaine.
    - Chaque milestone couvre de nouvelles fonctionnalités sur un maximum de règle et élément du jeu
    - Chaque milestone donc toutes les issues sont fermé est également fermé
-Issues : 
+- Issues : 
    - Chaque issues est toujours rattaché à un milestone
    - Création d'une nouvelle issues pour chaque nouvelle fonctionnalité (ou même pour chacune des "sous" fonctionnalités quand elle est trop importante)
    - Chaque issue fini est fermé
-Label :
+- Label :
    - Création de plusieurs label personnalisé afin de mieux distingué les issues entre elle (merging, refactoring, test...)
-Branche : 
+- Branche : 
    - 13 branches en tout
    - Création de plusieurs branche afin de distinguer l'avancement de chaque fonctionnalité et de travailler sans problème. Ainsi dans le cas du travail sur plusieurs fonctionnalités à la fois, il y a une possibilité de "checkout" la branche correspondant au la fonctionnalité voulu et travailler dessus, tout en mettant en ligne et en permettant à d'autre membre d'également travailler sur cette fonctionnalité si besoin
    - Création de branche pour de nouvelles fonctionnalités qui ont, par la suite été abandonné pour une autre implémentation (branche sql par exemple)

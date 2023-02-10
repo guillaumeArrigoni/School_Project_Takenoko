@@ -35,7 +35,6 @@ public class Main {
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
     boolean csv;
-
     public static void main(String... args) throws IOException, CloneNotSupportedException, CsvException {
         //detection of arg for JCommander
         Main main = new Main();
@@ -117,7 +116,6 @@ public class Main {
                     playerList.add(bot3);
                     playerList.add(bot4);
                     Game game = new Game(playerList,board,logDemo);
-                    ((BotRuleBased) bot2).setGame(game);
                     int winner = game.play(gestionnaire, "twoThousands");
 
                     int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore(), bot3.getScore(), bot4.getScore()};

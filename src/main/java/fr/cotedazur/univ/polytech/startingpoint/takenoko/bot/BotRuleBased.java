@@ -17,6 +17,8 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathirrigatio
 
 import java.util.*;
 
+import static java.lang.Math.min;
+
 public class BotRuleBased extends BotRandom {
 
     int currentScore;
@@ -64,10 +66,51 @@ public class BotRuleBased extends BotRandom {
         return typeObjective;
     }
 
+    protected void placeTileExceptColor(int[] coords, Color color){
+        //Init
+        List<HexagoneBox> list = new ArrayList<>();
+        List<HexagoneBox> listRightIndex = new ArrayList<>();
+        //Get all the available coords
+        List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
+        //Draw three tiles
+        for(int i = 0; i < min(3,board.getElementOfTheBoard().getStackOfBox().getStackOfBox().size()); i++){
+            list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
+            if (list.get(i).getColor() == color){
+                listRightIndex.add(list.get(i));
+            }
+        }
+        List<HexagoneBox> listClone = new ArrayList<>(list);
+        int[] placedTileCoords = coords;
+        if (listRightIndex.size()!=listClone.size()){
+            for(HexagoneBox box : listRightIndex){
+                listClone.remove(box);
+            }
+        } else {
+            while (placedTileCoords.equals(coords)) placedTileCoords = availableTilesList.get(random.nextInt(0, availableTilesList.size()));
+        }
+        //Choose a random tile from the tiles drawn
+        int placedTileIndex = random.nextInt(0, listClone.size());
+        HexagoneBox tileToPlace = listClone.get(placedTileIndex);
+        //Choose a random available space
+        HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
+        //Add the tile to the board
+        board.addBox(placedTile,this);
+        logInfoDemo.addLog(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+        list.remove(tileToPlace);
+        for (int i = 0;i<list.size();i++){
+            board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get(i));
+        }
+    }
+
     private void sabotageObj(TypeObjective typeObjective, Bot bot){
         switch (typeObjective){
             case PARCELLE :
-                break;
+                if (bot.getLastBoxPlaced().length==3 && board.getElementOfTheBoard().getStackOfBox().getStackOfBox().size()!=0){
+                    int[] coord = bot.getLastBoxPlaced();
+                    Color color = board.getPlacedBox().get(HexagoneBox.generateID(coord)).getColor();
+                    placeTileExceptColor(coord,color);
+                    break;
+                }
             case JARDINIER :
                 if (choseMoveForPanda().length != 0 && bot.getLastCoordGardener().length==3) {
                     int[] coordLastMovement = bot.getLastCoordGardener();
@@ -107,12 +150,7 @@ public class BotRuleBased extends BotRandom {
                     }
                 }
             default :
-                if (choseMoveForPanda().length == 0 || !(this.possibleActions.contains(PossibleActions.MOVE_PANDA))) {
-                    doAction("arg");
-                } else {
-                    movePanda("arg");
-                    this.possibleActions.remove(PossibleActions.MOVE_PANDA);
-                }
+                doAction("arg");
         }
     }
 

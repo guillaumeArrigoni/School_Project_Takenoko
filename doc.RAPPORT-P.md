@@ -101,14 +101,13 @@ Guillaume :
     - La classe TakenokoException et ses classes "enfants"
     - Les classes Simulations des précédentes si besoin (Board, HexagoneBoxPlaced,StackOfBox...)
     - Les tests de ces classes
-Arthur :
+- Arthur :
     - La classe Main
     - La classe Game
     - La classe Log
     - La classe BotRuleBased
-    - La classe CSVHandler
     - Les tests de ces classes
-Loïc :
+- Loïc :
    - La classe Bot
    - La classe BotDFS
    - La classe BotRandom

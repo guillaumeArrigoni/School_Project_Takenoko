@@ -68,6 +68,64 @@ Ce résultat peut s'expliquer par plusieurs raison :
 On peut cependant noté que même lors de la réalisation de partie avec le BotRuleBased contre le bot DFS, ce dernier l'emporte en moyenne plus souvent, appuyant nos premiers arguements.
   
   
-  3 - Processus
+3 - Processus
+Qui est responsable de quoi/qui a fait quoi ?
+Loris :
+    - La classe MétéoDice
+    - La classe Objective et ses classes "enfants" 
+    - La classe Pattern et ses classes "enfants"
+    - La classe TypeObjective
+    - La classe GestionObjectives
+    - Les tests de ces classes
+Guillaume :
+    - La classe Board
+    - La classe HexagoneBox
+    - La classe HexagoneBoxPlaced
+    - La classe Crest
+    - La classe CrestGestionnary
+    - La classe ElementOfTheBoard
+    - La classe StackOfBox
+    - La classe RetrieveBoxIdWIthParameters
+    - La classe GetAllBoxFillingThePatternEntered
+    - La classe Combination
+    - La classe Permutation
+    - La classe GenerateAWayToIrrigateTheBox
+    - La classe GenerateOptimizePathForSeveralBox
+    - La classe GenerateOptimizePathForSeveralBoxWithSimulation
+    - Quelques méthodes de la classes BotRuleBased et GestionObjectifs
+    - La classe TakenokoException et ses classes "enfants"
+    - Les classes Simulations des précédentes si besoin (Board, HexagoneBoxPlaced,StackOfBox...)
+    - Les tests de ces classes
+Arthur :
+    - La classe Main
+    - La classe Game
+    - La classe Log
+    - La classe BotRuleBased
+    - Les tests de ces classes
+Loïc :
+   - La classe Bot
+   - La classe BotDFS
+   - La classe BotRandom
+   - La classe BotSimulator
+   - La classe ActionLog
+   - La classe ActionLogIrrigation
+   - La classe GameState
+   - La classe Node
+   - Les tests de ces classes
 
-
+Le process de l'équipe :
+Milestones : 
+   - 11 milestones ont été utilisés donc 2 pour la dernière semaine.
+   - Chaque milestone couvre de nouvelles fonctionnalités sur un maximum de règle et élément du jeu
+   - Chaque milestone donc toutes les issues sont fermé est également fermé
+Issues : 
+   - Chaque issues est toujours rattaché à un milestone
+   - Création d'une nouvelle issues pour chaque nouvelle fonctionnalité (ou même pour chacune des "sous" fonctionnalités quand elle est trop importante)
+   - Chaque issue fini est fermé
+Label :
+   - Création de plusieurs label personnalisé afin de mieux distingué les issues entre elle (merging, refactoring, test...)
+Branche : 
+   - 13 branches en tout
+   - Création de plusieurs branche afin de distinguer l'avancement de chaque fonctionnalité et de travailler sans problème. Ainsi dans le cas du travail sur plusieurs fonctionnalités à la fois, il y a une possibilité de "checkout" la branche correspondant au la fonctionnalité voulu et travailler dessus, tout en mettant en ligne et en permettant à d'autre membre d'également travailler sur cette fonctionnalité si besoin
+   - Création de branche pour de nouvelles fonctionnalités qui ont, par la suite été abandonné pour une autre implémentation (branche sql par exemple)
+   - Création de branche pour des types de travaux récurrents, par exemple la branche refactoring, implementTest...

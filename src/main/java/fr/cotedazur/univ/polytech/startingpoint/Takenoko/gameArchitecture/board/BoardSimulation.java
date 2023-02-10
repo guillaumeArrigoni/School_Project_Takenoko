@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardSimulation;
@@ -18,13 +19,13 @@ public class BoardSimulation extends Board {
     }
 
     public BoardSimulation(Board board, ElementOfTheBoard elementOfTheBoard, int numberOfPlayers){
-        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoard, numberOfPlayers);
+        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoard, numberOfPlayers,board.getLoggerSevere());
         super.elementOfTheBoard = new ElementOfTheBoardSimulation(elementOfTheBoard);
         setupSimulation(board);
     }
 
     public BoardSimulation(Board board, ElementOfTheBoardCheated elementOfTheBoardCheated, int numberOfPlayers) {
-        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoardCheated, numberOfPlayers);
+        super(board.getRetrieveBoxIdWithParameters(), board.isAllIrrigated(), board.getIdOfTheBoard(), elementOfTheBoardCheated, numberOfPlayers,board.getLoggerSevere());
         super.elementOfTheBoard = elementOfTheBoardCheated;
         setupSimulation(board);
     }
@@ -33,7 +34,7 @@ public class BoardSimulation extends Board {
     /**
      * Method use to copy the board and place in the new board generated
      * the HexagoneBoxSimulation corresponding to the box already place in the true board
-     * @param board : the true box use to to generate this simulation
+     * @param board : the true box use to generate this simulation
      */
     private void setupSimulation(Board board) {
         this.crestGestionnarySimulation = new CrestGestionnarySimulation(board.getCrestGestionnary());

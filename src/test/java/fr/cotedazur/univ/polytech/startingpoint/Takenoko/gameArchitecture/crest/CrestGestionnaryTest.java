@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -62,7 +63,7 @@ class CrestGestionnaryTest {
     @Order(2)
     public void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters,false, 1, 2);
+        board = new Board(retrieveBoxIdWithParameters,false, 1, 2,new LoggerSevere(true));
         boxIn5 = new HexagoneBoxPlaced(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         boxIn4 = new HexagoneBoxPlaced(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         boxIn13 = new HexagoneBoxPlaced(1,-2,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);

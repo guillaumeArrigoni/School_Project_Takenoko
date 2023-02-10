@@ -15,32 +15,40 @@ import java.nio.file.*;
 import com.opencsv.exceptions.CsvException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoStats;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotDFS;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
-//TODO remettre quand botRuleBased marche
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRuleBased;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
+import java.text.DecimalFormat;
 import java.util.*;
 //https://www.redblobgames.com/grids/hexagons/#coordinates
 
 public class Main {
     //parameters for JCommander
-    @Parameter(names={"--2thousands"}, arity=0)
+    /*@Parameter(names={"--2thousands"}, arity=0)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
-    boolean csv;
+    boolean csv;*/
+    boolean twoThousands = true;
+    boolean demo =false;
+    boolean csv = true;
+
     public static void main(String... args) throws IOException, CloneNotSupportedException, CsvException {
         //detection of arg for JCommander
         Main main = new Main();
         LogInfoDemo logDemo = new LogInfoDemo(main.demo || (!main.twoThousands && !main.csv));
         LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
+        LoggerError loggerError = new LoggerError(main.demo || (!main.twoThousands && !main.csv));
+        LoggerSevere loggerSevere = new LoggerSevere(main.demo || (!main.twoThousands && !main.csv));
         JCommander.newBuilder()
                 .addObject(main)
                 .build()
@@ -51,12 +59,12 @@ public class Main {
             int numberOfPlayer = 4;
             Log log = new Log();
             log.logInit(numberOfPlayer,logInfoStats);
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 50; i++) {
                 numberOfGame++;
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-                Board board = new Board(retrieving, 1, 2);
+                Board board = new Board(retrieving, 1, 2,loggerSevere);
                 Random random = new Random();
-                GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
+                GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
                 gestionnaire.initialize(
                         gestionnaire.ListOfObjectiveParcelleByDefault(),
                         gestionnaire.ListOfObjectiveJardinierByDefault(),
@@ -168,9 +176,9 @@ public class Main {
         }
         else if (main.demo || (!main.csv && !main.twoThousands)) {
             RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
-            Board board = new Board(retrieving, 1,2);
+            Board board = new Board(retrieving, 1,2,loggerSevere);
             Random random = new Random();
-            GestionObjectives gestionnaire = new GestionObjectives(board, retrieving);
+            GestionObjectives gestionnaire = new GestionObjectives(board, retrieving,loggerError);
             Bot bot1 = new BotDFS("BotDFS",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             Bot bot2 = new BotRuleBased("BotRB",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
             Bot bot3 = new BotRandom("BotRandom1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);

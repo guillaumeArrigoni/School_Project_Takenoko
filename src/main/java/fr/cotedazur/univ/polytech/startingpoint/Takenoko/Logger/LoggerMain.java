@@ -20,7 +20,7 @@ public class LoggerMain {
         this.logger = java.util.logging.Logger.getLogger(name);
         this.handler = new ConsoleHandler();
         this.level = level;
-        this.formatterForLog = new FormatterForLog();
+        this.formatterForLog = new FormatterForLog(this.level);
         setup();
     }
 
@@ -30,9 +30,13 @@ public class LoggerMain {
 
     protected void setOff(){
         this.level = Level.OFF;
+        setup();
     }
 
     private void setup(){
+        for (Handler handler : logger.getHandlers()){
+            logger.removeHandler(handler);
+        }
         handler.setLevel(level);
         handler.setFormatter(formatterForLog);
         logger.addHandler(handler);
@@ -40,10 +44,12 @@ public class LoggerMain {
     }
 
     public void addLog(String msg){
+        setup();
         logger.log(level,msg);
     }
 
     public void displaySeparator(){
+        setup();
         this.addLog("------------------------------------------------");
     }
 }

@@ -1,10 +1,11 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -63,8 +64,8 @@ class HexagoneBoxPlacedTest {
         logInfoDemo = new LogInfoDemo(true);
         elementOfTheBoardCheated = new ElementOfTheBoardCheated();
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated, 2);
-        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters);
+        board = new Board(retrieveBoxIdWithParameters,true, 1,elementOfTheBoardCheated, 2,new LoggerSevere(true));
+        gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true));
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         botRandom = new BotRandom("testBot", board, random,gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(),logInfoDemo);
@@ -137,7 +138,7 @@ class HexagoneBoxPlacedTest {
 
     private static Stream<Arguments> provideIrrigationAutomatic(){
         RetrieveBoxIdWithParameters retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        Board board = new Board(retrieveBoxIdWithParameters,false, 1, 2);
+        Board board = new Board(retrieveBoxIdWithParameters,false, 1, 2,new LoggerSevere(true));
         HexagoneBoxPlaced vertClassique04 = new HexagoneBoxPlaced(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
         board.addBox(vertClassique04);
         HexagoneBoxPlaced vertClassique05 = new HexagoneBoxPlaced(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);

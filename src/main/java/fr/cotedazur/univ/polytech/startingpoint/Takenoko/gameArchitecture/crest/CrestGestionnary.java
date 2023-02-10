@@ -6,6 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.ImpossibleToPlaceIrrigationException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -105,7 +106,7 @@ public class CrestGestionnary {
             crest.setIrrigated(true);
             setRangeToIrrigate(crest, 0);
             this.listOfCrestOneRangeToIrrigated.remove(crest);
-            rewriteRangeToIrrigatedAfterNewIrrigation(crest);
+            rewriteRangeToIrrigatedAfterNewIrrigation(crest,0);
             for (int i = 0; i<2;i++) {
                 if (placedBox.containsKey(crest.getIdOfAdjacentBox()[i])) {
                     placedBox.get(crest.getIdOfAdjacentBox()[i]).setIrrigate(true);
@@ -132,14 +133,17 @@ public class CrestGestionnary {
      *      - call itself until we reach the end of a genealogy branch
      * @param parent : the new Irrigation that has been placed
      */
-    private void rewriteRangeToIrrigatedAfterNewIrrigation(Crest parent){
-        if (linkCrestParentToCrestChildren.containsKey(parent) && !linkCrestParentToCrestChildren.get(parent).isEmpty()){
+    private void rewriteRangeToIrrigatedAfterNewIrrigation(Crest parent, int nb){
+        if (nb>500){
+            return;
+        }
+        if ((linkCrestParentToCrestChildren.containsKey(parent) && !linkCrestParentToCrestChildren.get(parent).isEmpty())){
             ArrayList<Crest> children = this.linkCrestParentToCrestChildren.get(parent);
             for (int i = 0; i<children.size();i++){
                 Crest child = children.get(i);
                 int candidateNewRange = rangeFromIrrigated.get(parent)+1;
                 updateChildRangeIfLessOrEqualsThanBefore(parent, child, candidateNewRange);
-                rewriteRangeToIrrigatedAfterNewIrrigation(child);
+                rewriteRangeToIrrigatedAfterNewIrrigation(child,nb+1);
             }
         }
     }
@@ -261,15 +265,19 @@ public class CrestGestionnary {
      */
     private void updateCrestVariableWithNewBoxAdded(HexagoneBoxPlaced box){
         if (box.getColor() == Color.Lac){
+            Crest fakeCrest = new Crest(99,99,1);
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
                 Crest crest = box.getListOfCrestAroundBox().get(i);
                 linkCrestParentToCrestChildren.put(crest, new ArrayList<>());
+                linkCrestChildrenToCrestParent.put(crest,new ArrayList<>(Arrays.asList(fakeCrest)));
                 parentChildless.add(crest);
                 listOfCrestOneRangeToIrrigated.add(crest);
                 parentChildless = eleminateDuplicate(parentChildless);
                 listOfCrestOneRangeToIrrigated = eleminateDuplicate(listOfCrestOneRangeToIrrigated);
                 setRangeToIrrigate(crest, 0);
+                crest.setIrrigated(true);
             }
+            box.setIrrigate(true);
             ArrayList<Crest> newParentChildless = new ArrayList<>();
             //actualizeCrestVariable(box.getListOfCrestAroundBox());
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){

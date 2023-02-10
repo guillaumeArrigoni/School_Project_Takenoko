@@ -13,6 +13,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjec
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,24 +46,19 @@ public class BotSimulator extends Bot{
             legal = false;
             return;
         }
-        doAction(arg);
+        launchAction(arg);
     }
 
     @Override
-    protected void doAction(String arg) {
-        switch (instructions.getAction()) {
-            case DRAW_AND_PUT_TILE -> placeTile(arg);
-            case MOVE_GARDENER -> moveGardener(arg);
-            case DRAW_OBJECTIVE -> drawObjective(arg);
-            case TAKE_IRRIGATION -> nbIrrigation++;
-            case PLACE_IRRIGATION -> placeIrrigation(arg);
-            case GROW_BAMBOO -> growBambooRain(arg);
-            case ADD_AUGMENT -> placeAugment(arg);
-            default ->//MOVE PANDA
-                    movePanda(arg);
-        }
-
+    public void movePandaStorm() {
     }
+
+    @Override
+    protected void launchAction(String arg){
+        PossibleActions action = instructions.getAction();
+        doAction(arg,action);
+    }
+
 
     @Override
     protected void placeTile(String arg){
@@ -127,9 +123,9 @@ public class BotSimulator extends Bot{
     @Override
     public void drawObjective(String arg) {
         switch(instructions.getParameters()[0]){
-            case 0 -> gestionObjectives.rollParcelleObjective(this, arg);
-            case 1 -> gestionObjectives.rollPandaObjective(this, arg);
-            default -> gestionObjectives.rollJardinierObjective(this, arg);
+            case 0 -> gestionObjectives.rollParcelleObjective(this);
+            case 1 -> gestionObjectives.rollPandaObjective(this);
+            case 2 -> gestionObjectives.rollJardinierObjective(this);
         }
     }
 

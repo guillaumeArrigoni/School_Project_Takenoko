@@ -2,6 +2,8 @@ package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
@@ -28,19 +30,20 @@ class BotRandomTest {
     final String arg = "demo";
 
     GestionObjectives gestionObjectives;
-
+    private static LogInfoDemo logInfoDemo;
     @BeforeEach
     void setUp() {
-        LogInfoDemo logInfoDemo = new LogInfoDemo(true);
+        logInfoDemo = new LogInfoDemo(true);
         this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        board = new Board(retrieveBoxIdWithParameters, 1, 2);
-        gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        board = new Board(retrieveBoxIdWithParameters, 1, 2,new LoggerSevere(true));
+        gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters,new LoggerError(true));
         gestionObjectives.initialize(
                 gestionObjectives.ListOfObjectiveParcelleByDefault(),
                 gestionObjectives.ListOfObjectiveJardinierByDefault(),
                 gestionObjectives.ListOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
+        //TODO
         board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(0, new HexagoneBox(Color.Jaune, Special.Classique));
         botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
     }
@@ -214,6 +217,4 @@ class BotRandomTest {
         assertEquals(-1, board.getPandaCoords()[1]);
         assertEquals(0, board.getPandaCoords()[2]);
     }
-
-
 }

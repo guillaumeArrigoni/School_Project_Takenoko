@@ -34,7 +34,6 @@ public class BotRuleBased extends BotRandom {
     public void playTurn(MeteoDice.Meteo meteo, String arg) {
         possibleActions = PossibleActions.getAllActions();
         this.objectives = getObjectives();
-        System.out.println();
         switch (meteo) {
             case VENT -> {
                 //2 fois la même action possible
@@ -137,19 +136,19 @@ public class BotRuleBased extends BotRandom {
         logInfoDemo.displayTextAction(action);
         switch (action) {
             case DRAW_AND_PUT_TILE -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherPoserTuile");
+                logInfoDemo.addLog("Le bot a choisi : PiocherPoserTuile");
                 placeTile(arg);
             }
             case MOVE_GARDENER -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : BougerJardinier");
+                logInfoDemo.addLog("Le bot a choisi : BougerJardinier");
                 moveGardener(arg);
             }
             case DRAW_OBJECTIVE -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : PiocherObjectif");
+                logInfoDemo.addLog("Le bot a choisi : PiocherObjectif");
                 drawObjective(arg);
             }
             case TAKE_IRRIGATION -> {
-                if (arg.equals("demo")) System.out.println("Le bot a choisi : PrendreIrrigation");
+                logInfoDemo.addLog("Le bot a choisi : PrendreIrrigation");
                 this.nbIrrigation++;
                 placeIrrigation();
             }
@@ -179,7 +178,7 @@ public class BotRuleBased extends BotRandom {
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
         board.addBox(placedTile);
-        if (arg.equals("demo")) System.out.println(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+        logInfoDemo.addLog(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
     }
@@ -188,12 +187,13 @@ public class BotRuleBased extends BotRandom {
     protected void moveGardener(String arg){
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
-        if (arg.equals("demo")) System.out.println(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
+        logInfoDemo.addLog(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
 
     @Override
     public void drawObjective(String arg){
-        gestionObjectives.rollObjective(this, arg);
+        int i = random.nextInt(0, 3);
+        gestionObjectives.rollObjective(this, arg, i);
         this.objectivesInHand++;
         this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
     }
@@ -232,7 +232,7 @@ public class BotRuleBased extends BotRandom {
             if(!tmp.isEmpty()) {
                 temp = tmp.get(random.nextInt(0, tmp.size()));
                 for (ArrayList<Crest> path : temp.getPathToIrrigation()) {
-                    System.out.println("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
+                    logInfoDemo.addLog("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
                     board.placeIrrigation(path.get(0));
                     nbIrrigation--;
                 }

@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -22,6 +23,7 @@ public class GestionObjectives {
     private ArrayList<ObjectivePanda> PandaObjectifs;
     private final int NB_LISTES_OBJECTIVES = 3;
     private boolean ABotHasEnoughObjectivesDone;
+    private LoggerError loggerError;
 
     PatternParcelle POSER_TRIANGLE = new PatternParcelle("TRIANGLE");
     PatternParcelle POSER_LIGNE = new PatternParcelle("LIGNE");
@@ -86,14 +88,14 @@ public class GestionObjectives {
      * This Constructor creates an instance witch contains the different ArrayLists of Objective.
      * This instance rolls the Objectives to draw for the bots, and checks if the Objectives are achieved.
      */
-    public GestionObjectives(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
+    public GestionObjectives(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, LoggerError loggerError){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.board = board;
         this.ParcelleObjectifs = new ArrayList<>();
         this.JardinierObjectifs = new ArrayList<>();
         this.PandaObjectifs = new ArrayList<>();
         this.ABotHasEnoughObjectivesDone = false;
-
+        this.loggerError = loggerError;
     }
 
     /**
@@ -171,7 +173,7 @@ public class GestionObjectives {
      * @return a new instance of GestionObjectives witch is a copy of the instance this method is applied to.
      */
     public GestionObjectives copy(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
-        GestionObjectives gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters);
+        GestionObjectives gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters, this.loggerError);
         gestionObjectives.ParcelleObjectifs = new ArrayList<>(this.ParcelleObjectifs);
         gestionObjectives.JardinierObjectifs = new ArrayList<>(this.JardinierObjectifs);
         gestionObjectives.PandaObjectifs = new ArrayList<>(this.PandaObjectifs);
@@ -218,7 +220,7 @@ public class GestionObjectives {
      * This method is a getter for the field ABotHasEnoughObjectivesDone.
      * @return a boolean witch correspond to the field ABotHasEnoughObjectivesDone.
      */
-    public boolean DoesABotHaveEnoughObjectivesDone() {
+    public boolean doesABotHaveEnoughObjectivesDone() {
         return ABotHasEnoughObjectivesDone;
     }
 
@@ -226,20 +228,21 @@ public class GestionObjectives {
      * @param bot corresponds to the bot who rolls the objective to draw.
      * This method rolls (random) an objective among the objectives available with the TypeObjective chosen by the bot.
      */
-    public void rollObjective(BotRandom bot, String arg){
-        TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg);
+
+    public void rollObjective(Bot bot, String arg, int id){
+        TypeObjective typeObjective = bot.choseTypeObjectiveToRoll(arg,id);
         switch (typeObjective){
-        case PARCELLE -> rollParcelleObjective(bot, arg);
-        case JARDINIER -> rollJardinierObjective(bot, arg);
-        case PANDA -> rollPandaObjective(bot, arg);
+        case PARCELLE -> rollParcelleObjective(bot);
+        case JARDINIER -> rollJardinierObjective(bot);
+        case PANDA -> rollPandaObjective(bot);
         }
     }
 
     /**
      * @param bot corresponds to the bot who rolls the objective to draw.
-     * This method rolls (random) an objective among the objectives available with the TypeObjective PARCELLE.
+     *            This method rolls (random) an objective among the objectives available with the TypeObjective PARCELLE.
      */
-    public void rollParcelleObjective(Bot bot, String arg){
+    public void rollParcelleObjective(Bot bot){
         int i = new Random().nextInt(0, getParcelleObjectifs().size());
         Objective objective = this.getParcelleObjectifs().get(i);
         this.getParcelleObjectifs().remove(i);
@@ -249,9 +252,9 @@ public class GestionObjectives {
 
     /**
      * @param bot corresponds to the bot who rolls the objective to draw.
-     * This method rolls (random) an objective among the objectives available with the TypeObjective JARDINIER.
+     *            This method rolls (random) an objective among the objectives available with the TypeObjective JARDINIER.
      */
-    public void rollJardinierObjective(Bot bot, String arg){
+    public void rollJardinierObjective(Bot bot){
         int i = new Random().nextInt(0, getJardinierObjectifs().size());
         Objective objective = this.getJardinierObjectifs().get(i);
         this.getJardinierObjectifs().remove(i);
@@ -261,9 +264,9 @@ public class GestionObjectives {
 
     /**
      * @param bot corresponds to the bot who rolls the objective to draw.
-     * This method rolls (random) an objective among the objectives available with the TypeObjective PANDA.
+     *            This method rolls (random) an objective among the objectives available with the TypeObjective PANDA.
      */
-    public void rollPandaObjective(Bot bot, String arg){
+    public void rollPandaObjective(Bot bot){
         int i = new Random().nextInt(0, getPandaObjectifs().size());
         Objective objective = this.getPandaObjectifs().get(i);
         this.getPandaObjectifs().remove(i);
@@ -366,7 +369,7 @@ public class GestionObjectives {
                 }
             }
         } catch (DeletingBotBambooException e) {
-            System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+            loggerError.logErrorTitle(e);
         }
         return isDone;
     }
@@ -376,7 +379,7 @@ public class GestionObjectives {
      * @return a boolean corresponding to if the objectiveJardinier is achieved or not.
      */
     public boolean checkJardinierObjectives(Objective objective) {
-        ArrayList<Integer> listOfIdAvailable = new ArrayList<>();
+        ArrayList<Integer> listOfIdAvailable;
         if(objective.getPattern().getSpecial() == null){
             listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.of(new ArrayList<>(Arrays.asList(objective.getPattern().getHauteurBambou()))),Optional.empty());
         }
@@ -416,7 +419,7 @@ public class GestionObjectives {
                     idOfAdjacentBoxCorrect.add(j);
                 }
             }
-            if (ParcelleLosangeObjectifCondition(box, idOfAdjacentBoxCorrect)) return true;
+            if (ParcelleLosangeObjectiveCondition(box, idOfAdjacentBoxCorrect)) return true;
         }
         return false;
     }
@@ -427,20 +430,19 @@ public class GestionObjectives {
      * @param idOfAdjacentBoxCorrect contains all the adjacent box of the previous box that complete the objective condition (color, irrigated ...)
      * @return true if the rhombus parcel is completed, false if it does not
      */
-    private boolean ParcelleLosangeObjectifCondition(HexagoneBoxPlaced box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
+    private boolean ParcelleLosangeObjectiveCondition(HexagoneBoxPlaced box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
             int adjIndice1 = (idOfAdjacentBoxCorrect.get(j)+1)%7;
             int adjIndice2 = (idOfAdjacentBoxCorrect.get(j)+2)%7;
             if (adjIndice1 == 0) adjIndice1 = 1;
             if (adjIndice2 == 0) adjIndice2 = 1;
             if (board.isCoordinateInBoard(box.getAdjacentBox().get(adjIndice1)) &&
-                    board.isCoordinateInBoard(box.getAdjacentBox().get(adjIndice2))){
-                if (idOfAdjacentBoxCorrect.contains(adjIndice1)
-                        && board.getBoxWithCoordinates(box.getAdjacentBox().get(adjIndice1)).getColor() == box.getColor()
-                        && idOfAdjacentBoxCorrect.contains(adjIndice2)
-                        && board.getBoxWithCoordinates(box.getAdjacentBox().get(adjIndice2)).getColor() == box.getColor()){
-                    return true;
-                }
+                    board.isCoordinateInBoard(box.getAdjacentBox().get(adjIndice2)) &&
+                    idOfAdjacentBoxCorrect.contains(adjIndice1) &&
+                    board.getBoxWithCoordinates(box.getAdjacentBox().get(adjIndice1)).getColor() == box.getColor() &&
+                    idOfAdjacentBoxCorrect.contains(adjIndice2) &&
+                    board.getBoxWithCoordinates(box.getAdjacentBox().get(adjIndice2)).getColor() == box.getColor()){
+                return true;
             }
         }
         return false;
@@ -459,7 +461,7 @@ public class GestionObjectives {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             ArrayList<Integer> idOfAdjacentBoxCorrect = getAllAdjacentBoxThatCompleteTheCondition(listOfIdAvailable, i);
-            if (ParcelleObjectifCondition(idOfAdjacentBoxCorrect, x)) return true;
+            if (ParcelleObjectiveCondition(idOfAdjacentBoxCorrect, x)) return true;
         }
         return false;
     }
@@ -489,7 +491,7 @@ public class GestionObjectives {
      * @param x that have the same value as before
      * @return true if the objective is completed or false if it does not.
      */
-    private boolean ParcelleObjectifCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
+    private boolean ParcelleObjectiveCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
             int adjIndice = idOfAdjacentBoxCorrect.get(j)+ x;
             if (adjIndice > 6) adjIndice = adjIndice - 6;
@@ -549,14 +551,13 @@ public class GestionObjectives {
     public TypeObjective chooseTypeObjectiveByCheckingUnknownObjectives(Bot bot){
         int[] numberOfTypeObjectiveDone = new int[NB_LISTES_OBJECTIVES];
         int[] moyennePointsObjectives = new int[NB_LISTES_OBJECTIVES];
-        int sizeParcellle = this.getParcelleObjectifs().size();
+        int sizeParcelle = this.getParcelleObjectifs().size();
         int sizeJardinier = this.getJardinierObjectifs().size();
         int sizePanda = this.getPandaObjectifs().size();
         ArrayList<Objective> listOfAllObjectivesDrawable = new ArrayList<>();
         listOfAllObjectivesDrawable.addAll(this.getParcelleObjectifs());
         listOfAllObjectivesDrawable.addAll(this.getJardinierObjectifs());
         listOfAllObjectivesDrawable.addAll(this.getPandaObjectifs());
-        int n = listOfAllObjectivesDrawable.size();
         for(Objective objective : listOfAllObjectivesDrawable){
             if(checkOneObjective(objective,bot)){
                 switch (objective.getType()){
@@ -566,27 +567,22 @@ public class GestionObjectives {
                 }
             }
         }
-        if(sizeParcellle != 0) {
-            if(numberOfTypeObjectiveDone[0] != 0){
-                moyennePointsObjectives[0] /= numberOfTypeObjectiveDone[0];
-            }
-            numberOfTypeObjectiveDone[0] /= sizeParcellle;
+        return chooseTypeObjective(numberOfTypeObjectiveDone, moyennePointsObjectives, sizeParcelle, sizeJardinier, sizePanda);
+    }
+
+    private TypeObjective chooseTypeObjective(int[] numberOfTypeObjectiveDone, int[] moyennePointsObjectives, int sizeParcelle, int sizeJardinier, int sizePanda) {
+        if(sizeParcelle != 0) {
+            updateNumberOfTypeObjectiveDone(numberOfTypeObjectiveDone, 0, moyennePointsObjectives, sizeParcelle);
         }
         if(sizeJardinier != 0) {
-            if(numberOfTypeObjectiveDone[1] != 0){
-                moyennePointsObjectives[1] /= numberOfTypeObjectiveDone[1];
-            }
-            numberOfTypeObjectiveDone[1] /= sizeJardinier;
+            updateNumberOfTypeObjectiveDone(numberOfTypeObjectiveDone, 1, moyennePointsObjectives, sizeJardinier);
         }
         if(sizePanda != 0) {
-            if(numberOfTypeObjectiveDone[2] != 0){
-                moyennePointsObjectives[2] /= numberOfTypeObjectiveDone[2];
-            }
-            numberOfTypeObjectiveDone[2] /= sizePanda;
+            updateNumberOfTypeObjectiveDone(numberOfTypeObjectiveDone, 2, moyennePointsObjectives, sizePanda);
         }
         ArrayList<Integer> indices = indiceMax(numberOfTypeObjectiveDone);
         if(indices.size() == 1){
-            return switch (indices.get(0)){
+            return switch (indices.get(0)) {
                 case 0 -> TypeObjective.PARCELLE;
                 case 1 -> TypeObjective.JARDINIER;
                 default -> TypeObjective.PANDA;
@@ -594,12 +590,19 @@ public class GestionObjectives {
         }
         else{
             ArrayList<Integer> indicesMoyenne = indiceMax(moyennePointsObjectives);
-            return switch (indicesMoyenne.get(0)){
+            return switch (indicesMoyenne.get(0)) {
                 case 0 -> TypeObjective.PARCELLE;
                 case 1 -> TypeObjective.JARDINIER;
                 default -> TypeObjective.PANDA;
             };
         }
+    }
+
+    private void updateNumberOfTypeObjectiveDone(int[] numberOfTypeObjectiveDone, int x, int[] moyennePointsObjectives, int sizeParcellle) {
+        if(numberOfTypeObjectiveDone[x] != 0){
+            moyennePointsObjectives[x] /= numberOfTypeObjectiveDone[x];
+        }
+        numberOfTypeObjectiveDone[x] /= sizeParcellle;
     }
 
     /**

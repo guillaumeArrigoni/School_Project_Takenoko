@@ -106,6 +106,7 @@ Arthur :
     - La classe Game
     - La classe Log
     - La classe BotRuleBased
+    - La classe CSVHandler
     - Les tests de ces classes
 Loïc :
    - La classe Bot

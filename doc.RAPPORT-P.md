@@ -33,6 +33,11 @@ Les différents logger peuvent tous être paramétrés pour s'afficher ou non à
 Ainsi, par exemple, la simulation "--thousand" affichera uniquement le logger LogInfoStats.
 
 Les statistiques en CSV :
+La simulation "--csv" permet de lancer 100 parties et d'enregistrer les résultats dans un fichier csv. Ce fichier (stats.csv) contient le pourcentage de victoire de chaque bot, son score moyen ainsi que le nombre de parties qu'il a joué.
+Tout cela est fait à l'aide de la classe CSVHandler et l'on procède ainsi :
+  - On récupère le chemin du fichier stats.csv qu'importe le système d'exploitation (ou on le crée s'il n'existe pas)
+  - Si le fichier est vide (ou vient d'être créé), on lance les 100 parties et on écrit les statistiques dans le fichier
+  - Sinon, on lit le contenu du fichier, on en crée un autre temporaire (temp_stats.csv), dedans on écrit le résultat du calcul des nouvelles statistiques de chaque bot en prenant en comtpe le nombre de parties jouées, on supprime ensuite "stats.csv" et on renomme "temps_stats.csv" en "stats.csv".
 
 Bot spécifique et analyse :
 Le bot spécifique demandé est capable de :

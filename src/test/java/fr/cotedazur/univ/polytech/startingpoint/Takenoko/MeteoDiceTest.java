@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko;
 
 import org.junit.jupiter.api.Test;
 

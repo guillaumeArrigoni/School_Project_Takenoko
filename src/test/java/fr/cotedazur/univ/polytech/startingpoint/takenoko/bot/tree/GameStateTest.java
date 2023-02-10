@@ -1,0 +1,75 @@
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree;
+
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRandom;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotSimulator;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.PossibleActions;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.HashMap;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
+class GameStateTest {
+
+    BotRandom botRandom;
+    Board board;
+    Random r;
+    MeteoDice meteoDice;
+    RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    final String arg = "demo";
+
+    BotSimulator bot;
+    GestionObjectives gestionObjectives;
+
+    @BeforeEach
+    void setUp() {
+        LogInfoDemo logInfoDemo = new LogInfoDemo(true);
+        this.retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
+        board = new Board(retrieveBoxIdWithParameters, 1, 2, new LoggerSevere(true));
+        gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters, new LoggerError(true));
+        gestionObjectives.initialize(
+                gestionObjectives.ListOfObjectiveParcelleByDefault(),
+                gestionObjectives.ListOfObjectiveJardinierByDefault(),
+                gestionObjectives.ListOfObjectivePandaByDefault());
+        r = mock(Random.class);
+        meteoDice = mock(MeteoDice.class);
+        botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
+        board.getElementOfTheBoard().getStackOfBox().getStackOfBox().clear();
+        for(int i = 0; i < 15; i++){
+            board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(new HexagoneBox(Color.Vert, Special.Classique));
+        }
+        bot = botRandom.createBotSimulator();
+    }
+
+    @Test
+    void testScoreLegal(){
+        bot.setInstructions(new ActionLog(PossibleActions.DRAW_AND_PUT_TILE, 1,-1,0, 0));
+        bot.playTurn(MeteoDice.Meteo.VENT, "demo");
+        GameState gameState = new GameState(bot, MeteoDice.Meteo.NO_METEO);
+        assertEquals(0, gameState.getScore());
+        assertEquals(-999,new GameState().getScore());
+    }
+
+    @Test
+    void testScoreIllegal(){
+        bot.setInstructions(new ActionLog(PossibleActions.MOVE_PANDA, 1,-1,0));
+        bot.playTurn(MeteoDice.Meteo.NO_METEO, "demo");
+        GameState gameState = new GameState(bot, MeteoDice.Meteo.NO_METEO);
+        assertEquals(-999, gameState.getScore());
+
+    }
+}

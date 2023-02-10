@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

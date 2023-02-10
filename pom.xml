@@ -106,7 +106,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>fr.cotedazur.univ.polytech.startingpoint.Takenoko.Main</mainClass> <!-- CHANGE ME -->
+                    <mainClass>fr.cotedazur.univ.polytech.startingpoint.takenoko.Main</mainClass> <!-- CHANGE ME -->
                     <!--          <arguments>
                                 <argument>argument1</argument>
                               </arguments>

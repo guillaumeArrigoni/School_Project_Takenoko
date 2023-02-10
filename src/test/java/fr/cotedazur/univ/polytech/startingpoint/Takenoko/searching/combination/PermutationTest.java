@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.combination;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.combination;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;

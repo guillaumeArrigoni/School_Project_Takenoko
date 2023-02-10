@@ -1,6 +1,6 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.params.ParameterizedTest;

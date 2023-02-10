@@ -183,19 +183,44 @@ public class BotRuleBased extends BotRandom {
         resetPossibleAction();
     }
 
+    @Override
     protected void launchAction(String arg) {
+        List<Objective> pandaObj = getObjectivesOfType(TypeObjective.PANDA);
+        List<Objective> gardenerObj = getObjectivesOfType(TypeObjective.JARDINIER);
+        boolean done = false;
+        //on pioche un objectif dès que possible
         if (this.possibleActions.contains(PossibleActions.DRAW_OBJECTIVE) && objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
             drawObjective(arg);
             this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
+            done = true;
         }
-        else if (choseMoveForPanda().length == 0 || !(this.possibleActions.contains(PossibleActions.MOVE_PANDA))) {
-            launchSabotage();
-        } else {
+        //sinon on bouge le panda en respectant un objectif
+        else if (choseMoveForPanda().length != 0 && this.possibleActions.contains(PossibleActions.MOVE_PANDA) && !(pandaObj.isEmpty())) {
+            movePanda(arg);
+            this.possibleActions.remove(PossibleActions.MOVE_PANDA);
+            done = true;
+        }
+        //sinon on bouge le jardinier en respectant un objectif
+        else if (!(gardenerObj.isEmpty()) && this.possibleActions.contains(PossibleActions.MOVE_GARDENER)) {
+            for (Objective obj : gardenerObj) {
+                if (getHighestBamboosOfColorPossible(obj.getColors().get(0)) != null) {
+                    moveGardener(arg);
+                    done = true;
+                }
+            }
+        }
+        //sinon on bouge le panda au hasard
+        if (!done && choseMoveForPanda().length != 0 && this.possibleActions.contains(PossibleActions.MOVE_PANDA)) {
             movePanda(arg);
             this.possibleActions.remove(PossibleActions.MOVE_PANDA);
         }
+        //sinon on fait une action au hasard
+        else if (!done) {
+            doAction(arg);
+        }
     }
 
+    @Override
     protected PossibleActions chooseAction() {
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
@@ -216,25 +241,26 @@ public class BotRuleBased extends BotRandom {
     }
 
     protected int[] choseMoveForPanda() {
+        List<Objective> objPanda = getObjectivesOfType(TypeObjective.PANDA);
         List<HexagoneBoxPlaced> hexagoneBoxWithBamboos = hexagoneBoxWithBamboos();
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(this.board, board.getPandaCoords());
-        for (int[] possiblePandaCoords : possibleMoves) {
-            for (HexagoneBoxPlaced boxWithBamboos : hexagoneBoxWithBamboos) {
-                if (Arrays.equals(possiblePandaCoords, boxWithBamboos.getCoordinates())) {
-                    return possiblePandaCoords;
+        if (objPanda.isEmpty()) {
+            for (int[] possiblePandaCoords : possibleMoves) {
+                for (HexagoneBoxPlaced boxWithBamboos : hexagoneBoxWithBamboos) {
+                    if (Arrays.equals(possiblePandaCoords, boxWithBamboos.getCoordinates())) {
+                        return possiblePandaCoords;
+                    }
                 }
             }
         }
-        return new int[0];
-    }
-
-    protected int[] choseMoveForGardener() {
-        List<HexagoneBoxPlaced> hexagoneBoxWithBamboos = hexagoneBoxWithBamboos();
-        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(this.board, board.getGardenerCoords());
-        for (int[] possibleGardenerCoords : possibleMoves) {
-            for (HexagoneBoxPlaced boxWithBamboos : hexagoneBoxWithBamboos) {
-                if (Arrays.equals(possibleGardenerCoords, boxWithBamboos.getCoordinates())) {
-                    return possibleGardenerCoords;
+        else {
+            for (HexagoneBoxPlaced box : hexagoneBoxWithBamboos) {
+                for (Objective obj : objPanda) {
+                    for (Color c : obj.getColors()) {
+                        if (box.getColor().equals(c) && box.getHeightBamboo() > 0 && this.bambooEaten.get(c) < obj.getPattern().getHauteurBambou()) {
+                            return box.getCoordinates();
+                        }
+                    }
                 }
             }
         }
@@ -295,7 +321,17 @@ public class BotRuleBased extends BotRandom {
 
     @Override
     protected void moveGardener(String arg){
+        List<Objective> objGardener = getObjectivesOfType(TypeObjective.JARDINIER);
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
+        if (!objGardener.isEmpty()) {
+            for (Objective obj : objGardener) {
+                HexagoneBoxPlaced newBox = getHighestBamboosOfColorPossible(obj.getColors().get(0));
+                if (newBox != null) {
+                    board.setGardenerCoords(newBox.getCoordinates(),this);
+                    return;
+                }
+            }
+        }
         board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         logInfoDemo.addLog(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
@@ -381,9 +417,24 @@ public class BotRuleBased extends BotRandom {
         }
     }
 
-    public HexagoneBoxPlaced getHighestBamboosOfColor(Color color) {
+    public HexagoneBoxPlaced getHighestBamboosOfColorPossible(Color color) {
         int highest = 0;
         HexagoneBoxPlaced highestBox = null;
+        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
+        for (int[] possibleMove : possibleMoves) {
+            HexagoneBoxPlaced box = board.getBoxWithCoordinates(possibleMove);
+            if (box.getColor().equals(color) && box.getHeightBamboo() < 4 && box.getHeightBamboo() > highest) {
+                highest = box.getHeightBamboo();
+                highestBox = box;
+            }
+        }
+        return highestBox;
+    }
+
+    public HexagoneBoxPlaced getHighestBamboosOfColorInBoard(Color color) {
+        int highest = 0;
+        HexagoneBoxPlaced highestBox = null;
+
         for (HexagoneBoxPlaced box : this.board.getAllBoxPlaced()) {
             if (box.getColor().equals(color) && box.getHeightBamboo() < 4 && box.getHeightBamboo() > highest) {
                 highest = box.getHeightBamboo();
@@ -398,7 +449,7 @@ public class BotRuleBased extends BotRandom {
         List<Objective> gardenerObj = getObjectivesOfType(TypeObjective.JARDINIER);
         for (Objective obj : gardenerObj) {
             for (Color c : obj.getColors()) {
-                HexagoneBoxPlaced box = getHighestBamboosOfColor(c);
+                HexagoneBoxPlaced box = getHighestBamboosOfColorInBoard(c);
                 if (box != null) {
                     box.growBamboo();
                     return;

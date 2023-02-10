@@ -146,4 +146,69 @@ class BotRuleBasedTest {
         botRB.growBambooRain(arg);
         assertEquals(2, hexagoneBoxPlaced2.getHeightBamboo());
     }
+
+    @Test
+    void moveGardener() {
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1, -1, 0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced2 = new HexagoneBoxPlaced(1, 0, -1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced3 = new HexagoneBoxPlaced(0, 1, -1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
+        hexagoneBoxPlaced5.setHeightBamboo(2);
+        //planter 2 bambous rouges
+        botRB.objectives.add(gestionObjectives.getJardinierObjectifs().get(12));
+        botRB.moveGardener(arg);
+        assertEquals(3, hexagoneBoxPlaced5.getHeightBamboo());
+        botRB.moveGardener(arg);
+        assertEquals(2, hexagoneBoxPlaced2.getHeightBamboo());
+        botRB.moveGardener(arg);
+        assertEquals(4, hexagoneBoxPlaced5.getHeightBamboo());
+    }
+
+    @Test
+    void launchActionTest() {
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1, -1, 0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced2 = new HexagoneBoxPlaced(1, 0, -1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced3 = new HexagoneBoxPlaced(0, 1, -1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1, 0, 1, Color.Rouge, Special.Classique, retrieveBoxIdWithParameters, board);
+        HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0, -1, 1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters, board);
+        board.addBox(hexagoneBoxPlaced,botRB);
+        board.addBox(hexagoneBoxPlaced2,botRB);
+        board.addBox(hexagoneBoxPlaced3,botRB);
+        board.addBox(hexagoneBoxPlaced4,botRB);
+        board.addBox(hexagoneBoxPlaced5,botRB);
+        board.addBox(hexagoneBoxPlaced6,botRB);
+        hexagoneBoxPlaced5.setHeightBamboo(2);
+        //planter 2 bambous rouges
+        botRB.objectives.add(gestionObjectives.getJardinierObjectifs().get(12));
+        //manger 2 verts
+        botRB.objectives.add(gestionObjectives.getPandaObjectifs().get(0));
+        //on suppose que sa main est pleine avec d'autres objectis parcelles
+        botRB.objectivesInHand = 5;
+
+        //le bot doit manger le bambou vert en [-1,1,0]
+        botRB.launchAction("test");
+        assertEquals(0, hexagoneBoxPlaced4.getHeightBamboo());
+        //le bot doit faire pousser les bambous rouges
+        botRB.launchAction("test");
+        botRB.resetPossibleAction();
+        assertEquals(3, hexagoneBoxPlaced5.getHeightBamboo());
+        botRB.launchAction("test");;
+        botRB.resetPossibleAction();
+        assertEquals(2, hexagoneBoxPlaced2.getHeightBamboo());
+        botRB.launchAction("test");;
+        botRB.resetPossibleAction();
+        assertEquals(4, hexagoneBoxPlaced5.getHeightBamboo());
+        botRB.launchAction("test");
+        botRB.resetPossibleAction();
+        assertEquals(3, hexagoneBoxPlaced2.getHeightBamboo());
+    }
 }

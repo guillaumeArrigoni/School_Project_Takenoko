@@ -75,14 +75,14 @@ On peut cependant noter que même lors de la réalisation de parties avec le Bot
   
 3 - Processus
 Qui est responsable de quoi / qui a fait quoi ?
-Loris :
+- Loris :
     - La classe MétéoDice
     - La classe Objective et ses classes "enfants" 
     - La classe Pattern et ses classes "enfants"
     - La classe TypeObjective
     - La classe GestionObjectives
     - Les tests de ces classes
-Guillaume :
+- Guillaume :
     - La classe Board
     - La classe HexagoneBox
     - La classe HexagoneBoxPlaced

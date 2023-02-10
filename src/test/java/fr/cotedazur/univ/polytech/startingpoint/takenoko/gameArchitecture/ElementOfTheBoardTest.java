@@ -47,9 +47,9 @@ class ElementOfTheBoardTest {
         newBoxNumber = new ArrayList<>(Arrays.asList(1,2));
         newBambooNumber = new ArrayList<>(Arrays.asList(2,3));
         newBoxValue = new ArrayList<>(Arrays.asList(
-                new HexagoneBox(Color.Vert, Special.Classique),
-                new HexagoneBox(Color.Vert,Special.Protéger)));
-        newBambooValue = new ArrayList<>(Arrays.asList(Color.Jaune,Color.Rouge));
+                new HexagoneBox(Color.VERT, Special.CLASSIQUE),
+                new HexagoneBox(Color.VERT,Special.PROTEGER)));
+        newBambooValue = new ArrayList<>(Arrays.asList(Color.JAUNE,Color.ROUGE));
         elementOfTheBoardClassic = new ElementOfTheBoard(loggerSevere);
         elementOfTheBoardNewBox = new ElementOfTheBoard(true,newBoxNumber,newBoxValue,loggerSevere);
         elementOfTheBoardNewColor = new ElementOfTheBoard(newBambooNumber,newBambooValue,true,loggerSevere);
@@ -141,7 +141,7 @@ class ElementOfTheBoardTest {
     @Test
     void testExceptionTwoListsOfDifferentSize(){
         ListOfDifferentSize exception = assertThrows(ListOfDifferentSize.class, () -> {
-            elementOfTheBoardClassic.checkForThrowing_ListOfDifferentSize_Exception(newBoxValue.size(),new ArrayList<>(Arrays.asList(1)).size());
+            elementOfTheBoardClassic.checkForThrowingListOfDifferentSizeException(newBoxValue.size(),new ArrayList<>(Arrays.asList(1)).size());
         });
     }
 }

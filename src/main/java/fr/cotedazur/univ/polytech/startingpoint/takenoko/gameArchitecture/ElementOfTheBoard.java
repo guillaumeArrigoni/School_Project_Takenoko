@@ -19,29 +19,29 @@ public class ElementOfTheBoard {
     protected StackOfBox stackOfBox;
     protected LoggerSevere loggerSevere;
     protected final HashMap<Color,Integer> defaultInstructionBamboo = new HashMap<Color,Integer>() {{
-        put(Color.Vert, 36);
-        put(Color.Jaune, 30);
-        put(Color.Rouge, 24);
+        put(Color.VERT, 36);
+        put(Color.JAUNE, 30);
+        put(Color.ROUGE, 24);
     }};
     protected final HashMap<HexagoneBox,Integer> defaultInstructionBox = new HashMap<HexagoneBox,Integer>() {{
-        put(new HexagoneBox(Color.Vert,Special.Classique),6);
-        put(new HexagoneBox(Color.Vert,Special.Engrais),1);
-        put(new HexagoneBox(Color.Vert,Special.Protéger),2);
-        put(new HexagoneBox(Color.Vert,Special.SourceEau),2);
-        put(new HexagoneBox(Color.Jaune,Special.Classique),6);
-        put(new HexagoneBox(Color.Jaune,Special.Engrais),1);
-        put(new HexagoneBox(Color.Jaune,Special.Protéger),1);
-        put(new HexagoneBox(Color.Jaune,Special.SourceEau),1);
-        put(new HexagoneBox(Color.Rouge,Special.Classique),6);
-        put(new HexagoneBox(Color.Rouge,Special.Engrais),1);
-        put(new HexagoneBox(Color.Rouge,Special.Protéger),1);
-        put(new HexagoneBox(Color.Rouge,Special.SourceEau),1);
+        put(new HexagoneBox(Color.VERT,Special.CLASSIQUE),6);
+        put(new HexagoneBox(Color.VERT,Special.ENGRAIS),1);
+        put(new HexagoneBox(Color.VERT,Special.PROTEGER),2);
+        put(new HexagoneBox(Color.VERT,Special.SOURCE_EAU),2);
+        put(new HexagoneBox(Color.JAUNE,Special.CLASSIQUE),6);
+        put(new HexagoneBox(Color.JAUNE,Special.ENGRAIS),1);
+        put(new HexagoneBox(Color.JAUNE,Special.PROTEGER),1);
+        put(new HexagoneBox(Color.JAUNE,Special.SOURCE_EAU),1);
+        put(new HexagoneBox(Color.ROUGE,Special.CLASSIQUE),6);
+        put(new HexagoneBox(Color.ROUGE,Special.ENGRAIS),1);
+        put(new HexagoneBox(Color.ROUGE,Special.PROTEGER),1);
+        put(new HexagoneBox(Color.ROUGE,Special.SOURCE_EAU),1);
     }};
 
     protected final HashMap<Special,Integer> defaultInstructionSpecial = new HashMap<Special,Integer>() {{
-        put(Special.Engrais, 3);
-        put(Special.SourceEau, 3);
-        put(Special.Protéger, 3);
+        put(Special.ENGRAIS, 3);
+        put(Special.SOURCE_EAU, 3);
+        put(Special.PROTEGER, 3);
     }};
 
     protected final int defaultInstructionIrrigation = 20;
@@ -63,27 +63,27 @@ public class ElementOfTheBoard {
         this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
-    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo,
-                             ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox, boolean fromBeginingBox,
+    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginningBamboo,
+                             ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox, boolean fromBeginningBox,
                                 LoggerSevere loggerSevere){
         this.loggerSevere = loggerSevere;
-        this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginingBox));
-        this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginingBamboo);
+        this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginningBox));
+        this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginningBamboo);
         this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
         this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
-    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginingBamboo,LoggerSevere loggerSevere){
+    public ElementOfTheBoard(ArrayList<Integer> listOfBambooAvailable, ArrayList<Color> listOfColor, boolean fromBeginningBamboo,LoggerSevere loggerSevere){
         this.loggerSevere = loggerSevere;
         this.stackOfBox = new StackOfBox(defaultInstructionBox);
-        this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginingBamboo);
+        this.nbOfBambooForEachColorAvailable = generateWithArrayListBasementBamboo(listOfBambooAvailable,listOfColor,fromBeginningBamboo);
         this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
         this.nbJetonSpecial = this.defaultInstructionSpecial;
     }
 
-    public ElementOfTheBoard(boolean fromBeginingBox,ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox,LoggerSevere loggerSevere){
+    public ElementOfTheBoard(boolean fromBeginningBox,ArrayList<Integer> listOfBoxAvailable, ArrayList<HexagoneBox> listOfBox,LoggerSevere loggerSevere){
         this.loggerSevere = loggerSevere;
-        this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginingBox));
+        this.stackOfBox = new StackOfBox(generateWithArrayListBasementBox(listOfBoxAvailable,listOfBox,fromBeginningBox));
         this.nbOfBambooForEachColorAvailable = defaultInstructionBamboo;
         this.nbIrrigationAvailable = this.defaultInstructionIrrigation;
         this.nbJetonSpecial = this.defaultInstructionSpecial;
@@ -156,13 +156,13 @@ public class ElementOfTheBoard {
      * Method use to launch creation of box instruction with list of Box
      * @param listOfNumberToCreate
      * @param listBox
-     * @param fromBegining : true if the default instruction are not used
+     * @param fromBeginning : true if the default instruction are not used
      * @return
      */
     private HashMap<HexagoneBox, Integer> generateWithArrayListBasementBox(ArrayList<Integer> listOfNumberToCreate,
-                                                                           ArrayList<HexagoneBox> listBox, boolean fromBegining) {
+                                                                           ArrayList<HexagoneBox> listBox, boolean fromBeginning) {
         HashMap<HexagoneBox,Integer> instruction = defaultInstructionBox;
-        instruction = getColorIntegerHashMap(listOfNumberToCreate, listBox, fromBegining, instruction);
+        instruction = getColorIntegerHashMap(listOfNumberToCreate, listBox, fromBeginning, instruction);
         return instruction;
     }
 
@@ -170,13 +170,13 @@ public class ElementOfTheBoard {
      * Method use to launch creation of bamboo instruction with list of Color
      * @param listOfNumberToCreate
      * @param listColor
-     * @param fromBegining : true if the default instruction are not used
+     * @param fromBeginning : true if the default instruction are not used
      * @return
      */
     private HashMap<Color, Integer> generateWithArrayListBasementBamboo(ArrayList<Integer> listOfNumberToCreate,
-                                                                        ArrayList<Color> listColor, boolean fromBegining) {
+                                                                        ArrayList<Color> listColor, boolean fromBeginning) {
         HashMap<Color,Integer> instruction = defaultInstructionBamboo;
-        instruction = getColorIntegerHashMap(listOfNumberToCreate, listColor, fromBegining, instruction);
+        instruction = getColorIntegerHashMap(listOfNumberToCreate, listColor, fromBeginning, instruction);
         return instruction;
     }
 
@@ -184,15 +184,15 @@ public class ElementOfTheBoard {
      * Method use to handle exception if the list don't have the same size, and launch the generation of the instruction
      * @param listOfNumberToCreate
      * @param listKey
-     * @param fromBegining : true if the default instruction are not used
+     * @param fromBeginning : true if the default instruction are not used
      * @param instruction
      * @return
      * @param <T>
      */
-    private <T> HashMap<T, Integer> getColorIntegerHashMap(ArrayList<Integer> listOfNumberToCreate, ArrayList<T> listKey, boolean fromBegining, HashMap<T, Integer> instruction) {
+    private <T> HashMap<T, Integer> getColorIntegerHashMap(ArrayList<Integer> listOfNumberToCreate, ArrayList<T> listKey, boolean fromBeginning, HashMap<T, Integer> instruction) {
         try {
-            checkForThrowing_ListOfDifferentSize_Exception(listKey.size(), listOfNumberToCreate.size());
-            if (fromBegining){
+            checkForThrowingListOfDifferentSizeException(listKey.size(), listOfNumberToCreate.size());
+            if (fromBeginning){
                 instruction = new HashMap<>();
             }
             instruction = generateWithArrayList(instruction, listOfNumberToCreate, listKey);
@@ -214,7 +214,7 @@ public class ElementOfTheBoard {
      * @param size2
      * @throws ListOfDifferentSize
      */
-    protected void checkForThrowing_ListOfDifferentSize_Exception(int size1,int size2) throws ListOfDifferentSize {
+    protected void checkForThrowingListOfDifferentSizeException(int size1, int size2) throws ListOfDifferentSize {
         if (size1 != size2) {
             throw new ListOfDifferentSize(size1,size2);
         }

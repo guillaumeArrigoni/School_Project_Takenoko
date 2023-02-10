@@ -64,14 +64,14 @@ class BoardTest {
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true));
         random = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
-        vert01 = new HexagoneBoxPlaced(0,1,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        vert02 = new HexagoneBoxPlaced(-1,1,0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        vert07 = new HexagoneBoxPlaced(-1,2,-1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        jaune03 = new HexagoneBoxPlaced(-1,0,1, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        jaune08 = new HexagoneBoxPlaced(-2,2,0, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        rouge09Protected = new HexagoneBoxPlaced(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters,board);
-        vert18Engrais = new HexagoneBoxPlaced(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board);
-        notPlacedInBoard = new HexagoneBoxPlaced(1,1,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        vert01 = new HexagoneBoxPlaced(0,1,-1, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        vert02 = new HexagoneBoxPlaced(-1,1,0, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        vert07 = new HexagoneBoxPlaced(-1,2,-1, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        jaune03 = new HexagoneBoxPlaced(-1,0,1, Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        jaune08 = new HexagoneBoxPlaced(-2,2,0, Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        rouge09Protected = new HexagoneBoxPlaced(-2,1,1, Color.ROUGE, Special.PROTEGER, retrieveBoxIdWithParameters,board);
+        vert18Engrais = new HexagoneBoxPlaced(0,2,-2,Color.VERT,Special.ENGRAIS,retrieveBoxIdWithParameters,board);
+        notPlacedInBoard = new HexagoneBoxPlaced(1,1,-2,Color.VERT,Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
         bot = new BotRandom("bot",board,new Random(),gestionObjectives,retrieveBoxIdWithParameters,new HashMap<>(),logInfoDemo);
         board.addBox(vert01,bot);
         board.addBox(vert02,bot);
@@ -106,11 +106,11 @@ class BoardTest {
         ArrayList<Integer> listHeight = new ArrayList<>(Arrays.asList(2,3,1,0,0,3));
         setupHeight(listHeight);
         return Stream.of(
-                Arguments.of(vert01, listHeight.get(0)-1, Color.Vert,1),
-                Arguments.of(vert02, listHeight.get(1)-1, Color.Vert,2),
-                Arguments.of(jaune03, listHeight.get(2)-1, Color.Jaune,1),
-                Arguments.of(vert07, listHeight.get(3), Color.Vert,2),
-                Arguments.of(rouge09Protected, listHeight.get(5), Color.Rouge,0)
+                Arguments.of(vert01, listHeight.get(0)-1, Color.VERT,1),
+                Arguments.of(vert02, listHeight.get(1)-1, Color.VERT,2),
+                Arguments.of(jaune03, listHeight.get(2)-1, Color.JAUNE,1),
+                Arguments.of(vert07, listHeight.get(3), Color.VERT,2),
+                Arguments.of(rouge09Protected, listHeight.get(5), Color.ROUGE,0)
         );
     }
 

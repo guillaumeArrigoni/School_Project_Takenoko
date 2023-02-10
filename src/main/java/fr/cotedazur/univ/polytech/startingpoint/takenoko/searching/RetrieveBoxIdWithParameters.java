@@ -83,10 +83,10 @@ public class RetrieveBoxIdWithParameters {
         listId.remove(Integer.valueOf(id));
         listId.add(id);
         BoxSpeciality.put(speciality,listId);
-        if (speciality != Special.Classique){
-            ArrayList<Integer> listIdToDelete = BoxSpeciality.get(Special.Classique);
+        if (speciality != Special.CLASSIQUE){
+            ArrayList<Integer> listIdToDelete = BoxSpeciality.get(Special.CLASSIQUE);
             listIdToDelete.remove(Integer.valueOf(id));
-            BoxSpeciality.put(Special.Classique,listIdToDelete);
+            BoxSpeciality.put(Special.CLASSIQUE,listIdToDelete);
         }
     }
 

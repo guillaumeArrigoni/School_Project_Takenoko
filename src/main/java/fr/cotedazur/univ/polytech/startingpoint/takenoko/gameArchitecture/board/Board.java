@@ -183,7 +183,7 @@ public class Board implements Cloneable {
     public void setPandaCoords(int[] newCoords, Bot bot) {
         this.pandaCoords = newCoords;
         HexagoneBoxPlaced box = getBoxWithCoordinates(newCoords);
-        if (box.getSpecial()!=Special.Protéger && box.getHeightBamboo()>0) {
+        if (box.getSpecial()!=Special.PROTEGER && box.getHeightBamboo()>0) {
             Optional<Color> bambooEatedColor = box.eatBamboo();
             if (bambooEatedColor.isPresent()){
                 bot.addBambooEaten(bambooEatedColor.get());
@@ -309,7 +309,7 @@ public class Board implements Cloneable {
      * Method use to initialize the lake and thus the board
      */
     private void generateLac(){
-        HexagoneBoxPlaced lac = new HexagoneBoxPlaced(0,0,0, Color.Lac, Special.Classique, retrieveBoxIdWithParameters,this);
+        HexagoneBoxPlaced lac = new HexagoneBoxPlaced(0,0,0, Color.LAC, Special.CLASSIQUE, retrieveBoxIdWithParameters,this);
         this.numberBoxPlaced = 1;
         for (int i=1;i<7;i++){
             this.AvailableBox.add(lac.getAdjacentBoxOfIndex(i));

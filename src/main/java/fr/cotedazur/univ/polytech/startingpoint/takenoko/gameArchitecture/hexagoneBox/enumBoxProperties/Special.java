@@ -4,10 +4,10 @@ public enum Special {
     /**
      * The different special particularity of the box
      */
-    Classique(0, "classic"),
-    SourceEau(1,"water's source"),
-    Engrais(2,"fertilizer"),
-    Protéger(3,"protected");
+    CLASSIQUE(0, "classic"),
+    SOURCE_EAU(1,"water's source"),
+    ENGRAIS(2,"fertilizer"),
+    PROTEGER(3,"protected");
 
     private final int indice;
 

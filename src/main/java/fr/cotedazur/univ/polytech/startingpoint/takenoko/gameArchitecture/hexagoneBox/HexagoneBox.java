@@ -15,7 +15,7 @@ public class HexagoneBox implements Comparable<HexagoneBox> {
     public HexagoneBox (Color color, Special special){
         this.color = color;
         this.special = special;
-        this.irrigate = special==Special.SourceEau;
+        this.irrigate = special==Special.SOURCE_EAU;
     }
 
 

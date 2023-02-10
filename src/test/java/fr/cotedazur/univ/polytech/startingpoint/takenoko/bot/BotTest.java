@@ -40,7 +40,7 @@ class BotTest {
     //GetMovesForGardenerOrPanda
     @Test
     void getMovesForGardenerOrPandaTopRight() {
-        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1,-1,0,Color.Jaune, Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1,-1,0,Color.JAUNE, Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
         board.addBox(hexagoneBoxPlaced,bot);
         assertEquals(1,Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
         int[] coords = Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).get(0);
@@ -51,7 +51,7 @@ class BotTest {
 
     @Test
     void getMovesForGardenerOrPandaRight() {
-        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1,0,-1,Color.Jaune, Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1,0,-1,Color.JAUNE, Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
         board.addBox(hexagoneBoxPlaced,bot);
         assertEquals(1,Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
         int[] coords = Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).get(0);
@@ -62,7 +62,7 @@ class BotTest {
 
     @Test
     void getMovesForGardenerOrPandaBottomRight() {
-        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(0,1,-1,Color.Jaune, Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(0,1,-1,Color.JAUNE, Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
         board.addBox(hexagoneBoxPlaced,bot);
         assertEquals(1,Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
         int[] coords = Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).get(0);
@@ -73,7 +73,7 @@ class BotTest {
 
     @Test
     void getMovesForGardenerOrPandaBottomLeft() {
-        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(-1,1,0,Color.Jaune, Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(-1,1,0,Color.JAUNE, Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
         board.addBox(hexagoneBoxPlaced,bot);
         assertEquals(1,Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
         int[] coords = Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).get(0);
@@ -84,7 +84,7 @@ class BotTest {
 
     @Test
     void getMovesForGardenerOrPandaLeft() {
-        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(-1,0,1,Color.Jaune, Special.Classique,retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(-1,0,1,Color.JAUNE, Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
         board.addBox(hexagoneBoxPlaced,bot);
         assertEquals(1,Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
         int[] coords = Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).get(0);
@@ -95,7 +95,7 @@ class BotTest {
 
     @Test
     void getMovesForGardenerOrPandaTopLeft() {
-        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(0,-1,1,Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(0,-1,1,Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
         board.addBox(hexagoneBoxPlaced,bot);
         assertEquals(1,Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).size());
         int[] coords = Bot.possibleMoveForGardenerOrPanda(board,board.getGardenerCoords()).get(0);
@@ -106,12 +106,12 @@ class BotTest {
 
     @Test
     void getMovesForGardenerOrPandaGlobal() {
-        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1,-1,0,Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        HexagoneBoxPlaced hexagoneBoxPlaced2 = new HexagoneBoxPlaced(1,0,-1,Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        HexagoneBoxPlaced hexagoneBoxPlaced3 = new HexagoneBoxPlaced(0,1,-1,Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1,1,0,Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1,0,1,Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0,-1,1,Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced = new HexagoneBoxPlaced(1,-1,0,Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced2 = new HexagoneBoxPlaced(1,0,-1,Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced3 = new HexagoneBoxPlaced(0,1,-1,Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced4 = new HexagoneBoxPlaced(-1,1,0,Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced5 = new HexagoneBoxPlaced(-1,0,1,Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        HexagoneBoxPlaced hexagoneBoxPlaced6 = new HexagoneBoxPlaced(0,-1,1,Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
         board.addBox(hexagoneBoxPlaced,bot);
         board.addBox(hexagoneBoxPlaced2,bot);
         board.addBox(hexagoneBoxPlaced3,bot);

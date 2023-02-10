@@ -51,7 +51,7 @@ public class BoardSimulation extends Board {
         super.pandaCoords = board.getPandaCoords().clone();
         BotRandom bot = new BotRandom("bot",board,new Random(),new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true)),retrieveBoxIdWithParameters,new HashMap<>(),new LogInfoDemo(true));
         for (HexagoneBoxPlaced box : board.placedBox.values()) {
-            if (box.getColor()== Color.Lac){
+            if (box.getColor()== Color.LAC){
                 continue;
             }
             super.addBox(new HexagoneBoxSimulation(

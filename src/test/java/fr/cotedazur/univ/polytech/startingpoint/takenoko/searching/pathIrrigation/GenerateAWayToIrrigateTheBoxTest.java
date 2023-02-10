@@ -8,14 +8,12 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.crest.CrestNo
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.BoardSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveSimulation;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,9 +48,9 @@ class GenerateAWayToIrrigateTheBoxTest {
         board = new Board(retrieveBoxIdWithParameters,false,1,1, new LoggerSevere(true));
         boardSimulation = new BoardSimulation(board);
         retrieveSimulation = boardSimulation.getRetrieveBoxIdWithParameters();
-        hexagoneBoxPlaced1 = new HexagoneBoxSimulation(-1,1,0, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
-        hexagoneBoxPlaced2 = new HexagoneBoxSimulation(0,1,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
-        hexagoneBoxPlaced3 = new HexagoneBoxSimulation(-1,2,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced1 = new HexagoneBoxSimulation(-1,1,0, Color.VERT, Special.CLASSIQUE,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced2 = new HexagoneBoxSimulation(0,1,-1, Color.VERT, Special.CLASSIQUE,retrieveSimulation,boardSimulation);
+        hexagoneBoxPlaced3 = new HexagoneBoxSimulation(-1,2,-1, Color.VERT, Special.CLASSIQUE,retrieveSimulation,boardSimulation);
         bot = new BotRandom("bot",board,new Random(),new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true)),retrieveBoxIdWithParameters,new HashMap<>(),new LogInfoDemo(true));
         boardSimulation.addBox(hexagoneBoxPlaced1,bot);
         boardSimulation.addBox(hexagoneBoxPlaced2,bot);

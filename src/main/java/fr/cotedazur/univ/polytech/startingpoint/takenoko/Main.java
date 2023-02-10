@@ -67,9 +67,9 @@ public class Main {
                 Random random = new Random();
                 GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
                 gestionnaire.initialize(
-                        gestionnaire.ListOfObjectiveParcelleByDefault(),
-                        gestionnaire.ListOfObjectiveJardinierByDefault(),
-                        gestionnaire.ListOfObjectivePandaByDefault()
+                        gestionnaire.listOfObjectiveParcelleByDefault(),
+                        gestionnaire.listOfObjectiveJardinierByDefault(),
+                        gestionnaire.listOfObjectivePandaByDefault()
                 );
                 Bot bot1 = new BotDFS("BotDFS",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 Bot bot2 = new BotRuleBased("BotRB",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
@@ -105,9 +105,9 @@ public class Main {
                     Board board = new Board(retrieving, 1, 2,loggerSevere);
                     GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
                     gestionnaire.initialize(
-                            gestionnaire.ListOfObjectiveParcelleByDefault(),
-                            gestionnaire.ListOfObjectiveJardinierByDefault(),
-                            gestionnaire.ListOfObjectivePandaByDefault()
+                            gestionnaire.listOfObjectiveParcelleByDefault(),
+                            gestionnaire.listOfObjectiveJardinierByDefault(),
+                            gestionnaire.listOfObjectivePandaByDefault()
                     );
                     Bot bot1 = new BotDFS("BotDFS1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                     Bot bot2 = new BotDFS("BotDFS2",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);

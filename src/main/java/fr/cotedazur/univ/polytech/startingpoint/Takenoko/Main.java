@@ -50,11 +50,14 @@ public class Main {
         LoggerSevere loggerSevere = new LoggerSevere(main.demo || (!main.twoThousands && !main.csv));
 
         if (main.twoThousands || main.csv) {
+            int numberOfSimulation;
             int numberOfGame = 0;
             int numberOfPlayer = 4;
             Log log = new Log();
             log.logInit(numberOfPlayer,logInfoStats);
-            for (int i = 0; i < 50; i++) {
+            if (main.twoThousands) numberOfSimulation = 1000;
+            else numberOfSimulation = 100;
+            for (int i = 0; i < numberOfSimulation; i++) {
                 numberOfGame++;
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1, 2,loggerSevere);
@@ -80,7 +83,6 @@ public class Main {
                 int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore(), bot3.getScore(), bot4.getScore()};
                 log.logResult(winner, scoreForBots);
             }
-
             ArrayList<Float> winPercentageForBots = new ArrayList<>();
             ArrayList<Float> meanScoreForBots = new ArrayList<>();
 
@@ -88,8 +90,48 @@ public class Main {
                 winPercentageForBots.add(log.getWinPercentageForIndex(i));
                 meanScoreForBots.add(log.getMeanScoreForIndex(i));
             }
-
             log.printLog(numberOfPlayer, winPercentageForBots, meanScoreForBots);
+
+            if (main.twoThousands) {
+                log = new Log();
+                log.logInit(numberOfPlayer,logInfoStats);
+                for (int i = 0; i < numberOfSimulation; i++) {
+                    numberOfGame++;
+                    RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
+                    Board board = new Board(retrieving, 1, 2,loggerSevere);
+                    GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
+                    gestionnaire.initialize(
+                            gestionnaire.ListOfObjectiveParcelleByDefault(),
+                            gestionnaire.ListOfObjectiveJardinierByDefault(),
+                            gestionnaire.ListOfObjectivePandaByDefault()
+                    );
+                    Bot bot1 = new BotDFS("BotDFS1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                    Bot bot2 = new BotDFS("BotDFS2",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                    Bot bot3 = new BotDFS("BotDFS3",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                    Bot bot4 = new BotDFS("BotDFS4",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+
+                    List<Bot> playerList = new ArrayList<>();
+                    playerList.add(bot1);
+                    playerList.add(bot2);
+                    playerList.add(bot3);
+                    playerList.add(bot4);
+                    Game game = new Game(playerList,board,logDemo);
+                    int winner = game.play(gestionnaire, "twoThousands");
+
+                    int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore(), bot3.getScore(), bot4.getScore()};
+                    log.logResult(winner, scoreForBots);
+
+                }
+                winPercentageForBots = new ArrayList<>();
+                meanScoreForBots = new ArrayList<>();
+
+                for (int i = 0; i < numberOfPlayer; i++) {
+                    winPercentageForBots.add(log.getWinPercentageForIndex(i));
+                    meanScoreForBots.add(log.getMeanScoreForIndex(i));
+                }
+
+                log.printLog(numberOfPlayer, winPercentageForBots, meanScoreForBots);
+            }
 
             if (main.csv) {
                 //creation of a writer for csv

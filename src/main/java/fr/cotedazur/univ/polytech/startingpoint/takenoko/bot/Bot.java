@@ -9,6 +9,7 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.DeletingBotBambooException;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.TypeObjective;
@@ -335,7 +336,9 @@ public abstract class Bot {
                 bambooEaten.put(color, nbBambooOfOneColorAte - 1);
                 try {
                     board.getElementOfTheBoard().giveBackBamboo(color);
-                } catch (TakenokoException ignored){}
+                } catch (TakenokoException e){
+                    new LoggerSevere(true).logErrorTitle(e);
+                }
             } else {
                 errorImpossibleToDeleteTheseBamboo.add(color);
             }

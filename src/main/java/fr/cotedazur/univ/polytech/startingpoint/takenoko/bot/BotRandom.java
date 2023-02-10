@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
@@ -8,6 +9,7 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathirrigation.GenerateAWayToIrrigateTheBox;
@@ -163,7 +165,9 @@ public class BotRandom extends Bot {
                         temp = new GenerateAWayToIrrigateTheBox(box);
                         if (temp.getPathToIrrigation().size() <= this.nbIrrigation)
                             tmp.add(temp);
-                    } catch (Exception ignored) {}
+                    } catch (TakenokoException | CloneNotSupportedException e) {
+                        new LoggerSevere(true).logErrorTitle(e);
+                    }
                 }
             }
             placeIrrigation(tmp);

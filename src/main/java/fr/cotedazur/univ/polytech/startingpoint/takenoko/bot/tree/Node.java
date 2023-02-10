@@ -6,6 +6,7 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.PossibleActions;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathirrigation.GenerateAWayToIrrigateTheBox;
 
@@ -181,7 +182,9 @@ public class Node {
                     temp = new GenerateAWayToIrrigateTheBox(box);
                     if (temp.getPathToIrrigation().size() <= this.getValue().getBotSimulator().getNbIrrigation())
                         irrigationInstructions.add(new ActionLogIrrigation(PossibleActions.PLACE_IRRIGATION, temp.getPathToIrrigation()));
-                } catch (Exception ignored) {}
+                } catch (Exception e) {
+                    new LoggerSevere(true).logErrorTitle(e);
+                }
             }
         }
         return irrigationInstructions;

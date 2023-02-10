@@ -13,7 +13,7 @@ public class LoggerSevere extends LoggerMain {
         }
     }
 
-    public void logErrorTitle(TakenokoException e){
-        super.addLog("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
+    public void logErrorTitle(Exception e){
+        super.addLog("\n  -> An error has occurred : " + e.getMessage() + "\n");
     }
 }

@@ -19,6 +19,7 @@
 	- Lors du retrait de bambou, c'est à dire lorsque le panda mange un bambou (la hauteur ne peut pas être négative, la tuile ne doit pas contenir de jeton "protection")
 
 **Les logs :** 
+
 Toutes les classes relative au log sont accessibles dans le package "logger" à la racine du package "takenoko". Ce package contient 6 classes :
 
 -   LoggerMain : classe principale, permettant la création du logger, de définir à l'aide de setter ses attributs et de créer un log.
@@ -30,7 +31,8 @@ Toutes les classes relative au log sont accessibles dans le package "logger" à 
     -   LoggerError : permet d'afficher toutes les Exceptions "majeures", ne pouvant pas, ou n'ayant pas été "catch". 
 Les différents logger peuvent tous être paramétrés pour s'afficher ou non à l'aide du paramètre "IsOn" déclaré à la création du log. Ainsi, par exemple, la simulation "--thousand" affichera uniquement le logger LogInfoStats.
 
-**Les statistiques en CSV :** 
+**Les statistiques en CSV :**
+
 La simulation "--csv" permet de lancer 100 parties et d'enregistrer les résultats dans un fichier csv. Ce fichier (stats.csv) contient le pourcentage de victoire de chaque bot, son score moyen ainsi que le nombre de parties qu'il a joué. 
 Tout cela est fait à l'aide de la classe CSVHandler et l'on procède ainsi :
 
@@ -39,6 +41,7 @@ Tout cela est fait à l'aide de la classe CSVHandler et l'on procède ainsi :
 -   Sinon, on lit le contenu du fichier, on en crée un autre temporaire (temp_stats.csv), dedans on écrit le résultat du calcul des nouvelles statistiques de chaque bot en prenant en comtpe le nombre de parties jouées, on supprime ensuite "stats.csv" et on renomme "temps_stats.csv" en "stats.csv".
 
 **Bot spécifique et analyse :** 
+
 Le bot spécifique demandé est capable de :
 -   Récupérer un maximum de bambous, même s'il n'a pas de cartes de la couleur correspondante
 -   Essayer d'avoir toujours 5 cartes objectifs en sa possession

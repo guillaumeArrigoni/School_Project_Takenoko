@@ -96,7 +96,7 @@ public class BotRuleBased extends BotRandom {
                     int[] coordLastMovement = bot.getLastCoordPanda();
                     RetrieveBoxIdWithParameters r = board.getRetrieveBoxIdWithParameters();
                     Color color = board.getPlacedBox().get(HexagoneBox.generateID(coordLastMovement)).getColor();
-                    ArrayList<Integer> listBambooColor = r.getAllIdThatCompleteCondition(Optional.of(new ArrayList<>(Arrays.asList(color))),Optional.empty(),Optional.of(new ArrayList<>(Arrays.asList(1,2,3,4))),Optional.of(new ArrayList<>(Arrays.asList(Special.Classique,Special.Protéger,Special.Engrais))));
+                    ArrayList<Integer> listBambooColor = r.getAllIdThatCompleteCondition(Optional.of(new ArrayList<>(Arrays.asList(color))),Optional.empty(),Optional.of(new ArrayList<>(Arrays.asList(1,2,3,4))),Optional.of(new ArrayList<>(Arrays.asList(Special.CLASSIQUE,Special.PROTEGER,Special.ENGRAIS))));
                     for (int[] coord : Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords())){
                         if (listBambooColor.contains(HexagoneBox.generateID(coord))){
                             board.setPandaCoords(coord, this);

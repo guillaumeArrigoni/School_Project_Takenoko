@@ -29,15 +29,12 @@ import java.util.*;
 
 public class Main {
     //parameters for JCommander
-    /*@Parameter(names={"--2thousands"}, arity=0)
+    @Parameter(names={"--2thousands"}, arity=0)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
-    boolean csv;*/
-    boolean twoThousands = true;
-    boolean demo = false;
-    boolean csv = true;
+    boolean csv;
 
     public static void main(String... args) throws IOException, CloneNotSupportedException, CsvException {
         //detection of arg for JCommander

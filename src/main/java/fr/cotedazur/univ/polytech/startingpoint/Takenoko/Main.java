@@ -32,12 +32,16 @@ import java.util.*;
 
 public class Main {
     //parameters for JCommander
-    @Parameter(names={"--2thousands"}, arity=0)
+    /*@Parameter(names={"--2thousands"}, arity=0)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
-    boolean csv;
+    boolean csv;*/
+
+    boolean twoThousands = true;
+    boolean demo = false;
+    boolean csv = true;
 
     public static void main(String... args) throws IOException, CloneNotSupportedException, CsvException {
         //detection of arg for JCommander
@@ -56,7 +60,7 @@ public class Main {
             int numberOfPlayer = 4;
             Log log = new Log();
             log.logInit(numberOfPlayer,logInfoStats);
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 100; i++) {
                 numberOfGame++;
                 RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
                 Board board = new Board(retrieving, 1, 2,loggerSevere);
@@ -77,6 +81,7 @@ public class Main {
                 playerList.add(bot3);
                 playerList.add(bot4);
                 Game game = new Game(playerList,board,logDemo);
+                ((BotRuleBased) bot2).setGame(game);
                 int winner = game.play(gestionnaire, "twoThousands");
 
                 int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore(), bot3.getScore(), bot4.getScore()};

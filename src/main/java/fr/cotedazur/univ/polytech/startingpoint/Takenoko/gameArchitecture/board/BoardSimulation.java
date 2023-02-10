@@ -1,6 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoard;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardSimulation;
@@ -8,7 +11,11 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class BoardSimulation extends Board {
 
@@ -43,6 +50,7 @@ public class BoardSimulation extends Board {
         super.crestGestionnary = this.crestGestionnarySimulation;
         super.gardenerCoords = board.getGardenerCoords().clone();
         super.pandaCoords = board.getPandaCoords().clone();
+        BotRandom bot = new BotRandom("bot",board,new Random(),new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true)),retrieveBoxIdWithParameters,new HashMap<>(),new LogInfoDemo(true));
         for (HexagoneBoxPlaced box : board.placedBox.values()) {
             if (box.getColor()== Color.Lac){
                 continue;
@@ -54,7 +62,7 @@ public class BoardSimulation extends Board {
                     box.getColor(),
                     box.getSpecial(),
                     retrieveSimulation,
-                    this));
+                    this),bot);
         }
     }
 

@@ -1,5 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Game;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
@@ -7,6 +8,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
@@ -21,6 +23,97 @@ public class BotRuleBased extends BotRandom {
     int currentScore;
     int irrigationInHand;
     int objectivesInHand;
+    private Game game;
+
+    private Bot getBestOpponent(){
+        int maxScore = -1;
+        Bot bestBot = game.getPlayerList().get(0);
+        for(Bot bot : game.getPlayerList()){
+            if (bot.score>maxScore){
+                maxScore = bot.score;
+                bestBot = bot;
+            }
+        }
+        return bestBot;
+    }
+
+    private TypeObjective determinateMoreProbableObj(Bot bot){
+        List<Objective> listObj = bot.getObjectives();
+        HashMap<TypeObjective,Integer> maxObj = new HashMap<>();
+        maxObj.put(TypeObjective.PARCELLE,0);
+        maxObj.put(TypeObjective.JARDINIER,0);
+        maxObj.put(TypeObjective.PANDA,0);
+        TypeObjective typeObjective = TypeObjective.PANDA;
+        for (Objective obj : listObj){
+            maxObj.put(obj.getType(),maxObj.get(obj.getType())+1);
+        }
+        int max = -1;
+        for (TypeObjective type : maxObj.keySet()){
+            if (maxObj.get(type)>max){
+                max = maxObj.get(type);
+                typeObjective = type;
+            }
+        }
+        return typeObjective;
+    }
+
+    private void sabotageObj(TypeObjective typeObjective, Bot bot){
+        switch (typeObjective){
+            case PARCELLE :
+                break;
+            case JARDINIER :
+                if (choseMoveForPanda().length != 0 && bot.getLastCoordGardener().length==3) {
+                    int[] coordLastMovement = bot.getLastCoordGardener();
+                    if (Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords()).contains(coordLastMovement)) {
+                        board.setPandaCoords(coordLastMovement, this);
+                        logInfoDemo.displayMovementPanda(this.name, board);
+                        this.possibleActions.remove(PossibleActions.MOVE_PANDA);
+                        break;
+                    } else {
+                        HexagoneBoxPlaced box = board.getPlacedBox().get(HexagoneBox.generateID(coordLastMovement));
+                        for (int[] coord : box.getAdjacentBox().values()) {
+                            int key = HexagoneBox.generateID(coord);
+                            if (board.getPlacedBox().containsKey(key) && (board.getPlacedBox().get(key).getColor() ==
+                                    board.getPlacedBox().get(HexagoneBox.generateID(coordLastMovement)).getColor()) &&
+                                    Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords()).contains(coord)) {
+                                board.setPandaCoords(coord, this);
+                                logInfoDemo.displayMovementPanda(this.name, board);
+                                this.possibleActions.remove(PossibleActions.MOVE_PANDA);
+                                break;
+                            }
+                        }
+                    }
+                }
+            case PANDA :
+                if (choseMoveForPanda().length != 0 && bot.getLastCoordPanda().length==3) {
+                    int[] coordLastMovement = bot.getLastCoordPanda();
+                    RetrieveBoxIdWithParameters r = board.getRetrieveBoxIdWithParameters();
+                    Color color = board.getPlacedBox().get(HexagoneBox.generateID(coordLastMovement)).getColor();
+                    ArrayList<Integer> listBambooColor = r.getAllIdThatCompleteCondition(Optional.of(new ArrayList<>(Arrays.asList(color))),Optional.empty(),Optional.of(new ArrayList<>(Arrays.asList(1,2,3,4))),Optional.of(new ArrayList<>(Arrays.asList(Special.Classique,Special.Protéger,Special.Engrais))));
+                    for (int[] coord : Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords())){
+                        if (listBambooColor.contains(HexagoneBox.generateID(coord))){
+                            board.setPandaCoords(coord, this);
+                            logInfoDemo.displayMovementPanda(this.name, board);
+                            this.possibleActions.remove(PossibleActions.MOVE_PANDA);
+                            break;
+                        }
+                    }
+                }
+            default :
+                if (choseMoveForPanda().length == 0 || !(this.possibleActions.contains(PossibleActions.MOVE_PANDA))) {
+                    doAction("arg");
+                } else {
+                    movePanda("arg");
+                    this.possibleActions.remove(PossibleActions.MOVE_PANDA);
+                }
+        }
+    }
+
+    private void launchSabotage(){
+        Bot bot = getBestOpponent();
+        TypeObjective typeObjective = determinateMoreProbableObj(bot);
+        sabotageObj(typeObjective,bot);
+    }
 
 
     public BotRuleBased(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, HashMap<Color,Integer> bambooEated, LogInfoDemo logInfoDemo) {
@@ -28,6 +121,10 @@ public class BotRuleBased extends BotRandom {
         this.irrigationInHand = 0;
         this.objectivesInHand = 0;
         this.currentScore = 0;
+    }
+
+    public void setGame(Game game){
+        this.game = game;
     }
 
     @Override
@@ -92,7 +189,7 @@ public class BotRuleBased extends BotRandom {
             this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
         }
         else if (choseMoveForPanda().length == 0 || !(this.possibleActions.contains(PossibleActions.MOVE_PANDA))) {
-            doAction(arg);
+            launchSabotage();
         } else {
             movePanda(arg);
             this.possibleActions.remove(PossibleActions.MOVE_PANDA);
@@ -125,6 +222,19 @@ public class BotRuleBased extends BotRandom {
             for (HexagoneBoxPlaced boxWithBamboos : hexagoneBoxWithBamboos) {
                 if (Arrays.equals(possiblePandaCoords, boxWithBamboos.getCoordinates())) {
                     return possiblePandaCoords;
+                }
+            }
+        }
+        return new int[0];
+    }
+
+    protected int[] choseMoveForGardener() {
+        List<HexagoneBoxPlaced> hexagoneBoxWithBamboos = hexagoneBoxWithBamboos();
+        List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(this.board, board.getGardenerCoords());
+        for (int[] possibleGardenerCoords : possibleMoves) {
+            for (HexagoneBoxPlaced boxWithBamboos : hexagoneBoxWithBamboos) {
+                if (Arrays.equals(possibleGardenerCoords, boxWithBamboos.getCoordinates())) {
+                    return possibleGardenerCoords;
                 }
             }
         }
@@ -177,7 +287,7 @@ public class BotRuleBased extends BotRandom {
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
-        board.addBox(placedTile);
+        board.addBox(placedTile,this);
         logInfoDemo.addLog(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
@@ -186,7 +296,7 @@ public class BotRuleBased extends BotRandom {
     @Override
     protected void moveGardener(String arg){
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
-        board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
+        board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         logInfoDemo.addLog(this.name + " a déplacé le jardinier en " + Arrays.toString(board.getGardenerCoords()));
     }
 
@@ -210,7 +320,7 @@ public class BotRuleBased extends BotRandom {
             List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
             board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         }
-        logInfoDemo.displayMovementPanda(arg,board);
+        logInfoDemo.displayMovementPanda(this.name,board);
     }
 
 

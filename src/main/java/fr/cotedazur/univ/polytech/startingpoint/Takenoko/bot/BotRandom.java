@@ -74,7 +74,7 @@ public class BotRandom extends Bot {
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0], placedTileCoords[1], placedTileCoords[2], tileToPlace, retrieveBoxIdWithParameters, board);
         //Add the tile to the board
-        board.addBox(placedTile);
+        board.addBox(placedTile,this);
         logInfoDemo.addLog(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
@@ -83,7 +83,7 @@ public class BotRandom extends Bot {
     @Override
     protected void moveGardener(String arg) {
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
-        board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
+        board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         super.logInfoDemo.displayMovementGardener(this.name,board);
     }
 

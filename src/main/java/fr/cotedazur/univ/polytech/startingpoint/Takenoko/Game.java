@@ -26,6 +26,10 @@ public class Game {
         this.logInfoDemo = logInfoDemo;
     }
 
+    public List<Bot> getPlayerList(){
+        return this.playerList;
+    }
+
     public void printBoardState(Board board) {
         logInfoDemo.printBoardState(board);
     }

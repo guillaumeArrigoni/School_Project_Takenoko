@@ -1,6 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
@@ -8,6 +11,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxSimulation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,6 +22,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,14 +60,15 @@ class GenerateOptimizePathForSeveralBoxTest {
         hexagoneBoxPlaced6 = new HexagoneBoxSimulation(-1,2,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
         hexagoneBoxPlaced7 = new HexagoneBoxSimulation(-3,2,1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
         hexagoneBoxPlaced8 = new HexagoneBoxSimulation(0,2,-2, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
-        boardSimulation.addBox(hexagoneBoxPlaced1);
-        boardSimulation.addBox(hexagoneBoxPlaced2);
-        boardSimulation.addBox(hexagoneBoxPlaced3);
-        boardSimulation.addBox(hexagoneBoxPlaced4);
-        boardSimulation.addBox(hexagoneBoxPlaced5);
-        boardSimulation.addBox(hexagoneBoxPlaced6);
-        boardSimulation.addBox(hexagoneBoxPlaced7);
-        boardSimulation.addBox(hexagoneBoxPlaced8);
+        BotRandom bot = new BotRandom("bot",board,new Random(),new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true)),retrieveBoxIdWithParameters,new HashMap<>(),new LogInfoDemo(true));
+        boardSimulation.addBox(hexagoneBoxPlaced1, bot);
+        boardSimulation.addBox(hexagoneBoxPlaced2, bot);
+        boardSimulation.addBox(hexagoneBoxPlaced3, bot);
+        boardSimulation.addBox(hexagoneBoxPlaced4, bot);
+        boardSimulation.addBox(hexagoneBoxPlaced5, bot);
+        boardSimulation.addBox(hexagoneBoxPlaced6, bot);
+        boardSimulation.addBox(hexagoneBoxPlaced7, bot);
+        boardSimulation.addBox(hexagoneBoxPlaced8, bot);
         boxToIrrigate = new ArrayList<>(Arrays.asList(hexagoneBoxPlaced8,hexagoneBoxPlaced5));
 
         generateOptimizePathForSeveralBox = new GenerateOptimizePathForSeveralBoxSimulation(boxToIrrigate);

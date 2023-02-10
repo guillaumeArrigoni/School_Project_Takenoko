@@ -1,5 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation;
 
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.crest.CrestNotRegistered;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
@@ -9,12 +12,11 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveSimulation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 public class GenerateAWayToIrrigateTheBox {
 
@@ -91,8 +93,9 @@ public class GenerateAWayToIrrigateTheBox {
         setupClosestCrest();
         this.boardSimulation = new BoardSimulation((Board) box.getBoard().clone());
         this.crestGestionnarySimulation = new CrestGestionnarySimulation(boardSimulation.getCrestGestionnary());
+        BotRandom bot = new BotRandom("bot",boardSimulation,new Random(),new GestionObjectives(boardSimulation,new RetrieveBoxIdWithParameters(),new LoggerError(true)),new RetrieveBoxIdWithParameters(),new HashMap<>(),new LogInfoDemo(true));
         if (!this.boardSimulation.getPlacedBox().containsKey(box.getId())){
-            boardSimulation.addBox(box);
+            boardSimulation.addBox(box,bot);
         }
         setupPath(closestCrestToIrrigatedOfTheBox);
     }

@@ -4,6 +4,7 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.ElementOfTheBoardCheated;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
@@ -44,6 +45,7 @@ class BoardTest {
     private static HexagoneBoxPlaced notPlacedInBoard;
     private static ElementOfTheBoardCheated elementOfTheBoardCheated;
     private static LogInfoDemo logInfoDemo;
+    private static Bot bot;
     /**
      *                  12     13      14
      *              11    4         5      15
@@ -71,12 +73,14 @@ class BoardTest {
         rouge09Protected = new HexagoneBoxPlaced(-2,1,1, Color.Rouge, Special.Protéger, retrieveBoxIdWithParameters,board);
         vert18Engrais = new HexagoneBoxPlaced(0,2,-2,Color.Vert,Special.Engrais,retrieveBoxIdWithParameters,board);
         notPlacedInBoard = new HexagoneBoxPlaced(1,1,-2,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        board.addBox(vert01);
-        board.addBox(vert02);
-        board.addBox(vert07);
-        board.addBox(jaune03);
-        board.addBox(jaune08);
-        board.addBox(rouge09Protected);
+        bot = new BotRandom("bot",board,new Random(),new GestionObjectives(board,retrieveBoxIdWithParameters,new LoggerError(true)),retrieveBoxIdWithParameters,new HashMap<>(),new LogInfoDemo(true));
+        board.addBox(vert01, bot);
+        board.addBox(vert02, bot);
+        board.addBox(vert07, bot);
+        board.addBox(jaune03, bot);
+        board.addBox(jaune08, bot);
+        board.addBox(rouge09Protected, bot);
+        bot = new BotRandom("bot",board, new Random(),gestionObjectives,retrieveBoxIdWithParameters, new HashMap<>(),logInfoDemo);
     }
 
     private static void setupHeight(ArrayList<Integer> listHeight){
@@ -144,7 +148,7 @@ class BoardTest {
     @Test
     void testGetNumberBoxPlaced() {
         assertEquals(7,board.getNumberBoxPlaced());
-        board.addBox(vert18Engrais);
+        board.addBox(vert18Engrais, bot);
         assertEquals(8,board.getNumberBoxPlaced());
     }
 
@@ -154,7 +158,7 @@ class BoardTest {
                                            ArrayList<Integer> differentBambooHeightInTheBox1_2_3_7_8_9,
                                            ArrayList<HexagoneBoxPlaced> listOfBox) {
         int[] coords = box.getCoordinates();
-        board.setGardenerCoords(coords);
+        board.setGardenerCoords(coords, bot);
         System.out.println(board.getElementOfTheBoard().getNbOfBambooForEachColorAvailable());
         for (int i =0;i<differentBambooHeightInTheBox1_2_3_7_8_9.size();i++){
             assertEquals(differentBambooHeightInTheBox1_2_3_7_8_9.get(i),listOfBox.get(i).getHeightBamboo());
@@ -165,7 +169,7 @@ class BoardTest {
     @MethodSource("provideGardenerMoveAndChecking")
     void testSet_AND_GetGardenerCoords(HexagoneBoxPlaced box) {
         int[] coords = box.getCoordinates();
-        board.setGardenerCoords(coords);
+        board.setGardenerCoords(coords, bot);
         assertEquals(coords,board.getGardenerCoords());
     }
 

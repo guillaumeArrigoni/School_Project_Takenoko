@@ -74,7 +74,7 @@ public class BotDFS extends Bot{
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
-        board.addBox(placedTile);
+        board.addBox(placedTile,this);
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
         super.logInfoDemo.displayPlacementBox(this.name,placedTile);
@@ -82,7 +82,7 @@ public class BotDFS extends Bot{
 
     @Override
     protected void moveGardener(String arg) {
-        board.setGardenerCoords(instructions.get(0).getParameters());
+        board.setGardenerCoords(instructions.get(0).getParameters(),this);
         super.logInfoDemo.displayMovementGardener(this.name,board);
     }
 

@@ -41,6 +41,34 @@ public abstract class Bot {
      */
     protected List<Objective> objectives;
 
+    protected int[] lastCoordGardener;
+    protected int[] lastCoordPanda;
+    protected int[] lastBoxPlaced;
+
+    public void setLastBoxPlaced(int[] lastBoxPlaced) {
+        this.lastBoxPlaced = lastBoxPlaced;
+    }
+
+    public void setLastCoordGardener(int[] lastCoordGardener) {
+        this.lastCoordGardener = lastCoordGardener;
+    }
+
+    public void setLastCoordPanda(int[] lastCoordPanda) {
+        this.lastCoordPanda = lastCoordPanda;
+    }
+
+    public int[] getLastCoordGardener() {
+        return lastCoordGardener;
+    }
+
+    public int[] getLastCoordPanda() {
+        return lastCoordPanda;
+    }
+
+    public int[] getLastBoxPlaced() {
+        return lastBoxPlaced;
+    }
+
     protected LogInfoDemo logInfoDemo;
     /**
      *
@@ -77,6 +105,9 @@ public abstract class Bot {
         this.nbIrrigation = 0;
         this.logInfoDemo = logInfoDemo;
         this.numberObjectiveDone = 0;
+        this.lastBoxPlaced = new int[]{};
+        this.lastCoordGardener = new int[]{};
+        this.lastCoordPanda = new int[]{};
         resetPossibleAction();
     }
 

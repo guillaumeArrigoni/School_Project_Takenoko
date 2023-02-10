@@ -3,15 +3,12 @@ package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
 import java.util.*;
 
@@ -188,7 +185,7 @@ public class BotRuleBased extends BotRandom {
             case TAKE_IRRIGATION -> {
                 logInfoDemo.addLog("Le bot a choisi : PrendreIrrigation");
                 this.nbIrrigation++;
-                placeIrrigation();
+                placeIrrigationBase(arg);
             }
             case MOVE_PANDA -> {
                 movePanda(arg);
@@ -198,28 +195,7 @@ public class BotRuleBased extends BotRandom {
         }
     }
 
-    @Override
-    protected void placeTile(String arg){
-        //Init
-        List<HexagoneBox> list = new ArrayList<>();
-        //Get all the available coords
-        List<int[]> availableTilesList = board.getAvailableBox().stream().toList();
-        //Draw three tiles
-        for(int i = 0; i < 3; i++)
-            list.add(board.getElementOfTheBoard().getStackOfBox().getFirstBox());
-        //Choose a random tile from the tiles drawn
-        int placedTileIndex = random.nextInt(0, 3);
-        HexagoneBox tileToPlace = list.get(placedTileIndex);
-        //Choose a random available space
-        int[] placedTileCoords = availableTilesList.get(random.nextInt(0, availableTilesList.size()));
-        //Set the coords of the tile
-        HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
-        //Add the tile to the board
-        board.addBox(placedTile);
-        logInfoDemo.addLog(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
-        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
-        board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
-    }
+
 
     @Override
     protected void moveGardener(String arg){
@@ -258,32 +234,6 @@ public class BotRuleBased extends BotRandom {
         logInfoDemo.displayMovementPanda(arg,board);
     }
 
-
-    protected void placeIrrigation() {
-        if(random.nextInt(0,2) == 0) {
-            List<GenerateAWayToIrrigateTheBox> tmp = new ArrayList<>();
-            GenerateAWayToIrrigateTheBox temp;
-            for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
-                if (!box.isIrrigate()) {
-                    try {
-                        temp = new GenerateAWayToIrrigateTheBox(box);
-                        if (temp.getPathToIrrigation().size() <= this.nbIrrigation)
-                            tmp.add(temp);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            if(!tmp.isEmpty()) {
-                temp = tmp.get(random.nextInt(0, tmp.size()));
-                for (ArrayList<Crest> path : temp.getPathToIrrigation()) {
-                    logInfoDemo.addLog("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
-                    board.placeIrrigation(path.get(0));
-                    nbIrrigation--;
-                }
-            }
-        }
-    }
 
     protected ArrayList<Objective> getObjectivesOfType(TypeObjective typeObj) {
         ArrayList<Objective> objectivesOfType = new ArrayList<>();

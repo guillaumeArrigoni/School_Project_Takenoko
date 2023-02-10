@@ -65,76 +65,92 @@ public class Node {
 
     public void createChildren(String arg) {
         if(profondeur == 4 || (profondeur == 3 && (value.getMeteo() == MeteoDice.Meteo.NO_METEO || value.getMeteo() == MeteoDice.Meteo.VENT))){
-            List<ActionLog> instruction = generateIrrigationInstructions();
-            activateBotSimulator(arg, instruction);
+            treatIrrigation(arg);
             if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
                 children.clear();
                 profondeur --;
             }else{
                 this.getBestChild().createChildren(arg);
-                return;
             }
         }
         if(profondeur == 3){
-            switch(value.getMeteo()){
-                case ORAGE -> activateBotSimulator(arg,createPandaStormInstructions());
-                case NUAGES -> {
-                    activateBotSimulator(arg,generateSpecialInstruction());
-                    if (children.isEmpty()){
-                        profondeur --;
-                        createChildren(arg);
-                    }
-                }
-                case PLUIE -> {
-                    activateBotSimulator(arg,generateRainInstruction());
-                    if (children.isEmpty()){
-                        profondeur --;
-                        createChildren(arg);
-                    }
-                }
-                default /*SOLEIL*/ -> {
-                    List<ActionLog> instruction = generateInstruction();
-                    activateBotSimulator(arg, instruction);
-                    if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
-                        createChildrenIfNoGoodOption(arg);
-                    }
+            treatDepth3(arg);
+        } else if(profondeur > 1 ) {
+            treatDepthsup1(arg);
+        } else if (profondeur == 1) {
+            treatDepth1(arg);
+        }
+        if(profondeur > 1)
+            this.getBestChild().createChildren(arg);
+    }
+
+    private void treatIrrigation(String arg){
+        List<ActionLog> instruction = generateIrrigationInstructions();
+        activateBotSimulator(arg, instruction);
+
+    }
+
+    private void treatDepth3(String arg){
+        switch(value.getMeteo()){
+            case ORAGE -> activateBotSimulator(arg,createPandaStormInstructions());
+            case NUAGES -> {
+                activateBotSimulator(arg,generateSpecialInstruction());
+                if (children.isEmpty()){
+                    profondeur --;
+                    createChildren(arg);
                 }
             }
-        } else if(profondeur > 1 ) {
-            List<ActionLog> instruction;
-            if(value.getMeteo() == MeteoDice.Meteo.SOLEIL) {
-                instruction = generateInstruction(instructions.getAction());
-                activateBotSimulator(arg, instruction);
-                if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
-                    createChildrenIfNoGoodOption(arg,instructions.getAction());
+            case PLUIE -> {
+                activateBotSimulator(arg,generateRainInstruction());
+                if (children.isEmpty()){
+                    profondeur --;
+                    createChildren(arg);
                 }
-            }else{
-                instruction = generateInstruction();
+            }
+            default /*SOLEIL*/ -> {
+                List<ActionLog> instruction = generateInstruction();
                 activateBotSimulator(arg, instruction);
                 if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
                     createChildrenIfNoGoodOption(arg);
                 }
             }
-
-        } else if (profondeur == 1) {
-            List<ActionLog> instruction;
-            if(value.getMeteo() == MeteoDice.Meteo.SOLEIL) {
-                instruction = generateInstruction(instructions.getAction(), parent.instructions.getAction());
-                activateBotSimulator(arg, instruction);
-                if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
-                    createChildrenIfNoGoodOption(arg,instructions.getAction(), parent.instructions.getAction());
-                }
-            }else{
-                instruction = generateInstruction(instructions.getAction());
-                activateBotSimulator(arg, instruction);
-                if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
-                    createChildrenIfNoGoodOption(arg,instructions.getAction());
-                }
-            }
-        }if(profondeur > 1)
-            this.getBestChild().createChildren(arg);
+        }
     }
 
+
+    private void treatDepthsup1(String arg){
+        List<ActionLog> instruction;
+        if(value.getMeteo() == MeteoDice.Meteo.SOLEIL) {
+            instruction = generateInstruction(instructions.getAction());
+            activateBotSimulator(arg, instruction);
+            if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                createChildrenIfNoGoodOption(arg,instructions.getAction());
+            }
+        }else{
+            instruction = generateInstruction();
+            activateBotSimulator(arg, instruction);
+            if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                createChildrenIfNoGoodOption(arg);
+            }
+        }
+    }
+
+    private void treatDepth1(String arg){
+        List<ActionLog> instruction;
+        if(value.getMeteo() == MeteoDice.Meteo.SOLEIL) {
+            instruction = generateInstruction(instructions.getAction(), parent.instructions.getAction());
+            activateBotSimulator(arg, instruction);
+            if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                createChildrenIfNoGoodOption(arg,instructions.getAction(), parent.instructions.getAction());
+            }
+        }else{
+            instruction = generateInstruction(instructions.getAction());
+            activateBotSimulator(arg, instruction);
+            if(this.getBestChild().getValue().getScore() <= this.getValue().getScore()) {
+                createChildrenIfNoGoodOption(arg,instructions.getAction());
+            }
+        }
+    }
 
     /**
      * Create children if there is no good option generated
@@ -165,9 +181,7 @@ public class Node {
                     temp = new GenerateAWayToIrrigateTheBox(box);
                     if (temp.getPathToIrrigation().size() <= this.getValue().getBotSimulator().getNbIrrigation())
                         irrigationInstructions.add(new ActionLogIrrigation(PossibleActions.PLACE_IRRIGATION, temp.getPathToIrrigation()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception ignored) {}
             }
         }
         return irrigationInstructions;
@@ -186,6 +200,11 @@ public class Node {
                 }
             }
         }
+        createSpecialInstruction(specialInstructions);
+        return specialInstructions;
+    }
+
+    private void createSpecialInstruction(List<ActionLog> specialInstructions) {
         if(getNbSpecial(Special.Engrais) > 0){
             for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
                 if (box.getSpecial() == Special.Classique) {
@@ -200,9 +219,7 @@ public class Node {
                 }
             }
         }
-        return specialInstructions;
     }
-
 
 
     public List<ActionLog> generateRainInstruction(){
@@ -330,22 +347,34 @@ public class Node {
         }
         return bestChild;
     }
-public List<ActionLog> getBestInstruction(){
-    List<ActionLog> bestInstruction = new ArrayList<>();
-    Node bestChild = getBestChild();
-    bestInstruction.add(bestChild.getInstructions());
-    while(bestChild.profondeur >= 1){
-        bestChild = bestChild.getBestChild();
+    public List<ActionLog> getBestInstruction(){
+        List<ActionLog> bestInstruction = new ArrayList<>();
+        Node bestChild = getBestChild();
         bestInstruction.add(bestChild.getInstructions());
+        while(bestChild.profondeur >= 1){
+            bestChild = bestChild.getBestChild();
+            bestInstruction.add(bestChild.getInstructions());
+        }
+        return bestInstruction;
     }
-    return bestInstruction;
-}
 
-    private ActionLog getInstructions() {
+    public ActionLog getInstructions() {
         return instructions;
     }
 
-    private GameState getValue() {
+    public GameState getValue() {
         return value;
+    }
+
+    public int getProfondeur() {
+        return profondeur;
+    }
+
+    public Node getParent() {
+        return parent;
+    }
+
+    public List<Node> getChildren() {
+        return children;
     }
 }

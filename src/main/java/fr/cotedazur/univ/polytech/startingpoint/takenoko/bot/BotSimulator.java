@@ -101,7 +101,7 @@ public class BotSimulator extends Bot{
      * Allows the bot to place an irrigation
      * @param arg A string argument for the logger
      */
-    protected void placeIrrigation(String arg){
+    protected void placeIrrigationBase(String arg){
         ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions;
         for (ArrayList<Crest> path : actionLogIrrigation.getParamirrig()) {
             board.placeIrrigation(path.get(0));

@@ -147,7 +147,7 @@ public abstract class Bot {
      * Allows the bot to place an irrigation
      * @param arg A string argument for the logger
      */
-    protected abstract void placeIrrigation(String arg);
+    protected abstract void placeIrrigationBase(String arg);
 
     /**
      * Allows the bot to place an augment
@@ -156,14 +156,6 @@ public abstract class Bot {
     protected abstract void placeAugment(String arg);
 
     //METHODS
-
-    /**
-     * Plays a turn for this bot.
-     *
-     * @param meteo The weather for the turn
-     * @param arg A string argument for the logger
-     */
-
 
     /**
      * Return a TypeObjective based on the number given in parameter
@@ -201,7 +193,7 @@ public abstract class Bot {
             case MOVE_GARDENER -> moveGardener(arg);
             case DRAW_OBJECTIVE -> drawObjective(arg);
             case TAKE_IRRIGATION -> nbIrrigation++;
-            case PLACE_IRRIGATION -> placeIrrigation(arg);
+            case PLACE_IRRIGATION -> placeIrrigationBase(arg);
             case GROW_BAMBOO -> growBambooRain(arg);
             case ADD_AUGMENT -> placeAugment(arg);
             default -> movePanda(arg);
@@ -312,9 +304,7 @@ public abstract class Bot {
                 bambooEaten.put(color, nbBambooOfOneColorAte - 1);
                 try {
                     board.getElementOfTheBoard().giveBackBamboo(color);
-                } catch (TakenokoException e) {
-                    System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
-                }
+                } catch (TakenokoException ignored){}
             } else {
                 errorImpossibleToDeleteTheseBamboo.add(color);
             }

@@ -51,7 +51,7 @@ public class BotRandom extends Bot {
     @Override
     protected void launchAction(String arg){
         PossibleActions action = chooseAction();
-        placeIrrigation(arg);
+        placeIrrigationBase(arg);
         displayTextAction(action);
         doAction(arg,action);
     }
@@ -153,7 +153,7 @@ public class BotRandom extends Bot {
      * @param arg A string argument for the logger
      */
     @Override
-    public void placeIrrigation(String arg) {
+    public void placeIrrigationBase(String arg) {
         if (random.nextInt(0, 4) == 0) {
             List<GenerateAWayToIrrigateTheBox> tmp = new ArrayList<>();
             GenerateAWayToIrrigateTheBox temp;
@@ -163,18 +163,21 @@ public class BotRandom extends Bot {
                         temp = new GenerateAWayToIrrigateTheBox(box);
                         if (temp.getPathToIrrigation().size() <= this.nbIrrigation)
                             tmp.add(temp);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    } catch (Exception ignored) {}
                 }
             }
-            if (!tmp.isEmpty()) {
-                temp = tmp.get(random.nextInt(0, tmp.size()));
-                for (ArrayList<Crest> path : temp.getPathToIrrigation()) {
-                    logInfoDemo.addLog("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
-                    board.placeIrrigation(path.get(0));
-                    nbIrrigation--;
-                }
+            placeIrrigation(tmp);
+        }
+    }
+
+    private void placeIrrigation(List<GenerateAWayToIrrigateTheBox> tmp) {
+        GenerateAWayToIrrigateTheBox temp;
+        if (!tmp.isEmpty()) {
+            temp = tmp.get(random.nextInt(0, tmp.size()));
+            for (ArrayList<Crest> path : temp.getPathToIrrigation()) {
+                logInfoDemo.addLog("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
+                board.placeIrrigation(path.get(0));
+                nbIrrigation--;
             }
         }
     }

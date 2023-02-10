@@ -36,6 +36,7 @@ public class LoggerMain {
         logger.setUseParentHandlers(false);
     }
 
+
     public void addLog(String msg){
         setup();
         logger.log(level,msg);

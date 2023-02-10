@@ -9,21 +9,22 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.PossibleActions;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class GameStateTest {
+class NodeTest {
 
     BotRandom botRandom;
     Board board;
@@ -55,20 +56,49 @@ class GameStateTest {
     }
 
     @Test
-    void testScoreLegal(){
-        bot.setInstructions(new ActionLog(PossibleActions.DRAW_AND_PUT_TILE, 1,-1,0, 0));
-        bot.playTurn(MeteoDice.Meteo.VENT, "demo");
-        GameState gameState = new GameState(bot, MeteoDice.Meteo.NO_METEO);
-        assertEquals(0, gameState.getScore());
-        assertEquals(-999,new GameState().getScore());
+    void testConstructor1(){
+        Node node = new Node(bot, 2, MeteoDice.Meteo.NO_METEO, "green");
+        assertEquals(2, node.getProfondeur());
+        assertNull(node.getParent());
+        assertEquals(1, node.getChildren().size());
+        assertNull(node.getInstructions());
     }
 
     @Test
-    void testScoreIllegal(){
-        bot.setInstructions(new ActionLog(PossibleActions.MOVE_PANDA, 1,-1,0));
-        bot.playTurn(MeteoDice.Meteo.NO_METEO, "demo");
-        GameState gameState = new GameState(bot, MeteoDice.Meteo.NO_METEO);
-        assertEquals(-999, gameState.getScore());
+    void testConstructor2(){
+        Node node = new Node();
+        assertEquals(0, node.getProfondeur());
+        assertNull(node.getParent());
+        assertEquals(new ArrayList<Node>(), node.getChildren());
+        assertNull(node.getInstructions());
+    }
 
+    @Test
+    void testConstructor3(){
+        Node parent = new Node(bot, 2, MeteoDice.Meteo.NO_METEO, "green");
+        Node node = new Node(bot, 3, parent, MeteoDice.Meteo.NO_METEO);
+        assertEquals(2, node.getProfondeur());
+        assertEquals(parent, node.getParent());
+        assertEquals(new ArrayList<Node>(), node.getChildren());
+        assertEquals(bot.getInstructions(), node.getInstructions());
+    }
+
+    @Test
+    void testCreateChildren(){
+        Node node = new Node(bot, 2, MeteoDice.Meteo.NO_METEO, "green");
+        node.createChildren("green");
+        assertEquals(2, node.getProfondeur());
+        assertNull(node.getParent());
+        assertFalse(node.getChildren().isEmpty());
+    }
+
+    @Test
+    void testTreatIrrigation() {
+        bot.setInstructions(new ActionLog(PossibleActions.DRAW_AND_PUT_TILE, 1,-1,0, 0));
+        bot.playTurn(MeteoDice.Meteo.VENT, "demo");
+        assertTrue(bot.getBoard().isCoordinateInBoard(new int[]{1,-1,0}));
+        Node node = new Node(bot, 4, MeteoDice.Meteo.NO_METEO, "green");
+        node.createChildren("green");
+        assertEquals(2, node.getProfondeur());
     }
 }

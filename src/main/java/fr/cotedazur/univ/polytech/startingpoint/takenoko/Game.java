@@ -32,9 +32,9 @@ public class Game {
 
     public int play(GestionObjectives gestionnaire, String arg) throws CloneNotSupportedException {
         gestionnaire.initialize(
-                gestionnaire.ListOfObjectiveParcelleByDefault(),
-                gestionnaire.ListOfObjectiveJardinierByDefault(),
-                gestionnaire.ListOfObjectivePandaByDefault()
+                gestionnaire.listOfObjectiveParcelleByDefault(),
+                gestionnaire.listOfObjectiveJardinierByDefault(),
+                gestionnaire.listOfObjectivePandaByDefault()
         );
         for (Bot bot : this.playerList) {
             gestionnaire.rollParcelleObjective(bot);

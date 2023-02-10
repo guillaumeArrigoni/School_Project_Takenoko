@@ -179,23 +179,23 @@ public class Node {
 
     public List<ActionLog> generateSpecialInstruction(){
         List<ActionLog> specialInstructions = new ArrayList<>();
-        if(getNbSpecial(Special.SourceEau) > 0){
+        if(getNbSpecial(Special.SOURCE_EAU) > 0){
             for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
-                if (box.getSpecial() == Special.Classique) {
+                if (box.getSpecial() == Special.CLASSIQUE) {
                     specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 1));
                 }
             }
         }
-        if(getNbSpecial(Special.Engrais) > 0){
+        if(getNbSpecial(Special.ENGRAIS) > 0){
             for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
-                if (box.getSpecial() == Special.Classique) {
+                if (box.getSpecial() == Special.CLASSIQUE) {
                     specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 2));
                 }
             }
         }
-        if(getNbSpecial(Special.Protéger) > 0){
+        if(getNbSpecial(Special.PROTEGER) > 0){
             for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
-                if (box.getSpecial() == Special.Classique) {
+                if (box.getSpecial() == Special.CLASSIQUE) {
                     specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 3));
                 }
             }

@@ -4,7 +4,6 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ class StackOfBoxTest {
     public void setupGeneral(){
         elementOfTheBoard = new ElementOfTheBoard(new LoggerSevere(true));
         stackOfBox = new StackOfBox(elementOfTheBoard.defaultInstructionBox);
-        hexagoneBox = new HexagoneBox(Color.Vert, Special.Classique);
+        hexagoneBox = new HexagoneBox(Color.VERT, Special.CLASSIQUE);
     }
 
     @Test

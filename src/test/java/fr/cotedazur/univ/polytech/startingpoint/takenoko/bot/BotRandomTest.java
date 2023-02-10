@@ -38,13 +38,13 @@ class BotRandomTest {
         board = new Board(retrieveBoxIdWithParameters, 1, 2,new LoggerSevere(true));
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters,new LoggerError(true));
         gestionObjectives.initialize(
-                gestionObjectives.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives.ListOfObjectivePandaByDefault());
+                gestionObjectives.listOfObjectiveParcelleByDefault(),
+                gestionObjectives.listOfObjectiveJardinierByDefault(),
+                gestionObjectives.listOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         //TODO
-        board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(0, new HexagoneBox(Color.Jaune, Special.Classique));
+        board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(0, new HexagoneBox(Color.JAUNE, Special.CLASSIQUE));
         botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
     }
 
@@ -202,9 +202,9 @@ class BotRandomTest {
     void playTurnCloud(){
         when(r.nextInt(anyInt())).thenReturn(0,3,1,0,0,3,1);
         botRandom.playTurn(MeteoDice.Meteo.SOLEIL, arg);
-        assertEquals(Special.Classique,board.getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.CLASSIQUE,board.getPlacedBox().get(1009901).getSpecial());
         botRandom.playTurn(MeteoDice.Meteo.NUAGES, arg);
-        assertEquals(Special.Protéger, board.getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.PROTEGER, board.getPlacedBox().get(1009901).getSpecial());
     }
 
     @Test

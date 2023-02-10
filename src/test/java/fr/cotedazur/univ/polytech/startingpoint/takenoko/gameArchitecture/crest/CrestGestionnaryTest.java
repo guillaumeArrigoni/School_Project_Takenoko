@@ -64,9 +64,9 @@ class CrestGestionnaryTest {
     public void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters,false, 1, 2,new LoggerSevere(true));
-        boxIn5 = new HexagoneBoxPlaced(1,-1,0,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        boxIn4 = new HexagoneBoxPlaced(0,-1,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
-        boxIn13 = new HexagoneBoxPlaced(1,-2,1,Color.Vert,Special.Classique,retrieveBoxIdWithParameters,board);
+        boxIn5 = new HexagoneBoxPlaced(1,-1,0,Color.VERT,Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
+        boxIn4 = new HexagoneBoxPlaced(0,-1,1,Color.VERT,Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
+        boxIn13 = new HexagoneBoxPlaced(1,-2,1,Color.VERT,Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
     }
 
     private void setup_placeBox_5_4_13(){

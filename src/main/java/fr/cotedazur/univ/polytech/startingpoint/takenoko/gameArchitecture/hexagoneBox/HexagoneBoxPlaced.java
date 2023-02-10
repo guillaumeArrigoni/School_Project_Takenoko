@@ -94,7 +94,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
 
     public void growBamboo() {
         int boucle = 1;
-        if (super.special==Special.Engrais){
+        if (super.special==Special.ENGRAIS){
             boucle = 2;
         }
         retrieveBoxIdWithParameters.setBoxHeightDelete(this.id,this.heightBamboo);
@@ -143,7 +143,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     public void setIrrigate(boolean irrigate) {
         super.irrigate = irrigate;
         retrieveBoxIdWithParameters.setBoxIsIrrigated(this.id,super.irrigate);
-        if (irrigate && this.getColor()!=Color.Lac){
+        if (irrigate && this.getColor()!=Color.LAC){
             this.heightBamboo = 1;
             retrieveBoxIdWithParameters.setBoxHeight(this.id,this.heightBamboo);
         }
@@ -211,7 +211,7 @@ public class HexagoneBoxPlaced extends HexagoneBox {
     }
 
     private void initiateLacIrrigation(){
-        if (super.color == Color.Lac){
+        if (super.color == Color.LAC){
             for (int i=0; i<this.listOfCrestAroundBox.size();i++){
                 this.board.placeIrrigation(listOfCrestAroundBox.get(i));
             }

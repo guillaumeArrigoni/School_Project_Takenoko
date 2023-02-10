@@ -43,7 +43,7 @@ public class BoardSimulation extends Board {
         super.gardenerCoords = board.getGardenerCoords().clone();
         super.pandaCoords = board.getPandaCoords().clone();
         for (HexagoneBoxPlaced box : board.placedBox.values()) {
-            if (box.getColor()== Color.Lac){
+            if (box.getColor()== Color.LAC){
                 continue;
             }
             super.addBox(new HexagoneBoxSimulation(

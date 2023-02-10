@@ -91,7 +91,7 @@ public class BotRuleBased extends BotRandom {
         List<Objective> gardenerObj = getObjectivesOfType(TypeObjective.JARDINIER);
         boolean done = false;
         //on pioche un objectif dès que possible
-        if (this.possibleActions.contains(PossibleActions.DRAW_OBJECTIVE) && objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())) {
+        if (this.possibleActions.contains(PossibleActions.DRAW_OBJECTIVE) && objectivesInHand < 5 && !(gestionObjectives.getParcelleObjectives().isEmpty() || gestionObjectives.getJardinierObjectives().isEmpty() || gestionObjectives.getPandaObjectives().isEmpty())) {
             drawObjective(arg);
             this.possibleActions.remove(PossibleActions.DRAW_OBJECTIVE);
             done = true;

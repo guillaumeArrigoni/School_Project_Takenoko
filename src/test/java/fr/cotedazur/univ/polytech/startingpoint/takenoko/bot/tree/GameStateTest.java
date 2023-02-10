@@ -15,7 +15,6 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjec
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -42,15 +41,15 @@ class GameStateTest {
         board = new Board(retrieveBoxIdWithParameters, 1, 2, new LoggerSevere(true));
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters, new LoggerError(true));
         gestionObjectives.initialize(
-                gestionObjectives.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives.ListOfObjectivePandaByDefault());
+                gestionObjectives.listOfObjectiveParcelleByDefault(),
+                gestionObjectives.listOfObjectiveJardinierByDefault(),
+                gestionObjectives.listOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
         board.getElementOfTheBoard().getStackOfBox().getStackOfBox().clear();
         for(int i = 0; i < 15; i++){
-            board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(new HexagoneBox(Color.Vert, Special.Classique));
+            board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(new HexagoneBox(Color.VERT, Special.CLASSIQUE));
         }
         bot = botRandom.createBotSimulator();
     }

@@ -186,14 +186,14 @@ public class BotRandom extends Bot {
     protected void placeAugment(String arg) {
         int rdm = random.nextInt(1, 4);
         Special special = null;
-        boolean x = board.getElementOfTheBoard().getNbJetonSpecial().get(Special.SourceEau) > 0 ||
-                board.getElementOfTheBoard().getNbJetonSpecial().get(Special.Engrais) > 0 ||
-                board.getElementOfTheBoard().getNbJetonSpecial().get(Special.Protéger) > 0;
+        boolean x = board.getElementOfTheBoard().getNbJetonSpecial().get(Special.SOURCE_EAU) > 0 ||
+                board.getElementOfTheBoard().getNbJetonSpecial().get(Special.ENGRAIS) > 0 ||
+                board.getElementOfTheBoard().getNbJetonSpecial().get(Special.PROTEGER) > 0;
         while (x) {
             switch (rdm) {
-                case 1 -> special = Special.SourceEau;
-                case 2 -> special = Special.Engrais;
-                default -> special = Special.Protéger;
+                case 1 -> special = Special.SOURCE_EAU;
+                case 2 -> special = Special.ENGRAIS;
+                default -> special = Special.PROTEGER;
             }
             x = !board.getElementOfTheBoard().pickSpecial(special);
             rdm = ((rdm + 1) % 3) + 1;
@@ -202,7 +202,7 @@ public class BotRandom extends Bot {
         if (special != null) {
             List<HexagoneBoxPlaced> tmp = new ArrayList<>();
             for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
-                if (box.getSpecial() == Special.Classique) {
+                if (box.getSpecial() == Special.CLASSIQUE) {
                     tmp.add(box);
                 }
             }

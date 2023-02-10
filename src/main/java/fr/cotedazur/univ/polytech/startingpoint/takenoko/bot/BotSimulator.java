@@ -133,16 +133,16 @@ public class BotSimulator extends Bot{
         HexagoneBoxPlaced box = board.getPlacedBox().get(instructions.getParameters()[0]);
         switch (instructions.getParameters()[1]) {
             case 1 -> {
-                board.getElementOfTheBoard().pickSpecial(Special.SourceEau);
-                box.setSpecial(Special.SourceEau);
+                board.getElementOfTheBoard().pickSpecial(Special.SOURCE_EAU);
+                box.setSpecial(Special.SOURCE_EAU);
             }
             case 2 -> {
-                board.getElementOfTheBoard().pickSpecial(Special.Engrais);
-                box.setSpecial(Special.Engrais);
+                board.getElementOfTheBoard().pickSpecial(Special.ENGRAIS);
+                box.setSpecial(Special.ENGRAIS);
             }
             default -> {
-                board.getElementOfTheBoard().pickSpecial(Special.Protéger);
-                box.setSpecial(Special.Protéger);
+                board.getElementOfTheBoard().pickSpecial(Special.PROTEGER);
+                box.setSpecial(Special.PROTEGER);
             }
         }
     }

@@ -4,10 +4,10 @@ public enum Color {
     /**
      * The different Color of the box
      */
-    Lac(0, "Lac"),
-    Jaune(1, "Jaune"),
-    Vert(2, "Vert"),
-    Rouge(3, "Rouge");
+    LAC(0, "Lac"),
+    JAUNE(1, "Jaune"),
+    VERT(2, "Vert"),
+    ROUGE(3, "Rouge");
     private final int indice;
 
     private final String description;

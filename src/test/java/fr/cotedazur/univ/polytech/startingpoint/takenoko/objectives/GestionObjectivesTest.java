@@ -74,31 +74,31 @@ class GestionObjectivesTest {
         random = new Random();
         gestionObjectives = new GestionObjectives(board,retrieveBoxIdWithParameters,loggerError );
         gestionObjectives.initialize(
-                gestionObjectives.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives.ListOfObjectivePandaByDefault()
+                gestionObjectives.listOfObjectiveParcelleByDefault(),
+                gestionObjectives.listOfObjectiveJardinierByDefault(),
+                gestionObjectives.listOfObjectivePandaByDefault()
         );
         bot = new BotRandom("Bot",board,random, gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
-        Greenbox1 = new HexagoneBoxPlaced(-1, 1, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox2 = new HexagoneBoxPlaced(0, 1, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox3 = new HexagoneBoxPlaced(-1, 2, -1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox4 = new HexagoneBoxPlaced(-1, 0, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox5 = new HexagoneBoxPlaced(0, -1, 1, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Greenbox6 = new HexagoneBoxPlaced(-2, 2, 0, Color.Vert, Special.Classique, retrieveBoxIdWithParameters,board);
-        Yellowbox = new HexagoneBoxPlaced(0, 2, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        Yellowbox2 = new HexagoneBoxPlaced(1, 1, -2, Color.Jaune, Special.Classique, retrieveBoxIdWithParameters,board);
-        Redbox = new HexagoneBoxPlaced(1,-1,0,Color.Rouge,Special.Classique,retrieveBoxIdWithParameters,board);
-        YellowEngraisbox = new HexagoneBoxPlaced(1,0,-1,Color.Jaune,Special.Engrais,retrieveBoxIdWithParameters,board);
-        RedProtegerbox = new HexagoneBoxPlaced(-2,1,1,Color.Rouge,Special.Protéger,retrieveBoxIdWithParameters,board);
-        triangleVert = gestionObjectives.POSER_TRIANGLE_VERT;
-        ligneVert = gestionObjectives.POSER_LIGNE_VERTE;
-        courbeVert = gestionObjectives.POSER_COURBE_VERTE;
-        losangeVert = gestionObjectives.POSER_LOSANGE_VERT;
-        losangeVertJaune = gestionObjectives.POSER_LOSANGE_VERT_JAUNE;
-        planterBambouJauneClassique = gestionObjectives.PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE;
-        planterBambouJauneEngrais = gestionObjectives.PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE;
-        planterBambouRougeProteger = gestionObjectives.PLANTER_SUR_PROTEGER_BAMBOU_ROUGE;
-        planterDeuxBambousRouges = gestionObjectives.PLANTER_DEUX_BAMBOUS_ROUGES;
+        Greenbox1 = new HexagoneBoxPlaced(-1, 1, 0, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        Greenbox2 = new HexagoneBoxPlaced(0, 1, -1, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        Greenbox3 = new HexagoneBoxPlaced(-1, 2, -1, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        Greenbox4 = new HexagoneBoxPlaced(-1, 0, 1, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        Greenbox5 = new HexagoneBoxPlaced(0, -1, 1, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        Greenbox6 = new HexagoneBoxPlaced(-2, 2, 0, Color.VERT, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        Yellowbox = new HexagoneBoxPlaced(0, 2, -2, Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        Yellowbox2 = new HexagoneBoxPlaced(1, 1, -2, Color.JAUNE, Special.CLASSIQUE, retrieveBoxIdWithParameters,board);
+        Redbox = new HexagoneBoxPlaced(1,-1,0,Color.ROUGE,Special.CLASSIQUE,retrieveBoxIdWithParameters,board);
+        YellowEngraisbox = new HexagoneBoxPlaced(1,0,-1,Color.JAUNE,Special.ENGRAIS,retrieveBoxIdWithParameters,board);
+        RedProtegerbox = new HexagoneBoxPlaced(-2,1,1,Color.ROUGE,Special.PROTEGER,retrieveBoxIdWithParameters,board);
+        triangleVert = gestionObjectives.poserTriangleVert;
+        ligneVert = gestionObjectives.poserLigneVerte;
+        courbeVert = gestionObjectives.poserCourbeVerte;
+        losangeVert = gestionObjectives.poserLosangeVert;
+        losangeVertJaune = gestionObjectives.poserLosangeVertJaune;
+        planterBambouJauneClassique = gestionObjectives.planterSurClassiqueBambouJaune;
+        planterBambouJauneEngrais = gestionObjectives.planterSurEngraisBambouJaune;
+        planterBambouRougeProteger = gestionObjectives.planterSurProtegerBambouRouge;
+        planterDeuxBambousRouges = gestionObjectives.planterDeuxBambousRouges;
         bot.getObjectives().add(triangleVert);
         bot.getObjectives().add(ligneVert);
         bot.getObjectives().add(planterBambouJauneClassique);
@@ -131,31 +131,31 @@ class GestionObjectivesTest {
         Redbox.growBamboo();
         Redbox.growBamboo();
 
-        bot.addBambooEaten(Color.Vert);
-        bot.addBambooEaten(Color.Vert);
-        bot.addBambooEaten(Color.Vert);
-        bot.addBambooEaten(Color.Jaune);
-        bot.addBambooEaten(Color.Jaune);
-        bot.addBambooEaten(Color.Jaune);
-        bot.addBambooEaten(Color.Rouge);
-        bot.addBambooEaten(Color.Rouge);
-        bot.addBambooEaten(Color.Rouge);
-        pandaJaune = gestionObjectives.MANGER_DEUX_JAUNES_1;
-        pandaRouge = gestionObjectives.MANGER_DEUX_ROUGES_1;
-        pandaVert = gestionObjectives.MANGER_DEUX_VERTS_1;
-        pandaTricolore = gestionObjectives.MANGER_TRICOLORE_1;
+        bot.addBambooEaten(Color.VERT);
+        bot.addBambooEaten(Color.VERT);
+        bot.addBambooEaten(Color.VERT);
+        bot.addBambooEaten(Color.JAUNE);
+        bot.addBambooEaten(Color.JAUNE);
+        bot.addBambooEaten(Color.JAUNE);
+        bot.addBambooEaten(Color.ROUGE);
+        bot.addBambooEaten(Color.ROUGE);
+        bot.addBambooEaten(Color.ROUGE);
+        pandaJaune = gestionObjectives.mangerDeuxJaunes1;
+        pandaRouge = gestionObjectives.mangerDeuxRouges1;
+        pandaVert = gestionObjectives.mangerDeuxVerts1;
+        pandaTricolore = gestionObjectives.mangerTricolore1;
     }
 
     private static void setupPandaBambooEaten(){
-        bot.addBambooEaten(Color.Vert);
-        bot.addBambooEaten(Color.Vert);
-        bot.addBambooEaten(Color.Vert);
-        bot.addBambooEaten(Color.Jaune);
-        bot.addBambooEaten(Color.Jaune);
-        bot.addBambooEaten(Color.Jaune);
-        bot.addBambooEaten(Color.Rouge);
-        bot.addBambooEaten(Color.Rouge);
-        bot.addBambooEaten(Color.Rouge);
+        bot.addBambooEaten(Color.VERT);
+        bot.addBambooEaten(Color.VERT);
+        bot.addBambooEaten(Color.VERT);
+        bot.addBambooEaten(Color.JAUNE);
+        bot.addBambooEaten(Color.JAUNE);
+        bot.addBambooEaten(Color.JAUNE);
+        bot.addBambooEaten(Color.ROUGE);
+        bot.addBambooEaten(Color.ROUGE);
+        bot.addBambooEaten(Color.ROUGE);
     }
 
     private static Stream<Arguments> provideParcelleObjectiveChecking(){
@@ -186,13 +186,13 @@ class GestionObjectivesTest {
     void initialize() {
         GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError );
         gestionObjectives2.initialize(
-                gestionObjectives2.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives2.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives2.ListOfObjectivePandaByDefault()
+                gestionObjectives2.listOfObjectiveParcelleByDefault(),
+                gestionObjectives2.listOfObjectiveJardinierByDefault(),
+                gestionObjectives2.listOfObjectivePandaByDefault()
         );
-        assertEquals(15, gestionObjectives2.getParcelleObjectifs().size());
-        assertEquals(15, gestionObjectives2.getJardinierObjectifs().size());
-        assertEquals(15, gestionObjectives2.getPandaObjectifs().size());
+        assertEquals(15, gestionObjectives2.getParcelleObjectives().size());
+        assertEquals(15, gestionObjectives2.getJardinierObjectives().size());
+        assertEquals(15, gestionObjectives2.getPandaObjectives().size());
 
     }
 
@@ -200,33 +200,33 @@ class GestionObjectivesTest {
     void getParcelleObjectifs() {
         GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError );
         gestionObjectives2.initialize(
-                gestionObjectives2.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives2.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives2.ListOfObjectivePandaByDefault()
+                gestionObjectives2.listOfObjectiveParcelleByDefault(),
+                gestionObjectives2.listOfObjectiveJardinierByDefault(),
+                gestionObjectives2.listOfObjectivePandaByDefault()
         );
-        assertEquals(15, gestionObjectives2.getParcelleObjectifs().size());
+        assertEquals(15, gestionObjectives2.getParcelleObjectives().size());
     }
 
     @Test
     void getJardinierObjectifs() {
         GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError );
         gestionObjectives2.initialize(
-                gestionObjectives2.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives2.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives2.ListOfObjectivePandaByDefault()
+                gestionObjectives2.listOfObjectiveParcelleByDefault(),
+                gestionObjectives2.listOfObjectiveJardinierByDefault(),
+                gestionObjectives2.listOfObjectivePandaByDefault()
         );
-        assertEquals(15, gestionObjectives2.getJardinierObjectifs().size());
+        assertEquals(15, gestionObjectives2.getJardinierObjectives().size());
     }
 
     @Test
     void getPandaObjectifs() {
         GestionObjectives gestionObjectives2 = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError );
         gestionObjectives2.initialize(
-                gestionObjectives2.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives2.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives2.ListOfObjectivePandaByDefault()
+                gestionObjectives2.listOfObjectiveParcelleByDefault(),
+                gestionObjectives2.listOfObjectiveJardinierByDefault(),
+                gestionObjectives2.listOfObjectivePandaByDefault()
         );
-        assertEquals(15, gestionObjectives2.getPandaObjectifs().size());
+        assertEquals(15, gestionObjectives2.getPandaObjectives().size());
     }
 
     @Test

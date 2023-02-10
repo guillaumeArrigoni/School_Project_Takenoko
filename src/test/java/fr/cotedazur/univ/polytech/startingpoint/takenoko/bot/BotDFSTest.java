@@ -38,15 +38,15 @@ class BotDFSTest {
         board = new Board(retrieveBoxIdWithParameters, 1, 2, new LoggerSevere(true));
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters, new LoggerError(true));
         gestionObjectives.initialize(
-                gestionObjectives.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives.ListOfObjectivePandaByDefault());
+                gestionObjectives.listOfObjectiveParcelleByDefault(),
+                gestionObjectives.listOfObjectiveJardinierByDefault(),
+                gestionObjectives.listOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         bot = new BotDFS("testBot", board,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
         board.getElementOfTheBoard().getStackOfBox().getStackOfBox().clear();
         for(int i = 0; i < 15; i++){
-            board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(new HexagoneBox(Color.Vert, Special.Classique));
+            board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(new HexagoneBox(Color.VERT, Special.CLASSIQUE));
         }
     }
 
@@ -114,7 +114,7 @@ class BotDFSTest {
         bot.setInstructions(new ActionLog(PossibleActions.ADD_AUGMENT, 1009901,0));
         bot.launchAction( "demo");
         bot.launchAction( "demo");
-        assertEquals(Special.Protéger, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.PROTEGER, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
     }
 
     @Test
@@ -123,7 +123,7 @@ class BotDFSTest {
         bot.setInstructions(new ActionLog(PossibleActions.ADD_AUGMENT, 1009901,1));
         bot.launchAction( "demo");
         bot.launchAction( "demo");
-        assertEquals(Special.SourceEau, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.SOURCE_EAU, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
     }
 
     @Test
@@ -132,7 +132,7 @@ class BotDFSTest {
         bot.setInstructions(new ActionLog(PossibleActions.ADD_AUGMENT, 1009901,2));
         bot.launchAction( "demo");
         bot.launchAction( "demo");
-        assertEquals(Special.Engrais, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.ENGRAIS, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
     }
 
     @Test

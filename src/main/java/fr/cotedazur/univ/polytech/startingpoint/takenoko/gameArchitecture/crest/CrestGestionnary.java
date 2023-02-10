@@ -263,7 +263,7 @@ public class CrestGestionnary {
      * @param box
      */
     private void updateCrestVariableWithNewBoxAdded(HexagoneBoxPlaced box){
-        if (box.getColor() == Color.Lac){
+        if (box.getColor() == Color.LAC){
             Crest fakeCrest = new Crest(99,99,1);
             for (int i=0;i<box.getListOfCrestAroundBox().size();i++){
                 Crest crest = box.getListOfCrestAroundBox().get(i);

@@ -103,7 +103,7 @@ public class BotRuleBased extends BotRandom {
             done = true;
         }
         //sinon on bouge le jardinier en respectant un objectif
-        else if (!(gardenerObj.isEmpty())) {
+        else if (!(gardenerObj.isEmpty()) && this.possibleActions.contains(PossibleActions.MOVE_GARDENER)) {
             for (Objective obj : gardenerObj) {
                 if (getHighestBamboosOfColorPossible(obj.getColors().get(0)) != null) {
                     moveGardener(arg);

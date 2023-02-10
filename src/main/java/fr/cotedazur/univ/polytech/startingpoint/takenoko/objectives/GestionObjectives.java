@@ -470,7 +470,7 @@ public class GestionObjectives {
      * Method with the triangle, line and curve condition
      * @param listOfIdAvailable contains all the box placed in the board that complete the requirement of the objective (color, irrigated,...)
      * @param i that have the value as before
-     * @return true if the parcel is compelted, false if it does not
+     * @return true if the parcel is completed, false if it does not
      */
     private ArrayList<Integer> getAllAdjacentBoxThatCompleteTheCondition(ArrayList<Integer> listOfIdAvailable, int i) {
         HexagoneBoxPlaced box = board.getPlacedBox().get(listOfIdAvailable.get(i));
@@ -486,7 +486,7 @@ public class GestionObjectives {
 
     /**
      * Method with the triangle, line and curve condition
-     * @param idOfAdjacentBoxCorrect wontains all the box that filled the objective's requirement and are adjacent of another box that also complete the objective's requirement
+     * @param idOfAdjacentBoxCorrect contains all the box that filled the objective's requirement and are adjacent of another box that also complete the objective's requirement
      * @param x that have the same value as before
      * @return true if the objective is completed or false if it does not.
      */
@@ -531,7 +531,7 @@ public class GestionObjectives {
     }
 
     /**
-     * @param bot
+     * @param bot corresponds to the bot who wants to draw an objective.
      * @return a boolean corresponding to if the bot can draw an objective or if he has already too many objectives.
      */
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
@@ -542,7 +542,6 @@ public class GestionObjectives {
      * int[] numberOfTypeObjectiveDone : - numberOfTypeObjectiveDone[0] -> PARCELLE
      *                                   - numberOfTypeObjectiveDone[1] -> JARDINIER
      *                                   - numberOfTypeObjectiveDone[2] -> PANDA
-     *
      * This method checks all the drawable Objectives and counts the amount of Objectives currently done,
      * and increments the array values associated to the TypeObjective of the objectives done.
      * It returns the TypeObjective that is the most done when all the drawable Objectives are checked.
@@ -626,9 +625,7 @@ public class GestionObjectives {
         return res;
     }
 
-    /**
-     * @return the most present TypeObjective that can be drawn.
-     */
+    /*
     public TypeObjective mostPresentTypeObjectiveAvailableToDraw(){
         int[] numberOfTypeObjectiveAvailable = new int[NB_LISTES_OBJECTIVES];
         numberOfTypeObjectiveAvailable[0] = this.getParcelleObjectifs().size();
@@ -643,5 +640,5 @@ public class GestionObjectives {
             };
         }
         return null;
-    }
+    }*/
 }

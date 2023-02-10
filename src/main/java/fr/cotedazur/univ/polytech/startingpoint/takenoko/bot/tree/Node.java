@@ -4,10 +4,10 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.PossibleActions;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathirrigation.GenerateAWayToIrrigateTheBox;
 
 
 import java.util.ArrayList;
@@ -193,9 +193,9 @@ public class Node {
 
     public List<ActionLog> generateSpecialInstruction(){
         List<ActionLog> specialInstructions = new ArrayList<>();
-        if(getNbSpecial(Special.SourceEau) > 0){
+        if(getNbSpecial(Special.SOURCE_EAU) > 0){
             for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
-                if (box.getSpecial() == Special.Classique) {
+                if (box.getSpecial() == Special.CLASSIQUE) {
                     specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 1));
                 }
             }
@@ -205,16 +205,16 @@ public class Node {
     }
 
     private void createSpecialInstruction(List<ActionLog> specialInstructions) {
-        if(getNbSpecial(Special.Engrais) > 0){
+        if(getNbSpecial(Special.ENGRAIS) > 0){
             for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
-                if (box.getSpecial() == Special.Classique) {
+                if (box.getSpecial() == Special.CLASSIQUE) {
                     specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 2));
                 }
             }
         }
-        if(getNbSpecial(Special.Protéger) > 0){
+        if(getNbSpecial(Special.PROTEGER) > 0){
             for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {
-                if (box.getSpecial() == Special.Classique) {
+                if (box.getSpecial() == Special.CLASSIQUE) {
                     specialInstructions.add(new ActionLog(PossibleActions.ADD_AUGMENT, box.getId(), 3));
                 }
             }

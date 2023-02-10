@@ -1,16 +1,16 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLogIrrigation;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.Node;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 
@@ -69,7 +69,7 @@ public class BotDFS extends Bot{
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0],placedTileCoords[1],placedTileCoords[2],tileToPlace,retrieveBoxIdWithParameters,board);
         //Add the tile to the board
-        board.addBox(placedTile);
+        board.addBox(placedTile,this);
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
         super.logInfoDemo.displayPlacementBox(this.name,placedTile);
@@ -77,7 +77,7 @@ public class BotDFS extends Bot{
 
     @Override
     protected void moveGardener(String arg) {
-        board.setGardenerCoords(instructions.get(0).getParameters());
+        board.setGardenerCoords(instructions.get(0).getParameters(),this);
         super.logInfoDemo.displayMovementGardener(this.name,board);
     }
 
@@ -107,18 +107,18 @@ public class BotDFS extends Bot{
         HexagoneBoxPlaced box = board.getPlacedBox().get(instructions.get(0).getParameters()[0]);
         switch (instructions.get(0).getParameters()[1]) {
             case 1 -> {
-                board.getElementOfTheBoard().pickSpecial(Special.SourceEau);
+                board.getElementOfTheBoard().pickSpecial(Special.SOURCE_EAU);
                 logInfoDemo.addLog(this.name + " a placé une source d'eau en " + Arrays.toString(box.getCoordinates()));
-                box.setSpecial(Special.SourceEau);
+                box.setSpecial(Special.SOURCE_EAU);
             }
             case 2 -> {
-                board.getElementOfTheBoard().pickSpecial(Special.Engrais);
-                box.setSpecial(Special.Engrais);
+                board.getElementOfTheBoard().pickSpecial(Special.ENGRAIS);
+                box.setSpecial(Special.ENGRAIS);
                 logInfoDemo.addLog(this.name + " a placé un engrais en " + Arrays.toString(box.getCoordinates()));
             }
             default -> {
-                board.getElementOfTheBoard().pickSpecial(Special.Protéger);
-                box.setSpecial(Special.Protéger);
+                board.getElementOfTheBoard().pickSpecial(Special.PROTEGER);
+                box.setSpecial(Special.PROTEGER);
                 logInfoDemo.addLog(this.name + " a placé une protection en " + Arrays.toString(box.getCoordinates()));
             }
         }

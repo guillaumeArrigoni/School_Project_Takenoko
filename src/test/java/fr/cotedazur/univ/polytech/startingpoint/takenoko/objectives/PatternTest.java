@@ -1,9 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,12 +28,12 @@ class PatternTest {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters, 1, 2,new LoggerSevere(true));
         gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters,loggerError);
-        pattern1 = gestionnaire.PLANTER_SUR_SOURCE_EAU;
-        pattern2 = gestionnaire.PLANTER_TROIS_JAUNES;
-        pattern3 = gestionnaire.POSER_TRIANGLE;
-        pattern4 = gestionnaire.POSER_LIGNE;
-        pattern5 = gestionnaire.MANGER_DEUX_BAMBOUS;
-        pattern6 = gestionnaire.MANGER_TROIS_BAMBOUS;
+        pattern1 = gestionnaire.planterSurSourceEau;
+        pattern2 = gestionnaire.planterTroisJaunes;
+        pattern3 = gestionnaire.poserTriangle;
+        pattern4 = gestionnaire.poserLigne;
+        pattern5 = gestionnaire.mangerDeuxBambous;
+        pattern6 = gestionnaire.mangerTroisBambous;
     }
 
     @Test
@@ -68,7 +68,7 @@ class PatternTest {
 
     @Test
     void getSpecial() {
-        assertEquals(Special.SourceEau, pattern1.getSpecial());
+        assertEquals(Special.SOURCE_EAU, pattern1.getSpecial());
         assertNull(pattern2.getSpecial());
         assertNull(pattern3.getSpecial());
         assertNull(pattern4.getSpecial());

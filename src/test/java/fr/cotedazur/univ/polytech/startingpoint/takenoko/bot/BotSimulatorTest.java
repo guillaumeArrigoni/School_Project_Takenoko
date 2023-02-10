@@ -1,18 +1,18 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLogIrrigation;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathirrigation.GenerateAWayToIrrigateTheBox;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,15 +40,15 @@ class BotSimulatorTest {
         board = new Board(retrieveBoxIdWithParameters, 1, 2, new LoggerSevere(true));
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters, new LoggerError(true));
         gestionObjectives.initialize(
-                gestionObjectives.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives.ListOfObjectivePandaByDefault());
+                gestionObjectives.listOfObjectiveParcelleByDefault(),
+                gestionObjectives.listOfObjectiveJardinierByDefault(),
+                gestionObjectives.listOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
         board.getElementOfTheBoard().getStackOfBox().getStackOfBox().clear();
         for(int i = 0; i < 15; i++){
-            board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(new HexagoneBox(Color.Vert, Special.Classique));
+            board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(new HexagoneBox(Color.VERT, Special.CLASSIQUE));
         }
          bot = botRandom.createBotSimulator();
     }
@@ -126,7 +126,7 @@ class BotSimulatorTest {
         bot.playTurn(MeteoDice.Meteo.NO_METEO, "demo");
         bot.setInstructions(new ActionLog(PossibleActions.ADD_AUGMENT, 1009901,0));
         bot.playTurn(MeteoDice.Meteo.NO_METEO, "demo");
-        assertEquals(Special.Protéger, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.PROTEGER, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
     }
 
     @Test
@@ -135,7 +135,7 @@ class BotSimulatorTest {
         bot.playTurn(MeteoDice.Meteo.NO_METEO, "demo");
         bot.setInstructions(new ActionLog(PossibleActions.ADD_AUGMENT, 1009901,1));
         bot.playTurn(MeteoDice.Meteo.NO_METEO, "demo");
-        assertEquals(Special.SourceEau, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.SOURCE_EAU, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
     }
 
     @Test
@@ -144,7 +144,7 @@ class BotSimulatorTest {
         bot.playTurn(MeteoDice.Meteo.NO_METEO, "demo");
         bot.setInstructions(new ActionLog(PossibleActions.ADD_AUGMENT, 1009901,2));
         bot.playTurn(MeteoDice.Meteo.NO_METEO, "demo");
-        assertEquals(Special.Engrais, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.ENGRAIS, bot.getBoard().getPlacedBox().get(1009901).getSpecial());
     }
 
     @Test

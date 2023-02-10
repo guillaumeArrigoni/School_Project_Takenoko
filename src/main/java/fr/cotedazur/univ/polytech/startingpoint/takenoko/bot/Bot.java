@@ -1,14 +1,14 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.BoardSimulation;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.BoardSimulation;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.DeletingBotBambooException;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.TypeObjective;
@@ -48,6 +48,34 @@ public abstract class Bot {
     protected final Map<Color, Integer> bambooEaten;
 
 
+    protected int[] lastCoordGardener;
+    protected int[] lastCoordPanda;
+    protected int[] lastBoxPlaced;
+
+    public void setLastBoxPlaced(int[] lastBoxPlaced) {
+        this.lastBoxPlaced = lastBoxPlaced;
+    }
+
+    public void setLastCoordGardener(int[] lastCoordGardener) {
+        this.lastCoordGardener = lastCoordGardener;
+    }
+
+    public void setLastCoordPanda(int[] lastCoordPanda) {
+        this.lastCoordPanda = lastCoordPanda;
+    }
+
+    public int[] getLastCoordGardener() {
+        return lastCoordGardener;
+    }
+
+    public int[] getLastCoordPanda() {
+        return lastCoordPanda;
+    }
+
+    public int[] getLastBoxPlaced() {
+        return lastBoxPlaced;
+    }
+
     //CONSTRUCTOR
     /**
      * Constructs a new `Bot` instance with the given parameters.
@@ -68,13 +96,16 @@ public abstract class Bot {
         this.gestionObjectives = gestionObjectives;
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.bambooEaten = bambooEaten;
-        this.bambooEaten.put(Color.Rouge, 0);
-        this.bambooEaten.put(Color.Jaune, 0);
-        this.bambooEaten.put(Color.Vert, 0);
-        this.bambooEaten.put(Color.Lac, 0);
+        this.bambooEaten.put(Color.ROUGE, 0);
+        this.bambooEaten.put(Color.JAUNE, 0);
+        this.bambooEaten.put(Color.VERT, 0);
+        this.bambooEaten.put(Color.LAC, 0);
         this.nbIrrigation = 0;
         this.logInfoDemo = logInfoDemo;
         this.numberObjectiveDone = 0;
+        this.lastBoxPlaced = new int[]{};
+        this.lastCoordGardener = new int[]{};
+        this.lastCoordPanda = new int[]{};
         resetPossibleAction();
     }
 
@@ -250,7 +281,7 @@ public abstract class Bot {
                 (actions == PossibleActions.MOVE_PANDA && Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords()).isEmpty()) ||
                 (actions == PossibleActions.DRAW_OBJECTIVE && objectives.size() >= 5) ||
                 (actions == PossibleActions.DRAW_AND_PUT_TILE && board.getElementOfTheBoard().getStackOfBox().size() < 3) ||
-                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
+                (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectives().isEmpty() || gestionObjectives.getJardinierObjectives().isEmpty() || gestionObjectives.getPandaObjectives().isEmpty())));
     }
 
     /**

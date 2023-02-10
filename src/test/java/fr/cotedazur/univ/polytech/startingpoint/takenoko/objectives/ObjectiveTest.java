@@ -1,9 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,12 +29,12 @@ class ObjectiveTest {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
         board = new Board(retrieveBoxIdWithParameters, 1, 2,new LoggerSevere(true));
         gestionnaire = new GestionObjectives(board, retrieveBoxIdWithParameters,new LoggerError(true));
-        objective1 = gestionnaire.POSER_TRIANGLE_VERT;
-        objective2 = gestionnaire.POSER_LIGNE_JAUNE;
-        objective3 = gestionnaire.PLANTER_SUR_PROTEGER_BAMBOU_VERT;
-        objective4 = gestionnaire.PLANTER_SUR_ENGRAIS_BAMBOU_VERT;
-        objective5 = gestionnaire.POSER_LOSANGE_ROUGE_JAUNE;
-        objective6 = gestionnaire.MANGER_DEUX_JAUNES_1;}
+        objective1 = gestionnaire.poserTriangleVert;
+        objective2 = gestionnaire.poserLigneJaune;
+        objective3 = gestionnaire.planterSurProtegerBambouVert;
+        objective4 = gestionnaire.planterSurEngraisBambouVert;
+        objective5 = gestionnaire.poserLosangeRougeJaune;
+        objective6 = gestionnaire.mangerDeuxJaunes1;}
 
     @Test
     void getValue() {
@@ -48,22 +48,22 @@ class ObjectiveTest {
 
     @Test
     void getPattern() {
-        assertEquals(gestionnaire.POSER_TRIANGLE,objective1.getPattern());
-        assertEquals(gestionnaire.POSER_LIGNE,objective2.getPattern());
-        assertEquals(gestionnaire.PLANTER_SUR_PROTEGER,objective3.getPattern());
-        assertEquals(gestionnaire.PLANTER_SUR_ENGRAIS,objective4.getPattern());
-        assertEquals(gestionnaire.POSER_LOSANGE, objective5.getPattern());
-        assertEquals(gestionnaire.MANGER_DEUX_BAMBOUS, objective6.getPattern());
+        assertEquals(gestionnaire.poserTriangle,objective1.getPattern());
+        assertEquals(gestionnaire.poserLigne,objective2.getPattern());
+        assertEquals(gestionnaire.planterSurProteger,objective3.getPattern());
+        assertEquals(gestionnaire.planterSurEngrais,objective4.getPattern());
+        assertEquals(gestionnaire.poserLosange, objective5.getPattern());
+        assertEquals(gestionnaire.mangerDeuxBambous, objective6.getPattern());
     }
 
     @Test
     void getColors() {
-        assertEquals(new ArrayList<>(Arrays.asList( Color.Vert)), objective1.getColors());
-        assertEquals(new ArrayList<>(Arrays.asList( Color.Jaune)), objective2.getColors());
-        assertEquals(new ArrayList<>(Arrays.asList( Color.Vert)), objective3.getColors());
-        assertEquals(new ArrayList<>(Arrays.asList( Color.Vert)), objective4.getColors());
-        assertEquals(new ArrayList<>(Arrays.asList( Color.Rouge, Color.Jaune)), objective5.getColors());
-        assertEquals(new ArrayList<>(Arrays.asList( Color.Jaune)), objective6.getColors());
+        assertEquals(new ArrayList<>(Arrays.asList( Color.VERT)), objective1.getColors());
+        assertEquals(new ArrayList<>(Arrays.asList( Color.JAUNE)), objective2.getColors());
+        assertEquals(new ArrayList<>(Arrays.asList( Color.VERT)), objective3.getColors());
+        assertEquals(new ArrayList<>(Arrays.asList( Color.VERT)), objective4.getColors());
+        assertEquals(new ArrayList<>(Arrays.asList( Color.ROUGE, Color.JAUNE)), objective5.getColors());
+        assertEquals(new ArrayList<>(Arrays.asList( Color.JAUNE)), objective6.getColors());
     }
 
     @Test

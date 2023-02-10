@@ -1,14 +1,14 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.TypeObjective;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
@@ -38,13 +38,13 @@ class BotRandomTest {
         board = new Board(retrieveBoxIdWithParameters, 1, 2,new LoggerSevere(true));
         gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters,new LoggerError(true));
         gestionObjectives.initialize(
-                gestionObjectives.ListOfObjectiveParcelleByDefault(),
-                gestionObjectives.ListOfObjectiveJardinierByDefault(),
-                gestionObjectives.ListOfObjectivePandaByDefault());
+                gestionObjectives.listOfObjectiveParcelleByDefault(),
+                gestionObjectives.listOfObjectiveJardinierByDefault(),
+                gestionObjectives.listOfObjectivePandaByDefault());
         r = mock(Random.class);
         meteoDice = mock(MeteoDice.class);
         //TODO
-        board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(0, new HexagoneBox(Color.Jaune, Special.Classique));
+        board.getElementOfTheBoard().getStackOfBox().getStackOfBox().add(0, new HexagoneBox(Color.JAUNE, Special.CLASSIQUE));
         botRandom = new BotRandom("testBot", board, r,  gestionObjectives, retrieveBoxIdWithParameters, new HashMap<Color,Integer>(), logInfoDemo);
     }
 
@@ -202,9 +202,9 @@ class BotRandomTest {
     void playTurnCloud(){
         when(r.nextInt(anyInt())).thenReturn(0,3,1,0,0,3,1);
         botRandom.playTurn(MeteoDice.Meteo.SOLEIL, arg);
-        assertEquals(Special.Classique,board.getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.CLASSIQUE,board.getPlacedBox().get(1009901).getSpecial());
         botRandom.playTurn(MeteoDice.Meteo.NUAGES, arg);
-        assertEquals(Special.Protéger, board.getPlacedBox().get(1009901).getSpecial());
+        assertEquals(Special.PROTEGER, board.getPlacedBox().get(1009901).getSpecial());
     }
 
     @Test

@@ -11,16 +11,16 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 import com.opencsv.exceptions.CsvException;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoStats;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoStats;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotDFS;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRuleBased;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 
@@ -35,7 +35,6 @@ public class Main {
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
     boolean csv;
-
     public static void main(String... args) throws IOException, CloneNotSupportedException, CsvException {
         //detection of arg for JCommander
         Main main = new Main();
@@ -64,9 +63,9 @@ public class Main {
                 Random random = new Random();
                 GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
                 gestionnaire.initialize(
-                        gestionnaire.ListOfObjectiveParcelleByDefault(),
-                        gestionnaire.ListOfObjectiveJardinierByDefault(),
-                        gestionnaire.ListOfObjectivePandaByDefault()
+                        gestionnaire.listOfObjectiveParcelleByDefault(),
+                        gestionnaire.listOfObjectiveJardinierByDefault(),
+                        gestionnaire.listOfObjectivePandaByDefault()
                 );
                 Bot bot1 = new BotDFS("BotDFS",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 Bot bot2 = new BotRuleBased("BotRB",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
@@ -78,6 +77,7 @@ public class Main {
                 playerList.add(bot3);
                 playerList.add(bot4);
                 Game game = new Game(playerList,board,logDemo);
+                ((BotRuleBased) bot2).setGame(game);
                 int winner = game.play(gestionnaire, "twoThousands");
 
                 int[] scoreForBots = new int[]{bot1.getScore(), bot2.getScore(), bot3.getScore(), bot4.getScore()};
@@ -101,9 +101,9 @@ public class Main {
                     Board board = new Board(retrieving, 1, 2,loggerSevere);
                     GestionObjectives gestionnaire = new GestionObjectives(board, retrieving, loggerError);
                     gestionnaire.initialize(
-                            gestionnaire.ListOfObjectiveParcelleByDefault(),
-                            gestionnaire.ListOfObjectiveJardinierByDefault(),
-                            gestionnaire.ListOfObjectivePandaByDefault()
+                            gestionnaire.listOfObjectiveParcelleByDefault(),
+                            gestionnaire.listOfObjectiveJardinierByDefault(),
+                            gestionnaire.listOfObjectivePandaByDefault()
                     );
                     Bot bot1 = new BotDFS("BotDFS1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                     Bot bot2 = new BotDFS("BotDFS2",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
@@ -222,6 +222,7 @@ public class Main {
             playerList.add(bot3);
             playerList.add(bot4);
             Game game = new Game(playerList,board,logDemo);
+            ((BotRuleBased) bot2).setGame(game);
             game.play(gestionnaire, "demo");
         }
     }

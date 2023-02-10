@@ -2,7 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree;
 
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotSimulator;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
 
 /**
  * Class that represents a game state

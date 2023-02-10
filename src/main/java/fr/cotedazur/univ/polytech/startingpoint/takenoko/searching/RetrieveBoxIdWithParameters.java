@@ -1,7 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.searching;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
 
 import java.util.*;
 
@@ -83,10 +83,10 @@ public class RetrieveBoxIdWithParameters {
         listId.remove(Integer.valueOf(id));
         listId.add(id);
         BoxSpeciality.put(speciality,listId);
-        if (speciality != Special.Classique){
-            ArrayList<Integer> listIdToDelete = BoxSpeciality.get(Special.Classique);
+        if (speciality != Special.CLASSIQUE){
+            ArrayList<Integer> listIdToDelete = BoxSpeciality.get(Special.CLASSIQUE);
             listIdToDelete.remove(Integer.valueOf(id));
-            BoxSpeciality.put(Special.Classique,listIdToDelete);
+            BoxSpeciality.put(Special.CLASSIQUE,listIdToDelete);
         }
     }
 

@@ -1,7 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 
@@ -26,15 +26,19 @@ public class Game {
         this.logInfoDemo = logInfoDemo;
     }
 
+    public List<Bot> getPlayerList(){
+        return this.playerList;
+    }
+
     public void printBoardState(Board board) {
         logInfoDemo.printBoardState(board);
     }
 
     public int play(GestionObjectives gestionnaire, String arg) throws CloneNotSupportedException {
         gestionnaire.initialize(
-                gestionnaire.ListOfObjectiveParcelleByDefault(),
-                gestionnaire.ListOfObjectiveJardinierByDefault(),
-                gestionnaire.ListOfObjectivePandaByDefault()
+                gestionnaire.listOfObjectiveParcelleByDefault(),
+                gestionnaire.listOfObjectiveJardinierByDefault(),
+                gestionnaire.listOfObjectivePandaByDefault()
         );
         for (Bot bot : this.playerList) {
             gestionnaire.rollParcelleObjective(bot);

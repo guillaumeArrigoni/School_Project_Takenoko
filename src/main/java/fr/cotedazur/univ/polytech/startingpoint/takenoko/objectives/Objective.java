@@ -1,16 +1,16 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
 
 import java.util.ArrayList;
 
 public class Objective {
 
-    private String name;
-    private int value;
-    private TypeObjective type;
-    private Pattern pattern;
-    private ArrayList<Color> colors;
+    private final String name;
+    private final int value;
+    private final TypeObjective type;
+    private final Pattern pattern;
+    private final ArrayList<Color> colors;
 
     public Objective(String name, int value, TypeObjective type, Pattern pattern, ArrayList<Color> colors) {
         this.name = name;

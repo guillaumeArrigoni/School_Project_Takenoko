@@ -1,16 +1,16 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathirrigation.GenerateAWayToIrrigateTheBox;
 
 import java.util.*;
 
@@ -91,7 +91,7 @@ public class BotRandom extends Bot {
         //Set the coords of the tile
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0], placedTileCoords[1], placedTileCoords[2], tileToPlace, retrieveBoxIdWithParameters, board);
         //Add the tile to the board
-        board.addBox(placedTile);
+        board.addBox(placedTile,this);
         logInfoDemo.addLog(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
@@ -104,7 +104,7 @@ public class BotRandom extends Bot {
     @Override
     protected void moveGardener(String arg) {
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
-        board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())));
+        board.setGardenerCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())),this);
         super.logInfoDemo.displayMovementGardener(this.name,board);
     }
 
@@ -189,14 +189,14 @@ public class BotRandom extends Bot {
     protected void placeAugment(String arg) {
         int rdm = random.nextInt(1, 4);
         Special special = null;
-        boolean x = board.getElementOfTheBoard().getNbJetonSpecial().get(Special.SourceEau) > 0 ||
-                board.getElementOfTheBoard().getNbJetonSpecial().get(Special.Engrais) > 0 ||
-                board.getElementOfTheBoard().getNbJetonSpecial().get(Special.Protéger) > 0;
+        boolean x = board.getElementOfTheBoard().getNbJetonSpecial().get(Special.SOURCE_EAU) > 0 ||
+                board.getElementOfTheBoard().getNbJetonSpecial().get(Special.ENGRAIS) > 0 ||
+                board.getElementOfTheBoard().getNbJetonSpecial().get(Special.PROTEGER) > 0;
         while (x) {
             switch (rdm) {
-                case 1 -> special = Special.SourceEau;
-                case 2 -> special = Special.Engrais;
-                default -> special = Special.Protéger;
+                case 1 -> special = Special.SOURCE_EAU;
+                case 2 -> special = Special.ENGRAIS;
+                default -> special = Special.PROTEGER;
             }
             x = !board.getElementOfTheBoard().pickSpecial(special);
             rdm = ((rdm + 1) % 3) + 1;
@@ -205,7 +205,7 @@ public class BotRandom extends Bot {
         if (special != null) {
             List<HexagoneBoxPlaced> tmp = new ArrayList<>();
             for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
-                if (box.getSpecial() == Special.Classique) {
+                if (box.getSpecial() == Special.CLASSIQUE) {
                     tmp.add(box);
                 }
             }

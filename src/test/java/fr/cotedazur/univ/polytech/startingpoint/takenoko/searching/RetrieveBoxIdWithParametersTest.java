@@ -1,7 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.searching;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,35 +22,35 @@ class RetrieveBoxIdWithParametersTest {
     @Order(1)
     public static void setUpGeneral() {
         retrieveBoxIdWithParameters = new RetrieveBoxIdWithParameters();
-        retrieveBoxIdWithParameters.setBoxColor(1009901,Color.Vert);
+        retrieveBoxIdWithParameters.setBoxColor(1009901,Color.VERT);
         retrieveBoxIdWithParameters.setBoxIsIrrigated(1009901,true);
         retrieveBoxIdWithParameters.setBoxHeight(1009901,3);
-        retrieveBoxIdWithParameters.setBoxSpeciality(1009901,Special.Classique);
+        retrieveBoxIdWithParameters.setBoxSpeciality(1009901,Special.CLASSIQUE);
 
-        retrieveBoxIdWithParameters.setBoxColor(1009802,Color.Jaune);
+        retrieveBoxIdWithParameters.setBoxColor(1009802,Color.JAUNE);
         retrieveBoxIdWithParameters.setBoxIsIrrigated(1009802,true);
         retrieveBoxIdWithParameters.setBoxHeight(1009802,1);
-        retrieveBoxIdWithParameters.setBoxSpeciality(1009802,Special.Classique);
+        retrieveBoxIdWithParameters.setBoxSpeciality(1009802,Special.CLASSIQUE);
 
-        retrieveBoxIdWithParameters.setBoxColor(1000199,Color.Vert);
+        retrieveBoxIdWithParameters.setBoxColor(1000199,Color.VERT);
         retrieveBoxIdWithParameters.setBoxIsIrrigated(1000199,false);
         retrieveBoxIdWithParameters.setBoxHeight(1000199,4);
-        retrieveBoxIdWithParameters.setBoxSpeciality(1000199,Special.Engrais);
+        retrieveBoxIdWithParameters.setBoxSpeciality(1000199,Special.ENGRAIS);
 
-        retrieveBoxIdWithParameters.setBoxColor(1000298,Color.Rouge);
+        retrieveBoxIdWithParameters.setBoxColor(1000298,Color.ROUGE);
         retrieveBoxIdWithParameters.setBoxIsIrrigated(1000298,false);
         retrieveBoxIdWithParameters.setBoxHeight(1000298,3);
-        retrieveBoxIdWithParameters.setBoxSpeciality(1000298,Special.Engrais);
+        retrieveBoxIdWithParameters.setBoxSpeciality(1000298,Special.ENGRAIS);
 
-        retrieveBoxIdWithParameters.setBoxColor(1000397,Color.Vert);
+        retrieveBoxIdWithParameters.setBoxColor(1000397,Color.VERT);
         retrieveBoxIdWithParameters.setBoxIsIrrigated(1000397,true);
         retrieveBoxIdWithParameters.setBoxHeight(1000397,2);
-        retrieveBoxIdWithParameters.setBoxSpeciality(1000397,Special.Classique);
+        retrieveBoxIdWithParameters.setBoxSpeciality(1000397,Special.CLASSIQUE);
 
-        retrieveBoxIdWithParameters.setBoxColor(1009703,Color.Jaune);
+        retrieveBoxIdWithParameters.setBoxColor(1009703,Color.JAUNE);
         retrieveBoxIdWithParameters.setBoxIsIrrigated(1009703,true);
         retrieveBoxIdWithParameters.setBoxHeight(1009703,4);
-        retrieveBoxIdWithParameters.setBoxSpeciality(1009703,Special.Protéger);
+        retrieveBoxIdWithParameters.setBoxSpeciality(1009703,Special.PROTEGER);
     }
 
     private static Stream<Arguments> provideSetBoxHeight_AndDelete(){
@@ -62,9 +62,9 @@ class RetrieveBoxIdWithParametersTest {
 
     private static Stream<Arguments> provideSetBoxColor(){
         return Stream.of(
-                Arguments.of(1009901, Color.Vert,0,3),
-                Arguments.of(1009802, Color.Jaune,0,2),
-                Arguments.of(1000199, Color.Vert,1,3)
+                Arguments.of(1009901, Color.VERT,0,3),
+                Arguments.of(1009802, Color.JAUNE,0,2),
+                Arguments.of(1000199, Color.VERT,1,3)
         );
     }
 
@@ -78,9 +78,9 @@ class RetrieveBoxIdWithParametersTest {
 
     private static Stream<Arguments> provideSetBoxSpeciality(){
         return Stream.of(
-                Arguments.of(1009901, Special.Classique,0,3),
-                Arguments.of(1009802, Special.Classique,1,3),
-                Arguments.of(1000199, Special.Engrais,0,2)
+                Arguments.of(1009901, Special.CLASSIQUE,0,3),
+                Arguments.of(1009802, Special.CLASSIQUE,1,3),
+                Arguments.of(1000199, Special.ENGRAIS,0,2)
         );
     }
 
@@ -93,7 +93,7 @@ class RetrieveBoxIdWithParametersTest {
                         Optional.empty()),
 
                 Arguments.of(new ArrayList<>(Arrays.asList(1000298)), 1,
-                        Optional.of(new ArrayList<>(Arrays.asList(Color.Rouge))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Color.ROUGE))),
                         Optional.empty(),
                         Optional.empty(),
                         Optional.empty()),
@@ -111,20 +111,20 @@ class RetrieveBoxIdWithParametersTest {
                         Optional.empty(),
                         Optional.empty(),
                         Optional.empty(),
-                        Optional.of(new ArrayList<>(Arrays.asList(Special.Protéger)))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Special.PROTEGER)))),
 
                 Arguments.of(new ArrayList<>(Arrays.asList(1009901,1000397)), 2,
-                        Optional.of(new ArrayList<>(Arrays.asList(Color.Vert))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Color.VERT))),
                         Optional.empty(),
                         Optional.empty(),
-                        Optional.of(new ArrayList<>(Arrays.asList(Special.Classique)))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Special.CLASSIQUE)))),
                 Arguments.of(new ArrayList<>(Arrays.asList(1009901)), 1,
                         Optional.empty(),
                         Optional.of(new ArrayList<>(Arrays.asList(true))),
                         Optional.of(new ArrayList<>(Arrays.asList(3))),
                         Optional.empty()),
                 Arguments.of(new ArrayList<>(Arrays.asList(1000199)), 1,
-                        Optional.of(new ArrayList<>(Arrays.asList(Color.Vert))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Color.VERT))),
                         Optional.empty(),
                         Optional.of(new ArrayList<>(Arrays.asList(4))),
                         Optional.empty()),
@@ -132,30 +132,30 @@ class RetrieveBoxIdWithParametersTest {
                         Optional.empty(),
                         Optional.of(new ArrayList<>(Arrays.asList(false,true))),
                         Optional.empty(),
-                        Optional.of(new ArrayList<>(Arrays.asList(Special.Engrais)))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Special.ENGRAIS)))),
 
                 Arguments.of(new ArrayList<>(Arrays.asList(1009901,1000397)), 2,
-                        Optional.of(new ArrayList<>(Arrays.asList(Color.Vert))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Color.VERT))),
                         Optional.of(new ArrayList<>(Arrays.asList(true))),
                         Optional.of(new ArrayList<>(Arrays.asList(1,2,3))),
                         Optional.empty()),
                 Arguments.of(new ArrayList<>(Arrays.asList(1000397, 1009802, 1009703)), 3,
-                        Optional.of(new ArrayList<>(Arrays.asList(Color.Vert, Color.Rouge, Color.Jaune))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Color.VERT, Color.ROUGE, Color.JAUNE))),
                         Optional.empty(),
                         Optional.of(new ArrayList<>(Arrays.asList(1,2,4))),
-                        Optional.of(new ArrayList<>(Arrays.asList(Special.Classique,Special.Protéger)))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Special.CLASSIQUE,Special.PROTEGER)))),
 
                 Arguments.of(new ArrayList<>(Arrays.asList(1009901,1000397)), 2,
-                        Optional.of(new ArrayList<>(Arrays.asList(Color.Vert))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Color.VERT))),
                         Optional.of(new ArrayList<>(Arrays.asList(true,false))),
                         Optional.of(new ArrayList<>(Arrays.asList(1,2,3))),
-                        Optional.of(new ArrayList<>(Arrays.asList(Special.Classique)))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Special.CLASSIQUE)))),
 
                 Arguments.of(new ArrayList<>(Arrays.asList()), 0,
-                        Optional.of(new ArrayList<>(Arrays.asList(Color.Rouge))),
+                        Optional.of(new ArrayList<>(Arrays.asList(Color.ROUGE))),
                         Optional.of(new ArrayList<>(Arrays.asList(false))),
                         Optional.of(new ArrayList<>(Arrays.asList(1))),
-                        Optional.of(new ArrayList<>(Arrays.asList(Special.Engrais)))));
+                        Optional.of(new ArrayList<>(Arrays.asList(Special.ENGRAIS)))));
     }
 
 

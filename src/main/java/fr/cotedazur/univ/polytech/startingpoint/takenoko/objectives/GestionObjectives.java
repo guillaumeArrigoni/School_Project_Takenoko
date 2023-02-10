@@ -1,13 +1,13 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerError;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotSimulator;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.DeletingBotBambooException;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumBoxProperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.Bot;
 
@@ -17,71 +17,71 @@ public class GestionObjectives {
 
     private final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
     private final Board board;
-    private ArrayList<ObjectiveParcelle> ParcelleObjectifs;
-    private ArrayList<ObjectiveJardinier> JardinierObjectifs;
-    private ArrayList<ObjectivePanda> PandaObjectifs;
-    private final int NB_LISTES_OBJECTIVES = 3;
-    private boolean ABotHasEnoughObjectivesDone;
-    private LoggerError loggerError;
+    private ArrayList<ObjectiveParcelle> parcelleObjectives;
+    private ArrayList<ObjectiveJardinier> jardinierObjectives;
+    private ArrayList<ObjectivePanda> pandaObjectives;
+    private static final int NB_LISTES_OBJECTIVES = 3;
+    private boolean aBotHasEnoughObjectivesDone;
+    private final LoggerError loggerError;
 
-    PatternParcelle POSER_TRIANGLE = new PatternParcelle("TRIANGLE");
-    PatternParcelle POSER_LIGNE = new PatternParcelle("LIGNE");
-    PatternParcelle POSER_COURBE = new PatternParcelle("COURBE");
-    PatternParcelle POSER_LOSANGE = new PatternParcelle("LOSANGE");
-    PatternJardinier PLANTER_SUR_SOURCE_EAU = new PatternJardinier(1,4, Special.SourceEau);
-    PatternJardinier PLANTER_SUR_ENGRAIS = new PatternJardinier(1,4,Special.Engrais);
-    PatternJardinier PLANTER_SUR_PROTEGER = new PatternJardinier(1,4,Special.Protéger);
-    PatternJardinier PLANTER_SUR_CLASSIQUE = new PatternJardinier(1,4,Special.Classique);
-    PatternJardinier PLANTER_DEUX_ROUGES = new PatternJardinier(2,3,null);
-    PatternJardinier PLANTER_TROIS_JAUNES = new PatternJardinier(3,3,null);
-    PatternJardinier PLANTER_QUATRE_VERTS = new PatternJardinier(4,3,null);
-    PatternPanda MANGER_DEUX_BAMBOUS = new PatternPanda(2,1,null);
-    PatternPanda MANGER_TROIS_BAMBOUS = new PatternPanda(3,1,null);
-    ObjectiveParcelle POSER_TRIANGLE_VERT = new ObjectiveParcelle("POSER_TRIANGLE_VERT",2, POSER_TRIANGLE, new ArrayList<>(Arrays.asList( Color.Vert)));
-    ObjectiveParcelle POSER_TRIANGLE_JAUNE= new ObjectiveParcelle("POSER_TRIANGLE_JAUNE",3, POSER_TRIANGLE, new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectiveParcelle POSER_TRIANGLE_ROUGE= new ObjectiveParcelle("POSER_TRIANGLE_ROUGE",4, POSER_TRIANGLE, new ArrayList<>(Arrays.asList( Color.Rouge)));
-    ObjectiveParcelle POSER_LIGNE_VERTE= new ObjectiveParcelle("POSER_LIGNE_VERTE",2, POSER_LIGNE, new ArrayList<>(Arrays.asList( Color.Vert)));
-    ObjectiveParcelle POSER_LIGNE_JAUNE= new ObjectiveParcelle("POSER_LIGNE_JAUNE",3, POSER_LIGNE, new ArrayList<>(Arrays.asList( Color.Jaune)));
-    ObjectiveParcelle POSER_LIGNE_ROUGE= new ObjectiveParcelle("POSER_LIGNE_ROUGE",4, POSER_LIGNE, new ArrayList<>(Arrays.asList( Color.Rouge)));
-    ObjectiveParcelle POSER_COURBE_VERTE= new ObjectiveParcelle("POSER_COURBE_VERTE",2, POSER_COURBE, new ArrayList<>(Arrays.asList( Color.Vert)));
-    ObjectiveParcelle POSER_COURBE_JAUNE= new ObjectiveParcelle("POSER_COURBE_JAUNE",3, POSER_COURBE, new ArrayList<>(Arrays.asList( Color.Jaune)));
-    ObjectiveParcelle POSER_COURBE_ROUGE= new ObjectiveParcelle("POSER_COURBE_ROUGE",4, POSER_COURBE, new ArrayList<>(Arrays.asList( Color.Rouge)));
-    ObjectiveParcelle POSER_LOSANGE_VERT= new ObjectiveParcelle("POSER_LOSANGE_VERT",3, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Vert)));
-    ObjectiveParcelle POSER_LOSANGE_JAUNE= new ObjectiveParcelle("POSER_LOSANGE_JAUNE",4, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Jaune)));
-    ObjectiveParcelle POSER_LOSANGE_ROUGE= new ObjectiveParcelle("POSER_LOSANGE_ROUGE",5, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Rouge)));
-    ObjectiveParcelle POSER_LOSANGE_VERT_JAUNE= new ObjectiveParcelle("POSER_LOSANGE_VERT_JAUNE",3, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Vert,Color.Jaune)));
-    ObjectiveParcelle POSER_LOSANGE_VERT_ROUGE= new ObjectiveParcelle("POSER_LOSANGE_VERT_ROUGE",4, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Vert,Color.Rouge)));
-    ObjectiveParcelle POSER_LOSANGE_ROUGE_JAUNE= new ObjectiveParcelle("POSER_LOSANGE_ROUGE_JAUNE",5, POSER_LOSANGE, new ArrayList<>(Arrays.asList( Color.Rouge,Color.Jaune)));
-    ObjectiveJardinier PLANTER_SUR_SOURCE_EAU_BAMBOU_VERT = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_VERT",4,PLANTER_SUR_SOURCE_EAU,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectiveJardinier PLANTER_SUR_SOURCE_EAU_BAMBOU_JAUNE = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_JAUNE",4,PLANTER_SUR_SOURCE_EAU,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectiveJardinier PLANTER_SUR_SOURCE_EAU_BAMBOU_ROUGE = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_ROUGE",4,PLANTER_SUR_SOURCE_EAU,new ArrayList<>(Arrays.asList(Color.Rouge)));
-    ObjectiveJardinier PLANTER_SUR_ENGRAIS_BAMBOU_VERT = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_VERT",3,PLANTER_SUR_ENGRAIS,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectiveJardinier PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE",4,PLANTER_SUR_ENGRAIS,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectiveJardinier PLANTER_SUR_ENGRAIS_BAMBOU_ROUGE = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_ROUGE",5,PLANTER_SUR_ENGRAIS,new ArrayList<>(Arrays.asList(Color.Rouge)));
-    ObjectiveJardinier PLANTER_SUR_PROTEGER_BAMBOU_VERT = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_VERT",4,PLANTER_SUR_PROTEGER,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectiveJardinier PLANTER_SUR_PROTEGER_BAMBOU_JAUNE = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_JAUNE",5,PLANTER_SUR_PROTEGER,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectiveJardinier PLANTER_SUR_PROTEGER_BAMBOU_ROUGE = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_ROUGE",6,PLANTER_SUR_PROTEGER,new ArrayList<>(Arrays.asList(Color.Rouge)));
-    ObjectiveJardinier PLANTER_SUR_CLASSIQUE_BAMBOU_VERT = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_VERT",5,PLANTER_SUR_CLASSIQUE,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectiveJardinier PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE",6,PLANTER_SUR_CLASSIQUE,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectiveJardinier PLANTER_SUR_CLASSIQUE_BAMBOU_ROUGE = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_ROUGE",7,PLANTER_SUR_CLASSIQUE,new ArrayList<>(Arrays.asList(Color.Rouge)));
-    ObjectiveJardinier PLANTER_DEUX_BAMBOUS_ROUGES = new ObjectiveJardinier("PLANTER_DEUX_BAMBOUS_ROUGES",6,PLANTER_DEUX_ROUGES,new ArrayList<>(Arrays.asList(Color.Rouge)));
-    ObjectiveJardinier PLANTER_TROIS_BAMBOUS_JAUNES = new ObjectiveJardinier("PLANTER_TROIS_BAMBOUS_JAUNES",7,PLANTER_TROIS_JAUNES,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectiveJardinier PLANTER_QUATRE_BAMBOUS_VERTS = new ObjectiveJardinier("PLANTER_QUATRE_BAMBOUS_VERTS",8,PLANTER_QUATRE_VERTS,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectivePanda MANGER_DEUX_VERTS_1 = new ObjectivePanda("MANGER_DEUX_VERTS_1",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectivePanda MANGER_DEUX_VERTS_2 = new ObjectivePanda("MANGER_DEUX_VERTS_2",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectivePanda MANGER_DEUX_VERTS_3 = new ObjectivePanda("MANGER_DEUX_VERTS_3",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectivePanda MANGER_DEUX_VERTS_4 = new ObjectivePanda("MANGER_DEUX_VERTS_4",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectivePanda MANGER_DEUX_VERTS_5 = new ObjectivePanda("MANGER_DEUX_VERTS_5",3,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert)));
-    ObjectivePanda MANGER_DEUX_JAUNES_1 = new ObjectivePanda("MANGER_DEUX_JAUNES_1",4,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectivePanda MANGER_DEUX_JAUNES_2 = new ObjectivePanda("MANGER_DEUX_JAUNES_2",4,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectivePanda MANGER_DEUX_JAUNES_3 = new ObjectivePanda("MANGER_DEUX_JAUNES_3",4,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectivePanda MANGER_DEUX_JAUNES_4 = new ObjectivePanda("MANGER_DEUX_JAUNES_4",4,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Jaune)));
-    ObjectivePanda MANGER_DEUX_ROUGES_1 = new ObjectivePanda("MANGER_DEUX_ROUGES_1",5,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Rouge)));
-    ObjectivePanda MANGER_DEUX_ROUGES_2 = new ObjectivePanda("MANGER_DEUX_ROUGES_2",5,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Rouge)));
-    ObjectivePanda MANGER_DEUX_ROUGES_3 = new ObjectivePanda("MANGER_DEUX_ROUGES_3",5,MANGER_DEUX_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Rouge)));
-    ObjectivePanda MANGER_TRICOLORE_1 = new ObjectivePanda("MANGER_TRICOLORE_1",6,MANGER_TROIS_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
-    ObjectivePanda MANGER_TRICOLORE_2 = new ObjectivePanda("MANGER_TRICOLORE_2",6,MANGER_TROIS_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
-    ObjectivePanda MANGER_TRICOLORE_3 = new ObjectivePanda("MANGER_TRICOLORE_3",6,MANGER_TROIS_BAMBOUS,new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
+    PatternParcelle poserTriangle = new PatternParcelle("TRIANGLE");
+    PatternParcelle poserLigne = new PatternParcelle("LIGNE");
+    PatternParcelle poserCourbe = new PatternParcelle("COURBE");
+    PatternParcelle poserLosange = new PatternParcelle("LOSANGE");
+    PatternJardinier planterSurSourceEau = new PatternJardinier(1,4, Special.SOURCE_EAU);
+    PatternJardinier planterSurEngrais = new PatternJardinier(1,4,Special.ENGRAIS);
+    PatternJardinier planterSurProteger = new PatternJardinier(1,4,Special.PROTEGER);
+    PatternJardinier planterSurClassique = new PatternJardinier(1,4,Special.CLASSIQUE);
+    PatternJardinier planterDeuxRouges = new PatternJardinier(2,3,null);
+    PatternJardinier planterTroisJaunes = new PatternJardinier(3,3,null);
+    PatternJardinier planterQuatreVerts = new PatternJardinier(4,3,null);
+    PatternPanda mangerDeuxBambous = new PatternPanda(2,1,null);
+    PatternPanda mangerTroisBambous = new PatternPanda(3,1,null);
+    ObjectiveParcelle poserTriangleVert = new ObjectiveParcelle("POSER_TRIANGLE_VERT",2, poserTriangle, new ArrayList<>(List.of(Color.VERT)));
+    ObjectiveParcelle poserTriangleJaune = new ObjectiveParcelle("POSER_TRIANGLE_JAUNE",3, poserTriangle, new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveParcelle poserTriangleRouge = new ObjectiveParcelle("POSER_TRIANGLE_ROUGE",4, poserTriangle, new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveParcelle poserLigneVerte = new ObjectiveParcelle("POSER_LIGNE_VERTE",2, poserLigne, new ArrayList<>(List.of(Color.VERT)));
+    ObjectiveParcelle poserLigneJaune = new ObjectiveParcelle("POSER_LIGNE_JAUNE",3, poserLigne, new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveParcelle poserLigneRouge = new ObjectiveParcelle("POSER_LIGNE_ROUGE",4, poserLigne, new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveParcelle poserCourbeVerte = new ObjectiveParcelle("POSER_COURBE_VERTE",2, poserCourbe, new ArrayList<>(List.of(Color.VERT)));
+    ObjectiveParcelle poserCourbeJaune = new ObjectiveParcelle("POSER_COURBE_JAUNE",3, poserCourbe, new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveParcelle poserCourbeRouge = new ObjectiveParcelle("POSER_COURBE_ROUGE",4, poserCourbe, new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveParcelle poserLosangeVert = new ObjectiveParcelle("POSER_LOSANGE_VERT",3, poserLosange, new ArrayList<>(List.of(Color.VERT)));
+    ObjectiveParcelle poserLosangeJaune = new ObjectiveParcelle("POSER_LOSANGE_JAUNE",4, poserLosange, new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveParcelle poserLosangeRouge = new ObjectiveParcelle("POSER_LOSANGE_ROUGE",5, poserLosange, new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveParcelle poserLosangeVertJaune = new ObjectiveParcelle("POSER_LOSANGE_VERT_JAUNE",3, poserLosange, new ArrayList<>(Arrays.asList( Color.VERT,Color.JAUNE)));
+    ObjectiveParcelle poserLosangeVertRouge = new ObjectiveParcelle("POSER_LOSANGE_VERT_ROUGE",4, poserLosange, new ArrayList<>(Arrays.asList( Color.VERT,Color.ROUGE)));
+    ObjectiveParcelle poserLosangeRougeJaune = new ObjectiveParcelle("POSER_LOSANGE_ROUGE_JAUNE",5, poserLosange, new ArrayList<>(Arrays.asList( Color.ROUGE,Color.JAUNE)));
+    ObjectiveJardinier planterSurSourceEauBambouVert = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_VERT",4, planterSurSourceEau,new ArrayList<>(List.of(Color.VERT)));
+    ObjectiveJardinier planterSurSourceEauBambouJaune = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_JAUNE",4, planterSurSourceEau,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveJardinier planterSurSourceEauBambouRouge = new ObjectiveJardinier("PLANTER_SUR_SOURCE_EAU_BAMBOU_ROUGE",4, planterSurSourceEau,new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveJardinier planterSurEngraisBambouVert = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_VERT",3, planterSurEngrais,new ArrayList<>(List.of(Color.VERT)));
+    ObjectiveJardinier planterSurEngraisBambouJaune = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE",4, planterSurEngrais,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveJardinier planterSurEngraisBambouRouge = new ObjectiveJardinier("PLANTER_SUR_ENGRAIS_BAMBOU_ROUGE",5, planterSurEngrais,new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveJardinier planterSurProtegerBambouVert = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_VERT",4, planterSurProteger,new ArrayList<>(List.of(Color.VERT)));
+    ObjectiveJardinier planterSurProtegerBambouJaune = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_JAUNE",5, planterSurProteger,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveJardinier planterSurProtegerBambouRouge = new ObjectiveJardinier("PLANTER_SUR_PROTEGER_BAMBOU_ROUGE",6, planterSurProteger,new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveJardinier planterSurClassiqueBambouVert = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_VERT",5, planterSurClassique,new ArrayList<>(List.of(Color.VERT)));
+    ObjectiveJardinier planterSurClassiqueBambouJaune = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE",6, planterSurClassique,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveJardinier planterSurClassiqueBambouRouge = new ObjectiveJardinier("PLANTER_SUR_CLASSIQUE_BAMBOU_ROUGE",7, planterSurClassique,new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveJardinier planterDeuxBambousRouges = new ObjectiveJardinier("PLANTER_DEUX_BAMBOUS_ROUGES",6, planterDeuxRouges,new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectiveJardinier planterTroisBambousJaunes = new ObjectiveJardinier("PLANTER_TROIS_BAMBOUS_JAUNES",7, planterTroisJaunes,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectiveJardinier planterQuatreBambousVerts = new ObjectiveJardinier("PLANTER_QUATRE_BAMBOUS_VERTS",8, planterQuatreVerts,new ArrayList<>(List.of(Color.VERT)));
+    ObjectivePanda mangerDeuxVerts1 = new ObjectivePanda("MANGER_DEUX_VERTS_1",3, mangerDeuxBambous,new ArrayList<>(List.of(Color.VERT)));
+    ObjectivePanda mangerDeuxVerts2 = new ObjectivePanda("MANGER_DEUX_VERTS_2",3, mangerDeuxBambous,new ArrayList<>(List.of(Color.VERT)));
+    ObjectivePanda mangerDeuxVerts3 = new ObjectivePanda("MANGER_DEUX_VERTS_3",3, mangerDeuxBambous,new ArrayList<>(List.of(Color.VERT)));
+    ObjectivePanda mangerDeuxVerts4 = new ObjectivePanda("MANGER_DEUX_VERTS_4",3, mangerDeuxBambous,new ArrayList<>(List.of(Color.VERT)));
+    ObjectivePanda mangerDeuxVerts5 = new ObjectivePanda("MANGER_DEUX_VERTS_5",3, mangerDeuxBambous,new ArrayList<>(List.of(Color.VERT)));
+    ObjectivePanda mangerDeuxJaunes1 = new ObjectivePanda("MANGER_DEUX_JAUNES_1",4, mangerDeuxBambous,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectivePanda mangerDeuxJaunes2 = new ObjectivePanda("MANGER_DEUX_JAUNES_2",4, mangerDeuxBambous,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectivePanda mangerDeuxJaunes3 = new ObjectivePanda("MANGER_DEUX_JAUNES_3",4, mangerDeuxBambous,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectivePanda mangerDeuxJaunes4 = new ObjectivePanda("MANGER_DEUX_JAUNES_4",4, mangerDeuxBambous,new ArrayList<>(List.of(Color.JAUNE)));
+    ObjectivePanda mangerDeuxRouges1 = new ObjectivePanda("MANGER_DEUX_ROUGES_1",5, mangerDeuxBambous,new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectivePanda mangerDeuxRouges2 = new ObjectivePanda("MANGER_DEUX_ROUGES_2",5, mangerDeuxBambous,new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectivePanda mangerDeuxRouges3 = new ObjectivePanda("MANGER_DEUX_ROUGES_3",5, mangerDeuxBambous,new ArrayList<>(List.of(Color.ROUGE)));
+    ObjectivePanda mangerTricolore1 = new ObjectivePanda("MANGER_TRICOLORE_1",6, mangerTroisBambous,new ArrayList<>(Arrays.asList(Color.VERT,Color.JAUNE,Color.ROUGE)));
+    ObjectivePanda mangerTricolore2 = new ObjectivePanda("MANGER_TRICOLORE_2",6, mangerTroisBambous,new ArrayList<>(Arrays.asList(Color.VERT,Color.JAUNE,Color.ROUGE)));
+    ObjectivePanda mangerTricolore3 = new ObjectivePanda("MANGER_TRICOLORE_3",6, mangerTroisBambous,new ArrayList<>(Arrays.asList(Color.VERT,Color.JAUNE,Color.ROUGE)));
 
     /**
      * This Constructor creates an instance witch contains the different ArrayLists of Objective.
@@ -90,10 +90,10 @@ public class GestionObjectives {
     public GestionObjectives(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, LoggerError loggerError){
         this.retrieveBoxIdWithParameters = retrieveBoxIdWithParameters;
         this.board = board;
-        this.ParcelleObjectifs = new ArrayList<>();
-        this.JardinierObjectifs = new ArrayList<>();
-        this.PandaObjectifs = new ArrayList<>();
-        this.ABotHasEnoughObjectivesDone = false;
+        this.parcelleObjectives = new ArrayList<>();
+        this.jardinierObjectives = new ArrayList<>();
+        this.pandaObjectives = new ArrayList<>();
+        this.aBotHasEnoughObjectivesDone = false;
         this.loggerError = loggerError;
     }
 
@@ -101,69 +101,69 @@ public class GestionObjectives {
      * This method creates the ArrayList of ObjectiveParcelle by default, using all the objectives with the type PARCELLE.
      * @return An ArrayList with all the ObjectiveParcelle.
      */
-    public ArrayList<ObjectiveParcelle> ListOfObjectiveParcelleByDefault(){
+    public ArrayList<ObjectiveParcelle> listOfObjectiveParcelleByDefault(){
         return new ArrayList<>(Arrays.asList(
-                POSER_TRIANGLE_VERT,
-                POSER_TRIANGLE_JAUNE,
-                POSER_TRIANGLE_ROUGE,
-                POSER_LIGNE_VERTE,
-                POSER_LIGNE_JAUNE,
-                POSER_LIGNE_ROUGE,
-                POSER_COURBE_VERTE,
-                POSER_COURBE_JAUNE,
-                POSER_COURBE_ROUGE,
-                POSER_LOSANGE_VERT,
-                POSER_LOSANGE_JAUNE,
-                POSER_LOSANGE_ROUGE,
-                POSER_LOSANGE_VERT_ROUGE,
-                POSER_LOSANGE_VERT_JAUNE,
-                POSER_LOSANGE_ROUGE_JAUNE));
+                poserTriangleVert,
+                poserTriangleJaune,
+                poserTriangleRouge,
+                poserLigneVerte,
+                poserLigneJaune,
+                poserLigneRouge,
+                poserCourbeVerte,
+                poserCourbeJaune,
+                poserCourbeRouge,
+                poserLosangeVert,
+                poserLosangeJaune,
+                poserLosangeRouge,
+                poserLosangeVertRouge,
+                poserLosangeVertJaune,
+                poserLosangeRougeJaune));
     }
 
     /**
      * This method creates the ArrayList of ObjectiveJardinier by default, using all the objectives with the type JARDINIER.
      * @return An ArrayList with all the ObjectiveJardinier.
      */
-    public ArrayList<ObjectiveJardinier> ListOfObjectiveJardinierByDefault(){
+    public ArrayList<ObjectiveJardinier> listOfObjectiveJardinierByDefault(){
         return new ArrayList<>(Arrays.asList(
-                PLANTER_SUR_SOURCE_EAU_BAMBOU_VERT,
-                PLANTER_SUR_SOURCE_EAU_BAMBOU_JAUNE,
-                PLANTER_SUR_SOURCE_EAU_BAMBOU_ROUGE,
-                PLANTER_SUR_ENGRAIS_BAMBOU_VERT,
-                PLANTER_SUR_ENGRAIS_BAMBOU_JAUNE,
-                PLANTER_SUR_ENGRAIS_BAMBOU_ROUGE,
-                PLANTER_SUR_PROTEGER_BAMBOU_VERT,
-                PLANTER_SUR_PROTEGER_BAMBOU_JAUNE,
-                PLANTER_SUR_PROTEGER_BAMBOU_ROUGE,
-                PLANTER_SUR_CLASSIQUE_BAMBOU_VERT,
-                PLANTER_SUR_CLASSIQUE_BAMBOU_JAUNE,
-                PLANTER_SUR_CLASSIQUE_BAMBOU_ROUGE,
-                PLANTER_DEUX_BAMBOUS_ROUGES,
-                PLANTER_TROIS_BAMBOUS_JAUNES,
-                PLANTER_QUATRE_BAMBOUS_VERTS));
+                planterSurSourceEauBambouVert,
+                planterSurSourceEauBambouJaune,
+                planterSurSourceEauBambouRouge,
+                planterSurEngraisBambouVert,
+                planterSurEngraisBambouJaune,
+                planterSurEngraisBambouRouge,
+                planterSurProtegerBambouVert,
+                planterSurProtegerBambouJaune,
+                planterSurProtegerBambouRouge,
+                planterSurClassiqueBambouVert,
+                planterSurClassiqueBambouJaune,
+                planterSurClassiqueBambouRouge,
+                planterDeuxBambousRouges,
+                planterTroisBambousJaunes,
+                planterQuatreBambousVerts));
     }
 
     /**
      * This method creates the ArrayList of ObjectivePanda by default, using all the objectives with the type PANDA.
      * @return An ArrayList with all the ObjectivePanda.
      */
-    public ArrayList<ObjectivePanda> ListOfObjectivePandaByDefault(){
+    public ArrayList<ObjectivePanda> listOfObjectivePandaByDefault(){
         return new ArrayList<>(Arrays.asList(
-                MANGER_DEUX_VERTS_1,
-                MANGER_DEUX_VERTS_2,
-                MANGER_DEUX_VERTS_3,
-                MANGER_DEUX_VERTS_4,
-                MANGER_DEUX_VERTS_5,
-                MANGER_DEUX_JAUNES_1,
-                MANGER_DEUX_JAUNES_2,
-                MANGER_DEUX_JAUNES_3,
-                MANGER_DEUX_JAUNES_4,
-                MANGER_DEUX_ROUGES_1,
-                MANGER_DEUX_ROUGES_2,
-                MANGER_DEUX_ROUGES_3,
-                MANGER_TRICOLORE_1,
-                MANGER_TRICOLORE_2,
-                MANGER_TRICOLORE_3
+                mangerDeuxVerts1,
+                mangerDeuxVerts2,
+                mangerDeuxVerts3,
+                mangerDeuxVerts4,
+                mangerDeuxVerts5,
+                mangerDeuxJaunes1,
+                mangerDeuxJaunes2,
+                mangerDeuxJaunes3,
+                mangerDeuxJaunes4,
+                mangerDeuxRouges1,
+                mangerDeuxRouges2,
+                mangerDeuxRouges3,
+                mangerTricolore1,
+                mangerTricolore2,
+                mangerTricolore3
         ));
     }
 
@@ -173,9 +173,9 @@ public class GestionObjectives {
      */
     public GestionObjectives copy(Board board, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters){
         GestionObjectives gestionObjectives = new GestionObjectives(board, retrieveBoxIdWithParameters, this.loggerError);
-        gestionObjectives.ParcelleObjectifs = new ArrayList<>(this.ParcelleObjectifs);
-        gestionObjectives.JardinierObjectifs = new ArrayList<>(this.JardinierObjectifs);
-        gestionObjectives.PandaObjectifs = new ArrayList<>(this.PandaObjectifs);
+        gestionObjectives.parcelleObjectives = new ArrayList<>(this.parcelleObjectives);
+        gestionObjectives.jardinierObjectives = new ArrayList<>(this.jardinierObjectives);
+        gestionObjectives.pandaObjectives = new ArrayList<>(this.pandaObjectives);
         return gestionObjectives;
     }
 
@@ -186,33 +186,33 @@ public class GestionObjectives {
      * This method initializes the fields of the instance corresponding to the different Arraylists of Objectives.
      */
     public void initialize(ArrayList<ObjectiveParcelle> objectiveParcelleArrayList,ArrayList<ObjectiveJardinier> objectiveJardinierArrayList, ArrayList<ObjectivePanda> objectivePandaArrayList) {
-        this.ParcelleObjectifs = objectiveParcelleArrayList;
-        this.JardinierObjectifs = objectiveJardinierArrayList;
-        this.PandaObjectifs = objectivePandaArrayList;
+        this.parcelleObjectives = objectiveParcelleArrayList;
+        this.jardinierObjectives = objectiveJardinierArrayList;
+        this.pandaObjectives = objectivePandaArrayList;
     }
 
     /**
      * This method is a getter for the field ParcelleObjectives.
      * @return an ArrayList witch correspond to the field ParcelleObjectives.
      */
-    public ArrayList<ObjectiveParcelle> getParcelleObjectifs() {
-        return ParcelleObjectifs;
+    public ArrayList<ObjectiveParcelle> getParcelleObjectives() {
+        return parcelleObjectives;
     }
 
     /**
      * This method is a getter for the field JardinierObjectives.
      * @return an ArrayList witch correspond to the field JardinierObjectives.
      */
-    public ArrayList<ObjectiveJardinier> getJardinierObjectifs() {
-        return JardinierObjectifs;
+    public ArrayList<ObjectiveJardinier> getJardinierObjectives() {
+        return jardinierObjectives;
     }
 
     /**
      * This method is a getter for the field PandaObjectives.
      * @return an ArrayList witch correspond to the field PandaObjectives.
      */
-    public ArrayList<ObjectivePanda> getPandaObjectifs() {
-        return PandaObjectifs;
+    public ArrayList<ObjectivePanda> getPandaObjectives() {
+        return pandaObjectives;
     }
 
     /**
@@ -220,7 +220,7 @@ public class GestionObjectives {
      * @return a boolean witch correspond to the field ABotHasEnoughObjectivesDone.
      */
     public boolean doesABotHaveEnoughObjectivesDone() {
-        return ABotHasEnoughObjectivesDone;
+        return aBotHasEnoughObjectivesDone;
     }
 
     /**
@@ -242,9 +242,9 @@ public class GestionObjectives {
      *            This method rolls (random) an objective among the objectives available with the TypeObjective PARCELLE.
      */
     public void rollParcelleObjective(Bot bot){
-        int i = new Random().nextInt(0, getParcelleObjectifs().size());
-        Objective objective = this.getParcelleObjectifs().get(i);
-        this.getParcelleObjectifs().remove(i);
+        int i = new Random().nextInt(0, getParcelleObjectives().size());
+        Objective objective = this.getParcelleObjectives().get(i);
+        this.getParcelleObjectives().remove(i);
         bot.getObjectives().add(objective);
         displayPickObj(bot,objective);
     }
@@ -254,9 +254,9 @@ public class GestionObjectives {
      *            This method rolls (random) an objective among the objectives available with the TypeObjective JARDINIER.
      */
     public void rollJardinierObjective(Bot bot){
-        int i = new Random().nextInt(0, getJardinierObjectifs().size());
-        Objective objective = this.getJardinierObjectifs().get(i);
-        this.getJardinierObjectifs().remove(i);
+        int i = new Random().nextInt(0, getJardinierObjectives().size());
+        Objective objective = this.getJardinierObjectives().get(i);
+        this.getJardinierObjectives().remove(i);
         bot.getObjectives().add(objective);
         displayPickObj(bot,objective);
     }
@@ -266,9 +266,9 @@ public class GestionObjectives {
      *            This method rolls (random) an objective among the objectives available with the TypeObjective PANDA.
      */
     public void rollPandaObjective(Bot bot){
-        int i = new Random().nextInt(0, getPandaObjectifs().size());
-        Objective objective = this.getPandaObjectifs().get(i);
-        this.getPandaObjectifs().remove(i);
+        int i = new Random().nextInt(0, getPandaObjectives().size());
+        Objective objective = this.getPandaObjectives().get(i);
+        this.getPandaObjectives().remove(i);
         bot.getObjectives().add(objective);
         displayPickObj(bot,objective);
     }
@@ -326,9 +326,9 @@ public class GestionObjectives {
      * @param sizePlayerList corresponds to the number of players in the game.
      */
     public void addPointsIfEnoughObjectivesDone(Bot bot, int sizePlayerList){
-        if(bot.getNumberObjectiveDone() >= this.getNumberOfObjectivesDoneToStartLastTurn(sizePlayerList) && !this.ABotHasEnoughObjectivesDone){
+        if(bot.getNumberObjectiveDone() >= this.getNumberOfObjectivesDoneToStartLastTurn(sizePlayerList) && !this.aBotHasEnoughObjectivesDone){
             bot.setScore(bot.getScore() + 2);
-            this.ABotHasEnoughObjectivesDone = true;
+            this.aBotHasEnoughObjectivesDone = true;
         }
     }
 
@@ -355,10 +355,10 @@ public class GestionObjectives {
         boolean isDone = false;
         try{
             if (objective.getPattern().getNbBambou() == 3){
-                if (bot.getBambooEaten().get(Color.Jaune)>=1 &&
-                        bot.getBambooEaten().get(Color.Vert)>=1 &&
-                        bot.getBambooEaten().get(Color.Rouge)>=1){
-                    bot.deleteBambooEaten(new ArrayList<>(Arrays.asList(Color.Vert,Color.Jaune,Color.Rouge)));
+                if (bot.getBambooEaten().get(Color.JAUNE)>=1 &&
+                        bot.getBambooEaten().get(Color.VERT)>=1 &&
+                        bot.getBambooEaten().get(Color.ROUGE)>=1){
+                    bot.deleteBambooEaten(new ArrayList<>(Arrays.asList(Color.VERT,Color.JAUNE,Color.ROUGE)));
                     isDone = true;
                 }
             } else {
@@ -380,10 +380,10 @@ public class GestionObjectives {
     public boolean checkJardinierObjectives(Objective objective) {
         ArrayList<Integer> listOfIdAvailable;
         if(objective.getPattern().getSpecial() == null){
-            listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.of(new ArrayList<>(Arrays.asList(objective.getPattern().getHauteurBambou()))),Optional.empty());
+            listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.of(new ArrayList<>(List.of(objective.getPattern().getHauteurBambou()))),Optional.empty());
         }
         else {
-            listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(), Optional.of(new ArrayList<>(Arrays.asList(objective.getPattern().getHauteurBambou()))), Optional.of(new ArrayList<>(Arrays.asList(objective.getPattern().getSpecial()))));
+            listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(), Optional.of(new ArrayList<>(List.of(objective.getPattern().getHauteurBambou()))), Optional.of(new ArrayList<>(Collections.singletonList(objective.getPattern().getSpecial()))));
         }
         return listOfIdAvailable.size() == objective.getPattern().getNbBambou();
     }
@@ -418,7 +418,7 @@ public class GestionObjectives {
                     idOfAdjacentBoxCorrect.add(j);
                 }
             }
-            if (ParcelleLosangeObjectiveCondition(box, idOfAdjacentBoxCorrect)) return true;
+            if (parcelleLosangeObjectiveCondition(box, idOfAdjacentBoxCorrect)) return true;
         }
         return false;
     }
@@ -429,7 +429,7 @@ public class GestionObjectives {
      * @param idOfAdjacentBoxCorrect contains all the adjacent box of the previous box that complete the objective condition (color, irrigated ...)
      * @return true if the rhombus parcel is completed, false if it does not
      */
-    private boolean ParcelleLosangeObjectiveCondition(HexagoneBoxPlaced box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
+    private boolean parcelleLosangeObjectiveCondition(HexagoneBoxPlaced box, ArrayList<Integer> idOfAdjacentBoxCorrect) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
             int adjIndice1 = (idOfAdjacentBoxCorrect.get(j)+1)%7;
             int adjIndice2 = (idOfAdjacentBoxCorrect.get(j)+2)%7;
@@ -460,7 +460,7 @@ public class GestionObjectives {
         ArrayList<Integer> listOfIdAvailable = retrieveBoxIdWithParameters.getAllIdThatCompleteCondition(Optional.of(objective.getColors()), Optional.empty(),Optional.empty(),Optional.empty());
         for (int i=0;i<listOfIdAvailable.size();i++){
             ArrayList<Integer> idOfAdjacentBoxCorrect = getAllAdjacentBoxThatCompleteTheCondition(listOfIdAvailable, i);
-            if (ParcelleObjectiveCondition(idOfAdjacentBoxCorrect, x)) return true;
+            if (parcelleObjectiveCondition(idOfAdjacentBoxCorrect, x)) return true;
         }
         return false;
     }
@@ -470,7 +470,7 @@ public class GestionObjectives {
      * Method with the triangle, line and curve condition
      * @param listOfIdAvailable contains all the box placed in the board that complete the requirement of the objective (color, irrigated,...)
      * @param i that have the value as before
-     * @return true if the parcel is compelted, false if it does not
+     * @return true if the parcel is completed, false if it does not
      */
     private ArrayList<Integer> getAllAdjacentBoxThatCompleteTheCondition(ArrayList<Integer> listOfIdAvailable, int i) {
         HexagoneBoxPlaced box = board.getPlacedBox().get(listOfIdAvailable.get(i));
@@ -486,11 +486,11 @@ public class GestionObjectives {
 
     /**
      * Method with the triangle, line and curve condition
-     * @param idOfAdjacentBoxCorrect wontains all the box that filled the objective's requirement and are adjacent of another box that also complete the objective's requirement
+     * @param idOfAdjacentBoxCorrect contains all the box that filled the objective's requirement and are adjacent of another box that also complete the objective's requirement
      * @param x that have the same value as before
      * @return true if the objective is completed or false if it does not.
      */
-    private boolean ParcelleObjectiveCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
+    private boolean parcelleObjectiveCondition(ArrayList<Integer> idOfAdjacentBoxCorrect, int x) {
         for (int j = 0; j< idOfAdjacentBoxCorrect.size(); j++){
             int adjIndice = idOfAdjacentBoxCorrect.get(j)+ x;
             if (adjIndice > 6) adjIndice = adjIndice - 6;
@@ -522,8 +522,8 @@ public class GestionObjectives {
                     scoresPanda[i] = bots.get(indicesBestScore.get(i)).getScorePanda();
                 }
                 ArrayList<Integer> indicesBestScorePanda = indiceMax(scoresPanda);
-                for(int j=0;j<indicesBestScorePanda.size();j++){
-                    botWinnerList.add(bots.get(indicesBestScore.get(indicesBestScorePanda.get(j))));
+                for (Integer integer : indicesBestScorePanda) {
+                    botWinnerList.add(bots.get(indicesBestScore.get(integer)));
                 }
             }
         }
@@ -531,7 +531,7 @@ public class GestionObjectives {
     }
 
     /**
-     * @param bot
+     * @param bot corresponds to the bot who wants to draw an objective.
      * @return a boolean corresponding to if the bot can draw an objective or if he has already too many objectives.
      */
     public boolean checkIfBotCanDrawAnObjective(Bot bot){
@@ -542,7 +542,6 @@ public class GestionObjectives {
      * int[] numberOfTypeObjectiveDone : - numberOfTypeObjectiveDone[0] -> PARCELLE
      *                                   - numberOfTypeObjectiveDone[1] -> JARDINIER
      *                                   - numberOfTypeObjectiveDone[2] -> PANDA
-     *
      * This method checks all the drawable Objectives and counts the amount of Objectives currently done,
      * and increments the array values associated to the TypeObjective of the objectives done.
      * It returns the TypeObjective that is the most done when all the drawable Objectives are checked.
@@ -550,13 +549,13 @@ public class GestionObjectives {
     public TypeObjective chooseTypeObjectiveByCheckingUnknownObjectives(Bot bot){
         int[] numberOfTypeObjectiveDone = new int[NB_LISTES_OBJECTIVES];
         int[] moyennePointsObjectives = new int[NB_LISTES_OBJECTIVES];
-        int sizeParcelle = this.getParcelleObjectifs().size();
-        int sizeJardinier = this.getJardinierObjectifs().size();
-        int sizePanda = this.getPandaObjectifs().size();
+        int sizeParcelle = this.getParcelleObjectives().size();
+        int sizeJardinier = this.getJardinierObjectives().size();
+        int sizePanda = this.getPandaObjectives().size();
         ArrayList<Objective> listOfAllObjectivesDrawable = new ArrayList<>();
-        listOfAllObjectivesDrawable.addAll(this.getParcelleObjectifs());
-        listOfAllObjectivesDrawable.addAll(this.getJardinierObjectifs());
-        listOfAllObjectivesDrawable.addAll(this.getPandaObjectifs());
+        listOfAllObjectivesDrawable.addAll(this.getParcelleObjectives());
+        listOfAllObjectivesDrawable.addAll(this.getJardinierObjectives());
+        listOfAllObjectivesDrawable.addAll(this.getPandaObjectives());
         for(Objective objective : listOfAllObjectivesDrawable){
             if(checkOneObjective(objective,bot)){
                 switch (objective.getType()){
@@ -624,24 +623,5 @@ public class GestionObjectives {
             }
         }
         return res;
-    }
-
-    /**
-     * @return the most present TypeObjective that can be drawn.
-     */
-    public TypeObjective mostPresentTypeObjectiveAvailableToDraw(){
-        int[] numberOfTypeObjectiveAvailable = new int[NB_LISTES_OBJECTIVES];
-        numberOfTypeObjectiveAvailable[0] = this.getParcelleObjectifs().size();
-        numberOfTypeObjectiveAvailable[1] = this.getJardinierObjectifs().size();
-        numberOfTypeObjectiveAvailable[2] = this.getPandaObjectifs().size();
-        ArrayList<Integer> indices = indiceMax(numberOfTypeObjectiveAvailable);
-        if(numberOfTypeObjectiveAvailable[indices.get(0)] !=0){
-            return switch (indices.get(0)){
-                case 0 -> TypeObjective.PARCELLE;
-                case 1 -> TypeObjective.JARDINIER;
-                default -> TypeObjective.PANDA;
-            };
-        }
-        return null;
     }
 }

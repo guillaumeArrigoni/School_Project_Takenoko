@@ -1,8 +1,8 @@
 package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLogIrrigation;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.tree.ActionLog;
+import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.tree.ActionLogIrrigation;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
@@ -174,6 +174,10 @@ public class BotSimulator extends Bot{
 
     public ActionLog getInstructions(){
         return instructions;
+    }
+
+    public void setInstructions(ActionLog instructions){
+        this.instructions = instructions;
     }
 
 }

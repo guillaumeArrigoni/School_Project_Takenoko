@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.tree;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
@@ -155,7 +155,8 @@ public class Node {
         }
     }
 
-    private List<ActionLog> generateIrrigationInstructions(){
+
+    public List<ActionLog> generateIrrigationInstructions(){
         List<ActionLog> irrigationInstructions = new ArrayList<>();
         GenerateAWayToIrrigateTheBox temp;
         for (HexagoneBoxPlaced box : value.getBoard().getPlacedBox().values()) {
@@ -176,7 +177,7 @@ public class Node {
         return getValue().getBoard().getElementOfTheBoard().getNbJetonSpecial().get(special);
     }
 
-    private List<ActionLog> generateSpecialInstruction(){
+    public List<ActionLog> generateSpecialInstruction(){
         List<ActionLog> specialInstructions = new ArrayList<>();
         if(getNbSpecial(Special.SourceEau) > 0){
             for (HexagoneBoxPlaced box : getValue().getBoard().getPlacedBox().values()) {

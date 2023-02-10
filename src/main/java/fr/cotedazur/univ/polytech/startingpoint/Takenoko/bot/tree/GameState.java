@@ -1,4 +1,4 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS;
+package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.tree;
 
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;

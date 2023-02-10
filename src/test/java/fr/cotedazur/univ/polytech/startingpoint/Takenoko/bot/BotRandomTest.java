@@ -78,7 +78,7 @@ class BotRandomTest {
         when(r.nextInt(anyInt(), anyInt())).thenReturn(0,1,2,0,0,0,1,2,1,1);
         when(r.nextInt(anyInt())).thenReturn(0,0);
         botRandom.playTurn(MeteoDice.Meteo.VENT, arg);
-        verify(r, times(5)).nextInt(anyInt(),anyInt());
+        verify(r, times(6)).nextInt(anyInt(),anyInt());
         verify(r, times(2)).nextInt(anyInt());
         assertEquals(3, board.getAllBoxPlaced().size());
     }
@@ -88,7 +88,7 @@ class BotRandomTest {
         when(r.nextInt(anyInt(), anyInt())).thenReturn(0);
         when(r.nextInt(anyInt())).thenReturn(0,1);
         botRandom.playTurn(MeteoDice.Meteo.VENT, arg);
-        verify(r, times(4)).nextInt(anyInt(),anyInt());
+        verify(r, times(5)).nextInt(anyInt(),anyInt());
         verify(r, times(2)).nextInt(anyInt());
         assertEquals(2, board.getAllBoxPlaced().size());
         assertNotEquals(new int[]{0,0,0}, board.getGardenerCoords());

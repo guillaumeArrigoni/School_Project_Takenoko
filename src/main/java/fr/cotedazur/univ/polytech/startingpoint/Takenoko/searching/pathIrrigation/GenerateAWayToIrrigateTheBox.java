@@ -23,6 +23,7 @@ public class GenerateAWayToIrrigateTheBox {
     private ArrayList<Crest> closestCrestToIrrigatedOfTheBox;
     private BoardSimulation boardSimulation;
     private CrestGestionnarySimulation crestGestionnarySimulation;
+    private Crest fakeCrest;
 
     /**
      * TODO : in order to be able to use all the different way to irrigate this box,
@@ -86,6 +87,7 @@ public class GenerateAWayToIrrigateTheBox {
      * @throws CloneNotSupportedException
      */
     private void setup() throws CrestNotRegistered, CloneNotSupportedException {
+        fakeCrest = new Crest(99,99,1);
         setupClosestCrest();
         this.boardSimulation = new BoardSimulation((Board) box.getBoard().clone());
         this.crestGestionnarySimulation = new CrestGestionnarySimulation(boardSimulation.getCrestGestionnary());
@@ -140,7 +142,7 @@ public class GenerateAWayToIrrigateTheBox {
         while (rangeFirstCrestInlist > 1 && pass) {
             ArrayList<Crest> listCrestToAdd = new ArrayList<>();
             for (Crest crestInList : intructions.get(0)){
-                if (crestInList.getId() == (new Crest(99,99,1).getId())){
+                if (crestInList.getId() == (fakeCrest.getId())){
                     pass = false;
                 } else if (!crestGestionnarySimulation.getListOfCrestIrrigated().contains(crestInList) && !crestInList.isIrrigated()){
                     listCrestToAdd.addAll((Collection<? extends Crest>) crestGestionnarySimulation.getLinkCrestChildrenToCrestParent().get(crestInList).clone());
@@ -166,7 +168,6 @@ public class GenerateAWayToIrrigateTheBox {
      * @return
      */
     private int tryGetRange(Crest crest){
-        Crest fakeCrest = new Crest(99,99,1);
         if (!crest.equals(fakeCrest)){
             try {
                 return crestGestionnarySimulation.getRangeFromIrrigatedOfCrest(crest);

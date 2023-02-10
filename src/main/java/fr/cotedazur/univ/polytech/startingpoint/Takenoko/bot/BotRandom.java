@@ -75,12 +75,9 @@ public class BotRandom extends Bot {
         HexagoneBoxPlaced placedTile = new HexagoneBoxPlaced(placedTileCoords[0], placedTileCoords[1], placedTileCoords[2], tileToPlace, retrieveBoxIdWithParameters, board);
         //Add the tile to the board
         board.addBox(placedTile);
-        if (arg.equals("demo"))
-            logInfoDemo.addLog(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
+        logInfoDemo.addLog(this.name + " a placé une tuile " + tileToPlace.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 2) % 3));
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
-        if (arg.equals("demo"))
-            logInfoDemo.addLog(this.name + " a placé une tuile " + placedTile.getColor() + " en " + Arrays.toString(placedTile.getCoordinates()));
     }
 
     @Override

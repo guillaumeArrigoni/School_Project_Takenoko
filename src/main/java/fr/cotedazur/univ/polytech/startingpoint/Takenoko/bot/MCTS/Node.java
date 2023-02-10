@@ -1,23 +1,41 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.Bot;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.BotSimulator;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.Bot;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotSimulator;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.PossibleActions;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that represents a node of the tree
+ */
 public class Node {
+    /**
+     * The depth of the node
+     */
     private int profondeur;
+    /**
+     * The parent of the node
+     */
     private final Node parent;
+    /**
+     * The value of the node
+     */
     private final GameState value;
+    /**
+     * The instructions of the node
+     */
     private final ActionLog instructions;
+    /**
+     * The children of the node
+     */
     private final List<Node> children;
 
     public Node(BotSimulator bot, int profondeur, MeteoDice.Meteo meteo, String arg) {

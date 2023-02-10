@@ -1,44 +1,38 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.BoardSimulation;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.TakenokoException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.exception.DeletingBotBambooException;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.BoardSimulation;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLog;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.TakenokoException;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.DeletingBotBambooException;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.TypeObjective;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import java.util.*;
 
+/**
+ * The `Bot` abstract class represents a bot player in a board game.
+ * It includes attributes like the bot's name, score, objectives, and so on,
+ * as well as methods for playing a turn, moving the panda, and performing actions.
+ */
 public abstract class Bot {
     //ATTRIBUTES
-    /**
-     * Name of the bot
-     */
+    /** The name of the bot */
     protected final String name;
-    /**
-     * The board of the game
-     */
+    /** The game board */
     protected final Board board;
-    /**
-     * The score of the bot
-     */
+    /** The bot's score */
     protected int score;
-
+    /** The bot's panda score */
     protected int scorePanda;
-
-    /**
-     * The list of possible actions
-     */
+    /** The possible actions that the bot can take */
     protected List<PossibleActions> possibleActions;
-    /**
-     * The list of objectives of the bot
-     */
+    /** The objectives that the bot has */
     protected List<Objective> objectives;
 
     protected int[] lastCoordGardener;
@@ -69,25 +63,30 @@ public abstract class Bot {
         return lastBoxPlaced;
     }
 
+    /** A logger of the game */
     protected LogInfoDemo logInfoDemo;
-    /**
-     *
-     */
-
+    /** The number of objectives that the bot has completed */
     protected int numberObjectiveDone;
-
+    /** The number of irrigation tiles the bot has */
     protected int nbIrrigation;
+    /** A class that manages the objectives of the game */
     protected final GestionObjectives gestionObjectives;
+    /** A class that retrieves the box ID*/
     protected final RetrieveBoxIdWithParameters retrieveBoxIdWithParameters;
+    /** A map of the bamboo eaten by color */
     protected final Map<Color, Integer> bambooEaten;
 
 
     //CONSTRUCTOR
     /**
-     * Constructor of the bot
+     * Constructs a new `Bot` instance with the given parameters.
      *
-     * @param name  the name of the bot
-     * @param board the board of the game
+     * @param name The name of the bot
+     * @param board The game board
+     * @param gestionObjectives A class that manages the objectives of the game
+     * @param retrieveBoxIdWithParameters A class that retrieves the box ID
+     * @param bambooEaten A map of the bamboo eaten by color
+     * @param logInfoDemo A logger of the game
      */
     protected Bot(String name, Board board, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEaten, LogInfoDemo logInfoDemo) {
         this.name = name;
@@ -111,6 +110,12 @@ public abstract class Bot {
         resetPossibleAction();
     }
 
+    /**
+     * Creates a `BotSimulator` instance for this bot.
+     *
+     * @param instructions The actions that the bot will take in the simulation
+     * @return A `BotSimulator` instance for this bot
+     */
     public BotSimulator createBotSimulator(ActionLog ... instructions) {
         Board tmpBoard = new BoardSimulation(this.board,this.board.getElementOfTheBoard(),this.board.getNumberOfPlayers());
         RetrieveBoxIdWithParameters tmp = tmpBoard.getRetrieveBoxIdWithParameters();
@@ -127,45 +132,77 @@ public abstract class Bot {
                 inst);
     }
 
-    /**
-     * This method is called at the beginning of the turn
-     */
-    public void playTurn(MeteoDice.Meteo meteo, String arg){
-        possibleActions = PossibleActions.getAllActions();
-        this.objectives = getObjectives();
-        logInfoDemo.displayTextMeteo(meteo);
-        switch (meteo){
-            case VENT -> {
-                //Deux fois la même action autorisé
-                launchAction(arg);
-                resetPossibleAction();
-                launchAction(arg);
-            }
-            case PLUIE -> {
-                //Le joueur peut faire pousser une tuile irriguée
-                growBambooRain(arg);
-                launchAction(arg);
-                launchAction(arg);
-            }
-            case NUAGES -> {
-                placeAugment(arg);
-                launchAction(arg);
-                launchAction(arg);
-            }
-            case ORAGE -> {
-                movePandaStorm();
-                launchAction(arg);
-                launchAction(arg);
-            }
-            default/*SOLEIL*/ -> {
-                launchAction(arg);
-                launchAction(arg);
-                launchAction(arg);
-            }
-        }
-    }
+    //ABSTRACT METHODS
 
-    public TypeObjective choseTypeObjectiveToRoll(String arg, int nb) {
+    /**
+     * Allows the bot to play a turn
+     * @param meteo The weather of the turn
+     * @param arg  A string argument for the logger
+     */
+    public abstract void playTurn(MeteoDice.Meteo meteo, String arg);
+
+    /**
+     * Allows the bot to initiate an action
+     * @param arg A string argument for the logger
+     */
+    protected abstract void launchAction(String arg);
+    /**
+     * Allows the bot to place a tile
+     * @param arg A string argument for the logger
+     */
+    protected abstract void placeTile(String arg);
+
+    /**
+     * Allows the bot to move the gardener
+     * @param arg A string argument for the logger
+     */
+    protected abstract void moveGardener(String arg);
+
+    /**
+     * Allows the bot to move the panda
+     * @param arg A string argument for the logger
+     */
+    protected abstract void movePanda(String arg);
+    /**
+     * Allows the bot to grow bamboo if the weather is the rain
+     * @param arg A string argument for the logger
+     */
+    protected abstract void growBambooRain(String arg);
+
+    /**
+     * Allows the bot to draw an objective
+     * @param arg A string argument for the logger
+     */
+    protected abstract void drawObjective(String arg);
+
+    /**
+     * Allows the bot to place an irrigation
+     * @param arg A string argument for the logger
+     */
+    protected abstract void placeIrrigation(String arg);
+
+    /**
+     * Allows the bot to place an augment
+     * @param arg A string argument for the logger
+     */
+    protected abstract void placeAugment(String arg);
+
+    //METHODS
+
+    /**
+     * Plays a turn for this bot.
+     *
+     * @param meteo The weather for the turn
+     * @param arg A string argument for the logger
+     */
+
+
+    /**
+     * Return a TypeObjective based on the number given in parameter
+     * @param nb the number of the type of objective
+     * @return the type of objective
+     */
+    public TypeObjective choseTypeObjectiveToRoll(int nb) {
         switch (nb) {
             case 1 -> {
                 logInfoDemo.displayPickGardenerObj(this.name);
@@ -182,12 +219,13 @@ public abstract class Bot {
         }
     }
 
-    public abstract void movePandaStorm();
 
-    protected abstract void launchAction(String arg);
+
 
     /**
-     * This method is called to do an action
+     * Allow the Bot to do an action
+     * @param arg A string argument for the logger
+     * @param action the action to do
      */
     protected void doAction(String arg,PossibleActions action){
         switch (action){
@@ -202,37 +240,51 @@ public abstract class Bot {
         }
     }
 
+    /**
+     * Allows the bot to log an action
+     * @param action the action to log
+     */
     protected void displayTextAction(PossibleActions action){
         logInfoDemo.displayTextAction(action);
     }
 
-    //ABSTRACT METHODS
-    protected abstract void placeTile(String arg);
-    protected abstract void moveGardener(String arg);
-    protected abstract void movePanda(String arg);
-    protected abstract void growBambooRain(String arg);
-    protected abstract void drawObjective(String arg);
-    protected abstract void placeIrrigation(String arg);
-    protected abstract void placeAugment(String arg);
-
-    //METHODS
+    /**
+     * Add the score of an objective to the score of the bot
+     * @param objective the objective to add
+     */
     public void addScore(Objective objective) {
         this.score += objective.getValue();
     }
 
+    /**
+     * Add the score of a panda objective to the score of the bot
+     * @param objective the objective to add
+     */
     public void addScorePanda(Objective objective) {
         this.scorePanda += objective.getValue();
     }
 
+    /**
+     * Add a bamboo eaten to the bot
+     * @param colorAte the color of the bamboo eaten
+     */
     public void addBambooEaten(Color colorAte) {
         int nbAte = bambooEaten.get(colorAte) + 1;
         bambooEaten.put(colorAte, nbAte);
     }
 
+    /**
+     * Augment the number of objective done by the bot
+     */
     public void incrementNumberObjectiveDone() {
         this.numberObjectiveDone++;
     }
 
+    /**
+     * Check if an objective is illegal
+     * @param actions the action to check
+     * @return true if the objective is illegal
+     */
     public boolean isObjectiveIllegal(PossibleActions actions) {
         return ((actions == PossibleActions.MOVE_GARDENER && Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords()).isEmpty()) ||
                 (actions == PossibleActions.MOVE_PANDA && Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords()).isEmpty()) ||
@@ -241,6 +293,12 @@ public abstract class Bot {
                 (actions == PossibleActions.DRAW_OBJECTIVE && (gestionObjectives.getParcelleObjectifs().isEmpty() || gestionObjectives.getJardinierObjectifs().isEmpty() || gestionObjectives.getPandaObjectifs().isEmpty())));
     }
 
+    /**
+     * Check all the move possible for the gardener or the panda
+     * @param board the board
+     * @param coord the coord of the gardener or the panda
+     * @return a list of all the possible move
+     */
     public static List<int[]> possibleMoveForGardenerOrPanda(Board board, int[] coord) {
         int x = coord[0];
         int y = coord[1];
@@ -273,6 +331,11 @@ public abstract class Bot {
         return possibleMove;
     }
 
+    /**
+     * Delete the bamboo eaten by the bot
+     * @param listBambooToDelete the list of bamboo to delete
+     * @throws DeletingBotBambooException if the bot try to delete a bamboo that he doesn't have
+     */
     public void deleteBambooEaten(List<Color> listBambooToDelete) throws DeletingBotBambooException {
         ArrayList<Color> errorImpossibleToDeleteTheseBamboo = new ArrayList<>();
         for (Color color : listBambooToDelete) {
@@ -283,7 +346,6 @@ public abstract class Bot {
                     board.getElementOfTheBoard().giveBackBamboo(color);
                 } catch (TakenokoException e) {
                     System.err.println("\n  -> An error has occurred : " + e.getErrorTitle() + "\n");
-                    throw new RuntimeException();
                 }
             } else {
                 errorImpossibleToDeleteTheseBamboo.add(color);
@@ -294,6 +356,9 @@ public abstract class Bot {
         }
     }
 
+    /**
+     * Reset the possible actions of the bot
+     */
     public void resetPossibleAction(){
         possibleActions = PossibleActions.getAllActions();
     }

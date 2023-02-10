@@ -1,9 +1,18 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.PossibleActions;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.PossibleActions;
 
+/**
+ * Class that represents an action and its parameters
+ */
 public class ActionLog {
+    /**
+     * The action
+     */
     PossibleActions action;
+    /**
+     * The parameters of the action
+     */
     int[] parameters;
 
 

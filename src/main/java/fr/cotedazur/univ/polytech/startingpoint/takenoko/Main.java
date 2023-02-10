@@ -134,77 +134,13 @@ public class Main {
             }
 
             if (main.csv) {
-                //creation of a writer for csv
-                FileSystem fs = FileSystems.getDefault();
-                Path path = fs.getPath("./stats/", "stats.csv");
-                File file = new File(path.toString());
-                File tempfile = new File("temp_" + file.getName());
-                CSVWriter writer = new CSVWriter(new FileWriter(tempfile, true));
-
-                CSVReader reader = new CSVReader(new FileReader(file));
-                List<String[]> lines = new ArrayList<>();
-
-                int lineCount = 0;
-                String line = null;
-                try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-                    while ((line = bufferedReader.readLine()) != null) {
-                        lineCount++;
-                    }
-                } catch(IOException e){
-                    e.printStackTrace();
-                }
-
-                String[] currentWinPercentage;
-                String[] currentMeanScore;
-                String[] currentGamePlayed;
-
                 String[] winPercentage = winPercentageForBots.stream().map(String::valueOf).toArray(String[]::new);
                 String[] meanScore = meanScoreForBots.stream().map(String::valueOf).toArray(String[]::new);
-                String[] header = new String[] {"", "BotDFS", "BotRB", "BotRandom1", "BotRandom2"};
-                String[] firstLine = new String[5];
-                String[] secondLine = new String[5];
-                String[] thirdLine = new String[5];
-
-                firstLine[0] = "Winrate";
-                secondLine[0] = "Score moyen";
-                thirdLine[0] = "Nombre de partie";
-
-                if (lineCount > 0) {
-                    lines = reader.readAll();
-                    lines.remove(0);
-
-                    for (int i = 0; i < lines.size(); i++) {
-                        ArrayList<String> tempLine = new ArrayList<>(Arrays.asList(lines.get(i)));
-                        tempLine.remove(0);
-                        lines.set(i, tempLine.toArray(new String[0]));
-                    }
-
-                    currentWinPercentage = lines.get(0);
-                    currentMeanScore = lines.get(1);
-                    currentGamePlayed = lines.get(2);
-
-                    for (int i = 1; i < numberOfPlayer+1; i++) {
-                        firstLine[i] = String.valueOf((Double.parseDouble(winPercentage[i-1])*numberOfGame + Double.parseDouble(currentWinPercentage[i-1])*Double.parseDouble(currentGamePlayed[i-1]))/(numberOfGame + Double.parseDouble(currentGamePlayed[i-1])));
-                        secondLine[i] = String.valueOf((Double.parseDouble(meanScore[i-1])*numberOfGame + Double.parseDouble(currentMeanScore[i-1])*Double.parseDouble(currentGamePlayed[i-1]))/(numberOfGame + Double.parseDouble(currentGamePlayed[i-1])));
-                        thirdLine[i] = String.valueOf((Double.parseDouble(currentGamePlayed[i-1])+numberOfGame));
-                    }
-                }
-                else {
-                    for (int i = 1; i < numberOfPlayer+1; i++) {
-                        firstLine[i] = winPercentage[i-1];
-                        secondLine[i] = meanScore[i-1];
-                        thirdLine[i] = String.valueOf(numberOfGame);
-                    }
-                }
-
-                writer.writeNext(header);
-                writer.writeNext(firstLine);
-                writer.writeNext(secondLine);
-                writer.writeNext(thirdLine);
-                writer.close();
-                reader.close();
-                if (!file.delete()) logInfoStats.addLog("Erreur de suppression du fichier");
-                if (!tempfile.renameTo(file)) logInfoStats.addLog("Erreur rename du fichier");
+                ArrayList<String[]> newData = new ArrayList<>();
+                newData.add(winPercentage);
+                newData.add(meanScore);
+                CSVHandler csvHandler = new CSVHandler();
+                csvHandler.writeNewData(newData,numberOfPlayer,numberOfGame,logInfoStats);
             }
         }
         else {

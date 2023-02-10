@@ -1,18 +1,18 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLog;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.ActionLogIrrigation;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot.MCTS.Node;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLog;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLogIrrigation;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.Node;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 
 import java.util.*;
 
@@ -44,11 +44,6 @@ public class BotDFS extends Bot{
         for(int i = 0; i < instructions.size(); i++){
             launchAction(arg);
         }
-    }
-
-    @Override
-    public void movePandaStorm() {
-
     }
 
     @Override
@@ -100,7 +95,7 @@ public class BotDFS extends Bot{
 
 
     protected void placeIrrigation(String arg){
-        ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions;
+        ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions.get(0);
         for (ArrayList<Crest> path : actionLogIrrigation.getParamirrig()) {
             logInfoDemo.addLog("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
             board.placeIrrigation(path.get(0));
@@ -148,5 +143,11 @@ public class BotDFS extends Bot{
         }
     }
 
+
+    public void setInstructions(ActionLog instructions) {
+        if(this.instructions == null)
+            this.instructions = new ArrayList<>();
+        this.instructions.add(instructions);
+    }
 
 }

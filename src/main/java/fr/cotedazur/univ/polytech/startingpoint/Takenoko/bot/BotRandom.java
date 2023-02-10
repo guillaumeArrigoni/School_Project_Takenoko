@@ -1,23 +1,22 @@
-package fr.cotedazur.univ.polytech.startingpoint.Takenoko.bot;
+package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.MeteoDice;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.crest.Crest;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.TypeObjective;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
-import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
 
 import java.util.*;
 
-
 /**
- * This class is the bot that will play the game
+ * The `BotRandom` class represents a random bot player in a game.
+ * It implements the abstract methods from the `Bot` class to make decisions and perform actions in the game.
  */
 public class BotRandom extends Bot {
 
@@ -26,17 +25,29 @@ public class BotRandom extends Bot {
      */
     protected final Random random;
 
-    public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEated, LogInfoDemo logInfoDemo) {
-        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEated, logInfoDemo);
+    /**
+     * Constructs a new `BotRandom` instance with the given parameters.
+     *
+     * @param name The name of the bot
+     * @param board The game board
+     * @param gestionObjectives A class that manages the objectives of the game
+     * @param retrieveBoxIdWithParameters A class that retrieves the box ID
+     * @param bambooEaten A map of the bamboo eaten by color
+     * @param logInfoDemo A logger of the game
+     * @param random The random generator
+     */
+    public BotRandom(String name, Board board, Random random, GestionObjectives gestionObjectives, RetrieveBoxIdWithParameters retrieveBoxIdWithParameters, Map<Color, Integer> bambooEaten, LogInfoDemo logInfoDemo) {
+        super(name, board, gestionObjectives, retrieveBoxIdWithParameters, bambooEaten, logInfoDemo);
         this.random = random;
     }
 
 
     //METHODS
 
-
-
-
+    /**
+     * Launches the action of the bot.
+     * @param arg A string argument for the logger
+     */
     @Override
     protected void launchAction(String arg){
         PossibleActions action = chooseAction();
@@ -45,7 +56,10 @@ public class BotRandom extends Bot {
         doAction(arg,action);
     }
 
-
+    /**
+     * Chooses a legal action randomly.
+     * @return The action chosen
+     */
     protected PossibleActions chooseAction() {
         PossibleActions acp = possibleActions.get(random.nextInt(possibleActions.size()));
         //Check if the action is possible
@@ -56,7 +70,10 @@ public class BotRandom extends Bot {
         return acp;
     }
 
-
+    /**
+     * Allow the bot to place a tile on the board.
+     * @param arg A string argument for the logger
+     */
     @Override
     protected void placeTile(String arg) {
         //Init
@@ -80,6 +97,10 @@ public class BotRandom extends Bot {
         board.getElementOfTheBoard().getStackOfBox().addNewBox(list.get((placedTileIndex + 1) % 3));
     }
 
+    /**
+     * Allow the bot to move the gardener
+     * @param arg A string argument for the logger
+     */
     @Override
     protected void moveGardener(String arg) {
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getGardenerCoords());
@@ -87,6 +108,10 @@ public class BotRandom extends Bot {
         super.logInfoDemo.displayMovementGardener(this.name,board);
     }
 
+    /**
+     * Allow the bot to move the panda
+     * @param arg A string argument for the logger
+     */
     @Override
     public void movePanda(String arg) {
         List<int[]> possibleMoves = Bot.possibleMoveForGardenerOrPanda(board, board.getPandaCoords());
@@ -94,6 +119,10 @@ public class BotRandom extends Bot {
         super.logInfoDemo.displayMovementPanda(this.name,board);
     }
 
+    /**
+     * Allow the bot grow bamboo after during the rain.
+     * @param arg A string argument for the logger
+     */
     @Override
     public void growBambooRain(String arg) {
         List<HexagoneBoxPlaced> tmp = new ArrayList<>();
@@ -109,12 +138,20 @@ public class BotRandom extends Bot {
         }
     }
 
+    /**
+     * Allow the bot to draw an objective
+     * @param arg A string argument for the logger
+     */
     @Override
     public void drawObjective(String arg) {
         int i = random.nextInt(0, 3);
         gestionObjectives.rollObjective(this, arg,i);
     }
 
+    /**
+     * Allow the bot to place an irrigation
+     * @param arg A string argument for the logger
+     */
     @Override
     public void placeIrrigation(String arg) {
         if (random.nextInt(0, 4) == 0) {
@@ -142,6 +179,10 @@ public class BotRandom extends Bot {
         }
     }
 
+    /**
+     * Allow the bot to place an augment
+     * @param arg A string argument for the logger
+     */
     protected void placeAugment(String arg) {
         int rdm = random.nextInt(1, 4);
         Special special = null;
@@ -173,6 +214,9 @@ public class BotRandom extends Bot {
         }
     }
 
+    /**
+     * Allow the bot to move the panda during the storm
+     */
     public void movePandaStorm() {
         List<int[]> possibleMoves = new ArrayList<>();
         for (HexagoneBoxPlaced box : board.getPlacedBox().values()) {
@@ -180,6 +224,40 @@ public class BotRandom extends Bot {
         }
         board.setPandaCoords(possibleMoves.get(random.nextInt(0, possibleMoves.size())), this);
         logInfoDemo.addLog(this.name + " a déplacé le panda en " + Arrays.toString(board.getPandaCoords()) + " grâce à l'orage");
+    }
+
+    @Override
+    public void playTurn(MeteoDice.Meteo meteo, String arg){
+        possibleActions = PossibleActions.getAllActions();
+        this.objectives = getObjectives();
+        logInfoDemo.displayTextMeteo(meteo);
+        switch (meteo){
+            case VENT -> {
+                launchAction(arg);
+                resetPossibleAction();
+                launchAction(arg);
+            }
+            case PLUIE -> {
+                growBambooRain(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
+            case NUAGES -> {
+                placeAugment(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
+            case ORAGE -> {
+                movePandaStorm();
+                launchAction(arg);
+                launchAction(arg);
+            }
+            default/*SOLEIL*/ -> {
+                launchAction(arg);
+                launchAction(arg);
+                launchAction(arg);
+            }
+        }
     }
 }
 

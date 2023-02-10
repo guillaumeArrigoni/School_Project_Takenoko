@@ -1,11 +1,11 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.searching;
 
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.crest.CrestNotRegistered;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateOptimizePathForSeveralBoxWithSimulation;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumboxproperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathirrigation.GenerateOptimizePathForSeveralBoxWithSimulation;
 
 import java.util.*;
 

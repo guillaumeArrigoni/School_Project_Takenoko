@@ -1,14 +1,14 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.BoardSimulation;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.BoardSimulation;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumboxproperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.TakenokoException;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.DeletingBotBambooException;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.TypeObjective;

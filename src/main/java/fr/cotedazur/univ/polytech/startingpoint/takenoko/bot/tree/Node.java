@@ -4,10 +4,10 @@ import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotSimulator;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.PossibleActions;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumboxproperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.Objective;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathIrrigation.GenerateAWayToIrrigateTheBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.pathirrigation.GenerateAWayToIrrigateTheBox;
 
 
 import java.util.ArrayList;

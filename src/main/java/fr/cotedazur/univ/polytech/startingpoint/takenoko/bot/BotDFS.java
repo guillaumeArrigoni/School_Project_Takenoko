@@ -1,16 +1,16 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.MeteoDice;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLog;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.ActionLogIrrigation;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree.Node;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBox;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.HexagoneBoxPlaced;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Special;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBox;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.HexagoneBoxPlaced;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumboxproperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumboxproperties.Special;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 

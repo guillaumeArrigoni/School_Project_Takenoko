@@ -2,7 +2,7 @@ package fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.crest;
 
 
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.exception.TakenokoException;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.crest.Crest;
 
 public class CrestNotRegistered extends TakenokoException {
 

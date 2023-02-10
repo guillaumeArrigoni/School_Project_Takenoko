@@ -1,9 +1,9 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumboxproperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

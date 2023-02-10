@@ -1,7 +1,7 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.tree;
 
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.PossibleActions;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.crest.Crest;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.crest.Crest;
 
 import java.util.ArrayList;
 import java.util.List;

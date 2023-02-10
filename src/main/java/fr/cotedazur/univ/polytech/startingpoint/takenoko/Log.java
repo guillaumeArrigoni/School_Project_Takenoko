@@ -1,6 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoStats;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoStats;
 
 import java.util.ArrayList;
 import java.util.Arrays;

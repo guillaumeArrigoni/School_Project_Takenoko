@@ -11,16 +11,16 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 import com.opencsv.exceptions.CsvException;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoDemo;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LogInfoStats;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerError;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.Logger.LoggerSevere;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoDemo;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LogInfoStats;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerError;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.logger.LoggerSevere;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.Bot;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotDFS;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRandom;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.bot.BotRuleBased;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.board.Board;
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.board.Board;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumboxproperties.Color;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.takenoko.searching.RetrieveBoxIdWithParameters;
 

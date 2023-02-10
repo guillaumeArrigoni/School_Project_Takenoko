@@ -1,6 +1,6 @@
 package fr.cotedazur.univ.polytech.startingpoint.takenoko.exception;
 
-import fr.cotedazur.univ.polytech.startingpoint.takenoko.gameArchitecture.hexagoneBox.enumBoxProperties.Color;
+import fr.cotedazur.univ.polytech.startingpoint.takenoko.gamearchitecture.hexagonebox.enumboxproperties.Color;
 
 import java.util.ArrayList;
 

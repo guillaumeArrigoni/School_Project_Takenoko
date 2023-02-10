@@ -29,12 +29,5 @@ public class ActionLog {
         return parameters;
     }
 
-    public String toString(){
-        StringBuilder s = new StringBuilder(action.toString());
-        for (int parameter : parameters) {
-            s.append(" ").append(parameter);
-        }
-        return s.toString();
-    }
 
 }

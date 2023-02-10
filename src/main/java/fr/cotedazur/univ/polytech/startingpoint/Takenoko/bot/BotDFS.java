@@ -95,7 +95,7 @@ public class BotDFS extends Bot{
 
 
     protected void placeIrrigation(String arg){
-        ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions;
+        ActionLogIrrigation actionLogIrrigation = (ActionLogIrrigation) instructions.get(0);
         for (ArrayList<Crest> path : actionLogIrrigation.getParamirrig()) {
             logInfoDemo.addLog("Le bot a placé une irrigation en " + Arrays.toString(path.get(0).getCoordinates()));
             board.placeIrrigation(path.get(0));
@@ -143,5 +143,11 @@ public class BotDFS extends Bot{
         }
     }
 
+
+    public void setInstructions(ActionLog instructions) {
+        if(this.instructions == null)
+            this.instructions = new ArrayList<>();
+        this.instructions.add(instructions);
+    }
 
 }

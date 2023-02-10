@@ -22,7 +22,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class BotSimulatorTests {
+class BotSimulatorTest {
     BotRandom botRandom;
     Board board;
     Random r;
@@ -55,7 +55,6 @@ class BotSimulatorTests {
 
     @Test
     void botRandomCreation(){
-        BotSimulator bot = botRandom.createBotSimulator();
         assertEquals(botRandom.score, bot.score);
         assertEquals(botRandom.scorePanda, bot.scorePanda);
         assertEquals(botRandom.objectives, bot.objectives);

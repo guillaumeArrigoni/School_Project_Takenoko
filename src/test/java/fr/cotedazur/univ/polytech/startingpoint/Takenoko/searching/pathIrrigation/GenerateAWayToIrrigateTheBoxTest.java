@@ -46,12 +46,12 @@ class GenerateAWayToIrrigateTheBoxTest {
         hexagoneBoxPlaced1 = new HexagoneBoxSimulation(-1,1,0, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
         hexagoneBoxPlaced2 = new HexagoneBoxSimulation(0,1,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
         hexagoneBoxPlaced3 = new HexagoneBoxSimulation(-1,2,-1, Color.Vert, Special.Classique,retrieveSimulation,boardSimulation);
-        board.addBox(hexagoneBoxPlaced1);
-        board.addBox(hexagoneBoxPlaced2);
-        board.addBox(hexagoneBoxPlaced3);
+        boardSimulation.addBox(hexagoneBoxPlaced1);
+        boardSimulation.addBox(hexagoneBoxPlaced2);
+        boardSimulation.addBox(hexagoneBoxPlaced3);
         crest1 = new Crest(-5,15,1);
         crest2 = new Crest(-10,15,3);
-        generateAWayToIrrigateTheBox = new GenerateAWayToIrrigateTheBox(hexagoneBoxPlaced3);
+        generateAWayToIrrigateTheBox = new GenerateAWayToIrrigateTheBox(hexagoneBoxPlaced3, boardSimulation);
     }
 
     private static Stream<Arguments> provideCheckPath(){
@@ -71,7 +71,7 @@ class GenerateAWayToIrrigateTheBoxTest {
     @ParameterizedTest
     @MethodSource("provideCheckPath")
     void checkPath(boolean bool, Crest crest) {
-        board.placeIrrigation(crest);
+        boardSimulation.placeIrrigation(crest);
         assertEquals(bool,hexagoneBoxPlaced3.isIrrigate());
     }
 

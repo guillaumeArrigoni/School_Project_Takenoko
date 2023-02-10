@@ -134,7 +134,7 @@ public class CrestGestionnary {
      * @param parent : the new Irrigation that has been placed
      */
     private void rewriteRangeToIrrigatedAfterNewIrrigation(Crest parent, int nb){
-        if (nb>50){
+        if (nb>500){
             return;
         }
         if ((linkCrestParentToCrestChildren.containsKey(parent) && !linkCrestParentToCrestChildren.get(parent).isEmpty())){

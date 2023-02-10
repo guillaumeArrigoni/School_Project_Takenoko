@@ -10,8 +10,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
-import java.nio.file.*;
-
 import com.opencsv.exceptions.CsvException;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoDemo;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.Logger.LogInfoStats;
@@ -26,33 +24,30 @@ import fr.cotedazur.univ.polytech.startingpoint.Takenoko.gameArchitecture.hexago
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.objectives.GestionObjectives;
 import fr.cotedazur.univ.polytech.startingpoint.Takenoko.searching.RetrieveBoxIdWithParameters;
 
-import java.text.DecimalFormat;
 import java.util.*;
 //https://www.redblobgames.com/grids/hexagons/#coordinates
 
 public class Main {
     //parameters for JCommander
-    /*@Parameter(names={"--2thousands"}, arity=0)
+    @Parameter(names={"--2thousands"}, arity=0)
     boolean twoThousands;
     @Parameter(names={"--demo"},arity=0)
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
-    boolean csv;*/
-    boolean twoThousands = true;
-    boolean demo =false;
-    boolean csv = true;
+    boolean csv;
 
     public static void main(String... args) throws IOException, CloneNotSupportedException, CsvException {
         //detection of arg for JCommander
         Main main = new Main();
-        LogInfoDemo logDemo = new LogInfoDemo(main.demo || (!main.twoThousands && !main.csv));
-        LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
-        LoggerError loggerError = new LoggerError(main.demo || (!main.twoThousands && !main.csv));
-        LoggerSevere loggerSevere = new LoggerSevere(main.demo || (!main.twoThousands && !main.csv));
         JCommander.newBuilder()
                 .addObject(main)
                 .build()
                 .parse(args);
+
+        LogInfoDemo logDemo = new LogInfoDemo(main.demo || (!main.twoThousands && !main.csv));
+        LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
+        LoggerError loggerError = new LoggerError(main.demo || (!main.twoThousands && !main.csv));
+        LoggerSevere loggerSevere = new LoggerSevere(main.demo || (!main.twoThousands && !main.csv));
 
         if (main.twoThousands || main.csv) {
             int numberOfGame = 0;
@@ -70,10 +65,10 @@ public class Main {
                         gestionnaire.ListOfObjectiveJardinierByDefault(),
                         gestionnaire.ListOfObjectivePandaByDefault()
                 );
-                Bot bot1 = new BotDFS("Bot1",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-                Bot bot2 = new BotRuleBased("Bot2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-                Bot bot3 = new BotRandom("Bot3",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
-                Bot bot4 = new BotRandom("Bot4",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot1 = new BotDFS("BotDFS",board,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot2 = new BotRuleBased("BotRB",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot3 = new BotRandom("BotRandom1",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
+                Bot bot4 = new BotRandom("BotRandom2",board,random,gestionnaire, retrieving, new HashMap<Color,Integer>(),logDemo);
                 List<Bot> playerList = new ArrayList<>();
                 playerList.add(bot1);
                 playerList.add(bot2);
@@ -123,7 +118,7 @@ public class Main {
 
                 String[] winPercentage = winPercentageForBots.stream().map(String::valueOf).toArray(String[]::new);
                 String[] meanScore = meanScoreForBots.stream().map(String::valueOf).toArray(String[]::new);
-                String[] header = new String[5];
+                String[] header = new String[] {"", "BotDFS", "BotRB", "BotRandom1", "BotRandom2"};
                 String[] firstLine = new String[5];
                 String[] secondLine = new String[5];
                 String[] thirdLine = new String[5];
@@ -131,10 +126,6 @@ public class Main {
                 firstLine[0] = "Winrate";
                 secondLine[0] = "Score moyen";
                 thirdLine[0] = "Nombre de partie";
-
-                for (int i = 1; i < 5; i++) {
-                    header[i] = "Bot" + i;
-                }
 
                 if (lineCount > 0) {
                     lines = reader.readAll();
@@ -170,11 +161,11 @@ public class Main {
                 writer.writeNext(thirdLine);
                 writer.close();
                 reader.close();
-                file.delete();
-                tempfile.renameTo(file);
+                if (!file.delete()) logInfoStats.addLog("Erreur de suppression du fichier");
+                if (!tempfile.renameTo(file)) logInfoStats.addLog("Erreur rename du fichier");
             }
         }
-        else if (main.demo || (!main.csv && !main.twoThousands)) {
+        else {
             RetrieveBoxIdWithParameters retrieving = new RetrieveBoxIdWithParameters();
             Board board = new Board(retrieving, 1,2,loggerSevere);
             Random random = new Random();

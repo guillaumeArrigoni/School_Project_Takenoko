@@ -35,6 +35,32 @@ public class Main {
     boolean demo;
     @Parameter(names={"--csv"}, arity=0)
     boolean csv;
+
+    private void runInApp(){
+        if (!twoThousands && !demo && !csv){
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Welcome to the game of Takenoko");
+            System.out.println("Do you want to run the '--2thousands' mode ? (answer '2thousands' or '1' if yes, default is 'no')");
+            System.out.println("Do you want to run the '--csv' mode ? (answer 'demo' or '2' if yes, default is 'no')");
+            System.out.println("Default mode is the demo mode");
+            String[] parameters = sc.nextLine().split(" ");
+            if (parameters.length == (0)){
+                demo = true;
+            } else {
+                for (String parameter : parameters) {
+                    switch (parameter) {
+                        case "2thousands", "1":
+                            twoThousands = true;
+                            break;
+                        case "csv","2":
+                            csv = true;
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
     public static void main(String... args) throws IOException, CloneNotSupportedException, CsvException {
         //detection of arg for JCommander
         Main main = new Main();
@@ -47,7 +73,7 @@ public class Main {
         LogInfoStats logInfoStats = new LogInfoStats(main.twoThousands || main.csv);
         LoggerError loggerError = new LoggerError(main.demo || (!main.twoThousands && !main.csv));
         LoggerSevere loggerSevere = new LoggerSevere(main.demo || (!main.twoThousands && !main.csv));
-
+        main.runInApp();
         if (main.twoThousands || main.csv) {
             int numberOfSimulation;
             int numberOfGame = 0;

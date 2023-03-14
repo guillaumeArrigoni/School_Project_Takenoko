@@ -14,11 +14,11 @@
 
 ## Sommaire
 1. [État du projet](#1-état-du-projet)
-2. [Installation](2#-installation)
+2. [Installation](#2-installation)
 3. [Comment exécuter le programme](#3-comment-exécuter-le-programme)
 4. [Comment exécuter les tests](#4-comment-exécuter-les-tests)
 5. [Description et règle du jeu](#5-description-et-règle-du-jeu)
-6. [Organisation du travail](6#-organisation-du-travail)
+6. [Organisation du travail](#6-organisation-du-travail)
 
 ## 1. État du projet
 Projet terminé, toutes les slices ont étaient développées. Le code lui reste tout de même perfectible. 
